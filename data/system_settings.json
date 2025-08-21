@@ -398,15 +398,27 @@
           "repetition_frequency": true
         },
         "fixedMeals": {
-          "breakfast": [],
+          "breakfast": [
+            {
+              "name": "Közlenmiş Kapya Biber",
+              "amount": "1",
+              "calories": 16,
+              "carbs": 3,
+              "protein": 1,
+              "fat": 0,
+              "minQuantity": 1,
+              "maxQuantity": 1,
+              "step": 1
+            }
+          ],
           "snack1": [],
           "lunch": [],
           "snack2": [],
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T21:06:34.757Z",
-      "updated": "21.08.2025 23:49:55",
+      "updatedAt": "2025-08-21T21:06:45.316Z",
+      "updated": "22.08.2025 00:06:45",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
