@@ -2,15 +2,15 @@
   "dietitians": [
     {
       "id": "dietitian_001",
-      "name": "Dt. Fatma Kaya", 
+      "name": "Dt. Fatma Kaya",
       "certification": "Klinik Diyetisyen",
       "isActive": true,
       "createdAt": "2025-08-17"
     },
     {
       "id": "dietitian_002",
-      "name": "Dt. Mehmet Öz",
-      "certification": "Sporcu Beslenmesi Uzmanı", 
+      "name": "Dt. Mehmet Ãz",
+      "certification": "Sporcu Beslenmesi UzmanÄ±",
       "isActive": true,
       "createdAt": "2025-08-17"
     }
