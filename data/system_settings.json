@@ -328,7 +328,7 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "vf",
+              "name": "a",
               "amount": "1",
               "calories": 0,
               "carbs": 0,
@@ -361,8 +361,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:57:49.579Z",
-      "updated": "21.08.2025 23:57:49",
+      "updatedAt": "2025-08-21T20:57:51.700Z",
+      "updated": "21.08.2025 23:57:51",
       "criteriaStates": {},
       "criteriaOrder": []
     },
