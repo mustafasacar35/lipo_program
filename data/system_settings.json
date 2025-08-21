@@ -340,12 +340,12 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "Közlenmiş Kapya Biber",
+              "name": "Yaban Mersinli Smoothie (1 porsiyon)",
               "amount": "1",
-              "calories": 16,
-              "carbs": 3,
-              "protein": 1,
-              "fat": 0,
+              "calories": 430,
+              "carbs": 2,
+              "protein": 20,
+              "fat": 38,
               "minQuantity": 1,
               "maxQuantity": 1,
               "step": 1
@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:05:54.610Z",
-      "updated": "22.08.2025 00:05:54",
+      "updatedAt": "2025-08-21T21:05:55.847Z",
+      "updated": "22.08.2025 00:05:55",
       "criteriaStates": {},
       "criteriaOrder": []
     },
