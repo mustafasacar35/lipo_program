@@ -198,19 +198,7 @@
       "timestamp": "2025-08-21T19:22:39.355Z",
       "templateData": {
         "fixedMeals": {
-          "breakfast": [
-            {
-              "name": "1 adet Sebzeli Muffin",
-              "amount": "1",
-              "calories": 316,
-              "carbs": 5,
-              "protein": 20,
-              "fat": 24,
-              "minQuantity": 1,
-              "maxQuantity": 1,
-              "step": 0.5
-            }
-          ],
+          "breakfast": [],
           "snack1": [],
           "lunch": [],
           "snack2": [],
@@ -232,8 +220,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:50:33.359Z",
-      "updated": "21.08.2025 23:50:33",
+      "updatedAt": "2025-08-21T20:50:43.033Z",
+      "updated": "21.08.2025 23:50:43",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -409,6 +397,6 @@
       "fixedMeals": {}
     }
   },
-  "lastUpdated": "2025-08-21T20:49:16.856Z",
+  "lastUpdated": "2025-08-21T20:50:38.147Z",
   "version": "2.1.0"
 }
