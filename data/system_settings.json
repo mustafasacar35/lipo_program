@@ -338,7 +338,20 @@
       "timestamp": "2025-08-21T19:23:19.906Z",
       "templateData": {
         "fixedMeals": {
-          "breakfast": [],
+          "breakfast": [
+            {
+              "name": "sul",
+              "amount": "1",
+              "calories": 0,
+              "carbs": 0,
+              "protein": 0,
+              "fat": 0,
+              "minQuantity": 1,
+              "maxQuantity": 2,
+              "step": 0.5,
+              "isManual": true
+            }
+          ],
           "snack1": [],
           "lunch": [],
           "snack2": [],
@@ -360,8 +373,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:17:21.827Z",
-      "updated": "22.08.2025 00:17:21",
+      "updatedAt": "2025-08-21T21:17:24.524Z",
+      "updated": "22.08.2025 00:17:24",
       "criteriaStates": {},
       "criteriaOrder": []
     },
