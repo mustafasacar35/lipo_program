@@ -220,8 +220,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:15:17.046Z",
-      "updated": "22.08.2025 00:15:17",
+      "updatedAt": "2025-08-21T21:17:04.428Z",
+      "updated": "22.08.2025 00:17:04",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -481,6 +481,6 @@
       }
     }
   },
-  "lastUpdated": "2025-08-21T21:15:02.793Z",
+  "lastUpdated": "2025-08-21T21:16:44.914Z",
   "version": "2.1.0"
 }
