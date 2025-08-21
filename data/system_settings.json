@@ -340,12 +340,12 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "Fırınlanmış Peynirli Taze Fasulye Graten",
+              "name": "Menemen (2 adet yumurta, 1 adet domates, 1 adet biber, 1/4 soğan)",
               "amount": "1",
-              "calories": 286,
+              "calories": 229,
               "carbs": 5,
-              "protein": 17,
-              "fat": 22,
+              "protein": 14,
+              "fat": 17,
               "minQuantity": 1,
               "maxQuantity": 1,
               "step": 1
@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:27:31.604Z",
-      "updated": "22.08.2025 00:27:31",
+      "updatedAt": "2025-08-21T21:28:02.912Z",
+      "updated": "22.08.2025 00:28:02",
       "criteriaStates": {},
       "criteriaOrder": []
     },
