@@ -348,6 +348,37 @@
       },
       "updatedAt": "2025-08-21T19:59:21.494Z",
       "updated": "21.08.2025 22:59:21"
+    },
+    "9": {
+      "name": "9",
+      "created": "21.08.2025 23:00:06",
+      "createdAt": "2025-08-21T20:00:06.103Z",
+      "templateData": {
+        "criteriaStates": {
+          "liked_foods": false,
+          "allergies": false,
+          "medical_conditions": true,
+          "macro_targets": true,
+          "calorie_distribution": true,
+          "meal_timing": true,
+          "food_groups": true,
+          "portion_sizes": true,
+          "cooking_methods": true,
+          "seasonal_foods": true,
+          "budget_constraints": true,
+          "preparation_time": true,
+          "repetition_frequency": true
+        },
+        "fixedMeals": {
+          "breakfast": [],
+          "snack1": [],
+          "lunch": [],
+          "snack2": [],
+          "dinner": []
+        }
+      },
+      "updatedAt": "2025-08-21T20:00:06.118Z",
+      "updated": "21.08.2025 23:00:06"
     }
   },
   "lastUpdated": "2025-08-21T19:59:04.835Z",
