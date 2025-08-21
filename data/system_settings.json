@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:06:52.960Z",
-      "updated": "22.08.2025 00:06:52",
+      "updatedAt": "2025-08-21T21:07:29.216Z",
+      "updated": "22.08.2025 00:07:29",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -340,12 +340,12 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "Közlenmiş Kapya Biber",
+              "name": "Yaban Mersinli Smoothie (1 porsiyon)",
               "amount": "1",
-              "calories": 16,
-              "carbs": 3,
-              "protein": 1,
-              "fat": 0,
+              "calories": 430,
+              "carbs": 2,
+              "protein": 20,
+              "fat": 38,
               "minQuantity": 1,
               "maxQuantity": 1,
               "step": 1
@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:06:59.981Z",
-      "updated": "22.08.2025 00:06:59",
+      "updatedAt": "2025-08-21T21:07:05.930Z",
+      "updated": "22.08.2025 00:07:00",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -517,6 +517,6 @@
       }
     }
   },
-  "lastUpdated": "2025-08-21T21:04:38.996Z",
+  "lastUpdated": "2025-08-21T21:07:22.722Z",
   "version": "2.1.0"
 }
