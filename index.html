@@ -6216,15 +6216,9 @@
                             await saveFixedMealsToStorage();
                         } catch(_) {}
                         
-                        // Şablon seçildi - forma yükle
+                        // ✅ ÖNEMLİ: Template uygula (sabit yemekleri de yükler)
                         const weekNo = parseInt(value.replace('template_', ''));
                         await applySystemWeekProfile(weekNo);
-                        
-                        // Şablon sabit yemeklerini yükle
-                        try {
-                            await loadFixedMealsFromStorage();
-                            console.log(`🍽️ [DROPDOWN] Şablon ${weekNo} sabit yemekleri yüklendi`);
-                        } catch(_) {}
                         
                         if (badge) badge.textContent = `Kapsam: Şablon ${weekNo}`;
                     } else {
@@ -9872,6 +9866,18 @@
                 console.log(`💾 [TEMPLATE-FIXED-MEALS] Şablon ${templateId} sabit yemekleri kaydediliyor:`, fixedMeals);
                 await saveTemplateSpecificData(templateId, 'fixedMeals', fixedMeals);
                 console.log(`✅ [TEMPLATE-FIXED-MEALS] Şablon ${templateId} sabit yemekleri kaydedildi`);
+                
+                // GitHub'a da kaydet
+                if (GITHUB_CONFIG.token) {
+                    try {
+                        const systemSettings = JSON.parse(localStorage.getItem('systemSettings_v2') || '{}');
+                        await saveToGitHub('data/system_settings.json', systemSettings, `Update template ${templateId} fixed meals`);
+                        console.log(`✅ [GITHUB] Şablon ${templateId} sabit yemekleri GitHub'a kaydedildi`);
+                    } catch (error) {
+                        console.warn('❌ GitHub kaydetme hatası:', error);
+                    }
+                }
+                
                 return;
             }
             
@@ -9928,6 +9934,7 @@
                     const templateFixedMeals = await loadTemplateSpecificData(templateId, 'fixedMeals');
                     if (templateFixedMeals) {
                         console.log(`✅ [TEMPLATE-FIXED-MEALS] Şablon ${templateId} sabit yemekleri bulundu:`, templateFixedMeals);
+                        loadFixedMealsFromWeekProfile(templateFixedMeals);
                         return templateFixedMeals;
                     } else {
                         console.log(`⚠️ [TEMPLATE-FIXED-MEALS] Şablon ${templateId} için sabit yemek bulunamadı, varsayılan kullanılacak`);
@@ -13162,6 +13169,12 @@
                     document.getElementById('system-default-diet').value = p.dietType || 'lowcarb';
                 }
 
+                // Template-specific fixed meals UI'ye yükle
+                if (templateFixedMeals) {
+                    console.log(`🍽️ [TEMPLATE-APPLY] Template fixed meals UI'ye yükleniyor:`, templateFixedMeals);
+                    loadFixedMealsFromWeekProfile(templateFixedMeals);
+                }
+
                 // Öğün ayarlarını yükle
                 if (profile.mealSettings) {
                     const m = profile.mealSettings;
@@ -13169,12 +13182,6 @@
                         const mealData = m[meal];
                         document.getElementById(`${meal}-min`).value = mealData.min || 2;
                         document.getElementById(`${meal}-max`).value = mealData.max || 4;
-                        
-                    // Template-specific fixed meals varsa kullan
-                    const fixedMealsToUse = templateFixedMeals || mealData.fixed || '';
-                    document.getElementById(`${meal}-fixed`).value = fixedMealsToUse;
-                    console.log(`🍽️ [TEMPLATE-APPLY] ${meal} sabit yemeği: ${fixedMealsToUse}`);
-                        
                         document.getElementById(`${meal}-macro`).value = mealData.macroPercent || 25;
                     });
                 }
