@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:13:27.887Z",
-      "updated": "21.08.2025 23:13:27",
+      "updatedAt": "2025-08-21T20:14:09.355Z",
+      "updated": "21.08.2025 23:14:09",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -428,8 +428,8 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T20:13:44.387Z",
-      "updated": "21.08.2025 23:13:44",
+      "updatedAt": "2025-08-21T20:14:07.819Z",
+      "updated": "21.08.2025 23:14:07",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
@@ -438,8 +438,8 @@
         "height": 169,
         "gender": "female",
         "activity": "1.55",
-        "dietType": "lowcarb",
-        "targetCalories": 1051
+        "dietType": "ketojenik",
+        "targetCalories": 1094
       },
       "fixedMeals": {}
     }
