@@ -4,17 +4,17 @@
   "metadata": {
     "totalMeals": 448,
     "categories": {
-      "BEVERAGES": "İçecekler (kahve, çay, smoothie)",
-      "BREAKFAST": "Kahvaltı yemekleri",
+      "BEVERAGES": "Ä°Ã§ecekler (kahve, Ã§ay, smoothie)",
+      "BREAKFAST": "KahvaltÄ± yemekleri",
       "MAIN_DISHES": "Ana yemekler",
       "SIDE_DISHES": "Yan yemekler",
       "SALADS": "Salatalar",
-      "SOUPS": "Çorbalar",
-      "DESSERTS": "Tatlılar",
-      "BREADS": "Ekmek ve tahıl ürünleri",
-      "SNACKS": "Atıştırmalıklar",
-      "SUPPLEMENTS": "Ek gıdalar",
-      "SPECIAL": "Özel/karma yemekler"
+      "SOUPS": "Ãorbalar",
+      "DESSERTS": "TatlÄ±lar",
+      "BREADS": "Ekmek ve tahÄ±l Ã¼rÃ¼nleri",
+      "SNACKS": "AtÄ±ÅtÄ±rmalÄ±klar",
+      "SUPPLEMENTS": "Ek gÄ±dalar",
+      "SPECIAL": "Ãzel/karma yemekler"
     },
     "roles": {
       "mainDish": "mainDish",
@@ -27,12 +27,12 @@
       "snack": "snack",
       "filler": "filler"
     },
-    "conversionNotes": "Otomatik dönüştürme - 2025-08-11"
+    "conversionNotes": "Otomatik dÃ¶nÃ¼ÅtÃ¼rme - 2025-08-11"
   },
   "meals": [
     {
       "id": "meal_0001",
-      "name": "Kurşun Geçirmez Kahve",
+      "name": "KurÅun GeÃ§irmez Kahve",
       "categories": [
         "SPECIAL",
         "BEVERAGES"
@@ -61,7 +61,7 @@
       "tags": [
         "kahve",
         "keto",
-        "kurşun geçirmez"
+        "kurÅun geÃ§irmez"
       ],
       "compatibility": {
         "positive": [],
@@ -139,7 +139,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -215,7 +215,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -265,7 +265,7 @@
     },
     {
       "id": "meal_0004",
-      "name": "1 tatlı kaşığı Tereyağı",
+      "name": "1 tatlÄ± kaÅÄ±ÄÄ± TereyaÄÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -291,7 +291,7 @@
         "isFixed": false
       },
       "tags": [
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -341,7 +341,7 @@
     },
     {
       "id": "meal_0005",
-      "name": "1 tatlı kaşığı kaymak (10 gram)",
+      "name": "1 tatlÄ± kaÅÄ±ÄÄ± kaymak (10 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -417,7 +417,7 @@
     },
     {
       "id": "meal_0006",
-      "name": "1 yemek kaşığı tahin",
+      "name": "1 yemek kaÅÄ±ÄÄ± tahin",
       "categories": [
         "SPECIAL"
       ],
@@ -494,7 +494,7 @@
     },
     {
       "id": "meal_0007",
-      "name": "Tatlı Patates Omleti",
+      "name": "TatlÄ± Patates Omleti",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -521,15 +521,15 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı patates",
+        "tatlÄ± patates",
         "yumurta"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -577,7 +577,7 @@
     },
     {
       "id": "meal_0008",
-      "name": "Kavurmalı Yumurta (50 gram kavurma, 2 adet yumurta)",
+      "name": "KavurmalÄ± Yumurta (50 gram kavurma, 2 adet yumurta)",
       "categories": [
         "SPECIAL"
       ],
@@ -612,9 +612,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -743,7 +743,7 @@
     },
     {
       "id": "meal_0010",
-      "name": "Mantarlı Yumurta (100 gram mantar, 1 yemek kaşığı tereyağı, 1 adet yumurta, tuz ve baharatlar)",
+      "name": "MantarlÄ± Yumurta (100 gram mantar, 1 yemek kaÅÄ±ÄÄ± tereyaÄÄ±, 1 adet yumurta, tuz ve baharatlar)",
       "categories": [
         "SPECIAL"
       ],
@@ -771,15 +771,15 @@
       "tags": [
         "mantar",
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -826,7 +826,7 @@
     },
     {
       "id": "meal_0011",
-      "name": "Haşlanmış Yumurta (1 adet) + 1 Tatlı Kaşığı Tereyağı ve Baharatlar",
+      "name": "HaÅlanmÄ±Å Yumurta (1 adet) + 1 TatlÄ± KaÅÄ±ÄÄ± TereyaÄÄ± ve Baharatlar",
       "categories": [
         "SPECIAL"
       ],
@@ -853,15 +853,15 @@
       },
       "tags": [
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -908,7 +908,7 @@
     },
     {
       "id": "meal_0012",
-      "name": "Haşlanmış Yumurta (2 adet) + 1 Tatlı Kaşığı Tereyağı ve Baharatlar",
+      "name": "HaÅlanmÄ±Å Yumurta (2 adet) + 1 TatlÄ± KaÅÄ±ÄÄ± TereyaÄÄ± ve Baharatlar",
       "categories": [
         "SPECIAL"
       ],
@@ -936,15 +936,15 @@
       },
       "tags": [
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -991,7 +991,7 @@
     },
     {
       "id": "meal_0013",
-      "name": "Ketojenik Granola (100 gram) + Yarım Su Bardağı Badem Sütü",
+      "name": "Ketojenik Granola (100 gram) + YarÄ±m Su BardaÄÄ± Badem SÃ¼tÃ¼",
       "categories": [
         "SPECIAL"
       ],
@@ -1020,15 +1020,15 @@
       },
       "tags": [
         "granola",
-        "badem sütü",
+        "badem sÃ¼tÃ¼",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -1110,9 +1110,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -1195,9 +1195,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -1244,7 +1244,7 @@
     },
     {
       "id": "meal_0016",
-      "name": "Avokado (yarım)",
+      "name": "Avokado (yarÄ±m)",
       "categories": [
         "SPECIAL"
       ],
@@ -1319,7 +1319,7 @@
     },
     {
       "id": "meal_0017",
-      "name": "Salatalık (1 adet)",
+      "name": "SalatalÄ±k (1 adet)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -1347,7 +1347,7 @@
         "isFixed": true
       },
       "tags": [
-        "salatalık",
+        "salatalÄ±k",
         "keto",
         "salata"
       ],
@@ -1398,7 +1398,7 @@
     },
     {
       "id": "meal_0018",
-      "name": "Yoğurtlu çılbır",
+      "name": "YoÄurtlu Ã§Ä±lbÄ±r",
       "categories": [
         "SPECIAL"
       ],
@@ -1427,9 +1427,9 @@
       "tags": [
         "keto",
         "yumurta",
-        "yoğur",
-        "süt",
-        "çılbır"
+        "yoÄur",
+        "sÃ¼t",
+        "Ã§Ä±lbÄ±r"
       ],
       "compatibility": {
         "positive": [
@@ -1483,7 +1483,7 @@
     },
     {
       "id": "meal_0019",
-      "name": "1 dilim Fırında Kabaklı Börek",
+      "name": "1 dilim FÄ±rÄ±nda KabaklÄ± BÃ¶rek",
       "categories": [
         "SPECIAL"
       ],
@@ -1510,13 +1510,13 @@
       },
       "tags": [
         "kabak",
-        "börek",
+        "bÃ¶rek",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -1564,7 +1564,7 @@
     },
     {
       "id": "meal_0020",
-      "name": "1 Kase Sote Edilmiş Ispanak + 1 tatlı kaşığı zeytinyağı",
+      "name": "1 Kase Sote EdilmiÅ Ispanak + 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -1590,8 +1590,8 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
-        "zeytinyağı",
+        "Ä±spanak",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -1678,9 +1678,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -1727,7 +1727,7 @@
     },
     {
       "id": "meal_0022",
-      "name": "Haşlanmış Yumurta",
+      "name": "HaÅlanmÄ±Å Yumurta",
       "categories": [
         "SPECIAL"
       ],
@@ -1807,7 +1807,7 @@
     },
     {
       "id": "meal_0023",
-      "name": "ek domatlı",
+      "name": "ek domatlÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -1885,7 +1885,7 @@
     },
     {
       "id": "meal_0024",
-      "name": "Tulum /kaşar peyniri (50 gram)",
+      "name": "Tulum /kaÅar peyniri (50 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -1960,7 +1960,7 @@
     },
     {
       "id": "meal_0025",
-      "name": "Kasap sucuk (50 gram, tavada veya ızgarada)",
+      "name": "Kasap sucuk (50 gram, tavada veya Ä±zgarada)",
       "categories": [
         "SPECIAL"
       ],
@@ -2104,7 +2104,7 @@
     },
     {
       "id": "meal_0027",
-      "name": "Yulaflı Börek (1 dilim)",
+      "name": "YulaflÄ± BÃ¶rek (1 dilim)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2128,18 +2128,18 @@
       },
       "tags": [
         "yulaf",
-        "börek",
+        "bÃ¶rek",
         "ekmek",
         "peynir",
         "yumurta",
         "lor",
-        "ıspanak"
+        "Ä±spanak"
       ],
       "compatibility": {
         "positive": [
           "domates",
           "zeytin",
-          "yeşillik"
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -2186,7 +2186,7 @@
     },
     {
       "id": "meal_0028",
-      "name": "Kabaklı ve havuçlu tost",
+      "name": "KabaklÄ± ve havuÃ§lu tost",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2215,16 +2215,16 @@
       "tags": [
         "tost",
         "ekmek",
-        "börek",
+        "bÃ¶rek",
         "yumurta",
         "peynir",
         "kabak",
-        "havuç",
+        "havuÃ§",
         "lor"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -2271,7 +2271,7 @@
     },
     {
       "id": "meal_0029",
-      "name": "Fırında Sucuklu Kaşarlı Lokmalar (4 adet)",
+      "name": "FÄ±rÄ±nda Sucuklu KaÅarlÄ± Lokmalar (4 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -2350,7 +2350,7 @@
     },
     {
       "id": "meal_0030",
-      "name": "Maydanozlu Poğaça (2 adet)",
+      "name": "Maydanozlu PoÄaÃ§a (2 adet)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2380,13 +2380,13 @@
       },
       "tags": [
         "peynir",
-        "börek",
+        "bÃ¶rek",
         "ekmek",
         "yumurta"
       ],
       "compatibility": {
         "positive": [
-          "yeşillik",
+          "yeÅillik",
           "zeytin",
           "domates"
         ],
@@ -2435,7 +2435,7 @@
     },
     {
       "id": "meal_0031",
-      "name": "Badem Unlu Dere Otlu Poğaça (3 poğaça)",
+      "name": "Badem Unlu Dere Otlu PoÄaÃ§a (3 poÄaÃ§a)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2468,7 +2468,7 @@
       ],
       "compatibility": {
         "positive": [
-          "yeşillik",
+          "yeÅillik",
           "zeytin",
           "domates"
         ],
@@ -2517,7 +2517,7 @@
     },
     {
       "id": "meal_0032",
-      "name": "Hindistancevizi Unlu Ispanaklı Muffin (2 adet)",
+      "name": "Hindistancevizi Unlu IspanaklÄ± Muffin (2 adet)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2545,7 +2545,7 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
+        "Ä±spanak",
         "muffin",
         "ekmek",
         "tost",
@@ -2554,7 +2554,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yeşillik",
+          "yeÅillik",
           "zeytin",
           "peynir",
           "domates"
@@ -2639,8 +2639,8 @@
       "compatibility": {
         "positive": [
           "domates",
-          "salatalık",
-          "turşu",
+          "salatalÄ±k",
+          "turÅu",
           "peynir"
         ],
         "negative": [],
@@ -2684,7 +2684,7 @@
     },
     {
       "id": "meal_0034",
-      "name": "1 dilim Pırasalı Tava Böreği",
+      "name": "1 dilim PÄ±rasalÄ± Tava BÃ¶reÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -2708,15 +2708,15 @@
         "isFixed": false
       },
       "tags": [
-        "pırasa",
-        "börek",
+        "pÄ±rasa",
+        "bÃ¶rek",
         "keto",
-        "poğaça"
+        "poÄaÃ§a"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -2759,7 +2759,7 @@
     },
     {
       "id": "meal_0035",
-      "name": "Ketojenik Ispanaklı Börek (1 dilim)",
+      "name": "Ketojenik IspanaklÄ± BÃ¶rek (1 dilim)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2787,17 +2787,17 @@
         "isFixed": true
       },
       "tags": [
-        "ıspanak",
-        "börek",
+        "Ä±spanak",
+        "bÃ¶rek",
         "keto",
         "ekmek"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -2844,7 +2844,7 @@
     },
     {
       "id": "meal_0036",
-      "name": "Peynirli Kabaklı Poğaça (2 adet)",
+      "name": "Peynirli KabaklÄ± PoÄaÃ§a (2 adet)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -2873,7 +2873,7 @@
         "isFixed": false
       },
       "tags": [
-        "poğaça",
+        "poÄaÃ§a",
         "ekmek",
         "tost",
         "yumurta",
@@ -2883,7 +2883,7 @@
         "positive": [
           "zeytin",
           "domates",
-          "yeşillik",
+          "yeÅillik",
           "hindi"
         ],
         "negative": [],
@@ -2931,7 +2931,7 @@
     },
     {
       "id": "meal_0037",
-      "name": "Yumurta Salatası",
+      "name": "Yumurta SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -2958,7 +2958,7 @@
       },
       "tags": [
         "yumurta",
-        "yeşillik",
+        "yeÅillik",
         "sabah",
         "keto"
       ],
@@ -3090,7 +3090,7 @@
     },
     {
       "id": "meal_0039",
-      "name": "Peynirli biber dolması (2 adet)",
+      "name": "Peynirli biber dolmasÄ± (2 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -3167,7 +3167,7 @@
     },
     {
       "id": "meal_0040",
-      "name": "Menemen (2 adet yumurta, 1 adet domates, 1 adet biber, 1/4 soğan)",
+      "name": "Menemen (2 adet yumurta, 1 adet domates, 1 adet biber, 1/4 soÄan)",
       "categories": [
         "SPECIAL"
       ],
@@ -3275,7 +3275,7 @@
       "tags": [
         "biber",
         "lor",
-        "z.yağı",
+        "z.yaÄÄ±",
         "keto",
         "peynir"
       ],
@@ -3328,7 +3328,7 @@
     },
     {
       "id": "meal_0042",
-      "name": "Sahanda Yumurta (1 adet), 1 tatlı kaşığı tereyağı ile",
+      "name": "Sahanda Yumurta (1 adet), 1 tatlÄ± kaÅÄ±ÄÄ± tereyaÄÄ± ile",
       "categories": [
         "SPECIAL"
       ],
@@ -3355,7 +3355,7 @@
       },
       "tags": [
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -3561,7 +3561,7 @@
     },
     {
       "id": "meal_0045",
-      "name": "Tulum / kaşar / lor peyniri (30 gram)",
+      "name": "Tulum / kaÅar / lor peyniri (30 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -3590,7 +3590,7 @@
         "peynir",
         "keto",
         "lor",
-        "kaşar",
+        "kaÅar",
         "tulum"
       ],
       "compatibility": {
@@ -3802,7 +3802,7 @@
     },
     {
       "id": "meal_0048",
-      "name": "(1 porsiyon) Kahvaltılık Kuru Soğanlı Cevizli Lor Kavurması",
+      "name": "(1 porsiyon) KahvaltÄ±lÄ±k Kuru SoÄanlÄ± Cevizli Lor KavurmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -3828,7 +3828,7 @@
         "isFixed": false
       },
       "tags": [
-        "soğan",
+        "soÄan",
         "ceviz",
         "lor",
         "keto"
@@ -3879,7 +3879,7 @@
     },
     {
       "id": "meal_0049",
-      "name": "Peynir Topları (1 porsiyon)",
+      "name": "Peynir ToplarÄ± (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -3914,7 +3914,7 @@
           "yumurta",
           "zeytin",
           "domates",
-          "yeşillik"
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -3961,7 +3961,7 @@
     },
     {
       "id": "meal_0050",
-      "name": "Ispanaklı ve Lor Peynirli Omlet",
+      "name": "IspanaklÄ± ve Lor Peynirli Omlet",
       "categories": [
         "SPECIAL"
       ],
@@ -3989,7 +3989,7 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
+        "Ä±spanak",
         "lor",
         "omlet",
         "keto",
@@ -4045,7 +4045,7 @@
     },
     {
       "id": "meal_0051",
-      "name": "Sebzeli omlet (2 adet yumurta, 5 adet mantar, 5 yaprak ıspanak, 1 tatlı kaşığı tereyağı)",
+      "name": "Sebzeli omlet (2 adet yumurta, 5 adet mantar, 5 yaprak Ä±spanak, 1 tatlÄ± kaÅÄ±ÄÄ± tereyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -4074,7 +4074,7 @@
       "tags": [
         "yumurta",
         "sebze",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -4082,7 +4082,7 @@
           "domates",
           "peynir",
           "zeytin",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -4129,7 +4129,7 @@
     },
     {
       "id": "meal_0052",
-      "name": "Şekersiz badem ezmesi (1 tatlı kaşığı)",
+      "name": "Åekersiz badem ezmesi (1 tatlÄ± kaÅÄ±ÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -4204,7 +4204,7 @@
     },
     {
       "id": "meal_0053",
-      "name": "Yumurta salatası (2 adet haşlanmış yumurta, 5 dal maydanoz, 5 dal dereotu, 1 dilim limon ve 1 yemek kaşığı zeytinyağı",
+      "name": "Yumurta salatasÄ± (2 adet haÅlanmÄ±Å yumurta, 5 dal maydanoz, 5 dal dereotu, 1 dilim limon ve 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -4234,13 +4234,13 @@
       "tags": [
         "yumurta",
         "zeytin",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -4319,7 +4319,7 @@
         "positive": [
           "ekmek",
           "peynir",
-          "tatlı"
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -4366,7 +4366,7 @@
     },
     {
       "id": "meal_0055",
-      "name": "Susamlı Omlet",
+      "name": "SusamlÄ± Omlet",
       "categories": [
         "SPECIAL"
       ],
@@ -4401,7 +4401,7 @@
           "domates",
           "peynir",
           "zeytin",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "ekmek"
         ],
         "negative": [],
@@ -4449,7 +4449,7 @@
     },
     {
       "id": "meal_0056",
-      "name": "Haşlanmış Yumurta (1 adet) + Tereyağı ve Baharatlar",
+      "name": "HaÅlanmÄ±Å Yumurta (1 adet) + TereyaÄÄ± ve Baharatlar",
       "categories": [
         "SPECIAL"
       ],
@@ -4476,7 +4476,7 @@
       },
       "tags": [
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -4531,7 +4531,7 @@
     },
     {
       "id": "meal_0057",
-      "name": "2 adet lupin unlu poğaça (veya 4 adet Lorlu poğaça)",
+      "name": "2 adet lupin unlu poÄaÃ§a (veya 4 adet Lorlu poÄaÃ§a)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -4560,7 +4560,7 @@
       },
       "tags": [
         "keto",
-        "poğaça",
+        "poÄaÃ§a",
         "lupin",
         "lor",
         "ekmek",
@@ -4569,7 +4569,7 @@
       "compatibility": {
         "positive": [
           "zeytin",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -4616,7 +4616,7 @@
     },
     {
       "id": "meal_0058",
-      "name": "Kıymalı - Yumurtalı ıspanak kavurma (2 adet yumurta, 50 gram kıyma, 100 gram Ispanak, 1 yemek kaşığı zeytinyağı, soğan",
+      "name": "KÄ±ymalÄ± - YumurtalÄ± Ä±spanak kavurma (2 adet yumurta, 50 gram kÄ±yma, 100 gram Ispanak, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±, soÄan",
       "categories": [
         "SPECIAL"
       ],
@@ -4646,7 +4646,7 @@
       "tags": [
         "keto",
         "yumurta",
-        "ıspanak",
+        "Ä±spanak",
         "et"
       ],
       "compatibility": {
@@ -4702,7 +4702,7 @@
     },
     {
       "id": "meal_0059",
-      "name": "Sebzeli Omlet (1 adet yumurta, 5 adet mantar, 5 yaprak ıspanak, 1 yemek kaşığı zeytinyağı)",
+      "name": "Sebzeli Omlet (1 adet yumurta, 5 adet mantar, 5 yaprak Ä±spanak, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -4733,14 +4733,14 @@
         "omlet",
         "hindi",
         "mantar",
-        "ıspanak",
+        "Ä±spanak",
         "keto",
         "tost"
       ],
       "compatibility": {
         "positive": [
           "domates",
-          "salatalık",
+          "salatalÄ±k",
           "zeytin",
           "ekmek",
           "salata"
@@ -4790,7 +4790,7 @@
     },
     {
       "id": "meal_0060",
-      "name": "1 dilim Ketojenik Ispanaklı Börek",
+      "name": "1 dilim Ketojenik IspanaklÄ± BÃ¶rek",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -4818,8 +4818,8 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
-        "börek",
+        "Ä±spanak",
+        "bÃ¶rek",
         "keto",
         "ekmek"
       ],
@@ -4828,7 +4828,7 @@
           "zeytin",
           "domates",
           "peynir",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -4906,7 +4906,7 @@
         "et",
         "tost",
         "muffin",
-        "börek"
+        "bÃ¶rek"
       ],
       "compatibility": {
         "positive": [],
@@ -4955,7 +4955,7 @@
     },
     {
       "id": "meal_0062",
-      "name": "30 gram pastırma",
+      "name": "30 gram pastÄ±rma",
       "categories": [
         "SPECIAL"
       ],
@@ -4984,7 +4984,7 @@
         "keto",
         "et",
         "tost",
-        "börek",
+        "bÃ¶rek",
         "muffin"
       ],
       "compatibility": {
@@ -5034,7 +5034,7 @@
     },
     {
       "id": "meal_0063",
-      "name": "Yumurtalı ıspanak /pazı /semizotu   kavurma (2 adet yumurta, 100 gram Ispanak, 1 yemek kaşığı zeytinyağı, tercihen soğan",
+      "name": "YumurtalÄ± Ä±spanak /pazÄ± /semizotu   kavurma (2 adet yumurta, 100 gram Ispanak, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±, tercihen soÄan",
       "categories": [
         "SPECIAL"
       ],
@@ -5062,17 +5062,17 @@
       },
       "tags": [
         "yumurta",
-        "zeytinyağı",
-        "ıspanak",
+        "zeytinyaÄÄ±",
+        "Ä±spanak",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "ekmek",
           "peynir",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "domates",
-          "tatlı"
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -5119,7 +5119,7 @@
     },
     {
       "id": "meal_0064",
-      "name": "Sebzeli omlet (2 yumurta, 5 adet mantar, 5 yaprak ıspanak / pazı, 1 yemek kaşığı zeytinyağı)",
+      "name": "Sebzeli omlet (2 yumurta, 5 adet mantar, 5 yaprak Ä±spanak / pazÄ±, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -5149,7 +5149,7 @@
         "yumurta",
         "zeytin",
         "sebze",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -5157,7 +5157,7 @@
           "domates",
           "peynir",
           "zeytin",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "ekmek"
         ],
         "negative": [],
@@ -5205,7 +5205,7 @@
     },
     {
       "id": "meal_0065",
-      "name": "Közlenmiş Kapya Biber",
+      "name": "KÃ¶zlenmiÅ Kapya Biber",
       "categories": [
         "SPECIAL"
       ],
@@ -5233,7 +5233,7 @@
       "tags": [
         "biber",
         "keto",
-        "yeşillik"
+        "yeÅillik"
       ],
       "compatibility": {
         "positive": [],
@@ -5320,7 +5320,7 @@
         "positive": [
           "zeytin",
           "domates",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "peynir"
         ],
         "negative": [],
@@ -5368,7 +5368,7 @@
     },
     {
       "id": "meal_0067",
-      "name": "1 adet Ispanaklı Muffin",
+      "name": "1 adet IspanaklÄ± Muffin",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -5396,7 +5396,7 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
+        "Ä±spanak",
         "muffin",
         "keto",
         "ekmek"
@@ -5405,7 +5405,7 @@
         "positive": [
           "zeytin",
           "peynir",
-          "yeşillik"
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -5452,7 +5452,7 @@
     },
     {
       "id": "meal_0068",
-      "name": "Sebzeli Omlet (2 adet yumurta, 5 adet mantar, 5 yaprak ıspanak, 1 yemek kaşığı zeytinyağı)",
+      "name": "Sebzeli Omlet (2 adet yumurta, 5 adet mantar, 5 yaprak Ä±spanak, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -5482,7 +5482,7 @@
         "sebze",
         "omlet",
         "mantar",
-        "ıspanak",
+        "Ä±spanak",
         "keto"
       ],
       "compatibility": {
@@ -5491,7 +5491,7 @@
           "domates",
           "ekmek",
           "peynir",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -5538,7 +5538,7 @@
     },
     {
       "id": "meal_0069",
-      "name": "Lor peynirli tabanlı keto pizza",
+      "name": "Lor peynirli tabanlÄ± keto pizza",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -5568,18 +5568,18 @@
       "tags": [
         "pizza",
         "ekmek",
-        "börek",
+        "bÃ¶rek",
         "yumurta",
         "peynir",
         "sucuk"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata",
-          "yeşillik",
-          "kuruyemiş",
-          "tatlı"
+          "yeÅillik",
+          "kuruyemiÅ",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -5664,8 +5664,8 @@
           "domates",
           "peynir",
           "zeytin",
-          "yeşillik",
-          "kuruyemiş",
+          "yeÅillik",
+          "kuruyemiÅ",
           "salata"
         ],
         "negative": [],
@@ -5713,7 +5713,7 @@
     },
     {
       "id": "meal_0071",
-      "name": "sebzeli omlet (2 adet yumurta, 2 dilim hindi füme, 5 adet mantar, 5 yaprak ıspanak, 1 yemek kaşığı zeytinyağı)",
+      "name": "sebzeli omlet (2 adet yumurta, 2 dilim hindi fÃ¼me, 5 adet mantar, 5 yaprak Ä±spanak, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -5744,7 +5744,7 @@
         "omlet",
         "hindi",
         "mantar",
-        "ıspanak",
+        "Ä±spanak",
         "keto",
         "tost"
       ],
@@ -5753,7 +5753,7 @@
           "zeytin",
           "peynir",
           "domates",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -5800,7 +5800,7 @@
     },
     {
       "id": "meal_0072",
-      "name": "Kabaklı Omlet",
+      "name": "KabaklÄ± Omlet",
       "categories": [
         "SPECIAL"
       ],
@@ -5837,7 +5837,7 @@
           "zeytin",
           "domates",
           "peynir",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -5912,7 +5912,7 @@
       },
       "tags": [
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -5922,8 +5922,8 @@
           "domates",
           "ekmek",
           "sucuk",
-          "kuruyemiş",
-          "yeşillik"
+          "kuruyemiÅ",
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -5970,7 +5970,7 @@
     },
     {
       "id": "meal_0074",
-      "name": "1 dilim Ispanaklı Kabak Böreği",
+      "name": "1 dilim IspanaklÄ± Kabak BÃ¶reÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -5996,9 +5996,9 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
+        "Ä±spanak",
         "kabak",
-        "börek",
+        "bÃ¶rek",
         "keto",
         "ekmek"
       ],
@@ -6007,8 +6007,8 @@
           "peynir",
           "zeytin",
           "domates",
-          "tatlı",
-          "kuruyemiş"
+          "tatlÄ±",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -6056,7 +6056,7 @@
     },
     {
       "id": "meal_0075",
-      "name": "Sebzeli Krep (2 adet yumurta, 1 yemek kaşığı lupin unu, 5 adet mantar, 5 yaprak ıspanak, 1 yemek kaşığı zeytinyağı)",
+      "name": "Sebzeli Krep (2 adet yumurta, 1 yemek kaÅÄ±ÄÄ± lupin unu, 5 adet mantar, 5 yaprak Ä±spanak, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -6087,7 +6087,7 @@
         "sebze",
         "krep",
         "mantar",
-        "ıspanak",
+        "Ä±spanak",
         "keto",
         "ekmek",
         "tost"
@@ -6095,7 +6095,7 @@
       "compatibility": {
         "positive": [
           "zeytin",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -6142,7 +6142,7 @@
     },
     {
       "id": "meal_0076",
-      "name": "Haşlanmış Yumurta (2 adet) + Tereyağı ve Baharatlar",
+      "name": "HaÅlanmÄ±Å Yumurta (2 adet) + TereyaÄÄ± ve Baharatlar",
       "categories": [
         "SPECIAL"
       ],
@@ -6170,18 +6170,18 @@
       },
       "tags": [
         "yumurta",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto",
         "tost"
       ],
       "compatibility": {
         "positive": [
           "sucuk",
-          "pastırma",
+          "pastÄ±rma",
           "ekmek",
-          "yeşillik",
+          "yeÅillik",
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "hindi"
         ],
         "negative": [],
@@ -6229,7 +6229,7 @@
     },
     {
       "id": "meal_0077",
-      "name": "tahin ekmeği ile tost (1 dilim kaşar) + kasap sucuk (50 gram)",
+      "name": "tahin ekmeÄi ile tost (1 dilim kaÅar) + kasap sucuk (50 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -6263,9 +6263,9 @@
       "compatibility": {
         "positive": [
           "domates",
-          "salatalık",
+          "salatalÄ±k",
           "peynir",
-          "turşu"
+          "turÅu"
         ],
         "negative": [],
         "neutral": []
@@ -6340,7 +6340,7 @@
       },
       "tags": [
         "hellim",
-        "ıspanak",
+        "Ä±spanak",
         "keto",
         "peynir"
       ],
@@ -6394,7 +6394,7 @@
     },
     {
       "id": "meal_0079",
-      "name": "Biber Dolması (Lor ve Yumurta Dolgulu)",
+      "name": "Biber DolmasÄ± (Lor ve Yumurta Dolgulu)",
       "categories": [
         "SPECIAL"
       ],
@@ -6477,7 +6477,7 @@
     },
     {
       "id": "meal_0080",
-      "name": "Fırında Menemen",
+      "name": "FÄ±rÄ±nda Menemen",
       "categories": [
         "SPECIAL"
       ],
@@ -6513,7 +6513,7 @@
           "zeytin",
           "ekmek",
           "tahin",
-          "yeşillik"
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -6560,7 +6560,7 @@
     },
     {
       "id": "meal_0081",
-      "name": "Izgara Kabak Ruloları",
+      "name": "Izgara Kabak RulolarÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -6636,7 +6636,7 @@
     },
     {
       "id": "meal_0082",
-      "name": "Taze Fasulyeli Yumurta Kavurması",
+      "name": "Taze Fasulyeli Yumurta KavurmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -6662,7 +6662,7 @@
         "isFixed": false
       },
       "tags": [
-        "fasülye",
+        "fasÃ¼lye",
         "yumurta"
       ],
       "compatibility": {
@@ -6717,7 +6717,7 @@
     },
     {
       "id": "meal_0083",
-      "name": "Fırınlanmış Peynirli Taze Fasulye Graten",
+      "name": "FÄ±rÄ±nlanmÄ±Å Peynirli Taze Fasulye Graten",
       "categories": [
         "SPECIAL"
       ],
@@ -6743,17 +6743,17 @@
         "isFixed": false
       },
       "tags": [
-        "fasülye",
+        "fasÃ¼lye",
         "peynir",
         "yumurta"
       ],
       "compatibility": {
         "positive": [
-          "yeşillik",
+          "yeÅillik",
           "salata",
-          "çorba",
-          "tatlı",
-          "kuruyemiş"
+          "Ã§orba",
+          "tatlÄ±",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -6801,7 +6801,7 @@
     },
     {
       "id": "meal_0084",
-      "name": "Yoğurtlu Tavuk Salatası",
+      "name": "YoÄurtlu Tavuk SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -6831,14 +6831,14 @@
         "tavuk",
         "et",
         "salata",
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -6886,7 +6886,7 @@
     },
     {
       "id": "meal_0085",
-      "name": "Girit Usulü Zeytinli Meze",
+      "name": "Girit UsulÃ¼ Zeytinli Meze",
       "categories": [
         "SPECIAL"
       ],
@@ -6966,7 +6966,7 @@
     },
     {
       "id": "meal_0086",
-      "name": "Yumurtalı Lahana Kavurma",
+      "name": "YumurtalÄ± Lahana Kavurma",
       "categories": [
         "SPECIAL"
       ],
@@ -6996,9 +6996,9 @@
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
+          "kuruyemiÅ",
           "domates",
-          "yoğurt"
+          "yoÄurt"
         ],
         "negative": [],
         "neutral": []
@@ -7046,7 +7046,7 @@
     },
     {
       "id": "meal_0087",
-      "name": "Patlıcan Tost",
+      "name": "PatlÄ±can Tost",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -7072,7 +7072,7 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "tost",
         "keto",
         "ekmek",
@@ -7083,7 +7083,7 @@
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -7130,7 +7130,7 @@
     },
     {
       "id": "meal_0088",
-      "name": "2 dilim Hindi Füme",
+      "name": "2 dilim Hindi FÃ¼me",
       "categories": [
         "SPECIAL"
       ],
@@ -7211,7 +7211,7 @@
     },
     {
       "id": "meal_0089",
-      "name": "Kabaklı Peynirli Muffin (4 adet)",
+      "name": "KabaklÄ± Peynirli Muffin (4 adet)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -7247,11 +7247,11 @@
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
+          "kuruyemiÅ",
           "zeytin",
           "peynir",
           "domates",
-          "yeşillik"
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -7380,7 +7380,7 @@
     },
     {
       "id": "meal_0091",
-      "name": "Yeşil Mercimekli Tuzlu Kek (1 dilim)",
+      "name": "YeÅil Mercimekli Tuzlu Kek (1 dilim)",
       "categories": [
         "SPECIAL"
       ],
@@ -7456,7 +7456,7 @@
     },
     {
       "id": "meal_0092",
-      "name": "Çıtır Tavuk",
+      "name": "ÃÄ±tÄ±r Tavuk",
       "categories": [
         "SPECIAL"
       ],
@@ -7483,7 +7483,7 @@
         "isFixed": false
       },
       "tags": [
-        "çıtır",
+        "Ã§Ä±tÄ±r",
         "tavuk",
         "keto"
       ],
@@ -7491,7 +7491,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -7537,7 +7537,7 @@
     },
     {
       "id": "meal_0093",
-      "name": "Ciğer Kavurma (200 gram)",
+      "name": "CiÄer Kavurma (200 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -7564,16 +7564,16 @@
         "isFixed": false
       },
       "tags": [
-        "ciğer",
+        "ciÄer",
         "keto",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -7618,7 +7618,7 @@
     },
     {
       "id": "meal_0094",
-      "name": "Etli Kereviz Yemeği",
+      "name": "Etli Kereviz YemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -7651,9 +7651,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -7698,7 +7698,7 @@
     },
     {
       "id": "meal_0095",
-      "name": "Ketojenik Köfte",
+      "name": "Ketojenik KÃ¶fte",
       "categories": [
         "SPECIAL"
       ],
@@ -7726,16 +7726,16 @@
         "isFixed": false
       },
       "tags": [
-        "köfte",
+        "kÃ¶fte",
         "keto",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -7816,7 +7816,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -7862,7 +7862,7 @@
     },
     {
       "id": "meal_0097",
-      "name": "Fırında Kremalı Karnabahar",
+      "name": "FÄ±rÄ±nda KremalÄ± Karnabahar",
       "categories": [
         "SPECIAL"
       ],
@@ -7889,13 +7889,13 @@
       },
       "tags": [
         "karnabahar",
-        "kremalı",
+        "kremalÄ±",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -7941,7 +7941,7 @@
     },
     {
       "id": "meal_0098",
-      "name": "Kerevizli Çökertme Kebabı (200 gr kıyma ve 1 küçük boy kereviz ile)",
+      "name": "Kerevizli ÃÃ¶kertme KebabÄ± (200 gr kÄ±yma ve 1 kÃ¼Ã§Ã¼k boy kereviz ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -7969,14 +7969,14 @@
       },
       "tags": [
         "kereviz",
-        "kıyma",
+        "kÄ±yma",
         "kebap",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8022,7 +8022,7 @@
     },
     {
       "id": "meal_0099",
-      "name": "200 gram Tavuk Eti ile Güveç (domates, biber ve soğan ile)",
+      "name": "200 gram Tavuk Eti ile GÃ¼veÃ§ (domates, biber ve soÄan ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -8050,15 +8050,15 @@
       },
       "tags": [
         "tavuk",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -8103,7 +8103,7 @@
     },
     {
       "id": "meal_0100",
-      "name": "200 gram Kırmızı Et ile Güveç (domates, biber ve soğan ile)",
+      "name": "200 gram KÄ±rmÄ±zÄ± Et ile GÃ¼veÃ§ (domates, biber ve soÄan ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -8131,15 +8131,15 @@
       },
       "tags": [
         "et",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -8184,7 +8184,7 @@
     },
     {
       "id": "meal_0101",
-      "name": "Patlıcan Kebabı (2 orta boy patlıcan, 200 gr kıyma ile)",
+      "name": "PatlÄ±can KebabÄ± (2 orta boy patlÄ±can, 200 gr kÄ±yma ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -8211,15 +8211,15 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
-        "kıyma",
+        "patlÄ±can",
+        "kÄ±yma",
         "kebap",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8265,7 +8265,7 @@
     },
     {
       "id": "meal_0102",
-      "name": "200 gram Somon Fileto (tavada veya ızgarada)",
+      "name": "200 gram Somon Fileto (tavada veya Ä±zgarada)",
       "categories": [
         "SPECIAL"
       ],
@@ -8293,15 +8293,15 @@
       },
       "tags": [
         "somon",
-        "balık",
+        "balÄ±k",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "limon",
-          "zeytinyağı"
+          "zeytinyaÄÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -8346,7 +8346,7 @@
     },
     {
       "id": "meal_0103",
-      "name": "Karnabahar Mantı (150 gr karnabahar, 150 gr kıyma ile)",
+      "name": "Karnabahar MantÄ± (150 gr karnabahar, 150 gr kÄ±yma ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -8375,13 +8375,13 @@
       },
       "tags": [
         "karnabahar",
-        "kıyma",
+        "kÄ±yma",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8427,7 +8427,7 @@
     },
     {
       "id": "meal_0104",
-      "name": "Nohut Yemeği (1 su bardağı nohut ile)",
+      "name": "Nohut YemeÄi (1 su bardaÄÄ± nohut ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -8454,7 +8454,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8500,7 +8500,7 @@
     },
     {
       "id": "meal_0105",
-      "name": "Pırasa Yemeği (100 gr pırasa + 100 gr kıyma ile)",
+      "name": "PÄ±rasa YemeÄi (100 gr pÄ±rasa + 100 gr kÄ±yma ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -8527,14 +8527,14 @@
         "isFixed": false
       },
       "tags": [
-        "pırasa",
-        "kıyma",
+        "pÄ±rasa",
+        "kÄ±yma",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8580,7 +8580,7 @@
     },
     {
       "id": "meal_0106",
-      "name": "Ciğer Kavurma (1 porsiyon)",
+      "name": "CiÄer Kavurma (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -8607,13 +8607,13 @@
         "isFixed": false
       },
       "tags": [
-        "ciğer",
+        "ciÄer",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8693,7 +8693,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -8739,7 +8739,7 @@
     },
     {
       "id": "meal_0108",
-      "name": "Kıymalı - Yumurtalı Ispanak Kavurma",
+      "name": "KÄ±ymalÄ± - YumurtalÄ± Ispanak Kavurma",
       "categories": [
         "SPECIAL"
       ],
@@ -8767,19 +8767,19 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
+        "kÄ±yma",
         "yumurta",
-        "ıspanak",
-        "zeytinyağı",
+        "Ä±spanak",
+        "zeytinyaÄÄ±",
         "keto",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -8859,7 +8859,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -8905,7 +8905,7 @@
     },
     {
       "id": "meal_0110",
-      "name": "Lahana Mücver",
+      "name": "Lahana MÃ¼cver",
       "categories": [
         "SPECIAL"
       ],
@@ -8932,13 +8932,13 @@
       },
       "tags": [
         "lahana",
-        "mücver",
+        "mÃ¼cver",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -8986,7 +8986,7 @@
     },
     {
       "id": "meal_0111",
-      "name": "1 tatlı kaşığı keten tohumu (salata üzerine)",
+      "name": "1 tatlÄ± kaÅÄ±ÄÄ± keten tohumu (salata Ã¼zerine)",
       "categories": [
         "SPECIAL"
       ],
@@ -9061,7 +9061,7 @@
     },
     {
       "id": "meal_0112",
-      "name": "Karnabahar Püresi",
+      "name": "Karnabahar PÃ¼resi",
       "categories": [
         "SPECIAL"
       ],
@@ -9089,7 +9089,7 @@
       "tags": [
         "karnabahar",
         "keto",
-        "karnabahar püresi"
+        "karnabahar pÃ¼resi"
       ],
       "compatibility": {
         "positive": [],
@@ -9164,7 +9164,7 @@
       },
       "tags": [
         "karnabahar",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -9287,7 +9287,7 @@
     },
     {
       "id": "meal_0115",
-      "name": "Köz Patlıcan",
+      "name": "KÃ¶z PatlÄ±can",
       "categories": [
         "SPECIAL"
       ],
@@ -9313,7 +9313,7 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "keto"
       ],
       "compatibility": {
@@ -9361,7 +9361,7 @@
     },
     {
       "id": "meal_0116",
-      "name": "Köz Patlıcan Yoğurtlu",
+      "name": "KÃ¶z PatlÄ±can YoÄurtlu",
       "categories": [
         "SPECIAL"
       ],
@@ -9387,8 +9387,8 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
-        "yoğurt",
+        "patlÄ±can",
+        "yoÄurt",
         "keto"
       ],
       "compatibility": {
@@ -9436,7 +9436,7 @@
     },
     {
       "id": "meal_0117",
-      "name": "Tatlı Patates Püresi",
+      "name": "TatlÄ± Patates PÃ¼resi",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -9463,7 +9463,7 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı patates"
+        "tatlÄ± patates"
       ],
       "compatibility": {
         "positive": [],
@@ -9512,7 +9512,7 @@
     },
     {
       "id": "meal_0118",
-      "name": "1 tatlı kaşığı mayonez",
+      "name": "1 tatlÄ± kaÅÄ±ÄÄ± mayonez",
       "categories": [
         "SPECIAL"
       ],
@@ -9585,7 +9585,7 @@
     },
     {
       "id": "meal_0119",
-      "name": "2 kare Bitter Çikolata",
+      "name": "2 kare Bitter Ãikolata",
       "categories": [
         "SPECIAL"
       ],
@@ -9611,7 +9611,7 @@
         "isFixed": false
       },
       "tags": [
-        "çikolata",
+        "Ã§ikolata",
         "keto"
       ],
       "compatibility": {
@@ -9659,7 +9659,7 @@
     },
     {
       "id": "meal_0120",
-      "name": "Yoğurt 2 yemek kaşığı Ev Yoğurdu",
+      "name": "YoÄurt 2 yemek kaÅÄ±ÄÄ± Ev YoÄurdu",
       "categories": [
         "SPECIAL"
       ],
@@ -9685,7 +9685,7 @@
         "isFixed": false
       },
       "tags": [
-        "yoğurt",
+        "yoÄurt",
         "keto"
       ],
       "compatibility": {
@@ -9735,7 +9735,7 @@
     },
     {
       "id": "meal_0121",
-      "name": "Enginar Çanağı",
+      "name": "Enginar ÃanaÄÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -9808,7 +9808,7 @@
     },
     {
       "id": "meal_0122",
-      "name": "Keten Tohumu (1 yemek kaşığı)",
+      "name": "Keten Tohumu (1 yemek kaÅÄ±ÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -9883,7 +9883,7 @@
     },
     {
       "id": "meal_0123",
-      "name": "Chia Tohumu (1 yemek kaşığı)",
+      "name": "Chia Tohumu (1 yemek kaÅÄ±ÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -9991,7 +9991,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -10039,7 +10039,7 @@
     },
     {
       "id": "meal_0125",
-      "name": "2 yemek kaşığı ev yoğurdu",
+      "name": "2 yemek kaÅÄ±ÄÄ± ev yoÄurdu",
       "categories": [
         "SPECIAL"
       ],
@@ -10066,8 +10066,8 @@
       },
       "tags": [
         "keto",
-        "yoğurt",
-        "süt"
+        "yoÄurt",
+        "sÃ¼t"
       ],
       "compatibility": {
         "positive": [],
@@ -10116,7 +10116,7 @@
     },
     {
       "id": "meal_0126",
-      "name": "Patlıcan kebabı (2 adet orta boy patlıcan, 200 gram kıyma ile yapılan köfte: patlıcanlar halka halka doğranıp çöp şişe bir patlıcan bir köfte şeklinde dizilir. fırında ya da airfry'da pişirilir)",
+      "name": "PatlÄ±can kebabÄ± (2 adet orta boy patlÄ±can, 200 gram kÄ±yma ile yapÄ±lan kÃ¶fte: patlÄ±canlar halka halka doÄranÄ±p Ã§Ã¶p ÅiÅe bir patlÄ±can bir kÃ¶fte Åeklinde dizilir. fÄ±rÄ±nda ya da airfry'da piÅirilir)",
       "categories": [
         "SPECIAL"
       ],
@@ -10144,15 +10144,15 @@
       },
       "tags": [
         "et",
-        "patlıcan",
+        "patlÄ±can",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -10199,7 +10199,7 @@
     },
     {
       "id": "meal_0127",
-      "name": "Yarım su bardağı nohut+100 gr tavuk ya da kırmızı et ile nohut yemeği",
+      "name": "YarÄ±m su bardaÄÄ± nohut+100 gr tavuk ya da kÄ±rmÄ±zÄ± et ile nohut yemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -10231,9 +10231,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -10280,7 +10280,7 @@
     },
     {
       "id": "meal_0128",
-      "name": "Kıymalı ıspanak",
+      "name": "KÄ±ymalÄ± Ä±spanak",
       "categories": [
         "SPECIAL"
       ],
@@ -10314,9 +10314,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -10363,7 +10363,7 @@
     },
     {
       "id": "meal_0129",
-      "name": "Kırmızı et ya da tavuklu bamya yemeği (100 gram et ile)",
+      "name": "KÄ±rmÄ±zÄ± et ya da tavuklu bamya yemeÄi (100 gram et ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -10397,9 +10397,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -10446,7 +10446,7 @@
     },
     {
       "id": "meal_0130",
-      "name": "Yeşil mercimek yemeği",
+      "name": "YeÅil mercimek yemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -10475,7 +10475,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -10523,7 +10523,7 @@
     },
     {
       "id": "meal_0131",
-      "name": "80 gram Ton Balığı",
+      "name": "80 gram Ton BalÄ±ÄÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -10549,15 +10549,15 @@
         "isFixed": false
       },
       "tags": [
-        "balık",
+        "balÄ±k",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "limon",
-          "zeytinyağı"
+          "zeytinyaÄÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -10604,7 +10604,7 @@
     },
     {
       "id": "meal_0132",
-      "name": "Köfte",
+      "name": "KÃ¶fte",
       "categories": [
         "SPECIAL"
       ],
@@ -10637,9 +10637,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -10686,7 +10686,7 @@
     },
     {
       "id": "meal_0133",
-      "name": "Fırında Cevizli Peynirli Mantar Dolması (1 porsiyon)",
+      "name": "FÄ±rÄ±nda Cevizli Peynirli Mantar DolmasÄ± (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -10720,7 +10720,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -10803,7 +10803,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -10851,7 +10851,7 @@
     },
     {
       "id": "meal_0135",
-      "name": "Mantarlı Tavuk Sote (1 porsiyon)",
+      "name": "MantarlÄ± Tavuk Sote (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -10886,7 +10886,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -10934,7 +10934,7 @@
     },
     {
       "id": "meal_0136",
-      "name": "Kıymalı Lahana / Kabak / Yeşil Fasulye Yemeği",
+      "name": "KÄ±ymalÄ± Lahana / Kabak / YeÅil Fasulye YemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -10961,7 +10961,7 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
+        "kÄ±yma",
         "lahana",
         "kabak",
         "fasulye",
@@ -10970,7 +10970,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -11018,7 +11018,7 @@
     },
     {
       "id": "meal_0137",
-      "name": "150 gram ciğer kavurma (istenilen baharatlarla)",
+      "name": "150 gram ciÄer kavurma (istenilen baharatlarla)",
       "categories": [
         "SPECIAL"
       ],
@@ -11045,16 +11045,16 @@
         "isFixed": false
       },
       "tags": [
-        "ciğer",
+        "ciÄer",
         "keto",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -11101,7 +11101,7 @@
     },
     {
       "id": "meal_0138",
-      "name": "Kabak Çökertme Kebabı (1 porsiyon)",
+      "name": "Kabak ÃÃ¶kertme KebabÄ± (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -11137,9 +11137,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -11186,7 +11186,7 @@
     },
     {
       "id": "meal_0139",
-      "name": "Nohut yemeği (1 su bardağı nohut ile)",
+      "name": "Nohut yemeÄi (1 su bardaÄÄ± nohut ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -11213,7 +11213,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -11261,7 +11261,7 @@
     },
     {
       "id": "meal_0140",
-      "name": "Pırasa yemeği (100 gram pırasa + 100 gram kıyma ile)",
+      "name": "PÄ±rasa yemeÄi (100 gram pÄ±rasa + 100 gram kÄ±yma ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -11286,17 +11286,17 @@
         "isFixed": false
       },
       "tags": [
-        "pırasa",
-        "kıyma",
+        "pÄ±rasa",
+        "kÄ±yma",
         "keto",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -11343,7 +11343,7 @@
     },
     {
       "id": "meal_0141",
-      "name": "Enginar Mantısı (1 porsiyon)",
+      "name": "Enginar MantÄ±sÄ± (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -11376,7 +11376,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -11424,7 +11424,7 @@
     },
     {
       "id": "meal_0142",
-      "name": "Yeşil Mercimekli Kabak Sandal (1 porsiyon)",
+      "name": "YeÅil Mercimekli Kabak Sandal (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -11457,7 +11457,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -11505,7 +11505,7 @@
     },
     {
       "id": "meal_0143",
-      "name": "Fırında Tavuk Kanat",
+      "name": "FÄ±rÄ±nda Tavuk Kanat",
       "categories": [
         "SPECIAL"
       ],
@@ -11540,7 +11540,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -11588,7 +11588,7 @@
     },
     {
       "id": "meal_0144",
-      "name": "Tavada Kaşarlı Mantar",
+      "name": "Tavada KaÅarlÄ± Mantar",
       "categories": [
         "SPECIAL"
       ],
@@ -11613,7 +11613,7 @@
       },
       "tags": [
         "mantar",
-        "kaşar",
+        "kaÅar",
         "keto",
         "peynir"
       ],
@@ -11664,7 +11664,7 @@
     },
     {
       "id": "meal_0145",
-      "name": "Baby Enginar Salatası",
+      "name": "Baby Enginar SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -11769,12 +11769,12 @@
       },
       "tags": [
         "dondurma",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -11820,7 +11820,7 @@
     },
     {
       "id": "meal_0147",
-      "name": "Avokadolu Roka Salatası",
+      "name": "Avokadolu Roka SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -11851,7 +11851,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -11897,7 +11897,7 @@
     },
     {
       "id": "meal_0148",
-      "name": "Ketojenik Yaprak Sarması (4 adet)",
+      "name": "Ketojenik Yaprak SarmasÄ± (4 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -11930,9 +11930,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -11977,7 +11977,7 @@
     },
     {
       "id": "meal_0149",
-      "name": "Ketojenik Kuru Biber Dolması",
+      "name": "Ketojenik Kuru Biber DolmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -12010,9 +12010,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -12083,10 +12083,10 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı",
+        "tatlÄ±",
         "kurabiye",
         "kakao",
-        "çikolata"
+        "Ã§ikolata"
       ],
       "compatibility": {
         "positive": [],
@@ -12136,7 +12136,7 @@
     },
     {
       "id": "meal_0151",
-      "name": "Fırında sebzeli türlü (1 porsiyon)",
+      "name": "FÄ±rÄ±nda sebzeli tÃ¼rlÃ¼ (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -12158,11 +12158,11 @@
         "isFixed": false
       },
       "tags": [
-        "türlü"
+        "tÃ¼rlÃ¼"
       ],
       "compatibility": {
         "positive": [
-          "türlü"
+          "tÃ¼rlÃ¼"
         ],
         "negative": [],
         "neutral": []
@@ -12210,7 +12210,7 @@
     },
     {
       "id": "meal_0152",
-      "name": "Nohutlu Sebze Güveç",
+      "name": "Nohutlu Sebze GÃ¼veÃ§",
       "categories": [
         "SPECIAL"
       ],
@@ -12233,7 +12233,7 @@
       },
       "tags": [
         "nohut",
-        "güveç",
+        "gÃ¼veÃ§",
         "kabak"
       ],
       "compatibility": {
@@ -12285,7 +12285,7 @@
     },
     {
       "id": "meal_0153",
-      "name": "Yeşil Mercimek Köftesi (Yulaf Unlu)",
+      "name": "YeÅil Mercimek KÃ¶ftesi (Yulaf Unlu)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -12313,14 +12313,14 @@
         "mercimek",
         "maydanoz",
         "yumurta",
-        "börek",
+        "bÃ¶rek",
         "ekmek"
       ],
       "compatibility": {
         "positive": [
-          "yeşillik",
+          "yeÅillik",
           "salata",
-          "çorba"
+          "Ã§orba"
         ],
         "negative": [],
         "neutral": []
@@ -12368,7 +12368,7 @@
     },
     {
       "id": "meal_0154",
-      "name": "Tavuk köftesi (1 porsiyon)",
+      "name": "Tavuk kÃ¶ftesi (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -12398,14 +12398,14 @@
       "tags": [
         "et",
         "tavuk",
-        "köfte"
+        "kÃ¶fte"
       ],
       "compatibility": {
         "positive": [
           "salata",
           "ekmek",
-          "çorba",
-          "yeşillik"
+          "Ã§orba",
+          "yeÅillik"
         ],
         "negative": [],
         "neutral": []
@@ -12452,7 +12452,7 @@
     },
     {
       "id": "meal_0155",
-      "name": "Patlıcan Kebabı",
+      "name": "PatlÄ±can KebabÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -12479,15 +12479,15 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "et",
         "kebap"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata",
-          "tatlı",
+          "tatlÄ±",
           "ekmek"
         ],
         "negative": [],
@@ -12535,7 +12535,7 @@
     },
     {
       "id": "meal_0156",
-      "name": "Kuşkonmazlı ızgara somon",
+      "name": "KuÅkonmazlÄ± Ä±zgara somon",
       "categories": [
         "SPECIAL"
       ],
@@ -12563,15 +12563,15 @@
         "isFixed": false
       },
       "tags": [
-        "balık",
-        "kuşkonmaz",
+        "balÄ±k",
+        "kuÅkonmaz",
         "et"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata",
-          "tatlı"
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -12618,7 +12618,7 @@
     },
     {
       "id": "meal_0157",
-      "name": "Zeytinyağlı Yer Elması",
+      "name": "ZeytinyaÄlÄ± Yer ElmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -12644,8 +12644,8 @@
         "isFixed": false
       },
       "tags": [
-        "yer elması",
-        "zeytinyağı"
+        "yer elmasÄ±",
+        "zeytinyaÄÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -12689,7 +12689,7 @@
     },
     {
       "id": "meal_0158",
-      "name": "Fırında karnabahar kızartma (150 gram karnabahar, 1 yemek kaşığı zeytinyağı ve istenilen baharatlarla fırınlanacak.)",
+      "name": "FÄ±rÄ±nda karnabahar kÄ±zartma (150 gram karnabahar, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ve istenilen baharatlarla fÄ±rÄ±nlanacak.)",
       "categories": [
         "SPECIAL"
       ],
@@ -12714,7 +12714,7 @@
       },
       "tags": [
         "karnabahar",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -12760,7 +12760,7 @@
     },
     {
       "id": "meal_0159",
-      "name": "Karnabahar mantı (150 gram karnabahar, 1 tatlı kaşığı zeytinyağı ve istenilen baharatlarla",
+      "name": "Karnabahar mantÄ± (150 gram karnabahar, 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ± ve istenilen baharatlarla",
       "categories": [
         "SPECIAL"
       ],
@@ -12790,15 +12790,15 @@
       "tags": [
         "et",
         "karnabahar",
-        "kıyma",
+        "kÄ±yma",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -12841,7 +12841,7 @@
     },
     {
       "id": "meal_0160",
-      "name": "Mantarlı Tatlı Patates",
+      "name": "MantarlÄ± TatlÄ± Patates",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -12868,7 +12868,7 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı patates",
+        "tatlÄ± patates",
         "mantar"
       ],
       "compatibility": {
@@ -12915,7 +12915,7 @@
     },
     {
       "id": "meal_0161",
-      "name": "Pırasalı Tava Böreği (1 dilim)",
+      "name": "PÄ±rasalÄ± Tava BÃ¶reÄi (1 dilim)",
       "categories": [
         "SPECIAL"
       ],
@@ -12939,14 +12939,14 @@
         "isFixed": true
       },
       "tags": [
-        "pırasa",
-        "börek",
+        "pÄ±rasa",
+        "bÃ¶rek",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -12989,7 +12989,7 @@
     },
     {
       "id": "meal_0162",
-      "name": "Fırında Otlu Tereyağlı Somon",
+      "name": "FÄ±rÄ±nda Otlu TereyaÄlÄ± Somon",
       "categories": [
         "SPECIAL"
       ],
@@ -13017,14 +13017,14 @@
         "isFixed": false
       },
       "tags": [
-        "balık",
+        "balÄ±k",
         "et",
         "somon"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "çorba"
+          "Ã§orba"
         ],
         "negative": [],
         "neutral": []
@@ -13071,7 +13071,7 @@
     },
     {
       "id": "meal_0163",
-      "name": "Kıymalı biber dolması (2 adet)",
+      "name": "KÄ±ymalÄ± biber dolmasÄ± (2 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -13104,7 +13104,7 @@
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata"
         ],
         "negative": [],
@@ -13152,7 +13152,7 @@
     },
     {
       "id": "meal_0164",
-      "name": "Kıymalı Brüksel Lahana Yemeği",
+      "name": "KÄ±ymalÄ± BrÃ¼ksel Lahana YemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -13179,13 +13179,13 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
-        "brüksel lahana"
+        "kÄ±yma",
+        "brÃ¼ksel lahana"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "sebze"
         ],
         "negative": [],
@@ -13227,7 +13227,7 @@
     },
     {
       "id": "meal_0165",
-      "name": "Köfteli Pırasa Yemeği",
+      "name": "KÃ¶fteli PÄ±rasa YemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -13253,15 +13253,15 @@
         "isFixed": false
       },
       "tags": [
-        "köfte",
-        "pırasa"
+        "kÃ¶fte",
+        "pÄ±rasa"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -13303,7 +13303,7 @@
     },
     {
       "id": "meal_0166",
-      "name": "Susamlı Karnabahar Kızartma",
+      "name": "SusamlÄ± Karnabahar KÄ±zartma",
       "categories": [
         "SPECIAL"
       ],
@@ -13374,7 +13374,7 @@
     },
     {
       "id": "meal_0167",
-      "name": "Sebzeli Karnabahar Pilavı",
+      "name": "Sebzeli Karnabahar PilavÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -13443,7 +13443,7 @@
     },
     {
       "id": "meal_0168",
-      "name": "Ketojenik (Karnabaharlı) Kısır",
+      "name": "Ketojenik (KarnabaharlÄ±) KÄ±sÄ±r",
       "categories": [
         "SPECIAL"
       ],
@@ -13469,15 +13469,15 @@
         "isFixed": false
       },
       "tags": [
-        "kısır",
+        "kÄ±sÄ±r",
         "karnabahar"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -13521,7 +13521,7 @@
     },
     {
       "id": "meal_0169",
-      "name": "Ketojenik  Lahana Sarması (4 adet)",
+      "name": "Ketojenik  Lahana SarmasÄ± (4 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -13554,7 +13554,7 @@
       ],
       "compatibility": {
         "positive": [
-          "yoğurt"
+          "yoÄurt"
         ],
         "negative": [],
         "neutral": []
@@ -13601,7 +13601,7 @@
     },
     {
       "id": "meal_0170",
-      "name": "Tavuk Güveç",
+      "name": "Tavuk GÃ¼veÃ§",
       "categories": [
         "SPECIAL"
       ],
@@ -13629,7 +13629,7 @@
       },
       "tags": [
         "tavuk",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
@@ -13681,7 +13681,7 @@
     },
     {
       "id": "meal_0171",
-      "name": "250 gram ızgara ya da fırında balık (çupra, levrek, alabalık vs.)",
+      "name": "250 gram Ä±zgara ya da fÄ±rÄ±nda balÄ±k (Ã§upra, levrek, alabalÄ±k vs.)",
       "categories": [
         "SPECIAL"
       ],
@@ -13707,7 +13707,7 @@
         "isFixed": false
       },
       "tags": [
-        "balık",
+        "balÄ±k",
         "keto",
         "et"
       ],
@@ -13760,7 +13760,7 @@
     },
     {
       "id": "meal_0172",
-      "name": "Tavuk Keto Dürüm",
+      "name": "Tavuk Keto DÃ¼rÃ¼m",
       "categories": [
         "SPECIAL"
       ],
@@ -13839,7 +13839,7 @@
     },
     {
       "id": "meal_0173",
-      "name": "*Mantarlı tavuk sote",
+      "name": "*MantarlÄ± tavuk sote",
       "categories": [
         "SPECIAL"
       ],
@@ -13920,7 +13920,7 @@
     },
     {
       "id": "meal_0174",
-      "name": "100 gram Haşlama Et",
+      "name": "100 gram HaÅlama Et",
       "categories": [
         "SPECIAL"
       ],
@@ -13999,7 +13999,7 @@
     },
     {
       "id": "meal_0175",
-      "name": "Avokadolu Karides Salatası",
+      "name": "Avokadolu Karides SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -14158,7 +14158,7 @@
     },
     {
       "id": "meal_0177",
-      "name": "Tereyağlı Kabak",
+      "name": "TereyaÄlÄ± Kabak",
       "categories": [
         "SPECIAL"
       ],
@@ -14184,7 +14184,7 @@
       },
       "tags": [
         "kabak",
-        "tereyağı",
+        "tereyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -14234,7 +14234,7 @@
     },
     {
       "id": "meal_0178",
-      "name": "Fırında Domates Soslu Sebze Kızartması",
+      "name": "FÄ±rÄ±nda Domates Soslu Sebze KÄ±zartmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -14308,7 +14308,7 @@
     },
     {
       "id": "meal_0179",
-      "name": "Kabak kavurması (1 adet kabak + 1 domates + 1 biber) + 1 yemek kaşığı zeytinyağı ile)",
+      "name": "Kabak kavurmasÄ± (1 adet kabak + 1 domates + 1 biber) + 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -14384,7 +14384,7 @@
     },
     {
       "id": "meal_0180",
-      "name": "Fırında Kereviz Kızartma (150 gram kereviz, 1 yemek kaşığı zeytinyağı ve istenilen baharalarla fırınlanır)",
+      "name": "FÄ±rÄ±nda Kereviz KÄ±zartma (150 gram kereviz, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ve istenilen baharalarla fÄ±rÄ±nlanÄ±r)",
       "categories": [
         "SPECIAL"
       ],
@@ -14409,7 +14409,7 @@
       },
       "tags": [
         "kereviz",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -14455,7 +14455,7 @@
     },
     {
       "id": "meal_0181",
-      "name": "Közlenmiş patlıcan salatası",
+      "name": "KÃ¶zlenmiÅ patlÄ±can salatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -14480,7 +14480,7 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "keto",
         "salata"
       ],
@@ -14531,7 +14531,7 @@
     },
     {
       "id": "meal_0182",
-      "name": "Yer Elması Kızartması",
+      "name": "Yer ElmasÄ± KÄ±zartmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -14555,7 +14555,7 @@
         "isFixed": false
       },
       "tags": [
-        "yer elması"
+        "yer elmasÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -14632,7 +14632,7 @@
         "positive": [
           "salata",
           "sebze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "baharatlar"
         ],
         "negative": [],
@@ -14680,7 +14680,7 @@
     },
     {
       "id": "meal_0184",
-      "name": "Patlıcan kebabı (2 adet orta boy patlıcan, 150 gram kıyma ile yapılan köfte: patlıcanlar halka halka doğranıp çöp şişe bir patlıcan bir köfte şeklinde dizilir. Fırında ya da airfry da pişirilir)",
+      "name": "PatlÄ±can kebabÄ± (2 adet orta boy patlÄ±can, 150 gram kÄ±yma ile yapÄ±lan kÃ¶fte: patlÄ±canlar halka halka doÄranÄ±p Ã§Ã¶p ÅiÅe bir patlÄ±can bir kÃ¶fte Åeklinde dizilir. FÄ±rÄ±nda ya da airfry da piÅirilir)",
       "categories": [
         "SPECIAL"
       ],
@@ -14708,15 +14708,15 @@
       },
       "tags": [
         "et",
-        "patlıcan",
+        "patlÄ±can",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -14791,7 +14791,7 @@
       "compatibility": {
         "positive": [
           "ekmek",
-          "çorba"
+          "Ã§orba"
         ],
         "negative": [],
         "neutral": []
@@ -14840,7 +14840,7 @@
     },
     {
       "id": "meal_0186",
-      "name": "Tavuklu Hünkar Beğendi",
+      "name": "Tavuklu HÃ¼nkar BeÄendi",
       "categories": [
         "SPECIAL"
       ],
@@ -14866,12 +14866,12 @@
       },
       "tags": [
         "tavuk",
-        "patlıcan",
+        "patlÄ±can",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata",
           "ekmek"
         ],
@@ -14920,7 +14920,7 @@
     },
     {
       "id": "meal_0187",
-      "name": "Tavuk Çorbası",
+      "name": "Tavuk ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -14947,7 +14947,7 @@
       },
       "tags": [
         "keto",
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -14996,7 +14996,7 @@
     },
     {
       "id": "meal_0188",
-      "name": "İmam Bayıldı",
+      "name": "Ä°mam BayÄ±ldÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -15020,14 +15020,14 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
-        "zeytinyağı",
+        "patlÄ±can",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "tatlı",
-          "kuruyemiş",
+          "tatlÄ±",
+          "kuruyemiÅ",
           "ekmek",
           "salata"
         ],
@@ -15076,7 +15076,7 @@
     },
     {
       "id": "meal_0189",
-      "name": "Mücver",
+      "name": "MÃ¼cver",
       "categories": [
         "SPECIAL"
       ],
@@ -15108,7 +15108,7 @@
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
+          "kuruyemiÅ",
           "salata"
         ],
         "negative": [],
@@ -15185,7 +15185,7 @@
       "tags": [],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
+          "kuruyemiÅ",
           "salata"
         ],
         "negative": [],
@@ -15235,7 +15235,7 @@
     },
     {
       "id": "meal_0191",
-      "name": "Fırında Sebzeli Peynirli Güveç (1 porsiyon)",
+      "name": "FÄ±rÄ±nda Sebzeli Peynirli GÃ¼veÃ§ (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -15262,15 +15262,15 @@
       },
       "tags": [
         "peynir",
-        "güveç",
+        "gÃ¼veÃ§",
         "kabak",
-        "patlıcan",
+        "patlÄ±can",
         "et"
       ],
       "compatibility": {
         "positive": [
           "ekmek",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -15351,8 +15351,8 @@
       "compatibility": {
         "positive": [
           "salata",
-          "çorba",
-          "kuruyemiş"
+          "Ã§orba",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -15399,7 +15399,7 @@
     },
     {
       "id": "meal_0193",
-      "name": "Karnabahar Püreli Bonfile",
+      "name": "Karnabahar PÃ¼reli Bonfile",
       "categories": [
         "SPECIAL"
       ],
@@ -15432,9 +15432,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "tatlı",
-          "çorba",
-          "kuruyemiş"
+          "tatlÄ±",
+          "Ã§orba",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -15481,7 +15481,7 @@
     },
     {
       "id": "meal_0194",
-      "name": "Tavuk sote (200 gram tavuk fleto,1adet orta boy domates, 1 adet yeşil biber, 1 yemek kaşığı zeytinyağı)",
+      "name": "Tavuk sote (200 gram tavuk fleto,1adet orta boy domates, 1 adet yeÅil biber, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -15515,7 +15515,7 @@
       "compatibility": {
         "positive": [
           "salata",
-          "tatlı"
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -15562,7 +15562,7 @@
     },
     {
       "id": "meal_0195",
-      "name": "200  gram köfte (ekmeksiz, baharatlarla)",
+      "name": "200  gram kÃ¶fte (ekmeksiz, baharatlarla)",
       "categories": [
         "SPECIAL"
       ],
@@ -15592,15 +15592,15 @@
       "tags": [
         "et",
         "keto",
-        "köfte"
+        "kÃ¶fte"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "ekmek",
           "salata",
-          "tatlı",
-          "kuruyemiş"
+          "tatlÄ±",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -15647,7 +15647,7 @@
     },
     {
       "id": "meal_0196",
-      "name": "Kuzu Güveç (1 porsiyon)",
+      "name": "Kuzu GÃ¼veÃ§ (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -15676,15 +15676,15 @@
       "tags": [
         "et",
         "kuzu",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
           "ekmek",
-          "tatlı",
-          "kuruyemiş"
+          "tatlÄ±",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -15760,15 +15760,15 @@
       "tags": [
         "et",
         "ekmek",
-        "börek",
+        "bÃ¶rek",
         "yumurta",
         "tost"
       ],
       "compatibility": {
         "positive": [
-          "yeşillik",
+          "yeÅillik",
           "salata",
-          "çorba",
+          "Ã§orba",
           "meze"
         ],
         "negative": [],
@@ -15846,7 +15846,7 @@
       "tags": [
         "et",
         "keto",
-        "köfte",
+        "kÃ¶fte",
         "kavurma"
       ],
       "compatibility": {
@@ -15854,8 +15854,8 @@
           "ekmek",
           "salata",
           "meze",
-          "kuruyemiş",
-          "tatlı"
+          "kuruyemiÅ",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -15902,7 +15902,7 @@
     },
     {
       "id": "meal_0199",
-      "name": "Karnabahar Köfte",
+      "name": "Karnabahar KÃ¶fte",
       "categories": [
         "SPECIAL"
       ],
@@ -15927,16 +15927,16 @@
       },
       "tags": [
         "karnabahar",
-        "köfte",
+        "kÃ¶fte",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
-          "çorba",
+          "kuruyemiÅ",
+          "Ã§orba",
           "salata",
           "meze",
-          "tatlı"
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -15983,7 +15983,7 @@
     },
     {
       "id": "meal_0200",
-      "name": "*Zeytinyağlı Deniz Börülcesi ya da brokoli salata (1 tatlı kaşığı zeytinyağı ile",
+      "name": "*ZeytinyaÄlÄ± Deniz BÃ¶rÃ¼lcesi ya da brokoli salata (1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ± ile",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -16010,7 +16010,7 @@
       },
       "tags": [
         "zeytin",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -16061,7 +16061,7 @@
     },
     {
       "id": "meal_0201",
-      "name": "200 gram Kırmızı Et ile Güveç (1 porsiyon)",
+      "name": "200 gram KÄ±rmÄ±zÄ± Et ile GÃ¼veÃ§ (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -16090,15 +16090,15 @@
       },
       "tags": [
         "et",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "ekmek",
           "salata",
-          "tatlı",
-          "kuruyemiş"
+          "tatlÄ±",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -16145,7 +16145,7 @@
     },
     {
       "id": "meal_0202",
-      "name": "Kabak Sote (1 adet kabak ve 1 yemek kaşığı zeytinyağı ile)",
+      "name": "Kabak Sote (1 adet kabak ve 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -16172,7 +16172,7 @@
       },
       "tags": [
         "kabak",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "meze"
       ],
@@ -16223,7 +16223,7 @@
     },
     {
       "id": "meal_0203",
-      "name": "Kıyma Kebap",
+      "name": "KÄ±yma Kebap",
       "categories": [
         "SPECIAL"
       ],
@@ -16257,8 +16257,8 @@
           "meze",
           "sdalata",
           "ekmek",
-          "çorba",
-          "kuruyemiş"
+          "Ã§orba",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -16305,7 +16305,7 @@
     },
     {
       "id": "meal_0204",
-      "name": "Tavuk Döner (100 gram)",
+      "name": "Tavuk DÃ¶ner (100 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -16332,16 +16332,16 @@
       },
       "tags": [
         "tavuk",
-        "döner",
+        "dÃ¶ner",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "meze",
           "salata",
-          "çorba",
-          "kuruyemiş",
-          "tatlı"
+          "Ã§orba",
+          "kuruyemiÅ",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -16388,7 +16388,7 @@
     },
     {
       "id": "meal_0205",
-      "name": "*Kıymalı lahana/kabak /patlıcan  yemeği (150 gr kıyma)",
+      "name": "*KÄ±ymalÄ± lahana/kabak /patlÄ±can  yemeÄi (150 gr kÄ±yma)",
       "categories": [
         "SPECIAL"
       ],
@@ -16416,17 +16416,17 @@
       },
       "tags": [
         "kabak",
-        "patlıcan",
+        "patlÄ±can",
         "keto",
         "lahana",
-        "kıyma",
+        "kÄ±yma",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
           "meze",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "ekmek"
         ],
         "negative": [],
@@ -16508,10 +16508,10 @@
       "compatibility": {
         "positive": [
           "salata",
-          "çorba",
-          "tatlı",
+          "Ã§orba",
+          "tatlÄ±",
           "meze",
-          "çorba"
+          "Ã§orba"
         ],
         "negative": [],
         "neutral": []
@@ -16558,7 +16558,7 @@
     },
     {
       "id": "meal_0207",
-      "name": "Sarımsaklı Tereyağlı Karides",
+      "name": "SarÄ±msaklÄ± TereyaÄlÄ± Karides",
       "categories": [
         "SPECIAL"
       ],
@@ -16589,7 +16589,7 @@
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata",
           "meze",
           "peynir"
@@ -16639,7 +16639,7 @@
     },
     {
       "id": "meal_0208",
-      "name": "200 gram köfte",
+      "name": "200 gram kÃ¶fte",
       "categories": [
         "SPECIAL"
       ],
@@ -16674,10 +16674,10 @@
         "positive": [
           "salata",
           "meze",
-          "çorba",
+          "Ã§orba",
           "ekmek",
-          "tatlı",
-          "kuruyemiş"
+          "tatlÄ±",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -16724,7 +16724,7 @@
     },
     {
       "id": "meal_0209",
-      "name": "Patlıcan kebabı (2 adet orta boy patlıcan,200 gram kıyma ile yapılan köfte: patlıcanlar halka halka doğranıp çöp şişe bir patlıcan bir köfte şeklinde dizilir. Fırında ya da airfry da pişirilir)",
+      "name": "PatlÄ±can kebabÄ± (2 adet orta boy patlÄ±can,200 gram kÄ±yma ile yapÄ±lan kÃ¶fte: patlÄ±canlar halka halka doÄranÄ±p Ã§Ã¶p ÅiÅe bir patlÄ±can bir kÃ¶fte Åeklinde dizilir. FÄ±rÄ±nda ya da airfry da piÅirilir)",
       "categories": [
         "SPECIAL"
       ],
@@ -16752,13 +16752,13 @@
       },
       "tags": [
         "et",
-        "patlıcan",
+        "patlÄ±can",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
-          "tatlı",
+          "kuruyemiÅ",
+          "tatlÄ±",
           "salata",
           "meze"
         ],
@@ -16842,8 +16842,8 @@
           "ekmek",
           "salata",
           "meze",
-          "kuruyemiş",
-          "tatlı"
+          "kuruyemiÅ",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -16890,7 +16890,7 @@
     },
     {
       "id": "meal_0211",
-      "name": "Kıymalı Ispanak Yemeği",
+      "name": "KÄ±ymalÄ± Ispanak YemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -16917,15 +16917,15 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
-        "ıspanak",
+        "kÄ±yma",
+        "Ä±spanak",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
+          "kuruyemiÅ",
           "ekmek",
-          "tatlı"
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -16972,7 +16972,7 @@
     },
     {
       "id": "meal_0212",
-      "name": "Tavuk döner (200 gr)",
+      "name": "Tavuk dÃ¶ner (200 gr)",
       "categories": [
         "SPECIAL"
       ],
@@ -17001,15 +17001,15 @@
         "tavuk",
         "keto",
         "et",
-        "döner"
+        "dÃ¶ner"
       ],
       "compatibility": {
         "positive": [
           "salata",
           "meze",
-          "çorba",
-          "kuruyemiş",
-          "tatlı"
+          "Ã§orba",
+          "kuruyemiÅ",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -17056,7 +17056,7 @@
     },
     {
       "id": "meal_0213",
-      "name": "Kaşarlı Kabak Graten (1 porsiyon)",
+      "name": "KaÅarlÄ± Kabak Graten (1 porsiyon)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -17082,18 +17082,18 @@
         "isFixed": false
       },
       "tags": [
-        "kaşar",
+        "kaÅar",
         "peynir",
         "kabak",
-        "börek",
+        "bÃ¶rek",
         "ekmek"
       ],
       "compatibility": {
         "positive": [
           "domates",
           "salata",
-          "kuruyemiş",
-          "yeşillik",
+          "kuruyemiÅ",
+          "yeÅillik",
           "zeytin"
         ],
         "negative": [],
@@ -17142,7 +17142,7 @@
     },
     {
       "id": "meal_0214",
-      "name": "Susamlı karnabahar kızartma (150 gram karnabahar, 1 yemek kaşığı zeytinyağı, 1 yemek kaşığı susam ve istenilen baharatlarla fırınlanacak.)",
+      "name": "SusamlÄ± karnabahar kÄ±zartma (150 gram karnabahar, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±, 1 yemek kaÅÄ±ÄÄ± susam ve istenilen baharatlarla fÄ±rÄ±nlanacak.)",
       "categories": [
         "SPECIAL"
       ],
@@ -17169,7 +17169,7 @@
       "tags": [
         "zeytin",
         "karnabahar",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -17219,7 +17219,7 @@
     },
     {
       "id": "meal_0215",
-      "name": "Kıymalı Bamya (veya Kıymalı Lahana) Yemeği (100 gr kıyma ile)",
+      "name": "KÄ±ymalÄ± Bamya (veya KÄ±ymalÄ± Lahana) YemeÄi (100 gr kÄ±yma ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -17246,7 +17246,7 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
+        "kÄ±yma",
         "bamya",
         "lahana",
         "keto"
@@ -17254,7 +17254,7 @@
       "compatibility": {
         "positive": [
           "ekmek",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -17301,7 +17301,7 @@
     },
     {
       "id": "meal_0216",
-      "name": "Ispanaklı ya da Pazılı Tavuk Dolması",
+      "name": "IspanaklÄ± ya da PazÄ±lÄ± Tavuk DolmasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -17328,14 +17328,14 @@
       },
       "tags": [
         "tavuk",
-        "ıspanak",
-        "pazı",
+        "Ä±spanak",
+        "pazÄ±",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
-          "tatlı",
+          "kuruyemiÅ",
+          "tatlÄ±",
           "meze"
         ],
         "negative": [],
@@ -17383,7 +17383,7 @@
     },
     {
       "id": "meal_0217",
-      "name": "Patlıcan musakka (150 gr kıyma ile)",
+      "name": "PatlÄ±can musakka (150 gr kÄ±yma ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -17409,12 +17409,12 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "yoğurt",
+          "yoÄurt",
           "ekmek"
         ],
         "negative": [],
@@ -17462,7 +17462,7 @@
     },
     {
       "id": "meal_0218",
-      "name": "Peynirli Patlıcan Topları (4 adet)",
+      "name": "Peynirli PatlÄ±can ToplarÄ± (4 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -17490,12 +17490,12 @@
       },
       "tags": [
         "peynir",
-        "patlıcan",
+        "patlÄ±can",
         "top"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
+          "Ã§orba",
           "salata"
         ],
         "negative": [],
@@ -17544,7 +17544,7 @@
     },
     {
       "id": "meal_0219",
-      "name": "Cevizli biber yoğurtlaması",
+      "name": "Cevizli biber yoÄurtlamasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -17571,7 +17571,7 @@
       "tags": [
         "ceviz",
         "biber",
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [],
@@ -17620,7 +17620,7 @@
     },
     {
       "id": "meal_0220",
-      "name": "Havuçlu ve kabaklı tarator",
+      "name": "HavuÃ§lu ve kabaklÄ± tarator",
       "categories": [
         "SPECIAL"
       ],
@@ -17644,9 +17644,9 @@
         "isFixed": false
       },
       "tags": [
-        "havuç",
+        "havuÃ§",
         "kabak",
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [],
@@ -17695,7 +17695,7 @@
     },
     {
       "id": "meal_0221",
-      "name": "Pancarlı Humus",
+      "name": "PancarlÄ± Humus",
       "categories": [
         "SPECIAL"
       ],
@@ -17769,7 +17769,7 @@
     },
     {
       "id": "meal_0222",
-      "name": "Yoğurtlu Kabak Mezesi",
+      "name": "YoÄurtlu Kabak Mezesi",
       "categories": [
         "SPECIAL"
       ],
@@ -17793,7 +17793,7 @@
         "isFixed": false
       },
       "tags": [
-        "yoğurt",
+        "yoÄurt",
         "kabak"
       ],
       "compatibility": {
@@ -17843,7 +17843,7 @@
     },
     {
       "id": "meal_0223",
-      "name": "Karnabaharlı Humus",
+      "name": "KarnabaharlÄ± Humus",
       "categories": [
         "SPECIAL"
       ],
@@ -18074,7 +18074,7 @@
     },
     {
       "id": "meal_0226",
-      "name": "Kıymalı Patlıcan Kapama",
+      "name": "KÄ±ymalÄ± PatlÄ±can Kapama",
       "categories": [
         "SPECIAL"
       ],
@@ -18102,8 +18102,8 @@
       },
       "tags": [
         "et",
-        "kıyma",
-        "patlıcan"
+        "kÄ±yma",
+        "patlÄ±can"
       ],
       "compatibility": {
         "positive": [
@@ -18156,7 +18156,7 @@
     },
     {
       "id": "meal_0227",
-      "name": "Patlıcanlı Tavuk Sote",
+      "name": "PatlÄ±canlÄ± Tavuk Sote",
       "categories": [
         "SPECIAL"
       ],
@@ -18183,16 +18183,16 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "et",
         "tavuk"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -18239,7 +18239,7 @@
     },
     {
       "id": "meal_0228",
-      "name": "Taze Fasulyeli Kıymalı Sote",
+      "name": "Taze Fasulyeli KÄ±ymalÄ± Sote",
       "categories": [
         "SPECIAL"
       ],
@@ -18266,16 +18266,16 @@
         "isFixed": false
       },
       "tags": [
-        "fasülye",
-        "kıyma",
+        "fasÃ¼lye",
+        "kÄ±yma",
         "et"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -18323,7 +18323,7 @@
     },
     {
       "id": "meal_0229",
-      "name": "Kıymalı Bamya Sote",
+      "name": "KÄ±ymalÄ± Bamya Sote",
       "categories": [
         "SPECIAL"
       ],
@@ -18351,7 +18351,7 @@
       "tags": [],
       "compatibility": {
         "positive": [
-          "kıyma",
+          "kÄ±yma",
           "et",
           "bamya"
         ],
@@ -18402,7 +18402,7 @@
     },
     {
       "id": "meal_0230",
-      "name": "Kıymalı Semizotu Yemeği",
+      "name": "KÄ±ymalÄ± Semizotu YemeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -18429,16 +18429,16 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
+        "kÄ±yma",
         "et",
         "semizotu"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -18485,7 +18485,7 @@
     },
     {
       "id": "meal_0231",
-      "name": "Sulu Köfte",
+      "name": "Sulu KÃ¶fte",
       "categories": [
         "SPECIAL"
       ],
@@ -18512,13 +18512,13 @@
         "isFixed": false
       },
       "tags": [
-        "köfte",
+        "kÃ¶fte",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "ekmek",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "salata"
         ],
         "negative": [],
@@ -18600,8 +18600,8 @@
       "compatibility": {
         "positive": [
           "salata",
-          "çorba",
-          "kuruyemiş"
+          "Ã§orba",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -18648,7 +18648,7 @@
     },
     {
       "id": "meal_0233",
-      "name": "200 gram Tavuk Eti ile Güveç (domates, biber ve soğan ile)",
+      "name": "200 gram Tavuk Eti ile GÃ¼veÃ§ (domates, biber ve soÄan ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -18676,14 +18676,14 @@
       },
       "tags": [
         "tavuk",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "salata",
           "meze",
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -18730,7 +18730,7 @@
     },
     {
       "id": "meal_0234",
-      "name": "Zeytinyağlı Deniz Börülcesi",
+      "name": "ZeytinyaÄlÄ± Deniz BÃ¶rÃ¼lcesi",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -18757,8 +18757,8 @@
         "isFixed": false
       },
       "tags": [
-        "deniz börülcesi",
-        "zeytinyağı",
+        "deniz bÃ¶rÃ¼lcesi",
+        "zeytinyaÄÄ±",
         "keto",
         "meze",
         "salata"
@@ -18811,7 +18811,7 @@
     },
     {
       "id": "meal_0235",
-      "name": "200 gram Tavuk Eti ile Güveç (domates, biber ve soğan ile)",
+      "name": "200 gram Tavuk Eti ile GÃ¼veÃ§ (domates, biber ve soÄan ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -18839,7 +18839,7 @@
       },
       "tags": [
         "tavuk",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
@@ -18892,7 +18892,7 @@
     },
     {
       "id": "meal_0236",
-      "name": "200 gram Tavuk Eti ile Güveç (domates, biber ve soğan ile)",
+      "name": "200 gram Tavuk Eti ile GÃ¼veÃ§ (domates, biber ve soÄan ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -18920,7 +18920,7 @@
       },
       "tags": [
         "tavuk",
-        "güveç",
+        "gÃ¼veÃ§",
         "keto"
       ],
       "compatibility": {
@@ -18973,7 +18973,7 @@
     },
     {
       "id": "meal_0237",
-      "name": "Zeytinyağlı Deniz Börülcesi",
+      "name": "ZeytinyaÄlÄ± Deniz BÃ¶rÃ¼lcesi",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -19000,8 +19000,8 @@
         "isFixed": false
       },
       "tags": [
-        "deniz börülcesi",
-        "zeytinyağı",
+        "deniz bÃ¶rÃ¼lcesi",
+        "zeytinyaÄÄ±",
         "keto",
         "meze",
         "salata"
@@ -19077,7 +19077,7 @@
         "isFixed": false
       },
       "tags": [
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [],
@@ -19127,7 +19127,7 @@
     },
     {
       "id": "meal_0239",
-      "name": "Patlıcan Musakka",
+      "name": "PatlÄ±can Musakka",
       "categories": [
         "SPECIAL"
       ],
@@ -19152,15 +19152,15 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
-        "kıyma",
+        "patlÄ±can",
+        "kÄ±yma",
         "keto"
       ],
       "compatibility": {
         "positive": [
           "semizotu",
           "ekmek",
-          "yoğurt"
+          "yoÄurt"
         ],
         "negative": [],
         "neutral": []
@@ -19240,8 +19240,8 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş"
+          "yoÄurt",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -19288,7 +19288,7 @@
     },
     {
       "id": "meal_0241",
-      "name": "Patlıcan kebabı (2 adet orta boy patlıcan,200 gram kıyma ile yapılan köfte: patlıcanlar halka halka doğranıp çöp şişe bir patlıcan bir köfte şeklinde dizilir. Fırında ya da airfry da pişirilir)",
+      "name": "PatlÄ±can kebabÄ± (2 adet orta boy patlÄ±can,200 gram kÄ±yma ile yapÄ±lan kÃ¶fte: patlÄ±canlar halka halka doÄranÄ±p Ã§Ã¶p ÅiÅe bir patlÄ±can bir kÃ¶fte Åeklinde dizilir. FÄ±rÄ±nda ya da airfry da piÅirilir)",
       "categories": [
         "SPECIAL"
       ],
@@ -19316,8 +19316,8 @@
       },
       "tags": [
         "et",
-        "patlıcan",
-        "kıyma",
+        "patlÄ±can",
+        "kÄ±yma",
         "kebap",
         "keto"
       ],
@@ -19372,7 +19372,7 @@
     },
     {
       "id": "meal_0242",
-      "name": "Hünkar Beğendi",
+      "name": "HÃ¼nkar BeÄendi",
       "categories": [
         "SPECIAL"
       ],
@@ -19397,16 +19397,16 @@
         "isFixed": false
       },
       "tags": [
-        "patlıcan",
+        "patlÄ±can",
         "et",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "yoğurt",
+          "yoÄurt",
           "salata",
-          "kuruyemiş",
-          "tatlı"
+          "kuruyemiÅ",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -19486,9 +19486,9 @@
       ],
       "compatibility": {
         "positive": [
-          "yoğurt",
-          "kuruyemiş",
-          "çorba",
+          "yoÄurt",
+          "kuruyemiÅ",
+          "Ã§orba",
           "salata"
         ],
         "negative": [],
@@ -19571,8 +19571,8 @@
       "compatibility": {
         "positive": [
           "meze",
-          "kuruyemiş",
-          "yoğurt"
+          "kuruyemiÅ",
+          "yoÄurt"
         ],
         "negative": [],
         "neutral": []
@@ -19619,7 +19619,7 @@
     },
     {
       "id": "meal_0245",
-      "name": "Patlıcan Salatalı Tavuk Şiş",
+      "name": "PatlÄ±can SalatalÄ± Tavuk ÅiÅ",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -19648,13 +19648,13 @@
       },
       "tags": [
         "tavuk",
-        "patlıcan",
+        "patlÄ±can",
         "salata"
       ],
       "compatibility": {
         "positive": [
-          "çorba",
-          "tatlı"
+          "Ã§orba",
+          "tatlÄ±"
         ],
         "negative": [],
         "neutral": []
@@ -19701,7 +19701,7 @@
     },
     {
       "id": "meal_0246",
-      "name": "Kabak Çekirdeği (1 avuç)",
+      "name": "Kabak ÃekirdeÄi (1 avuÃ§)",
       "categories": [
         "SPECIAL"
       ],
@@ -19726,8 +19726,8 @@
         "isFixed": false
       },
       "tags": [
-        "kabak çekirdeği",
-        "kuruyemiş",
+        "kabak Ã§ekirdeÄi",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -19806,7 +19806,7 @@
       },
       "tags": [
         "ceviz",
-        "kuruyemiş",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -19857,7 +19857,7 @@
     },
     {
       "id": "meal_0248",
-      "name": "Kabak Çekirdeği (1 yemek kaşığı)",
+      "name": "Kabak ÃekirdeÄi (1 yemek kaÅÄ±ÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -19883,8 +19883,8 @@
         "isFixed": false
       },
       "tags": [
-        "kabak çekirdeği",
-        "kuruyemiş",
+        "kabak Ã§ekirdeÄi",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -19964,7 +19964,7 @@
       "tags": [
         "ceviz",
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [],
@@ -20014,7 +20014,7 @@
     },
     {
       "id": "meal_0250",
-      "name": "10 adet Çiğ Badem",
+      "name": "10 adet ÃiÄ Badem",
       "categories": [
         "SPECIAL"
       ],
@@ -20092,7 +20092,7 @@
     },
     {
       "id": "meal_0251",
-      "name": "10 adet Çiğ Fındık",
+      "name": "10 adet ÃiÄ FÄ±ndÄ±k",
       "categories": [
         "SPECIAL"
       ],
@@ -20119,9 +20119,9 @@
         "isFixed": true
       },
       "tags": [
-        "fındık",
+        "fÄ±ndÄ±k",
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [],
@@ -20199,7 +20199,7 @@
       "tags": [
         "ceviz",
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [],
@@ -20249,7 +20249,7 @@
     },
     {
       "id": "meal_0253",
-      "name": "Çiğ badem  (20 adet)",
+      "name": "ÃiÄ badem  (20 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -20277,7 +20277,7 @@
       "tags": [
         "badem",
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [],
@@ -20327,7 +20327,7 @@
     },
     {
       "id": "meal_0254",
-      "name": "Fındık (10 adet)",
+      "name": "FÄ±ndÄ±k (10 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -20354,9 +20354,9 @@
         "isFixed": false
       },
       "tags": [
-        "fındık",
+        "fÄ±ndÄ±k",
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [],
@@ -20406,7 +20406,7 @@
     },
     {
       "id": "meal_0255",
-      "name": "Fındık (20 adet)",
+      "name": "FÄ±ndÄ±k (20 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -20432,9 +20432,9 @@
         "isFixed": false
       },
       "tags": [
-        "fındık",
+        "fÄ±ndÄ±k",
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [],
@@ -20510,11 +20510,11 @@
       },
       "tags": [
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -20590,7 +20590,7 @@
       },
       "tags": [
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [
@@ -20668,11 +20668,11 @@
       },
       "tags": [
         "keto",
-        "kuruyemiş"
+        "kuruyemiÅ"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -20747,12 +20747,12 @@
       },
       "tags": [
         "ceviz",
-        "kuruyemiş",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -20800,7 +20800,7 @@
     },
     {
       "id": "meal_0260",
-      "name": "Bitter Çikolata?",
+      "name": "Bitter Ãikolata?",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -20826,7 +20826,7 @@
       },
       "tags": [
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -20904,7 +20904,7 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -20953,7 +20953,7 @@
     },
     {
       "id": "meal_0262",
-      "name": "Tahin + Ceviz + Tarçın",
+      "name": "Tahin + Ceviz + TarÃ§Ä±n",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -21184,7 +21184,7 @@
     },
     {
       "id": "meal_0265",
-      "name": "Kabak Tatlısı",
+      "name": "Kabak TatlÄ±sÄ±",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -21494,7 +21494,7 @@
     },
     {
       "id": "meal_0269",
-      "name": "Keto Çikolata",
+      "name": "Keto Ãikolata",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -21522,7 +21522,7 @@
         "isFixed": true
       },
       "tags": [
-        "çikolata",
+        "Ã§ikolata",
         "keto"
       ],
       "compatibility": {
@@ -21801,7 +21801,7 @@
     },
     {
       "id": "meal_0273",
-      "name": "Fıstık Ezmeli Kurabiye",
+      "name": "FÄ±stÄ±k Ezmeli Kurabiye",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -21827,7 +21827,7 @@
         "isFixed": true
       },
       "tags": [
-        "fıstık ezmesi",
+        "fÄ±stÄ±k ezmesi",
         "kurabiye",
         "keto"
       ],
@@ -21878,7 +21878,7 @@
     },
     {
       "id": "meal_0274",
-      "name": "Bir yemek kaşığı tahin içerisine, 1 adet ezilmiş ceviz içi ve hafif tarçın serpin)",
+      "name": "Bir yemek kaÅÄ±ÄÄ± tahin iÃ§erisine, 1 adet ezilmiÅ ceviz iÃ§i ve hafif tarÃ§Ä±n serpin)",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -21957,7 +21957,7 @@
     },
     {
       "id": "meal_0275",
-      "name": "Ketojenik Çikolatalı Sufle",
+      "name": "Ketojenik ÃikolatalÄ± Sufle",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -21985,8 +21985,8 @@
         "isFixed": false
       },
       "tags": [
-        "çikolata",
-        "tatlı",
+        "Ã§ikolata",
+        "tatlÄ±",
         "sufle"
       ],
       "compatibility": {
@@ -22063,7 +22063,7 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı",
+        "tatlÄ±",
         "revani"
       ],
       "compatibility": {
@@ -22113,7 +22113,7 @@
     },
     {
       "id": "meal_0277",
-      "name": "Un Helvası",
+      "name": "Un HelvasÄ±",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -22218,7 +22218,7 @@
       },
       "tags": [
         "tahin",
-        "tatlı",
+        "tatlÄ±",
         "kurabiye"
       ],
       "compatibility": {
@@ -22269,7 +22269,7 @@
     },
     {
       "id": "meal_0279",
-      "name": "Çikolata sosu",
+      "name": "Ãikolata sosu",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -22295,12 +22295,12 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [
           "kurabiye",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "ceviz",
           "badem"
         ],
@@ -22377,7 +22377,7 @@
       "tags": [
         "browni",
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -22457,7 +22457,7 @@
       "tags": [
         "magnolia",
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -22536,7 +22536,7 @@
       },
       "tags": [
         "hindistancevizi",
-        "tatlı",
+        "tatlÄ±",
         "top",
         "ceviz"
       ],
@@ -22588,7 +22588,7 @@
     },
     {
       "id": "meal_0283",
-      "name": "Ketojenik Kremalı Kek",
+      "name": "Ketojenik KremalÄ± Kek",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -22617,10 +22617,10 @@
         "isFixed": false
       },
       "tags": [
-        "kremalı",
+        "kremalÄ±",
         "kek",
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -22669,7 +22669,7 @@
     },
     {
       "id": "meal_0284",
-      "name": "Ketojenik Yaş Pasta",
+      "name": "Ketojenik YaÅ Pasta",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -22699,7 +22699,7 @@
       "tags": [
         "pasta",
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -22778,7 +22778,7 @@
       "tags": [
         "tiramisu",
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -22855,7 +22855,7 @@
       "tags": [
         "chia",
         "keto",
-        "tatlı"
+        "tatlÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -22904,7 +22904,7 @@
     },
     {
       "id": "meal_0287",
-      "name": "Kuruyemişli Keto Topları",
+      "name": "KuruyemiÅli Keto ToplarÄ±",
       "categories": [
         "SPECIAL",
         "DESSERTS"
@@ -22931,7 +22931,7 @@
         "isFixed": false
       },
       "tags": [
-        "tatlı",
+        "tatlÄ±",
         "top"
       ],
       "compatibility": {
@@ -22982,7 +22982,7 @@
     },
     {
       "id": "meal_0288",
-      "name": "Yeşil Salata",
+      "name": "YeÅil Salata",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -23057,7 +23057,7 @@
     },
     {
       "id": "meal_0289",
-      "name": "Beyaz Lahana Salatası",
+      "name": "Beyaz Lahana SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -23135,7 +23135,7 @@
     },
     {
       "id": "meal_0290",
-      "name": "Girit Ezmesi (yeşil peynir mezesi)",
+      "name": "Girit Ezmesi (yeÅil peynir mezesi)",
       "categories": [
         "SPECIAL"
       ],
@@ -23213,7 +23213,7 @@
     },
     {
       "id": "meal_0291",
-      "name": "Roka Salatası (yarım bağ roka, 5 fındık turp, 3 cherry domates, yarım kırmızı soğan + limon, 1 yemek kaşığı zeytinyağı)",
+      "name": "Roka SalatasÄ± (yarÄ±m baÄ roka, 5 fÄ±ndÄ±k turp, 3 cherry domates, yarÄ±m kÄ±rmÄ±zÄ± soÄan + limon, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -23240,7 +23240,7 @@
       "tags": [
         "roka",
         "turp",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -23291,7 +23291,7 @@
     },
     {
       "id": "meal_0292",
-      "name": "Yeşillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal maydanoz + limon ve sirke +1 tatlı kaşığı zeytinyağı ile)",
+      "name": "YeÅillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal maydanoz + limon ve sirke +1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -23321,7 +23321,7 @@
         "zeytin",
         "roka",
         "marul",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -23373,7 +23373,7 @@
     },
     {
       "id": "meal_0293",
-      "name": "Yeşillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal tere,  limon+1 yemek kaşığı zeytinyağı ile)",
+      "name": "YeÅillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal tere,  limon+1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -23401,7 +23401,7 @@
         "zeytin",
         "roka",
         "marul",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -23451,7 +23451,7 @@
     },
     {
       "id": "meal_0294",
-      "name": "Mevsim salata (marul, dereotu, roka, kırmızı lahana, turp + 1 yemek kaşığı zeytinyağı)",
+      "name": "Mevsim salata (marul, dereotu, roka, kÄ±rmÄ±zÄ± lahana, turp + 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -23481,7 +23481,7 @@
         "zeytin",
         "roka",
         "marul",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -23531,7 +23531,7 @@
     },
     {
       "id": "meal_0295",
-      "name": "2 avuç yeşil salata + bir tatlı kaşığı zeytin yağı",
+      "name": "2 avuÃ§ yeÅil salata + bir tatlÄ± kaÅÄ±ÄÄ± zeytin yaÄÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -23560,7 +23560,7 @@
       "tags": [
         "zeytin",
         "keto",
-        "yeşillik",
+        "yeÅillik",
         "salata"
       ],
       "compatibility": {
@@ -23610,7 +23610,7 @@
     },
     {
       "id": "meal_0296",
-      "name": "Mevsim Yeşillikleri (dereotu, roka, maydanoz, sirke, limon +1 tatlı kaşığı zeytinyağı ile)",
+      "name": "Mevsim YeÅillikleri (dereotu, roka, maydanoz, sirke, limon +1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -23638,7 +23638,7 @@
       "tags": [
         "zeytin",
         "roka",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -23688,7 +23688,7 @@
     },
     {
       "id": "meal_0297",
-      "name": "Roka, turp ve pancar dilimleri + limon ve 1 yemek kaşığı zeytinyağı ile",
+      "name": "Roka, turp ve pancar dilimleri + limon ve 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ile",
       "categories": [
         "SPECIAL"
       ],
@@ -23714,7 +23714,7 @@
       },
       "tags": [
         "roka",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -23759,7 +23759,7 @@
     },
     {
       "id": "meal_0298",
-      "name": "Yerelmalı Brokoli Salatası",
+      "name": "YerelmalÄ± Brokoli SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -23782,8 +23782,8 @@
         "isFixed": false
       },
       "tags": [
-        "yerelması",
-        "yer elması",
+        "yerelmasÄ±",
+        "yer elmasÄ±",
         "brokoli",
         "salata"
       ],
@@ -23834,7 +23834,7 @@
     },
     {
       "id": "meal_0299",
-      "name": "Brokoli Salatası",
+      "name": "Brokoli SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -23907,7 +23907,7 @@
     },
     {
       "id": "meal_0300",
-      "name": "Biberli peynir (3 adet yeşil biber, 50 gr lor peyniri, 1 tatlı kaşığı zeytinyağı, biraz tuz ve istenilen baharatlar. Biberleri zeytinyağında soteleyip, üzerine peyniri ekleyin. Bir miktar tuz ve istediğiniz baharatları serpin.)",
+      "name": "Biberli peynir (3 adet yeÅil biber, 50 gr lor peyniri, 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ±, biraz tuz ve istenilen baharatlar. Biberleri zeytinyaÄÄ±nda soteleyip, Ã¼zerine peyniri ekleyin. Bir miktar tuz ve istediÄiniz baharatlarÄ± serpin.)",
       "categories": [
         "SPECIAL"
       ],
@@ -23934,7 +23934,7 @@
       },
       "tags": [
         "peynir",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -23981,7 +23981,7 @@
     },
     {
       "id": "meal_0301",
-      "name": "Dilimlenmiş yarım turp + yarım pancar (1 dilim limon ile)",
+      "name": "DilimlenmiÅ yarÄ±m turp + yarÄ±m pancar (1 dilim limon ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -24054,7 +24054,7 @@
     },
     {
       "id": "meal_0302",
-      "name": "Brüksel Lahana Salatası",
+      "name": "BrÃ¼ksel Lahana SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -24079,8 +24079,8 @@
         "isFixed": false
       },
       "tags": [
-        "brüksel lahana",
-        "zeytinyağı",
+        "brÃ¼ksel lahana",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -24126,7 +24126,7 @@
     },
     {
       "id": "meal_0303",
-      "name": "Yoğurtlu Kırmızı Pancar Salatası",
+      "name": "YoÄurtlu KÄ±rmÄ±zÄ± Pancar SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -24151,7 +24151,7 @@
       },
       "tags": [
         "pancar",
-        "yoğurt",
+        "yoÄurt",
         "keto"
       ],
       "compatibility": {
@@ -24197,7 +24197,7 @@
     },
     {
       "id": "meal_0304",
-      "name": "Brüksel Lahana Salatası (100 gr brüksel lahana, 1 yemek kaşığı zeytinyağı)",
+      "name": "BrÃ¼ksel Lahana SalatasÄ± (100 gr brÃ¼ksel lahana, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -24222,8 +24222,8 @@
         "isFixed": false
       },
       "tags": [
-        "brüksel lahana",
-        "zeytinyağı",
+        "brÃ¼ksel lahana",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -24268,7 +24268,7 @@
     },
     {
       "id": "meal_0305",
-      "name": "Yeşillikler (Marul, Roka, Maydanoz + Zeytinyağı)",
+      "name": "YeÅillikler (Marul, Roka, Maydanoz + ZeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -24293,7 +24293,7 @@
         "isFixed": false
       },
       "tags": [
-        "yeşillik",
+        "yeÅillik",
         "sabah",
         "keto"
       ],
@@ -24344,7 +24344,7 @@
     },
     {
       "id": "meal_0306",
-      "name": "Yeşillikler (Marul, Roka, Maydanoz)",
+      "name": "YeÅillikler (Marul, Roka, Maydanoz)",
       "categories": [
         "SPECIAL"
       ],
@@ -24370,7 +24370,7 @@
         "isFixed": false
       },
       "tags": [
-        "yeşillik",
+        "yeÅillik",
         "sabah",
         "keto"
       ],
@@ -24421,7 +24421,7 @@
     },
     {
       "id": "meal_0307",
-      "name": "Yeşillikler (Marul, Roka, Maydanoz + Limon, Sirke, Zeytinyağı)",
+      "name": "YeÅillikler (Marul, Roka, Maydanoz + Limon, Sirke, ZeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -24447,7 +24447,7 @@
         "isFixed": false
       },
       "tags": [
-        "yeşillik",
+        "yeÅillik",
         "sabah",
         "keto"
       ],
@@ -24498,7 +24498,7 @@
     },
     {
       "id": "meal_0308",
-      "name": "Yeşillikler (Marul, Roka, Maydanoz + Limon, Sirke)",
+      "name": "YeÅillikler (Marul, Roka, Maydanoz + Limon, Sirke)",
       "categories": [
         "SPECIAL"
       ],
@@ -24524,7 +24524,7 @@
         "isFixed": false
       },
       "tags": [
-        "yeşillik",
+        "yeÅillik",
         "turp",
         "sabah",
         "keto"
@@ -24576,7 +24576,7 @@
     },
     {
       "id": "meal_0309",
-      "name": "Salatalık + Cherry Domates + Maydanoz + Yeşil Biber + Zeytinyağı",
+      "name": "SalatalÄ±k + Cherry Domates + Maydanoz + YeÅil Biber + ZeytinyaÄÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -24601,9 +24601,9 @@
         "isFixed": false
       },
       "tags": [
-        "salatalık",
+        "salatalÄ±k",
         "domates",
-        "yeşillik",
+        "yeÅillik",
         "keto"
       ],
       "compatibility": {
@@ -24653,7 +24653,7 @@
     },
     {
       "id": "meal_0310",
-      "name": "Salatalık + Cherry Domates + Maydanoz + Yeşil Biber + 1 Tatlı Kaşığı Zeytinyağı",
+      "name": "SalatalÄ±k + Cherry Domates + Maydanoz + YeÅil Biber + 1 TatlÄ± KaÅÄ±ÄÄ± ZeytinyaÄÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -24679,9 +24679,9 @@
         "isFixed": false
       },
       "tags": [
-        "salatalık",
+        "salatalÄ±k",
         "domates",
-        "yeşillik",
+        "yeÅillik",
         "keto"
       ],
       "compatibility": {
@@ -24731,7 +24731,7 @@
     },
     {
       "id": "meal_0311",
-      "name": "Yeşillikler (Dereotu, Roka, Maydanoz, Marul, Turp + Limon, Sirke, Zeytinyağı)",
+      "name": "YeÅillikler (Dereotu, Roka, Maydanoz, Marul, Turp + Limon, Sirke, ZeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -24757,7 +24757,7 @@
         "isFixed": false
       },
       "tags": [
-        "yeşillik",
+        "yeÅillik",
         "sabah",
         "keto"
       ],
@@ -24808,7 +24808,7 @@
     },
     {
       "id": "meal_0312",
-      "name": "Yoğurtlu enginar",
+      "name": "YoÄurtlu enginar",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -24837,7 +24837,7 @@
         "keto",
         "enginar",
         "salata",
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [],
@@ -24886,7 +24886,7 @@
     },
     {
       "id": "meal_0313",
-      "name": "Semizotu Salatası",
+      "name": "Semizotu SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -24963,7 +24963,7 @@
     },
     {
       "id": "meal_0314",
-      "name": "Yeşillikler (dereotu, roka, maydanoz, marul vs. + sirke, limon+1 tatlı kaşığı zeytinyağı )",
+      "name": "YeÅillikler (dereotu, roka, maydanoz, marul vs. + sirke, limon+1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ± )",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -24994,7 +24994,7 @@
         "zeytin",
         "roka",
         "marul",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -25044,7 +25044,7 @@
     },
     {
       "id": "meal_0315",
-      "name": "Lor Salatası",
+      "name": "Lor SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25126,7 +25126,7 @@
     },
     {
       "id": "meal_0316",
-      "name": "Roka salatası (yarım bağ roka, 1 adet küçük salatalık, 3 adet cherry domates, yarım kırmızı soğan + limon, 1 tatlı kaşığı zeytinyağı ve istenilen baharatlar ile)",
+      "name": "Roka salatasÄ± (yarÄ±m baÄ roka, 1 adet kÃ¼Ã§Ã¼k salatalÄ±k, 3 adet cherry domates, yarÄ±m kÄ±rmÄ±zÄ± soÄan + limon, 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ± ve istenilen baharatlar ile)",
       "categories": [
         "SPECIAL"
       ],
@@ -25155,7 +25155,7 @@
       "tags": [
         "zeytin",
         "roka",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto"
       ],
       "compatibility": {
@@ -25205,7 +25205,7 @@
     },
     {
       "id": "meal_0317",
-      "name": "Semizotu Salatası (2 avuç semizotu, 1 domates, 1 salatalık, 1 biber, 1 yemek kaşığı zeytinyağı)",
+      "name": "Semizotu SalatasÄ± (2 avuÃ§ semizotu, 1 domates, 1 salatalÄ±k, 1 biber, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25282,7 +25282,7 @@
     },
     {
       "id": "meal_0318",
-      "name": "Salatalık + Cherry Domates + Maydanoz + Yeşil Biber",
+      "name": "SalatalÄ±k + Cherry Domates + Maydanoz + YeÅil Biber",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25308,9 +25308,9 @@
         "isFixed": false
       },
       "tags": [
-        "salatalık",
+        "salatalÄ±k",
         "domates",
-        "yeşillik",
+        "yeÅillik",
         "keto",
         "salata"
       ],
@@ -25438,7 +25438,7 @@
     },
     {
       "id": "meal_0320",
-      "name": "Yoğurtlu Kırmızı Pancar Salatası (100 gram pancar, 2 yemek kaşığı yoğurt, 1 tatlı kaşığı zeytinyağı)",
+      "name": "YoÄurtlu KÄ±rmÄ±zÄ± Pancar SalatasÄ± (100 gram pancar, 2 yemek kaÅÄ±ÄÄ± yoÄurt, 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -25463,7 +25463,7 @@
       },
       "tags": [
         "pancar",
-        "yoğurt",
+        "yoÄurt",
         "keto"
       ],
       "compatibility": {
@@ -25513,7 +25513,7 @@
     },
     {
       "id": "meal_0321",
-      "name": "Kırmızı Pancar Salatası (100 gram pancar, 1 adet ceviz, maydanoz, 1 tatlı kaşığı zeytinyağı)",
+      "name": "KÄ±rmÄ±zÄ± Pancar SalatasÄ± (100 gram pancar, 1 adet ceviz, maydanoz, 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25592,7 +25592,7 @@
     },
     {
       "id": "meal_0322",
-      "name": "Yeşillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal maydanoz + limon, sirke ve 1 yemek  kaşığı zeytinyağı ile)",
+      "name": "YeÅillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal maydanoz + limon, sirke ve 1 yemek  kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25620,7 +25620,7 @@
       "tags": [
         "Roka",
         "marul",
-        "z.yağı",
+        "z.yaÄÄ±",
         "keto",
         "salata"
       ],
@@ -25671,7 +25671,7 @@
     },
     {
       "id": "meal_0323",
-      "name": "Yeşillikler (dereotu, roka, maydanoz, marul vs. + sirke ve limon ile)",
+      "name": "YeÅillikler (dereotu, roka, maydanoz, marul vs. + sirke ve limon ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25702,7 +25702,7 @@
         "marul",
         "keto",
         "salata",
-        "yeşillik"
+        "yeÅillik"
       ],
       "compatibility": {
         "positive": [],
@@ -25751,7 +25751,7 @@
     },
     {
       "id": "meal_0324",
-      "name": "Yeşillikler (4 yaprak marul, 4 yaprak roka, 4 dal maydanoz + limon, sirke ile)",
+      "name": "YeÅillikler (4 yaprak marul, 4 yaprak roka, 4 dal maydanoz + limon, sirke ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25782,7 +25782,7 @@
         "marul",
         "keto",
         "salata",
-        "yeşillik"
+        "yeÅillik"
       ],
       "compatibility": {
         "positive": [],
@@ -25831,7 +25831,7 @@
     },
     {
       "id": "meal_0325",
-      "name": "Roka Salatası",
+      "name": "Roka SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25859,7 +25859,7 @@
       "tags": [
         "roka",
         "turp",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -25910,7 +25910,7 @@
     },
     {
       "id": "meal_0326",
-      "name": "Yeşillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal maydanoz,  limon ve sirke ile)",
+      "name": "YeÅillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal maydanoz,  limon ve sirke ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -25941,7 +25941,7 @@
         "marul",
         "keto",
         "salata",
-        "yeşillik"
+        "yeÅillik"
       ],
       "compatibility": {
         "positive": [],
@@ -25990,7 +25990,7 @@
     },
     {
       "id": "meal_0327",
-      "name": "Dilimlenmiş yarım turp + yarım pancar",
+      "name": "DilimlenmiÅ yarÄ±m turp + yarÄ±m pancar",
       "categories": [
         "SPECIAL"
       ],
@@ -26067,7 +26067,7 @@
     },
     {
       "id": "meal_0328",
-      "name": "Yeşillikler (dereotu, roka, maydanoz, marul vs. + 1 yemek kaşığı zeytinyağı)",
+      "name": "YeÅillikler (dereotu, roka, maydanoz, marul vs. + 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -26095,10 +26095,10 @@
         "zeytin",
         "roka",
         "marul",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "domates",
-        "yeşillik"
+        "yeÅillik"
       ],
       "compatibility": {
         "positive": [],
@@ -26147,7 +26147,7 @@
     },
     {
       "id": "meal_0329",
-      "name": "Kırmızı Pancar Salatası",
+      "name": "KÄ±rmÄ±zÄ± Pancar SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26225,7 +26225,7 @@
     },
     {
       "id": "meal_0330",
-      "name": "Kırmızı Pancar Salatası",
+      "name": "KÄ±rmÄ±zÄ± Pancar SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26303,7 +26303,7 @@
     },
     {
       "id": "meal_0331",
-      "name": "Yeşil Salata (marul, dereotu, roka, kırmızı lahana, 1 tatlı kaşığı zeytinyağı)",
+      "name": "YeÅil Salata (marul, dereotu, roka, kÄ±rmÄ±zÄ± lahana, 1 tatlÄ± kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26333,7 +26333,7 @@
         "marul",
         "roka",
         "lahana",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -26384,7 +26384,7 @@
     },
     {
       "id": "meal_0332",
-      "name": "Salatalık (orta boy) + Cherry domates (2 adet)+ 4-5 dal maydanoz+ 2 adet küçük yeşil biber",
+      "name": "SalatalÄ±k (orta boy) + Cherry domates (2 adet)+ 4-5 dal maydanoz+ 2 adet kÃ¼Ã§Ã¼k yeÅil biber",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26414,7 +26414,7 @@
       "tags": [
         "keto",
         "salata",
-        "salatalık",
+        "salatalÄ±k",
         "domates"
       ],
       "compatibility": {
@@ -26464,7 +26464,7 @@
     },
     {
       "id": "meal_0333",
-      "name": "Yeşil salata (marul, dereotu, roka, kırmızı lahana, 1 yemek kaşığı zeytinyağı)",
+      "name": "YeÅil salata (marul, dereotu, roka, kÄ±rmÄ±zÄ± lahana, 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26493,7 +26493,7 @@
         "zeytin",
         "roka",
         "marul",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -26545,7 +26545,7 @@
     },
     {
       "id": "meal_0334",
-      "name": "Yeşillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal tere,  limon ile)",
+      "name": "YeÅillikler (4 yaprak marul, 4-5 yaprak roka, 4-5 dal tere,  limon ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26576,7 +26576,7 @@
         "marul",
         "keto",
         "salata",
-        "yeşillik"
+        "yeÅillik"
       ],
       "compatibility": {
         "positive": [],
@@ -26625,7 +26625,7 @@
     },
     {
       "id": "meal_0335",
-      "name": "Labneli Pancar Salatası",
+      "name": "Labneli Pancar SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26706,7 +26706,7 @@
     },
     {
       "id": "meal_0336",
-      "name": "Yeşillikler (dereotu, roka, maydanoz,marul,sirke,limon  ile)",
+      "name": "YeÅillikler (dereotu, roka, maydanoz,marul,sirke,limon  ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26736,7 +26736,7 @@
         "roka",
         "marul",
         "keto",
-        "yeşillik",
+        "yeÅillik",
         "salata"
       ],
       "compatibility": {
@@ -26786,7 +26786,7 @@
     },
     {
       "id": "meal_0337",
-      "name": "Yoğurtlu Kereviz Salatası",
+      "name": "YoÄurtlu Kereviz SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -26813,7 +26813,7 @@
       },
       "tags": [
         "kereviz",
-        "yoğurt",
+        "yoÄurt",
         "keto"
       ],
       "compatibility": {
@@ -26858,7 +26858,7 @@
     },
     {
       "id": "meal_0338",
-      "name": "Somonlu Roka ve Avokado Salatası",
+      "name": "Somonlu Roka ve Avokado SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26887,14 +26887,14 @@
         "isFixed": false
       },
       "tags": [
-        "balık",
+        "balÄ±k",
         "avokado",
         "salata"
       ],
       "compatibility": {
         "positive": [
           "zeytin",
-          "kuruyemiş",
+          "kuruyemiÅ",
           "peynir"
         ],
         "negative": [],
@@ -26943,7 +26943,7 @@
     },
     {
       "id": "meal_0339",
-      "name": "1 Kase Yeşil Salata",
+      "name": "1 Kase YeÅil Salata",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -26969,8 +26969,8 @@
         "isFixed": false
       },
       "tags": [
-        "yeşillik",
-        "zeytinyağı",
+        "yeÅillik",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -27021,7 +27021,7 @@
     },
     {
       "id": "meal_0340",
-      "name": "3 adet Cherry Domates + 1 yemek kaşığı zeytinyağı, Kekik ve Pul Biber",
+      "name": "3 adet Cherry Domates + 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ±, Kekik ve Pul Biber",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27049,7 +27049,7 @@
       },
       "tags": [
         "domates",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -27100,7 +27100,7 @@
     },
     {
       "id": "meal_0341",
-      "name": "Mevsim Yeşillikleri (dereotu, roka, maydanoz, sirke,limon ve 1 yemek kaşığı zeytinyağı ile)",
+      "name": "Mevsim YeÅillikleri (dereotu, roka, maydanoz, sirke,limon ve 1 yemek kaÅÄ±ÄÄ± zeytinyaÄÄ± ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27128,7 +27128,7 @@
       "tags": [
         "zeytin",
         "roka",
-        "zeytinyağı",
+        "zeytinyaÄÄ±",
         "keto",
         "salata"
       ],
@@ -27179,7 +27179,7 @@
     },
     {
       "id": "meal_0342",
-      "name": "Salatalık (orta boy 1 adet) + Cherry domates (2 adet)",
+      "name": "SalatalÄ±k (orta boy 1 adet) + Cherry domates (2 adet)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27207,7 +27207,7 @@
         "isFixed": false
       },
       "tags": [
-        "salatalık",
+        "salatalÄ±k",
         "cherry",
         "domates",
         "salata"
@@ -27259,7 +27259,7 @@
     },
     {
       "id": "meal_0343",
-      "name": "Mevsim yeşillikleri (dereotu, roka, maydanoz, marul, sirke, limon ile)",
+      "name": "Mevsim yeÅillikleri (dereotu, roka, maydanoz, marul, sirke, limon ile)",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27338,7 +27338,7 @@
     },
     {
       "id": "meal_0344",
-      "name": "Cevizli Kaşık Salatası",
+      "name": "Cevizli KaÅÄ±k SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27415,7 +27415,7 @@
     },
     {
       "id": "meal_0345",
-      "name": "Semizotlu ve Çilekli Kinoa Salatası",
+      "name": "Semizotlu ve Ãilekli Kinoa SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27443,7 +27443,7 @@
       "tags": [
         "kinoa",
         "salata",
-        "çilek",
+        "Ã§ilek",
         "meyve"
       ],
       "compatibility": {
@@ -27493,7 +27493,7 @@
     },
     {
       "id": "meal_0346",
-      "name": "Yoğurtlu Salatalık Mezesi",
+      "name": "YoÄurtlu SalatalÄ±k Mezesi",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27516,8 +27516,8 @@
         "isFixed": false
       },
       "tags": [
-        "yoğurt",
-        "salatalıki salata"
+        "yoÄurt",
+        "salatalÄ±ki salata"
       ],
       "compatibility": {
         "positive": [],
@@ -27567,7 +27567,7 @@
     },
     {
       "id": "meal_0347",
-      "name": "Göçmen Salatası",
+      "name": "GÃ¶Ã§men SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27597,7 +27597,7 @@
         "peynir",
         "salata",
         "domates",
-        "salatalık"
+        "salatalÄ±k"
       ],
       "compatibility": {
         "positive": [],
@@ -27647,7 +27647,7 @@
     },
     {
       "id": "meal_0348",
-      "name": "Yoğurtlu Semizotu Salatası",
+      "name": "YoÄurtlu Semizotu SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -27673,7 +27673,7 @@
       },
       "tags": [
         "semizotu",
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [],
@@ -27720,7 +27720,7 @@
     },
     {
       "id": "meal_0349",
-      "name": "Kuşkonmaz & Yumurta Salatası",
+      "name": "KuÅkonmaz & Yumurta SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -27747,7 +27747,7 @@
         "isFixed": false
       },
       "tags": [
-        "kuşkonmaz",
+        "kuÅkonmaz",
         "yumurta",
         "salata"
       ],
@@ -27799,7 +27799,7 @@
     },
     {
       "id": "meal_0350",
-      "name": "Cevizli Kabak Salatası",
+      "name": "Cevizli Kabak SalatasÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -27956,7 +27956,7 @@
     },
     {
       "id": "meal_0352",
-      "name": "Brokoli Salatası",
+      "name": "Brokoli SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -28033,7 +28033,7 @@
     },
     {
       "id": "meal_0353",
-      "name": "Mor Lahana Salatası",
+      "name": "Mor Lahana SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -28190,7 +28190,7 @@
     },
     {
       "id": "meal_0355",
-      "name": "Lor peynirli avokado salatası",
+      "name": "Lor peynirli avokado salatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -28379,7 +28379,7 @@
         "dereotu",
         "tere",
         "keto",
-        "yeşillik",
+        "yeÅillik",
         "salata"
       ],
       "compatibility": {
@@ -28429,7 +28429,7 @@
     },
     {
       "id": "meal_0358",
-      "name": "Enginar Salatası",
+      "name": "Enginar SalatasÄ±",
       "categories": [
         "SPECIAL",
         "SALADS"
@@ -28460,8 +28460,8 @@
       "compatibility": {
         "positive": [
           "ekmek",
-          "çorba",
-          "kuruyemiş"
+          "Ã§orba",
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -28508,7 +28508,7 @@
     },
     {
       "id": "meal_0359",
-      "name": "Mercimek Çorbası",
+      "name": "Mercimek ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28531,7 +28531,7 @@
         "isFixed": false
       },
       "tags": [
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -28578,7 +28578,7 @@
     },
     {
       "id": "meal_0360",
-      "name": "Brokoli Çorbası",
+      "name": "Brokoli ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28652,7 +28652,7 @@
     },
     {
       "id": "meal_0361",
-      "name": "Kıymalı Mantar Çorbası",
+      "name": "KÄ±ymalÄ± Mantar ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28678,7 +28678,7 @@
         "isFixed": false
       },
       "tags": [
-        "kıyma",
+        "kÄ±yma",
         "mantar",
         "keto"
       ],
@@ -28729,7 +28729,7 @@
     },
     {
       "id": "meal_0362",
-      "name": "Tarhana Çorbası",
+      "name": "Tarhana ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28802,7 +28802,7 @@
     },
     {
       "id": "meal_0363",
-      "name": "Kabak Çorbası",
+      "name": "Kabak ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28877,7 +28877,7 @@
     },
     {
       "id": "meal_0364",
-      "name": "Domatesli Kabak Çorbası",
+      "name": "Domatesli Kabak ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28953,7 +28953,7 @@
     },
     {
       "id": "meal_0365",
-      "name": "Yoğurtlu Köfte Çorbası",
+      "name": "YoÄurtlu KÃ¶fte ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -28978,8 +28978,8 @@
         "isFixed": false
       },
       "tags": [
-        "köfte",
-        "yoğurt",
+        "kÃ¶fte",
+        "yoÄurt",
         "keto"
       ],
       "compatibility": {
@@ -29027,7 +29027,7 @@
     },
     {
       "id": "meal_0366",
-      "name": "Bal Kabağı Çorbası",
+      "name": "Bal KabaÄÄ± ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29054,7 +29054,7 @@
         "isFixed": false
       },
       "tags": [
-        "bal kabağı"
+        "bal kabaÄÄ±"
       ],
       "compatibility": {
         "positive": [],
@@ -29101,7 +29101,7 @@
     },
     {
       "id": "meal_0367",
-      "name": "Kremalı Kabak Çorbası",
+      "name": "KremalÄ± Kabak ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29176,7 +29176,7 @@
     },
     {
       "id": "meal_0368",
-      "name": "Kremalı Ispanak Çorbası",
+      "name": "KremalÄ± Ispanak ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29202,7 +29202,7 @@
         "isFixed": false
       },
       "tags": [
-        "ıspanak",
+        "Ä±spanak",
         "krema",
         "keto"
       ],
@@ -29251,7 +29251,7 @@
     },
     {
       "id": "meal_0369",
-      "name": "Karnabahar Çorbası",
+      "name": "Karnabahar ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29399,7 +29399,7 @@
     },
     {
       "id": "meal_0371",
-      "name": "Peynirli Brokoli Çorbası",
+      "name": "Peynirli Brokoli ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29474,7 +29474,7 @@
     },
     {
       "id": "meal_0372",
-      "name": "200 gr tarhana çorbası",
+      "name": "200 gr tarhana Ã§orbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29499,7 +29499,7 @@
       "tags": [
         "keto",
         "tarhana",
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -29548,7 +29548,7 @@
     },
     {
       "id": "meal_0373",
-      "name": "Etli Karnabahar Çorbası",
+      "name": "Etli Karnabahar ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29577,7 +29577,7 @@
       "tags": [
         "et",
         "karnabahar",
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -29626,7 +29626,7 @@
     },
     {
       "id": "meal_0374",
-      "name": "Sebze Çorbası",
+      "name": "Sebze ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29655,7 +29655,7 @@
       "tags": [
         "sebze",
         "keto",
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -29704,7 +29704,7 @@
     },
     {
       "id": "meal_0375",
-      "name": "Çedar Peynirli Brokoli Çorbası",
+      "name": "Ãedar Peynirli Brokoli ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29733,9 +29733,9 @@
       },
       "tags": [
         "brokoli",
-        "çedar",
+        "Ã§edar",
         "keto",
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -29784,7 +29784,7 @@
     },
     {
       "id": "meal_0376",
-      "name": "Tavuklu Domates Çorbası",
+      "name": "Tavuklu Domates ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29815,7 +29815,7 @@
         "tavuk",
         "domates",
         "keto",
-        "çorba"
+        "Ã§orba"
       ],
       "compatibility": {
         "positive": [],
@@ -29864,7 +29864,7 @@
     },
     {
       "id": "meal_0377",
-      "name": "Kelle Paça Çorbası",
+      "name": "Kelle PaÃ§a ÃorbasÄ±",
       "categories": [
         "SPECIAL",
         "SOUPS"
@@ -29893,8 +29893,8 @@
       },
       "tags": [
         "et",
-        "çorba",
-        "kelle paça",
+        "Ã§orba",
+        "kelle paÃ§a",
         "keto"
       ],
       "compatibility": {
@@ -29973,7 +29973,7 @@
         "badem unu",
         "ekmek",
         "keto",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30023,7 +30023,7 @@
     },
     {
       "id": "meal_0379",
-      "name": "*Lor ekmeği (1 dilim)",
+      "name": "*Lor ekmeÄi (1 dilim)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30052,10 +30052,10 @@
       "tags": [
         "keto",
         "ekmek",
-        "börek",
+        "bÃ¶rek",
         "muffin",
         "tost",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30105,7 +30105,7 @@
     },
     {
       "id": "meal_0380",
-      "name": "Haşhaş ezmesi ekmeği (1 dilim)",
+      "name": "HaÅhaÅ ezmesi ekmeÄi (1 dilim)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30132,9 +30132,9 @@
         "isFixed": false
       },
       "tags": [
-        "haşhaş",
+        "haÅhaÅ",
         "keto",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30184,7 +30184,7 @@
     },
     {
       "id": "meal_0381",
-      "name": "*Haşhaş ezmesi ekmeği (1 dilim)",
+      "name": "*HaÅhaÅ ezmesi ekmeÄi (1 dilim)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30213,8 +30213,8 @@
       "tags": [
         "keto",
         "ekmek",
-        "haşhaş",
-        "ekmeği"
+        "haÅhaÅ",
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30264,7 +30264,7 @@
     },
     {
       "id": "meal_0382",
-      "name": "Badem unu ekmeği (1 dilim)",
+      "name": "Badem unu ekmeÄi (1 dilim)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30293,7 +30293,7 @@
         "badem",
         "keto",
         "ekmek",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30343,7 +30343,7 @@
     },
     {
       "id": "meal_0383",
-      "name": "Pita Ekmeği",
+      "name": "Pita EkmeÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30372,7 +30372,7 @@
         "pita",
         "ekmek",
         "keto",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30452,7 +30452,7 @@
         "lupin",
         "ekmek",
         "keto",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30502,7 +30502,7 @@
     },
     {
       "id": "meal_0385",
-      "name": "Karabuğday ekmeği 1 dilim 25 gr",
+      "name": "KarabuÄday ekmeÄi 1 dilim 25 gr",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30528,8 +30528,8 @@
       },
       "tags": [
         "ekmek",
-        "karabuğday",
-        "ekmeği"
+        "karabuÄday",
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30579,7 +30579,7 @@
     },
     {
       "id": "meal_0386",
-      "name": "1 dilim Keten Tohumu Ekmeği",
+      "name": "1 dilim Keten Tohumu EkmeÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30609,7 +30609,7 @@
         "ekmek",
         "keto",
         "muffin",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30659,7 +30659,7 @@
     },
     {
       "id": "meal_0387",
-      "name": "Nohut Ekmeği",
+      "name": "Nohut EkmeÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30733,7 +30733,7 @@
     },
     {
       "id": "meal_0388",
-      "name": "Tahin ekmeği",
+      "name": "Tahin ekmeÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30839,7 +30839,7 @@
         "keten tohumu",
         "ekmek",
         "keto",
-        "ekmeği",
+        "ekmeÄi",
         "tost"
       ],
       "compatibility": {
@@ -30919,7 +30919,7 @@
         "hindistan cevizi",
         "ekmek",
         "keto",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -30969,7 +30969,7 @@
     },
     {
       "id": "meal_0391",
-      "name": "1 dilim  Badem Unu Ekmeği",
+      "name": "1 dilim  Badem Unu EkmeÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -30998,7 +30998,7 @@
         "badem",
         "ekmek",
         "keto",
-        "ekmeği"
+        "ekmeÄi"
       ],
       "compatibility": {
         "positive": [],
@@ -31119,7 +31119,7 @@
     },
     {
       "id": "meal_0393",
-      "name": "5 Adet Çilek",
+      "name": "5 Adet Ãilek",
       "categories": [
         "SPECIAL"
       ],
@@ -31146,7 +31146,7 @@
         "isFixed": false
       },
       "tags": [
-        "çilek",
+        "Ã§ilek",
         "meyve",
         "keto"
       ],
@@ -31636,7 +31636,7 @@
     },
     {
       "id": "meal_0400",
-      "name": "5 Adet Orta Boy Yeşil Erik",
+      "name": "5 Adet Orta Boy YeÅil Erik",
       "categories": [
         "SPECIAL"
       ],
@@ -31709,7 +31709,7 @@
     },
     {
       "id": "meal_0401",
-      "name": "2 Adet Kayısı",
+      "name": "2 Adet KayÄ±sÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -31734,7 +31734,7 @@
         "isFixed": false
       },
       "tags": [
-        "kayısı",
+        "kayÄ±sÄ±",
         "meyve"
       ],
       "compatibility": {
@@ -31854,7 +31854,7 @@
     },
     {
       "id": "meal_0403",
-      "name": "100 gr Şeftali",
+      "name": "100 gr Åeftali",
       "categories": [
         "SPECIAL"
       ],
@@ -31878,7 +31878,7 @@
         "isFixed": false
       },
       "tags": [
-        "şeftali",
+        "Åeftali",
         "meyve"
       ],
       "compatibility": {
@@ -32149,7 +32149,7 @@
     },
     {
       "id": "meal_0407",
-      "name": "Çilek veya orman meyveleri (5 adet)",
+      "name": "Ãilek veya orman meyveleri (5 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -32225,7 +32225,7 @@
     },
     {
       "id": "meal_0408",
-      "name": "Ketojenik Tost (Haşhaş Ezmesi Ekmeği + Kaşar + Hindi Füme)",
+      "name": "Ketojenik Tost (HaÅhaÅ Ezmesi EkmeÄi + KaÅar + Hindi FÃ¼me)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -32253,21 +32253,21 @@
       },
       "tags": [
         "sucuk",
-        "haşhaş",
-        "kaşar",
+        "haÅhaÅ",
+        "kaÅar",
         "hindi",
         "keto",
         "ekmek",
-        "börek",
+        "bÃ¶rek",
         "et",
         "yumurta"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32314,7 +32314,7 @@
     },
     {
       "id": "meal_0409",
-      "name": "Ketojenik Tost (Tahin Ekmeği + Kaşar)",
+      "name": "Ketojenik Tost (Tahin EkmeÄi + KaÅar)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -32343,16 +32343,16 @@
       },
       "tags": [
         "tahin",
-        "kaşar",
+        "kaÅar",
         "keto",
         "ekmek"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32399,7 +32399,7 @@
     },
     {
       "id": "meal_0410",
-      "name": "Ketojenik Tost (Badem Unu Ekmeği + Kaşar)",
+      "name": "Ketojenik Tost (Badem Unu EkmeÄi + KaÅar)",
       "categories": [
         "SPECIAL",
         "SALADS",
@@ -32430,7 +32430,7 @@
       },
       "tags": [
         "badem",
-        "kaşar",
+        "kaÅar",
         "keto",
         "yumurta",
         "salata",
@@ -32440,9 +32440,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32489,7 +32489,7 @@
     },
     {
       "id": "meal_0411",
-      "name": "Tost (Karabuğday Ekmeği + Kaşar + Hindi Füme)",
+      "name": "Tost (KarabuÄday EkmeÄi + KaÅar + Hindi FÃ¼me)",
       "categories": [
         "SPECIAL"
       ],
@@ -32514,8 +32514,8 @@
         "isFixed": false
       },
       "tags": [
-        "karabuğday",
-        "kaşar",
+        "karabuÄday",
+        "kaÅar",
         "hindi",
         "tost",
         "et",
@@ -32525,9 +32525,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32572,7 +32572,7 @@
     },
     {
       "id": "meal_0412",
-      "name": "Tost (Karabuğday Ekmeği + Kaşar)",
+      "name": "Tost (KarabuÄday EkmeÄi + KaÅar)",
       "categories": [
         "SPECIAL"
       ],
@@ -32596,8 +32596,8 @@
         "isFixed": false
       },
       "tags": [
-        "karabuğday",
-        "kaşar",
+        "karabuÄday",
+        "kaÅar",
         "yumurta",
         "omlet",
         "tost"
@@ -32652,7 +32652,7 @@
     },
     {
       "id": "meal_0413",
-      "name": "Ketojenik Tost (Haşhaş Ezmesi Ekmeği + Kaşar)",
+      "name": "Ketojenik Tost (HaÅhaÅ Ezmesi EkmeÄi + KaÅar)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -32679,8 +32679,8 @@
         "isFixed": false
       },
       "tags": [
-        "haşhaş",
-        "kaşar",
+        "haÅhaÅ",
+        "kaÅar",
         "ketoi",
         "ekmek",
         "yumurta",
@@ -32690,9 +32690,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32737,7 +32737,7 @@
     },
     {
       "id": "meal_0414",
-      "name": "Ketojenik Tost (Haşhaş Ezmesi Ekmeği + Hindi Füme)",
+      "name": "Ketojenik Tost (HaÅhaÅ Ezmesi EkmeÄi + Hindi FÃ¼me)",
       "categories": [
         "SPECIAL",
         "SALADS",
@@ -32764,7 +32764,7 @@
         "isFixed": false
       },
       "tags": [
-        "haşhaş",
+        "haÅhaÅ",
         "hindi",
         "keto",
         "yumurta",
@@ -32775,9 +32775,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32822,7 +32822,7 @@
     },
     {
       "id": "meal_0415",
-      "name": "Ketojenik tost (2 ince dilim lor ekmeği arasına 30 gram kaşar, yeşillikler, domates)",
+      "name": "Ketojenik tost (2 ince dilim lor ekmeÄi arasÄ±na 30 gram kaÅar, yeÅillikler, domates)",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -32852,15 +32852,15 @@
         "keto",
         "ekmek",
         "tost",
-        "poğaça",
+        "poÄaÃ§a",
         "smoothie"
       ],
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32907,7 +32907,7 @@
     },
     {
       "id": "meal_0416",
-      "name": "Ketojenik tost (2 ince dilim lor ekmeği arasına 30 gram kaşar, 2 dilim hindi füme, yeşillikler, domates)",
+      "name": "Ketojenik tost (2 ince dilim lor ekmeÄi arasÄ±na 30 gram kaÅar, 2 dilim hindi fÃ¼me, yeÅillikler, domates)",
       "categories": [
         "SPECIAL",
         "SALADS",
@@ -32944,9 +32944,9 @@
       "compatibility": {
         "positive": [
           "salata",
-          "yoğurt",
-          "kuruyemiş",
-          "soğan"
+          "yoÄurt",
+          "kuruyemiÅ",
+          "soÄan"
         ],
         "negative": [],
         "neutral": []
@@ -32993,7 +32993,7 @@
     },
     {
       "id": "meal_0417",
-      "name": "Kabak Çekirdeği Unlu Tost",
+      "name": "Kabak ÃekirdeÄi Unlu Tost",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -33022,7 +33022,7 @@
         "isFixed": false
       },
       "tags": [
-        "kabak çekirdeği",
+        "kabak Ã§ekirdeÄi",
         "tost",
         "keto",
         "peynir",
@@ -33030,7 +33030,7 @@
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş"
+          "kuruyemiÅ"
         ],
         "negative": [],
         "neutral": []
@@ -33077,7 +33077,7 @@
     },
     {
       "id": "meal_0418",
-      "name": "Kollajen (1 ölçek 10 gram)",
+      "name": "Kollajen (1 Ã¶lÃ§ek 10 gram)",
       "categories": [
         "SPECIAL"
       ],
@@ -33153,7 +33153,7 @@
     },
     {
       "id": "meal_0419",
-      "name": "10 adet yaban mersini ya da 5 adet çilek",
+      "name": "10 adet yaban mersini ya da 5 adet Ã§ilek",
       "categories": [
         "SPECIAL"
       ],
@@ -33231,7 +33231,7 @@
     },
     {
       "id": "meal_0420",
-      "name": "Bitter çikolata (2 kare)",
+      "name": "Bitter Ã§ikolata (2 kare)",
       "categories": [
         "SPECIAL"
       ],
@@ -33257,7 +33257,7 @@
         "isFixed": false
       },
       "tags": [
-        "çikolata",
+        "Ã§ikolata",
         "keto"
       ],
       "compatibility": {
@@ -33307,7 +33307,7 @@
     },
     {
       "id": "meal_0421",
-      "name": "Elma (1 adet küçük boy)",
+      "name": "Elma (1 adet kÃ¼Ã§Ã¼k boy)",
       "categories": [
         "SPECIAL"
       ],
@@ -33379,7 +33379,7 @@
     },
     {
       "id": "meal_0422",
-      "name": "Armut (1 adet küçük boy)",
+      "name": "Armut (1 adet kÃ¼Ã§Ã¼k boy)",
       "categories": [
         "SPECIAL"
       ],
@@ -33451,7 +33451,7 @@
     },
     {
       "id": "meal_0423",
-      "name": "Muz (1 adet küçük boy)",
+      "name": "Muz (1 adet kÃ¼Ã§Ã¼k boy)",
       "categories": [
         "SPECIAL"
       ],
@@ -33523,7 +33523,7 @@
     },
     {
       "id": "meal_0424",
-      "name": "Çilek (10 adet)",
+      "name": "Ãilek (10 adet)",
       "categories": [
         "SPECIAL"
       ],
@@ -33549,7 +33549,7 @@
         "isFixed": true
       },
       "tags": [
-        "çilek",
+        "Ã§ilek",
         "keto"
       ],
       "compatibility": {
@@ -33597,7 +33597,7 @@
     },
     {
       "id": "meal_0425",
-      "name": "Yaban Mersini (1 avuç)",
+      "name": "Yaban Mersini (1 avuÃ§)",
       "categories": [
         "SPECIAL"
       ],
@@ -33740,7 +33740,7 @@
     },
     {
       "id": "meal_0427",
-      "name": "Portakal (1 adet küçük boy)",
+      "name": "Portakal (1 adet kÃ¼Ã§Ã¼k boy)",
       "categories": [
         "SPECIAL"
       ],
@@ -34112,7 +34112,7 @@
     },
     {
       "id": "meal_0432",
-      "name": "Badem Sütü (1 su bardağı)",
+      "name": "Badem SÃ¼tÃ¼ (1 su bardaÄÄ±)",
       "categories": [
         "SPECIAL",
         "BEVERAGES"
@@ -34139,7 +34139,7 @@
         "isFixed": true
       },
       "tags": [
-        "badem sütü",
+        "badem sÃ¼tÃ¼",
         "keto"
       ],
       "compatibility": {
@@ -34187,7 +34187,7 @@
     },
     {
       "id": "meal_0433",
-      "name": "Hindistan Cevizi Sütü (1 su bardağı)",
+      "name": "Hindistan Cevizi SÃ¼tÃ¼ (1 su bardaÄÄ±)",
       "categories": [
         "SPECIAL",
         "BEVERAGES"
@@ -34213,7 +34213,7 @@
         "isFixed": true
       },
       "tags": [
-        "hindistan cevizi sütü",
+        "hindistan cevizi sÃ¼tÃ¼",
         "keto"
       ],
       "compatibility": {
@@ -34336,7 +34336,7 @@
     },
     {
       "id": "meal_0435",
-      "name": "Çilekli-Limonlu Smoothie (1 porsiyon)",
+      "name": "Ãilekli-Limonlu Smoothie (1 porsiyon)",
       "categories": [
         "SPECIAL"
       ],
@@ -34362,13 +34362,13 @@
         "isFixed": false
       },
       "tags": [
-        "çilek",
+        "Ã§ilek",
         "meyve",
-        "yoğurt"
+        "yoÄurt"
       ],
       "compatibility": {
         "positive": [
-          "kuruyemiş",
+          "kuruyemiÅ",
           "badem",
           "ceviz"
         ],
@@ -34417,7 +34417,7 @@
     },
     {
       "id": "meal_0436",
-      "name": "Çiğ Badem",
+      "name": "ÃiÄ Badem",
       "categories": [
         "SPECIAL"
       ],
@@ -34443,7 +34443,7 @@
       },
       "tags": [
         "badem",
-        "kuruyemiş",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -34491,7 +34491,7 @@
     },
     {
       "id": "meal_0437",
-      "name": "Fındık",
+      "name": "FÄ±ndÄ±k",
       "categories": [
         "SPECIAL"
       ],
@@ -34516,8 +34516,8 @@
         "isFixed": false
       },
       "tags": [
-        "fındık",
-        "kuruyemiş",
+        "fÄ±ndÄ±k",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -34565,7 +34565,7 @@
     },
     {
       "id": "meal_0438",
-      "name": "Yer Fıstığı",
+      "name": "Yer FÄ±stÄ±ÄÄ±",
       "categories": [
         "SPECIAL"
       ],
@@ -34590,8 +34590,8 @@
         "isFixed": false
       },
       "tags": [
-        "yer fıstığı",
-        "kuruyemiş",
+        "yer fÄ±stÄ±ÄÄ±",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -34639,7 +34639,7 @@
     },
     {
       "id": "meal_0439",
-      "name": "Ay Çekirdeği",
+      "name": "Ay ÃekirdeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -34665,8 +34665,8 @@
         "isFixed": false
       },
       "tags": [
-        "ay çekirdeği",
-        "kuruyemiş",
+        "ay Ã§ekirdeÄi",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -34714,7 +34714,7 @@
     },
     {
       "id": "meal_0440",
-      "name": "Tuzsuz Ay Çekirdeği",
+      "name": "Tuzsuz Ay ÃekirdeÄi",
       "categories": [
         "SPECIAL"
       ],
@@ -34739,8 +34739,8 @@
         "isFixed": false
       },
       "tags": [
-        "ay çekirdeği",
-        "kuruyemiş",
+        "ay Ã§ekirdeÄi",
+        "kuruyemiÅ",
         "keto"
       ],
       "compatibility": {
@@ -34866,7 +34866,7 @@
     },
     {
       "id": "meal_0442",
-      "name": "Badem Unlu Lavaş",
+      "name": "Badem Unlu LavaÅ",
       "categories": [
         "SPECIAL",
         "BREADS"
@@ -34893,7 +34893,7 @@
       },
       "tags": [
         "badem",
-        "lavaş",
+        "lavaÅ",
         "keto"
       ],
       "compatibility": {
@@ -34941,7 +34941,7 @@
     },
     {
       "id": "meal_0443",
-      "name": "Ev yapımı turşu",
+      "name": "Ev yapÄ±mÄ± turÅu",
       "categories": [
         "SPECIAL"
       ],
@@ -35016,7 +35016,7 @@
     },
     {
       "id": "meal_0444",
-      "name": "Keten Tohumu (salata üzerine 1 tatlı kaşığı)",
+      "name": "Keten Tohumu (salata Ã¼zerine 1 tatlÄ± kaÅÄ±ÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -35095,7 +35095,7 @@
     },
     {
       "id": "meal_0445",
-      "name": "4 yemek kaşığı ev yoğurdu",
+      "name": "4 yemek kaÅÄ±ÄÄ± ev yoÄurdu",
       "categories": [
         "SPECIAL"
       ],
@@ -35170,7 +35170,7 @@
     },
     {
       "id": "meal_0446",
-      "name": "Kenevir Tohumu (salata üzerine 1 yemek kaşığı)",
+      "name": "Kenevir Tohumu (salata Ã¼zerine 1 yemek kaÅÄ±ÄÄ±)",
       "categories": [
         "SPECIAL"
       ],
@@ -35248,7 +35248,7 @@
     },
     {
       "id": "meal_0447",
-      "name": "1 dilim  Badem Unlu Sandviç Ekmeği",
+      "name": "1 dilim  Badem Unlu SandviÃ§ EkmeÄi",
       "categories": [
         "SPECIAL",
         "BREADS"
