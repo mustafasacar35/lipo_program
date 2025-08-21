@@ -2,15 +2,15 @@
   "doctors": [
     {
       "id": "doctor_001",
-      "name": "Dr. Ahmet Yılmaz",
+      "name": "Dr. Ahmet YÄ±lmaz",
       "specialty": "Endokrinoloji",
       "isActive": true,
       "createdAt": "2025-08-17"
     },
     {
-      "id": "doctor_002", 
-      "name": "Dr. Ayşe Demir",
-      "specialty": "İç Hastalıkları",
+      "id": "doctor_002",
+      "name": "Dr. AyÅe Demir",
+      "specialty": "Ä°Ã§ HastalÄ±klarÄ±",
       "isActive": true,
       "createdAt": "2025-08-17"
     }
