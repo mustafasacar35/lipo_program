@@ -328,16 +328,15 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "ko",
+              "name": "Kuşkonmazlı ızgara somon",
               "amount": "1",
-              "calories": 0,
-              "carbs": 0,
-              "protein": 0,
-              "fat": 0,
+              "calories": 483,
+              "carbs": 4,
+              "protein": 38,
+              "fat": 35,
               "minQuantity": 1,
-              "maxQuantity": 2,
-              "step": 0.5,
-              "isManual": true
+              "maxQuantity": 1,
+              "step": 1
             }
           ],
           "snack1": [],
@@ -361,8 +360,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:57:54.892Z",
-      "updated": "21.08.2025 23:57:54",
+      "updatedAt": "2025-08-21T20:57:56.083Z",
+      "updated": "21.08.2025 23:57:56",
       "criteriaStates": {},
       "criteriaOrder": []
     },
