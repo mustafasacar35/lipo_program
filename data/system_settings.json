@@ -180,7 +180,7 @@
         "repetition_frequency"
       ],
       "criteriaSettings": {
-        "allergies": true,
+        "allergies": false,
         "liked_foods": false,
         "medical_conditions": true,
         "macro_targets": true,
@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:10:52.455Z",
-      "updated": "21.08.2025 23:10:52",
+      "updatedAt": "2025-08-21T20:11:24.946Z",
+      "updated": "21.08.2025 23:11:24",
       "criteriaStates": {},
       "criteriaOrder": []
     },
