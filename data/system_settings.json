@@ -276,8 +276,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:40:11.936Z",
-      "updated": "22.08.2025 00:40:11"
+      "updatedAt": "2025-08-21T21:40:41.858Z",
+      "updated": "22.08.2025 00:40:41"
     },
     "2": {
       "name": "22",
@@ -464,8 +464,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:40:32.457Z",
-      "updated": "22.08.2025 00:40:32",
+      "updatedAt": "2025-08-21T21:40:40.381Z",
+      "updated": "22.08.2025 00:40:35",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
@@ -570,10 +570,10 @@
         "repetition_frequency"
       ],
       "criteriaSettings": {
-        "allergies": true,
+        "allergies": false,
         "liked_foods": false,
         "medical_conditions": false,
-        "macro_targets": false,
+        "macro_targets": true,
         "calorie_distribution": true,
         "meal_timing": true,
         "food_groups": true,
