@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:14:17.200Z",
-      "updated": "21.08.2025 23:14:17",
+      "updatedAt": "2025-08-21T20:39:17.596Z",
+      "updated": "21.08.2025 23:39:17",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -444,6 +444,6 @@
       "fixedMeals": {}
     }
   },
-  "lastUpdated": "2025-08-21T20:11:38.472Z",
+  "lastUpdated": "2025-08-21T20:39:05.239Z",
   "version": "2.1.0"
 }
