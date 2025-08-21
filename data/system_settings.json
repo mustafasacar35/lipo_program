@@ -326,19 +326,7 @@
       "timestamp": "2025-08-21T19:23:19.906Z",
       "templateData": {
         "fixedMeals": {
-          "breakfast": [
-            {
-              "name": "Kuşkonmazlı ızgara somon",
-              "amount": "1",
-              "calories": 483,
-              "carbs": 4,
-              "protein": 38,
-              "fat": 35,
-              "minQuantity": 1,
-              "maxQuantity": 1,
-              "step": 1
-            }
-          ],
+          "breakfast": [],
           "snack1": [],
           "lunch": [],
           "snack2": [],
@@ -360,8 +348,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:57:56.083Z",
-      "updated": "21.08.2025 23:57:56",
+      "updatedAt": "2025-08-21T20:58:07.555Z",
+      "updated": "21.08.2025 23:58:07",
       "criteriaStates": {},
       "criteriaOrder": []
     },
