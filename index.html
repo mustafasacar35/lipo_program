@@ -16291,7 +16291,7 @@ Desteklenen Dosyalar:
         });
 
         // Enter tuşu ile token girişi
-        async function saveToGitHub(filePath, data, message = 'Update data') {
+        async function saveToGitHub(filePath, data, message = 'Update data', retryCount = 0) {
             if (!GITHUB_CONFIG.token) {
                 showNotification('GitHub token bulunamadı!', 'error');
                 return false;
@@ -16313,6 +16313,7 @@ Desteklenen Dosyalar:
                 if (getResponse.ok) {
                     const fileData = await getResponse.json();
                     sha = fileData.sha;
+                    console.log(`🔍 [GITHUB-RETRY-${retryCount}] Mevcut SHA alındı: ${sha.substring(0, 8)}...`);
                 }
 
                 // Dosyayı güncelle veya oluştur
