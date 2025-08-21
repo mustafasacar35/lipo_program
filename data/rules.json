@@ -1,35 +1,33 @@
 {
   "version": "1.0",
   "lastUpdated": "2025-08-17T00:00:00.000Z",
-  
   "ruleTypes": [
     {
       "id": "frequency",
-      "name": "Sıklık Kuralları",
-      "description": "Yemeklerin öğün, gün, hafta bazında sıklık ayarları"
+      "name": "SÄ±klÄ±k KurallarÄ±",
+      "description": "Yemeklerin Ã¶ÄÃ¼n, gÃ¼n, hafta bazÄ±nda sÄ±klÄ±k ayarlarÄ±"
     },
     {
-      "id": "compatibility", 
-      "name": "Uyumluluk Kuralları",
-      "description": "Yemeklerin birlikte kullanım kuralları"
+      "id": "compatibility",
+      "name": "Uyumluluk KurallarÄ±",
+      "description": "Yemeklerin birlikte kullanÄ±m kurallarÄ±"
     },
     {
       "id": "restriction",
-      "name": "Kısıtlama Kuralları", 
-      "description": "Belirli yemeklerin yasak veya zorunlu olması"
+      "name": "KÄ±sÄ±tlama KurallarÄ±",
+      "description": "Belirli yemeklerin yasak veya zorunlu olmasÄ±"
     },
     {
       "id": "nutritional",
-      "name": "Beslenme Kuralları",
-      "description": "Makro ve mikro besin değerleri kuralları"
+      "name": "Beslenme KurallarÄ±",
+      "description": "Makro ve mikro besin deÄerleri kurallarÄ±"
     }
   ],
-  
   "rules": [
     {
       "id": "rule_001",
-      "name": "Ana Yemek Kuralı - Öğle/Akşam",
-      "description": "Öğle ve akşam öğünlerinde maksimum 1 ana yemek",
+      "name": "Ana Yemek KuralÄ± - ÃÄle/AkÅam",
+      "description": "ÃÄle ve akÅam Ã¶ÄÃ¼nlerinde maksimum 1 ana yemek",
       "type": "frequency",
       "priority": 1,
       "active": true,
@@ -38,8 +36,11 @@
         "value": "mainDish"
       },
       "constraint": {
-        "scope": "meal", 
-        "meals": ["lunch", "dinner"],
+        "scope": "meal",
+        "meals": [
+          "lunch",
+          "dinner"
+        ],
         "weeks": "all",
         "frequency": {
           "type": "max",
@@ -50,11 +51,10 @@
       "violation": "critical",
       "created": "2025-08-17T00:00:00.000Z"
     },
-    
     {
-      "id": "rule_002", 
-      "name": "Kahvaltı İçecek Kuralı",
-      "description": "Kahvaltıda mutlaka 1 içecek olmalı",
+      "id": "rule_002",
+      "name": "KahvaltÄ± Ä°Ã§ecek KuralÄ±",
+      "description": "KahvaltÄ±da mutlaka 1 iÃ§ecek olmalÄ±",
       "type": "restriction",
       "priority": 2,
       "active": true,
@@ -64,7 +64,9 @@
       },
       "constraint": {
         "scope": "meal",
-        "meals": ["breakfast"],
+        "meals": [
+          "breakfast"
+        ],
         "weeks": "all",
         "frequency": {
           "type": "fixed",
@@ -75,23 +77,25 @@
       "violation": "critical",
       "created": "2025-08-17T00:00:00.000Z"
     },
-    
     {
       "id": "rule_003",
-      "name": "Günlük Çorba Sıklığı",
-      "description": "Günde maksimum 1 çorba",
-      "type": "frequency", 
+      "name": "GÃ¼nlÃ¼k Ãorba SÄ±klÄ±ÄÄ±",
+      "description": "GÃ¼nde maksimum 1 Ã§orba",
+      "type": "frequency",
       "priority": 3,
       "active": true,
       "target": {
         "selector": "tags",
-        "value": ["çorba", "soup"]
+        "value": [
+          "Ã§orba",
+          "soup"
+        ]
       },
       "constraint": {
         "scope": "day",
         "weeks": "all",
         "frequency": {
-          "type": "max", 
+          "type": "max",
           "value": 1,
           "period": "perDay"
         }
@@ -99,17 +103,21 @@
       "violation": "warning",
       "created": "2025-08-17T00:00:00.000Z"
     },
-    
     {
       "id": "rule_004",
-      "name": "Haftalık Et Çeşitliliği",
-      "description": "Haftada en az 3 farklı et türü",
+      "name": "HaftalÄ±k Et ÃeÅitliliÄi",
+      "description": "Haftada en az 3 farklÄ± et tÃ¼rÃ¼",
       "type": "nutritional",
-      "priority": 4, 
+      "priority": 4,
       "active": true,
       "target": {
         "selector": "tags",
-        "value": ["et", "tavuk", "balık", "kuzu"]
+        "value": [
+          "et",
+          "tavuk",
+          "balÄ±k",
+          "kuzu"
+        ]
       },
       "constraint": {
         "scope": "week",
@@ -123,21 +131,25 @@
       "violation": "info",
       "created": "2025-08-17T00:00:00.000Z"
     },
-    
     {
       "id": "rule_005",
-      "name": "Ekmek Kısıtlaması - Keto",
-      "description": "Ketojenik diyette ekmek yasak", 
+      "name": "Ekmek KÄ±sÄ±tlamasÄ± - Keto",
+      "description": "Ketojenik diyette ekmek yasak",
       "type": "restriction",
       "priority": 1,
       "active": true,
       "target": {
         "selector": "tags",
-        "value": ["ekmek", "bread"]
+        "value": [
+          "ekmek",
+          "bread"
+        ]
       },
       "constraint": {
         "scope": "global",
-        "dietTypes": ["ketojenik"],
+        "dietTypes": [
+          "ketojenik"
+        ],
         "frequency": {
           "type": "forbidden",
           "value": 0
@@ -147,7 +159,6 @@
       "created": "2025-08-17T00:00:00.000Z"
     }
   ],
-  
   "compatibilityRules": [
     {
       "id": "compat_001",
@@ -155,33 +166,43 @@
       "description": "Ana yemeklerin salata ile uyumu",
       "active": true,
       "mainItem": {
-        "selector": "role", 
+        "selector": "role",
         "value": "mainDish"
       },
       "compatibleWith": {
         "selector": "tags",
-        "value": ["salata", "yeşillik"]
+        "value": [
+          "salata",
+          "yeÅillik"
+        ]
       },
       "incompatibleWith": {
         "selector": "tags",
-        "value": ["tatlı", "dessert"]
+        "value": [
+          "tatlÄ±",
+          "dessert"
+        ]
       },
       "strength": "strong",
       "created": "2025-08-17T00:00:00.000Z"
     },
-    
     {
       "id": "compat_002",
-      "name": "Çorba - Ekmek Uyumu",
-      "description": "Çorbaların ekmek ile uyumu",
+      "name": "Ãorba - Ekmek Uyumu",
+      "description": "ÃorbalarÄ±n ekmek ile uyumu",
       "active": true,
       "mainItem": {
         "selector": "tags",
-        "value": ["çorba"]
+        "value": [
+          "Ã§orba"
+        ]
       },
       "compatibleWith": {
-        "selector": "tags", 
-        "value": ["ekmek", "bread"]
+        "selector": "tags",
+        "value": [
+          "ekmek",
+          "bread"
+        ]
       },
       "incompatibleWith": {
         "selector": "role",
@@ -191,7 +212,6 @@
       "created": "2025-08-17T00:00:00.000Z"
     }
   ],
-  
   "priorityLevels": [
     {
       "level": 1,
@@ -200,21 +220,21 @@
       "color": "#dc3545"
     },
     {
-      "level": 2, 
-      "name": "Yüksek",
-      "description": "Çok önemli kurallar",
+      "level": 2,
+      "name": "YÃ¼ksek",
+      "description": "Ãok Ã¶nemli kurallar",
       "color": "#fd7e14"
     },
     {
       "level": 3,
-      "name": "Orta", 
-      "description": "Önemli kurallar",
+      "name": "Orta",
+      "description": "Ãnemli kurallar",
       "color": "#ffc107"
     },
     {
       "level": 4,
-      "name": "Düşük",
-      "description": "Öneri niteliğinde kurallar",
+      "name": "DÃ¼ÅÃ¼k",
+      "description": "Ãneri niteliÄinde kurallar",
       "color": "#28a745"
     }
   ]
