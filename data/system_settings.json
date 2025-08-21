@@ -340,12 +340,12 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "Menemen (2 adet yumurta, 1 adet domates, 1 adet biber, 1/4 soğan)",
+              "name": "Közlenmiş Kapya Biber",
               "amount": "1",
-              "calories": 229,
-              "carbs": 5,
-              "protein": 14,
-              "fat": 17,
+              "calories": 16,
+              "carbs": 3,
+              "protein": 1,
+              "fat": 0,
               "minQuantity": 1,
               "maxQuantity": 1,
               "step": 1
@@ -357,9 +357,9 @@
           "dinner": []
         },
         "criteriaStates": {
-          "liked_foods": false,
           "allergies": false,
-          "medical_conditions": false,
+          "liked_foods": true,
+          "medical_conditions": true,
           "macro_targets": true,
           "calorie_distribution": true,
           "meal_timing": true,
@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:06:30.395Z",
-      "updated": "22.08.2025 00:06:30",
+      "updatedAt": "2025-08-21T21:06:40.287Z",
+      "updated": "22.08.2025 00:06:40",
       "criteriaStates": {},
       "criteriaOrder": []
     },
