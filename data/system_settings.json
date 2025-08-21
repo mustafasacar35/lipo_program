@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:12:02.062Z",
-      "updated": "21.08.2025 23:12:02",
+      "updatedAt": "2025-08-21T20:12:19.601Z",
+      "updated": "21.08.2025 23:12:19",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -372,8 +372,10 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:12:11.678Z",
-      "updated": "21.08.2025 23:12:11"
+      "updatedAt": "2025-08-21T20:12:17.159Z",
+      "updated": "21.08.2025 23:12:17",
+      "criteriaStates": {},
+      "criteriaOrder": []
     },
     "9": {
       "name": "9",
