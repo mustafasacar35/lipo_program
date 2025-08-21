@@ -333,7 +333,7 @@
           "dinner": []
         },
         "criteriaStates": {
-          "allergies": true,
+          "allergies": false,
           "liked_foods": false,
           "medical_conditions": true,
           "macro_targets": true,
@@ -348,8 +348,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:08:03.094Z",
-      "updated": "21.08.2025 23:08:03"
+      "updatedAt": "2025-08-21T20:09:37.552Z",
+      "updated": "21.08.2025 23:09:37"
     },
     "9": {
       "name": "9",
