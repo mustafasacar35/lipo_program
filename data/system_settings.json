@@ -406,8 +406,8 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T21:26:11.937Z",
-      "updated": "22.08.2025 00:26:11"
+      "updatedAt": "2025-08-21T21:26:31.436Z",
+      "updated": "22.08.2025 00:26:31"
     },
     "9": {
       "name": "9",
@@ -433,8 +433,8 @@
           "dinner": []
         },
         "criteriaStates": {
-          "liked_foods": true,
-          "allergies": false,
+          "allergies": true,
+          "liked_foods": false,
           "medical_conditions": false,
           "macro_targets": false,
           "calorie_distribution": true,
@@ -448,8 +448,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:26:20.472Z",
-      "updated": "22.08.2025 00:26:20",
+      "updatedAt": "2025-08-21T21:26:29.724Z",
+      "updated": "22.08.2025 00:26:25",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
@@ -478,6 +478,95 @@
         "lunch": [],
         "snack2": [],
         "dinner": []
+      },
+      "mealSettings": {
+        "breakfast": {
+          "min": 1,
+          "max": 1,
+          "fixed": null,
+          "macroPercent": 25
+        },
+        "snack1": {
+          "min": 1,
+          "max": 2,
+          "fixed": null,
+          "macroPercent": 10
+        },
+        "lunch": {
+          "min": 3,
+          "max": 5,
+          "fixed": null,
+          "macroPercent": 30
+        },
+        "snack2": {
+          "min": 1,
+          "max": 2,
+          "fixed": null,
+          "macroPercent": 10
+        },
+        "dinner": {
+          "min": 3,
+          "max": 5,
+          "fixed": null,
+          "macroPercent": 25
+        }
+      },
+      "calorieMethod": "custom",
+      "customFormula": {
+        "coeff": {
+          "carbs": 0.6,
+          "protein": 0.8,
+          "fat": 1
+        },
+        "act": {
+          "1": 0.8,
+          "2": 0.9,
+          "3": 1,
+          "4": 1.1,
+          "5": 1.2
+        },
+        "coeffByDiet": {
+          "lowcarb": {
+            "carbs": 0.6,
+            "protein": 0.8,
+            "fat": 1
+          },
+          "ketojenik": {
+            "carbs": 0.3,
+            "protein": 0.8,
+            "fat": 1.2
+          }
+        }
+      },
+      "criteriaHierarchy": [
+        "allergies",
+        "liked_foods",
+        "medical_conditions",
+        "macro_targets",
+        "calorie_distribution",
+        "meal_timing",
+        "food_groups",
+        "portion_sizes",
+        "cooking_methods",
+        "seasonal_foods",
+        "budget_constraints",
+        "preparation_time",
+        "repetition_frequency"
+      ],
+      "criteriaSettings": {
+        "allergies": true,
+        "liked_foods": false,
+        "medical_conditions": false,
+        "macro_targets": false,
+        "calorie_distribution": true,
+        "meal_timing": true,
+        "food_groups": true,
+        "portion_sizes": true,
+        "cooking_methods": true,
+        "seasonal_foods": true,
+        "budget_constraints": true,
+        "preparation_time": true,
+        "repetition_frequency": true
       }
     }
   },
