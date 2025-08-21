@@ -340,16 +340,15 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "merc",
+              "name": "Yeşil mercimek yemeği",
               "amount": "1",
-              "calories": 0,
-              "carbs": 0,
-              "protein": 0,
-              "fat": 0,
-              "minQuantity": 1,
-              "maxQuantity": 2,
-              "step": 0.5,
-              "isManual": true
+              "calories": 280,
+              "carbs": 20,
+              "protein": 14,
+              "fat": 16,
+              "minQuantity": 0.5,
+              "maxQuantity": 1,
+              "step": 0.5
             }
           ],
           "snack1": [],
@@ -373,7 +372,7 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:12:11.156Z",
+      "updatedAt": "2025-08-21T20:12:11.678Z",
       "updated": "21.08.2025 23:12:11"
     },
     "9": {
