@@ -6251,9 +6251,9 @@
                             await saveFixedMealsToStorage();
                         } catch(_) {}
                         
-                        // ✅ ÖNEMLİ: Template uygula (sabit yemekleri de yükler)
+                        // ✅ ÖNEMLİ: Template uygula (sabit yemekleri de yükler) - Dropdown güncellemesini atla
                         const weekNo = parseInt(value.replace('template_', ''));
-                        await applySystemWeekProfile(weekNo);
+                        await applySystemWeekProfile(weekNo, true); // skipDropdownUpdate = true
                         
                         if (badge) badge.textContent = `Kapsam: Şablon ${weekNo}`;
                     } else {
@@ -13128,7 +13128,7 @@
                     <div class=\"btn-group btn-group-sm\">
                         <button class=\"btn btn-outline-secondary\" onclick=\"editSystemWeekProfile(${k})\" title=\"Bu şablonu düzenlemek için yükle\"><i class='fas fa-edit'></i> Düzenle</button>
                         <button class=\"btn btn-outline-success\" onclick=\"saveCurrentSettingsToTemplate(${k})\" title=\"Mevcut ayarları bu şablona kaydet\"><i class='fas fa-save'></i> Kaydet</button>
-                        <button class=\"btn btn-outline-primary\" onclick=\"(async () => { const weekSelect = document.getElementById('criteria-week-select'); if(weekSelect) { weekSelect.dataset.updating = 'true'; await applySystemWeekProfile(${k}); setTimeout(() => weekSelect.dataset.updating = 'false', 300); } })()\" title=\"Bu şablonu mevcut ayarlara uygula\"><i class='fas fa-download'></i> Uygula</button>
+                        <button class=\"btn btn-outline-primary\" onclick=\"(async () => { const weekSelect = document.getElementById('criteria-week-select'); if(weekSelect) { weekSelect.dataset.updating = 'true'; await applySystemWeekProfile(${k}, false); weekSelect.value = 'template_${k}'; setTimeout(() => weekSelect.dataset.updating = 'false', 300); } })()\" title=\"Bu şablonu mevcut ayarlara uygula\"><i class='fas fa-download'></i> Uygula</button>
                         <button class=\"btn btn-outline-danger\" onclick=\"deleteSystemWeekProfile(${k})\"><i class='fas fa-trash'></i></button>
                     </div>
                 </div>`;
@@ -13258,7 +13258,7 @@
         }
 
         // Hafta şablonu uygula
-        async function applySystemWeekProfile(weekNo) {
+        async function applySystemWeekProfile(weekNo, skipDropdownUpdate = false) {
             try {
                 console.log(`📥 [TEMPLATE-APPLY] Hafta ${weekNo} şablonu uygulanıyor...`);
                 
@@ -13378,15 +13378,19 @@
 
                 console.log(`✅ [TEMPLATE-APPLY] Hafta ${weekNo} şablonu başarıyla uygulandı`);
                 
-                // Dropdown'ı güncelle (event loop önleme ile)
-                const weekSelect = document.getElementById('criteria-week-select');
-                if (weekSelect) {
-                    weekSelect.dataset.updating = 'true';
-                    weekSelect.value = templateId;
-                    console.log(`🔄 [TEMPLATE-APPLY] Dropdown güncellendi: ${templateId}`);
-                    setTimeout(() => {
-                        weekSelect.dataset.updating = 'false';
-                    }, 200);
+                // Dropdown'ı güncelle (sadece skipDropdownUpdate false ise)
+                if (!skipDropdownUpdate) {
+                    const weekSelect = document.getElementById('criteria-week-select');
+                    if (weekSelect) {
+                        weekSelect.dataset.updating = 'true';
+                        weekSelect.value = templateId;
+                        console.log(`🔄 [TEMPLATE-APPLY] Dropdown güncellendi: ${templateId}`);
+                        setTimeout(() => {
+                            weekSelect.dataset.updating = 'false';
+                        }, 200);
+                    }
+                } else {
+                    console.log(`⏭️ [TEMPLATE-APPLY] Dropdown güncelleme atlandı (skipDropdownUpdate=true)`);
                 }
                 
                 // Criteria checkbox'larını yeniden kur
