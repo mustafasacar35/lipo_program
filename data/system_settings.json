@@ -220,8 +220,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:09:32.180Z",
-      "updated": "21.08.2025 23:09:32",
+      "updatedAt": "2025-08-21T20:10:44.416Z",
+      "updated": "21.08.2025 23:10:44",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -308,10 +308,10 @@
         "repetition_frequency"
       ],
       "criteriaSettings": {
-        "liked_foods": false,
-        "allergies": false,
-        "medical_conditions": true,
-        "macro_targets": true,
+        "liked_foods": true,
+        "allergies": true,
+        "medical_conditions": false,
+        "macro_targets": false,
         "calorie_distribution": true,
         "meal_timing": true,
         "food_groups": true,
@@ -333,10 +333,10 @@
           "dinner": []
         },
         "criteriaStates": {
-          "allergies": false,
-          "liked_foods": false,
-          "medical_conditions": true,
-          "macro_targets": true,
+          "liked_foods": true,
+          "allergies": true,
+          "medical_conditions": false,
+          "macro_targets": false,
           "calorie_distribution": true,
           "meal_timing": true,
           "food_groups": true,
@@ -348,8 +348,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:09:39.189Z",
-      "updated": "21.08.2025 23:09:39"
+      "updatedAt": "2025-08-21T20:10:03.379Z",
+      "updated": "21.08.2025 23:09:58"
     },
     "9": {
       "name": "9",
@@ -383,6 +383,6 @@
       "updated": "21.08.2025 23:07:50"
     }
   },
-  "lastUpdated": "2025-08-21T20:09:03.832Z",
+  "lastUpdated": "2025-08-21T20:10:19.486Z",
   "version": "2.1.0"
 }
