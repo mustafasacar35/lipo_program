@@ -205,8 +205,8 @@
           "dinner": []
         },
         "criteriaStates": {
-          "allergies": true,
           "liked_foods": false,
+          "allergies": false,
           "medical_conditions": true,
           "macro_targets": true,
           "calorie_distribution": true,
@@ -220,8 +220,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:07:19.529Z",
-      "updated": "21.08.2025 23:07:19",
+      "updatedAt": "2025-08-21T20:07:31.338Z",
+      "updated": "21.08.2025 23:07:31",
       "criteriaStates": {},
       "criteriaOrder": []
     },
