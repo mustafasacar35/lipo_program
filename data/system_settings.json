@@ -409,6 +409,18 @@
               "minQuantity": 1,
               "maxQuantity": 1,
               "step": 1
+            },
+            {
+              "name": "re",
+              "amount": "1",
+              "calories": 0,
+              "carbs": 0,
+              "protein": 0,
+              "fat": 0,
+              "minQuantity": 1,
+              "maxQuantity": 2,
+              "step": 0.5,
+              "isManual": true
             }
           ],
           "snack1": [],
@@ -417,8 +429,8 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T20:13:37.530Z",
-      "updated": "21.08.2025 23:13:37",
+      "updatedAt": "2025-08-21T20:13:40.732Z",
+      "updated": "21.08.2025 23:13:40",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
