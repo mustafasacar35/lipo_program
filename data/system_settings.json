@@ -14,7 +14,7 @@
         "min": 8,
         "max": 18,
         "fixed": null,
-        "macroPercent": 8
+        "macroPercent": 25
       },
       "snack1": {
         "min": 1,
@@ -84,7 +84,7 @@
       "repetition_frequency"
     ],
     "criteriaSettings": {
-      "allergies": false,
+      "allergies": true,
       "liked_foods": true,
       "medical_conditions": true,
       "macro_targets": true,
@@ -116,7 +116,7 @@
       "snack2": [],
       "dinner": []
     },
-    "timestamp": "2025-08-21T19:16:42.480Z"
+    "timestamp": "2025-08-21T19:38:31.039Z"
   },
   "weeklyProfiles": {
     "1": {
@@ -242,15 +242,26 @@
       "timestamp": "2025-08-21T19:16:07.385Z",
       "templateData": {
         "fixedMeals": {
-          "breakfast": [],
+          "breakfast": [
+            {
+              "name": "Yaban Mersinli Smoothie (1 porsiyon)",
+              "amount": "1",
+              "calories": 430,
+              "carbs": 2,
+              "protein": 20,
+              "fat": 38,
+              "minQuantity": 1,
+              "maxQuantity": 1
+            }
+          ],
           "snack1": [],
           "lunch": [],
           "snack2": [],
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T19:37:40.814Z",
-      "updated": "21.08.2025 22:37:40"
+      "updatedAt": "2025-08-21T19:38:32.568Z",
+      "updated": "21.08.2025 22:38:32"
     },
     "2": {
       "name": "22",
