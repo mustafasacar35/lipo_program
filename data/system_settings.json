@@ -375,26 +375,15 @@
       "timestamp": "2025-08-21T19:39:56.057Z",
       "templateData": {
         "fixedMeals": {
-          "breakfast": [
-            {
-              "name": "Yaban Mersinli Smoothie (1 porsiyon)",
-              "amount": "1",
-              "calories": 430,
-              "carbs": 2,
-              "protein": 20,
-              "fat": 38,
-              "minQuantity": 1,
-              "maxQuantity": 1
-            }
-          ],
+          "breakfast": [],
           "snack1": [],
           "lunch": [],
           "snack2": [],
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T19:40:28.559Z",
-      "updated": "21.08.2025 22:40:28"
+      "updatedAt": "2025-08-21T19:52:50.587Z",
+      "updated": "21.08.2025 22:52:50"
     },
     "9": {
       "name": "9",
