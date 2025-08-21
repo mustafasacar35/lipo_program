@@ -9718,7 +9718,8 @@
         async function loadMealsFromPlainJson() {
             try {
                 console.log('🔄 yemekler_plain.json\'dan yemekler yükleniyor...');
-                const response = await fetch('../yemekler_plain.json');
+                // GitHub'dan doğrudan yükleme
+                const response = await fetch('https://raw.githubusercontent.com/mustafasacar35/lipo_program/main/yemekler_plain.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -9733,13 +9734,42 @@
                     return mealsData;
                 } else {
                     console.log('⚠️ yemekler_plain.json boş veya geçersiz');
-                    return getMealsFromStorage(); // fallback
+                    return loadMealsFromStorage(); // fallback
                 }
             } catch (error) {
                 console.error('❌ yemekler_plain.json yüklenirken hata:', error);
                 // localStorage'dan yüklemeye çalış
-                return getMealsFromStorage();
+                return loadMealsFromStorage();
             }
+        }
+
+        // localStorage'dan yemek yükleme fallback fonksiyonu
+        function loadMealsFromStorage() {
+            try {
+                const stored = localStorage.getItem('nutritionMeals');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    console.log('🍽️ localStorage\'dan yemek veritabanı yüklendi:', parsed.length, 'yemek');
+                    return parsed;
+                }
+            } catch (e) {
+                console.warn('localStorage yemek veritabanı okuma hatası:', e);
+            }
+            
+            // Son fallback: demo veriler
+            const demoFoods = [
+                { name: 'Kurşun Geçirmez Kahve', category: 'İçecek', calories: 5, carbs: 0, protein: 0, fat: 0, minQuantity: 1, maxQuantity: 3, step: 0.5 },
+                { name: 'Sade Omlet', category: 'Protein', calories: 180, carbs: 2, protein: 12, fat: 14, minQuantity: 1, maxQuantity: 2, step: 0.5 },
+                { name: 'Avokado', category: 'Meyve', calories: 250, carbs: 12, protein: 3, fat: 23, minQuantity: 1, maxQuantity: 1.5, step: 0.25 },
+                { name: 'Badem', category: 'Kuruyemiş', calories: 580, carbs: 22, protein: 21, fat: 50, minQuantity: 1, maxQuantity: 2, step: 0.5 },
+                { name: 'Izgara Tavuk', category: 'Protein', calories: 165, carbs: 0, protein: 31, fat: 4, minQuantity: 1, maxQuantity: 2, step: 0.5 },
+                { name: 'Brokoli', category: 'Sebze', calories: 34, carbs: 7, protein: 3, fat: 0, minQuantity: 1, maxQuantity: 3, step: 0.5 },
+                { name: 'Karnabahar', category: 'Sebze', calories: 25, carbs: 5, protein: 2, fat: 0, minQuantity: 1, maxQuantity: 3, step: 0.5 },
+                { name: 'Somon', category: 'Protein', calories: 200, carbs: 0, protein: 25, fat: 11, minQuantity: 1, maxQuantity: 2, step: 0.5 }
+            ];
+            
+            console.log('🍽️ Demo yemek veritabanı kullanılıyor:', demoFoods.length, 'yemek');
+            return demoFoods;
         }
         
         // Sabit yemek seç
@@ -13325,6 +13355,14 @@
                     weekSelect.value = templateId;
                     console.log(`🔄 [TEMPLATE-APPLY] Dropdown güncellendi: ${templateId}`);
                 }
+                
+                // Criteria checkbox'larını yeniden kur
+                setTimeout(() => {
+                    if (typeof setupCriteriaCheckboxListeners === 'function') {
+                        setupCriteriaCheckboxListeners();
+                        console.log(`🔄 [TEMPLATE-APPLY] Criteria checkbox event listener'lar yenilendi`);
+                    }
+                }, 100);
                 
             } catch (e) {
                 console.error('❌ [TEMPLATE-APPLY] Hata:', e);
