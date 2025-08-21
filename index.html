@@ -9578,6 +9578,8 @@
                            placeholder="Porsiyon" 
                            value="1"
                            title="Porsiyon katsayısı veya '-' (otomatik)"
+                           oninput="validateFixedMealAmount(this); autoSaveFixedMeals();"
+                           onchange="autoSaveFixedMeals();">
                            oninput="validateFixedMealAmount(this); autoSaveFixedMeals();">
                 </div>
                 <div class="col-2">
@@ -9605,6 +9607,19 @@
             }, 500);
         }
         
+        // Otomatik sabit yemek kayıt fonksiyonu
+        function autoSaveFixedMeals() {
+            // Küçük bir gecikme ile çağır (kullanıcı hızlı değişiklik yaparken çok sık kayıt olmaması için)
+            clearTimeout(window.autoSaveTimeout);
+            window.autoSaveTimeout = setTimeout(() => {
+                saveFixedMealsToStorage().then(() => {
+                    console.log('💾 [FİZİKSEL JSON] Sabit yemek değişikliği otomatik kaydedildi');
+                }).catch(e => {
+                    console.warn('❌ Otomatik sabit yemek kayıt hatası:', e);
+                });
+            }, 1000); // 1 saniye gecikme
+        }
+
         // Sabit yemek satırını sil
         function removeFixedMealRow(rowId) {
             const row = document.getElementById(rowId);
@@ -9621,20 +9636,8 @@
                 }
                 
                 // Otomatik kaydet
-                setTimeout(() => {
-                    saveFixedMealsToStorage();
-                    console.log('💾 Satır silindikten sonra otomatik kayıt yapıldı');
-                }, 100);
+                autoSaveFixedMeals();
             }
-        }
-        
-        // Otomatik kaydetme için yardımcı fonksiyon
-        function autoSaveFixedMeals() {
-            clearTimeout(window.fixedMealSaveTimeout);
-            window.fixedMealSaveTimeout = setTimeout(async () => {
-                await saveFixedMealsToStorage();
-                console.log('💾 [FİZİKSEL JSON] Sabit yemek değişikliği otomatik kaydedildi');
-            }, 800);
         }
         
         // Sabit yemek arama fonksiyonu
