@@ -259,10 +259,25 @@
           "lunch": [],
           "snack2": [],
           "dinner": []
+        },
+        "criteriaStates": {
+          "allergies": false,
+          "liked_foods": false,
+          "medical_conditions": true,
+          "macro_targets": true,
+          "calorie_distribution": true,
+          "meal_timing": true,
+          "food_groups": true,
+          "portion_sizes": true,
+          "cooking_methods": true,
+          "seasonal_foods": true,
+          "budget_constraints": true,
+          "preparation_time": true,
+          "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:40:08.433Z",
-      "updated": "22.08.2025 00:40:08"
+      "updatedAt": "2025-08-21T21:40:11.936Z",
+      "updated": "22.08.2025 00:40:11"
     },
     "2": {
       "name": "22",
@@ -449,8 +464,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:40:02.706Z",
-      "updated": "22.08.2025 00:40:02",
+      "updatedAt": "2025-08-21T21:40:23.180Z",
+      "updated": "22.08.2025 00:40:23",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
