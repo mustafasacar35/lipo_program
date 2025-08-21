@@ -400,15 +400,15 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "Közlenmiş Kapya Biber",
+              "name": "Ketojenik Köfte",
               "amount": "1",
-              "calories": 16,
-              "carbs": 3,
-              "protein": 1,
-              "fat": 0,
-              "minQuantity": 1,
+              "calories": 360,
+              "carbs": 4,
+              "protein": 23,
+              "fat": 28,
+              "minQuantity": 0.5,
               "maxQuantity": 1,
-              "step": 1
+              "step": 0.5
             }
           ],
           "snack1": [],
@@ -417,8 +417,8 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T21:07:38.872Z",
-      "updated": "22.08.2025 00:07:38",
+      "updatedAt": "2025-08-21T21:07:40.084Z",
+      "updated": "22.08.2025 00:07:40",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
