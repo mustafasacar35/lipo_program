@@ -627,7 +627,7 @@
                    placeholder="GitHub Personal Access Token">
             
             <div>
-                <button onclick="connectGitHub()" class="github-login-btn">
+                <button onclick="connectToGitHub()" class="github-login-btn">
                     <i class="fas fa-link"></i> Bağlan
                 </button>
                 <button onclick="testConnection()" class="github-login-btn" style="background: #17a2b8;">
@@ -4493,6 +4493,9 @@
             
             // JSON verilerini yükle
             await loadSystemData();
+            
+            // Yemek veritabanını yükle
+            await loadMealsFromPlainJson();
             
             // Sistem ayarlarını yükle
             loadSavedSystemSettings();
@@ -9709,6 +9712,34 @@
             
             console.log('🍽️ Demo yemek veritabanı kullanılıyor:', demoFoods.length, 'yemek');
             return demoFoods;
+        }
+
+        // yemekler_plain.json'dan yemekleri otomatik yükle
+        async function loadMealsFromPlainJson() {
+            try {
+                console.log('🔄 yemekler_plain.json\'dan yemekler yükleniyor...');
+                const response = await fetch('../yemekler_plain.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const mealsData = await response.json();
+                
+                if (Array.isArray(mealsData) && mealsData.length > 0) {
+                    window.nutritionMeals = mealsData;
+                    // localStorage'a da kaydet
+                    localStorage.setItem('nutritionMeals', JSON.stringify(mealsData));
+                    console.log('✅ yemekler_plain.json\'dan', mealsData.length, 'yemek başarıyla yüklendi ve localStorage\'a kaydedildi');
+                    
+                    return mealsData;
+                } else {
+                    console.log('⚠️ yemekler_plain.json boş veya geçersiz');
+                    return getMealsFromStorage(); // fallback
+                }
+            } catch (error) {
+                console.error('❌ yemekler_plain.json yüklenirken hata:', error);
+                // localStorage'dan yüklemeye çalış
+                return getMealsFromStorage();
+            }
         }
         
         // Sabit yemek seç
