@@ -360,13 +360,13 @@
       "templateData": {
         "criteriaStates": {
           "liked_foods": true,
-          "allergies": true,
+          "allergies": false,
           "medical_conditions": true,
           "macro_targets": true,
           "calorie_distribution": true,
           "meal_timing": true,
-          "food_groups": false,
-          "portion_sizes": false,
+          "food_groups": true,
+          "portion_sizes": true,
           "cooking_methods": true,
           "seasonal_foods": true,
           "budget_constraints": true,
@@ -374,38 +374,15 @@
           "repetition_frequency": true
         },
         "fixedMeals": {
-          "breakfast": [
-            {
-              "name": "1 Kase Sote Edilmiş Ispanak + 1 tatlı kaşığı zeytinyağı",
-              "amount": "1",
-              "calories": 95,
-              "carbs": 3,
-              "protein": 5,
-              "fat": 7,
-              "minQuantity": 1,
-              "maxQuantity": 1,
-              "step": 1
-            },
-            {
-              "name": "Mantarlı Yumurta (100 gram mantar, 1 yemek kaşığı tereyağı, 1 adet yumurta, tuz ve baharatlar)",
-              "amount": "0.5",
-              "calories": 160,
-              "carbs": 4,
-              "protein": 9,
-              "fat": 12,
-              "minQuantity": 0.5,
-              "maxQuantity": 1,
-              "step": 1
-            }
-          ],
+          "breakfast": [],
           "snack1": [],
           "lunch": [],
           "snack2": [],
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T20:39:24.871Z",
-      "updated": "21.08.2025 23:39:24",
+      "updatedAt": "2025-08-21T20:49:54.552Z",
+      "updated": "21.08.2025 23:49:54",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
