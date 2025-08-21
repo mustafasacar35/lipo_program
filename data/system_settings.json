@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:17:13.989Z",
-      "updated": "22.08.2025 00:17:13",
+      "updatedAt": "2025-08-21T21:17:30.407Z",
+      "updated": "22.08.2025 00:17:30",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -340,16 +340,15 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "sul",
+              "name": "Fırınlanmış Peynirli Taze Fasulye Graten",
               "amount": "1",
-              "calories": 0,
-              "carbs": 0,
-              "protein": 0,
-              "fat": 0,
+              "calories": 286,
+              "carbs": 5,
+              "protein": 17,
+              "fat": 22,
               "minQuantity": 1,
-              "maxQuantity": 2,
-              "step": 0.5,
-              "isManual": true
+              "maxQuantity": 1,
+              "step": 1
             }
           ],
           "snack1": [],
@@ -373,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:17:24.524Z",
-      "updated": "22.08.2025 00:17:24",
+      "updatedAt": "2025-08-21T21:17:28.227Z",
+      "updated": "22.08.2025 00:17:28",
       "criteriaStates": {},
       "criteriaOrder": []
     },
