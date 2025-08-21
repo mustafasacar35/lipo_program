@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:06:02.686Z",
-      "updated": "22.08.2025 00:06:02",
+      "updatedAt": "2025-08-21T21:06:36.167Z",
+      "updated": "22.08.2025 00:06:36",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -357,9 +357,9 @@
           "dinner": []
         },
         "criteriaStates": {
+          "liked_foods": false,
           "allergies": false,
-          "liked_foods": true,
-          "medical_conditions": true,
+          "medical_conditions": false,
           "macro_targets": true,
           "calorie_distribution": true,
           "meal_timing": true,
@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:06:15.945Z",
-      "updated": "22.08.2025 00:06:15",
+      "updatedAt": "2025-08-21T21:06:30.395Z",
+      "updated": "22.08.2025 00:06:30",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -405,20 +405,104 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T20:49:55.575Z",
+      "updatedAt": "2025-08-21T21:06:34.757Z",
       "updated": "21.08.2025 23:49:55",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
-        "age": 39,
-        "weight": 72,
-        "height": 169,
+        "age": 33,
+        "weight": 70,
+        "height": 165,
         "gender": "female",
         "activity": "1.55",
-        "dietType": "ketojenik",
-        "targetCalories": 1094
+        "dietType": "lowcarb",
+        "targetCalories": 1022
       },
-      "fixedMeals": {}
+      "fixedMeals": {},
+      "mealSettings": {
+        "breakfast": {
+          "min": 3,
+          "max": 3,
+          "fixed": null,
+          "macroPercent": 22
+        },
+        "snack1": {
+          "min": 1,
+          "max": 2,
+          "fixed": null,
+          "macroPercent": 10
+        },
+        "lunch": {
+          "min": 3,
+          "max": 5,
+          "fixed": null,
+          "macroPercent": 30
+        },
+        "snack2": {
+          "min": 1,
+          "max": 2,
+          "fixed": null,
+          "macroPercent": 10
+        },
+        "dinner": {
+          "min": 3,
+          "max": 5,
+          "fixed": null,
+          "macroPercent": 25
+        }
+      },
+      "calorieMethod": "custom",
+      "customFormula": {
+        "coeff": {
+          "carbs": 0.6,
+          "protein": 0.8,
+          "fat": 1
+        },
+        "act": {
+          "1": 0.8,
+          "2": 0.9,
+          "3": 1,
+          "4": 1.1,
+          "5": 1.2
+        },
+        "coeffByDiet": {
+          "lowcarb": {
+            "carbs": 0.6,
+            "protein": 0.8,
+            "fat": 1
+          }
+        }
+      },
+      "criteriaHierarchy": [
+        "liked_foods",
+        "allergies",
+        "medical_conditions",
+        "macro_targets",
+        "calorie_distribution",
+        "meal_timing",
+        "food_groups",
+        "portion_sizes",
+        "cooking_methods",
+        "seasonal_foods",
+        "budget_constraints",
+        "preparation_time",
+        "repetition_frequency"
+      ],
+      "criteriaSettings": {
+        "liked_foods": false,
+        "allergies": false,
+        "medical_conditions": false,
+        "macro_targets": true,
+        "calorie_distribution": true,
+        "meal_timing": true,
+        "food_groups": true,
+        "portion_sizes": true,
+        "cooking_methods": true,
+        "seasonal_foods": true,
+        "budget_constraints": true,
+        "preparation_time": true,
+        "repetition_frequency": true
+      }
     }
   },
   "lastUpdated": "2025-08-21T21:04:38.996Z",
