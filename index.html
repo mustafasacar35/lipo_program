@@ -900,7 +900,7 @@
                                         <div class="d-flex align-items-center mb-2">
                                             <small class="text-muted me-2">📌 Sabit Yemekler:</small>
                                             <button type="button" class="btn btn-outline-primary btn-sm" id="add-breakfast-fixed-meal-btn" 
-                                                    onclick="addFixedMealRow('breakfast')" disabled>
+                                                    onclick="addFixedMealRow('breakfast')">
                                                 <i class="fas fa-plus"></i> Sabit Yemek Ekle
                                             </button>
                                         </div>
@@ -931,7 +931,7 @@
                                         <div class="d-flex align-items-center mb-2">
                                             <small class="text-muted me-2">📌 Sabit Yemekler:</small>
                                             <button type="button" class="btn btn-outline-primary btn-sm" id="add-snack1-fixed-meal-btn" 
-                                                    onclick="addFixedMealRow('snack1')" disabled>
+                                                    onclick="addFixedMealRow('snack1')">
                                                 <i class="fas fa-plus"></i> Sabit Yemek Ekle
                                             </button>
                                         </div>
@@ -962,7 +962,7 @@
                                         <div class="d-flex align-items-center mb-2">
                                             <small class="text-muted me-2">📌 Sabit Yemekler:</small>
                                             <button type="button" class="btn btn-outline-primary btn-sm" id="add-lunch-fixed-meal-btn" 
-                                                    onclick="addFixedMealRow('lunch')" disabled>
+                                                    onclick="addFixedMealRow('lunch')">
                                                 <i class="fas fa-plus"></i> Sabit Yemek Ekle
                                             </button>
                                         </div>
@@ -993,7 +993,7 @@
                                         <div class="d-flex align-items-center mb-2">
                                             <small class="text-muted me-2">📌 Sabit Yemekler:</small>
                                             <button type="button" class="btn btn-outline-primary btn-sm" id="add-snack2-fixed-meal-btn" 
-                                                    onclick="addFixedMealRow('snack2')" disabled>
+                                                    onclick="addFixedMealRow('snack2')">
                                                 <i class="fas fa-plus"></i> Sabit Yemek Ekle
                                             </button>
                                         </div>
@@ -1024,7 +1024,7 @@
                                         <div class="d-flex align-items-center mb-2">
                                             <small class="text-muted me-2">📌 Sabit Yemekler:</small>
                                             <button type="button" class="btn btn-outline-primary btn-sm" id="add-dinner-fixed-meal-btn" 
-                                                    onclick="addFixedMealRow('dinner')" disabled>
+                                                    onclick="addFixedMealRow('dinner')">
                                                 <i class="fas fa-plus"></i> Sabit Yemek Ekle
                                             </button>
                                         </div>
@@ -6201,6 +6201,29 @@
                     const value = sel.value;
                     const badge = document.getElementById('criteria-scope-badge');
                     
+                    // ÖNCEKİ TEMPLATE'İN VERİLERİNİ KAYDET
+                    const previousTemplateId = getCurrentTemplateId();
+                    console.log(`🔄 [TEMPLATE-CHANGE] Önceki template: ${previousTemplateId}, Yeni value: ${value}`);
+                    
+                    if (previousTemplateId) {
+                        // Önceki template'in kriter durumlarını kaydet
+                        const allCriteriaStates = {};
+                        const allCheckboxes = document.querySelectorAll('.criteria-checkbox-input');
+                        allCheckboxes.forEach(cb => {
+                            const cbId = cb.getAttribute('data-criteria-id');
+                            if (cbId) {
+                                allCriteriaStates[cbId] = cb.checked;
+                            }
+                        });
+                        
+                        console.log(`💾 [TEMPLATE-CHANGE] Önceki template ${previousTemplateId} kriter durumları kaydediliyor:`, allCriteriaStates);
+                        await saveTemplateSpecificData(previousTemplateId, 'criteriaStates', allCriteriaStates);
+                        
+                        // Sabit yemekleri de kaydet
+                        await saveFixedMealsToStorage();
+                        console.log(`💾 [TEMPLATE-CHANGE] Önceki template ${previousTemplateId} sabit yemekleri kaydedildi`);
+                    }
+                    
                     if (value === 'system') {
                         try { 
                             // Mevcut sabit yemekleri kaydet
@@ -9833,24 +9856,42 @@
                         const input = row.querySelector('.fixed-meal-search');
                         const amountInput = row.querySelector('.fixed-meal-amount');
                         
-                        if (input && input.value && input.dataset.selectedMeal) {
-                            try {
-                                const mealData = JSON.parse(input.dataset.selectedMeal);
-                                const amountValue = amountInput ? amountInput.value.trim() : '';
-                                
+                        if (input && input.value.trim()) {
+                            const amountValue = amountInput ? amountInput.value.trim() : '1';
+                            
+                            // Eğer selectedMeal dataset'i varsa onu kullan
+                            if (input.dataset.selectedMeal) {
+                                try {
+                                    const mealData = JSON.parse(input.dataset.selectedMeal);
+                                    fixedMeals[mealType].push({
+                                        name: mealData.name,
+                                        amount: amountValue === '-' || amountValue === '' ? 'auto' : amountValue,
+                                        calories: mealData.calories,
+                                        carbs: mealData.carbs,
+                                        protein: mealData.protein,
+                                        fat: mealData.fat,
+                                        minQuantity: mealData.minQuantity,
+                                        maxQuantity: mealData.maxQuantity,
+                                        step: mealData.step
+                                    });
+                                } catch (e) {
+                                    console.warn('Sabit yemek verisi parse edilemedi:', e);
+                                }
+                            } else {
+                                // Manuel girilen yemek - basit format
                                 fixedMeals[mealType].push({
-                                    name: mealData.name,
+                                    name: input.value.trim(),
                                     amount: amountValue === '-' || amountValue === '' ? 'auto' : amountValue,
-                                    calories: mealData.calories,
-                                    carbs: mealData.carbs,
-                                    protein: mealData.protein,
-                                    fat: mealData.fat,
-                                    minQuantity: mealData.minQuantity,
-                                    maxQuantity: mealData.maxQuantity,
-                                    step: mealData.step
+                                    calories: 0,
+                                    carbs: 0,
+                                    protein: 0,
+                                    fat: 0,
+                                    minQuantity: 1,
+                                    maxQuantity: 2,
+                                    step: 0.5,
+                                    isManual: true
                                 });
-                            } catch (e) {
-                                console.warn('Sabit yemek verisi parse edilemedi:', e);
+                                console.log(`📝 [MANUAL-MEAL] Manuel yemek kaydedildi: ${input.value.trim()}`);
                             }
                         }
                     });
@@ -13224,10 +13265,12 @@
                     // Checkbox'ları güncelle
                     Object.keys(criteriaStatesToApply).forEach(criteriaId => {
                         const isActive = criteriaStatesToApply[criteriaId];
-                        const checkbox = document.getElementById(criteriaId);
+                        const checkbox = document.querySelector(`[data-criteria-id="${criteriaId}"]`);
                         if (checkbox) {
                             checkbox.checked = isActive;
-                            console.log(`📋 [TEMPLATE-APPLY] ${criteriaId}: ${isActive ? 'aktif' : 'pasif'}`);
+                            console.log(`📋 [TEMPLATE-APPLY] ${criteriaId}: ${isActive ? 'aktif' : 'pasif'} - checkbox güncellendi`);
+                        } else {
+                            console.warn(`⚠️ [TEMPLATE-APPLY] Checkbox bulunamadı: ${criteriaId}`);
                         }
                     });
                     
