@@ -397,8 +397,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T19:37:56.315Z",
-      "updated": "21.08.2025 22:37:56",
+      "updatedAt": "2025-08-21T19:38:24.327Z",
+      "updated": "21.08.2025 22:38:24",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -732,7 +732,7 @@
       "updated": "21.08.2025 22:37:58"
     }
   },
-  "lastUpdated": "2025-08-21T19:37:29.117Z",
+  "lastUpdated": "2025-08-21T19:38:18.969Z",
   "version": "2.1.0",
   "interactionLog": []
 }
