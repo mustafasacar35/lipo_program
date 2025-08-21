@@ -9580,7 +9580,6 @@
                            title="Porsiyon katsayısı veya '-' (otomatik)"
                            oninput="validateFixedMealAmount(this); autoSaveFixedMeals();"
                            onchange="autoSaveFixedMeals();">
-                           oninput="validateFixedMealAmount(this); autoSaveFixedMeals();">
                 </div>
                 <div class="col-2">
                     <button type="button" class="btn btn-outline-danger btn-sm" 
@@ -11795,7 +11794,20 @@
                     }
                     return out;
                 });
-                if (ok) logToConsole('📄 data/planning_factors.json güncellendi (kriter sırası)');
+                if (ok) {
+                    logToConsole('📄 data/planning_factors.json güncellendi (kriter sırası)');
+                    
+                    // GitHub'a da kaydet
+                    try {
+                        const factorsData = localStorage.getItem('data/planning_factors.json');
+                        if (factorsData) {
+                            await saveToGitHub('data/planning_factors.json', factorsData);
+                            console.log('✅ [GITHUB] planning_factors.json GitHub\'a kaydedildi');
+                        }
+                    } catch (githubError) {
+                        console.warn('❌ [GITHUB] planning_factors.json GitHub\'a kaydedilemedi:', githubError);
+                    }
+                }
             } catch (e) {
                 console.warn('Kriter hiyerarşisi JSON kaydı başarısız:', e);
             }
@@ -15335,7 +15347,7 @@
             return false;
         }
 
-        function persistSystemRulesArchive() {
+        async function persistSystemRulesArchive() {
             // UI state → archive
             if (!systemRulesArchive) systemRulesArchive = initEmptySystemRulesArchive();
             if (!systemRulesArchive.rules) systemRulesArchive.rules = {};
@@ -15408,6 +15420,17 @@
                     const freqCount = compactFreq.length;
                     const depCount = compactDep.length;
                     logToConsole(`📄 system_rules.json güncellendi (${freqCount} sıklık, ${depCount} bağımlılık kuralı)`);
+                    
+                    // GitHub'a da kaydet
+                    try {
+                        const rulesData = localStorage.getItem('systemRulesArchive');
+                        if (rulesData) {
+                            await saveToGitHub('data/system_rules.json', rulesData);
+                            console.log('✅ [GITHUB] system_rules.json GitHub\'a kaydedildi');
+                        }
+                    } catch (githubError) {
+                        console.warn('❌ [GITHUB] system_rules.json GitHub\'a kaydedilemedi:', githubError);
+                    }
                 }
             } catch (e) {
                 console.warn('Kurallar hiyerarşisi JSON kaydı başarısız:', e);
