@@ -1,0 +1,229 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-11T00:00:00Z",
+  "metadata": {
+    "description": "Öğün şablonları sistemi",
+    "totalTemplates": 0,
+    "categories": ["breakfast", "lunch", "dinner", "snack"],
+    "sources": ["global", "dietitian", "patient", "auto_generated"]
+  },
+  "templates": [
+    {
+      "id": "tpl_0001",
+      "name": "Klasik Keto Kahvaltı",
+      "description": "Kurşun geçirmez kahve ile standart keto başlangıç",
+      "category": "breakfast",
+      "mealSlot": "breakfast",
+      "components": [
+        {
+          "mealId": "meal_0001",
+          "name": "Kurşun Geçirmez Kahve",
+          "role": "drink",
+          "defaultPortion": 1.0,
+          "required": true
+        }
+      ],
+      "macroEnvelope": {
+        "calories": [80, 120],
+        "protein": [0, 2],
+        "carbs": [0, 2],
+        "fat": [8, 15]
+      },
+      "dietTypes": ["keto", "elim_keto", "lowcarb"],
+      "tags": ["kahve", "keto", "hızlı"],
+      "compatibilityTags": ["energy_boost"],
+      "constraints": {
+        "maxItems": 1,
+        "allowAdditional": false,
+        "fixedStructure": true
+      },
+      "author": {
+        "type": "system",
+        "id": "global",
+        "name": "Sistem Varsayılanı"
+      },
+      "status": "approved",
+      "usage": {
+        "timesUsed": 0,
+        "avgSatisfaction": 0,
+        "lastUsed": null
+      },
+      "metadata": {
+        "createdAt": "2025-08-11T00:00:00Z",
+        "updatedAt": "2025-08-11T00:00:00Z",
+        "source": "system_default",
+        "verified": true
+      }
+    },
+    {
+      "id": "tpl_0002",
+      "name": "Omlet + Yeşillik + Haşhaş Ekmek + Tahin",
+      "description": "Protein açısından zengin, doyurucu öğle yemeği kombinasyonu",
+      "category": "lunch",
+      "mealSlot": "lunch",
+      "components": [
+        {
+          "mealId": "meal_xxxx",
+          "name": "Omlet (2 yumurta)",
+          "role": "mainDish",
+          "defaultPortion": 1.0,
+          "required": true
+        },
+        {
+          "mealId": "meal_yyyy",
+          "name": "Yeşillik Salata",
+          "role": "sideDish", 
+          "defaultPortion": 1.0,
+          "required": true
+        },
+        {
+          "mealId": "meal_zzzz",
+          "name": "Haşhaş Ekmegi",
+          "role": "bread",
+          "defaultPortion": 1.0,
+          "required": false
+        },
+        {
+          "mealId": "meal_wwww",
+          "name": "Tahin (1 kaşık)",
+          "role": "supplement",
+          "defaultPortion": 0.5,
+          "required": false
+        }
+      ],
+      "macroEnvelope": {
+        "calories": [450, 800],
+        "protein": [20, 45],
+        "carbs": [5, 25],
+        "fat": [30, 70]
+      },
+      "dietTypes": ["keto", "lowcarb", "sport"],
+      "tags": ["protein", "doyurucu", "kahvaltı_tarzı"],
+      "compatibilityTags": ["omletli", "salata_ile_iyi", "yeşillik"],
+      "constraints": {
+        "maxItems": 4,
+        "allowBread": true,
+        "avoidDuplicateBase": true,
+        "proteinFocus": true
+      },
+      "author": {
+        "type": "example",
+        "id": "template_demo",
+        "name": "Örnek Şablon"
+      },
+      "status": "draft",
+      "usage": {
+        "timesUsed": 0,
+        "avgSatisfaction": 0,
+        "lastUsed": null
+      },
+      "validationRules": [
+        {
+          "type": "macro_check",
+          "condition": "protein >= 15",
+          "message": "Protein miktarı yetersiz"
+        },
+        {
+          "type": "role_check",
+          "condition": "has_mainDish",
+          "message": "Ana yemek eksik"
+        },
+        {
+          "type": "compatibility_check",
+          "condition": "no_conflicts",
+          "message": "Uyumsuz yemek kombinasyonu"
+        }
+      ],
+      "metadata": {
+        "createdAt": "2025-08-11T00:00:00Z",
+        "updatedAt": "2025-08-11T00:00:00Z",
+        "source": "example_template",
+        "verified": false
+      }
+    }
+  ],
+  "captureSettings": {
+    "autoCapture": {
+      "enabled": true,
+      "conditions": {
+        "minMacroFit": 0.85,
+        "noRuleViolations": true,
+        "patientSatisfaction": 4.0
+      }
+    },
+    "inferredData": {
+      "macroEnvelope": {
+        "tolerance": 0.15
+      },
+      "dietTypes": {
+        "fromComponents": true,
+        "fromContext": true
+      },
+      "compatibilityTags": {
+        "fromComponents": true,
+        "combineLogic": "union"
+      }
+    }
+  },
+  "validationEngine": {
+    "preApplication": [
+      {
+        "check": "dietType_compatibility",
+        "severity": "error",
+        "message": "Şablon hasta diyet türü ile uyumsuz"
+      },
+      {
+        "check": "allergy_conflict",
+        "severity": "critical",
+        "message": "Şablon hasta alerjisi içeriyor"
+      },
+      {
+        "check": "macro_fit",
+        "severity": "warning",
+        "message": "Makro hedeflere uygun değil"
+      },
+      {
+        "check": "frequency_rules",
+        "severity": "warning",
+        "message": "Haftalık frekans kuralları ihlal"
+      }
+    ],
+    "suggestions": {
+      "onIncompatibility": [
+        "remove_conflicting_item",
+        "replace_with_alternative",
+        "adjust_portions",
+        "add_complementary_item"
+      ],
+      "onMacroMismatch": [
+        "scale_portions",
+        "add_filler",
+        "remove_excess_item"
+      ]
+    }
+  },
+  "promotionSystem": {
+    "personalToGlobal": {
+      "requirements": {
+        "minUsage": 10,
+        "avgSatisfaction": 4.5,
+        "noViolations": true,
+        "adminApproval": true
+      },
+      "process": [
+        "usage_validation",
+        "admin_review",
+        "conflict_check",
+        "global_addition"
+      ]
+    },
+    "deduplication": {
+      "similarity_threshold": 0.8,
+      "comparison_criteria": [
+        "component_similarity",
+        "macro_overlap",
+        "tag_similarity"
+      ]
+    }
+  }
+}

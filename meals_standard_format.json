@@ -1,0 +1,191 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-11T00:00:00Z",
+  "metadata": {
+    "totalMeals": 448,
+    "categories": {
+      "BEVERAGES": "İçecekler (kahve, çay, smoothie)",
+      "BREAKFAST": "Kahvaltı yemekleri",
+      "MAIN_DISHES": "Ana yemekler", 
+      "SIDE_DISHES": "Yan yemekler",
+      "SALADS": "Salatalar",
+      "SOUPS": "Çorbalar", 
+      "DESSERTS": "Tatlılar",
+      "BREADS": "Ekmek ve tahıl ürünleri",
+      "SNACKS": "Atıştırmalıklar",
+      "SUPPLEMENTS": "Ek gıdalar (tahin, tereyağı)",
+      "SPECIAL": "Özel/karma yemekler"
+    },
+    "roles": {
+      "mainDish": "Ana yemek (öğünün merkezi)",
+      "sideDish": "Yan yemek (tamamlayıcı)", 
+      "soup": "Çorba",
+      "dessert": "Tatlı",
+      "drink": "İçecek",
+      "bread": "Ekmek/tahıl",
+      "supplement": "Ek/destek gıda",
+      "snack": "Atıştırmalık",
+      "filler": "Dolgu (makro tamamlama)"
+    },
+    "dietTypes": {
+      "keto": "Ketojenik diyet uygunluğu",
+      "lowcarb": "Düşük karbonhidrat uygunluğu", 
+      "elim_keto": "Eliminasyon ketojenik",
+      "sport": "Sporcu beslenmesi",
+      "pregnancy": "Gebelik beslenmesi",
+      "diabetes": "Diyabet dostu"
+    }
+  },
+  "meals": [
+    {
+      "id": "meal_0001",
+      "name": "Kurşun Geçirmez Kahve",
+      "categories": ["BEVERAGES", "BREAKFAST"], 
+      "role": "drink",
+      "subRoles": ["energy_boost", "keto_friendly"],
+      "macros": {
+        "calories": 90,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 10,
+        "unit": "per_serving"
+      },
+      "portion": {
+        "defaultSize": 1,
+        "unit": "fincan",
+        "minQuantity": 0.5,
+        "maxQuantity": 1,
+        "step": 0.5,
+        "isFixed": false
+      },
+      "tags": ["kahve", "keto", "kurşun geçirmez", "energy"],
+      "compatibility": {
+        "positive": [],
+        "negative": [],
+        "neutral": ["any"]
+      },
+      "dietTypes": {
+        "keto": true,
+        "lowcarb": true,
+        "elim_keto": true,
+        "sport": true,
+        "pregnancy": false,
+        "diabetes": true
+      },
+      "mealTypes": ["breakfast"],
+      "fillerFor": {
+        "lunch": false,
+        "dinner": false
+      },
+      "seasonal": {
+        "months": [1,2,3,4,5,6,7,8,9,10,11,12],
+        "isReversed": false
+      },
+      "metadata": {
+        "addedDate": "2025-08-11",
+        "source": "original_system",
+        "verified": true
+      }
+    },
+    {
+      "id": "meal_0002", 
+      "name": "Tereyağı (1 tatlı kaşığı)",
+      "categories": ["SUPPLEMENTS", "BREAKFAST", "SIDE_DISHES"],
+      "role": "supplement", 
+      "subRoles": ["fat_source", "keto_friendly"],
+      "macros": {
+        "calories": 90,
+        "protein": 0,
+        "carbs": 0, 
+        "fat": 10,
+        "unit": "per_serving"
+      },
+      "portion": {
+        "defaultSize": 1,
+        "unit": "tatlı kaşığı",
+        "minQuantity": 1,
+        "maxQuantity": 1,
+        "step": 1,
+        "isFixed": false
+      },
+      "tags": ["tereyağı", "keto", "yağ"],
+      "compatibility": {
+        "positive": ["ekmek", "sebze", "salata"],
+        "negative": [],
+        "neutral": ["et", "tavuk", "balık"]
+      },
+      "dietTypes": {
+        "keto": true,
+        "lowcarb": true, 
+        "elim_keto": true,
+        "sport": true,
+        "pregnancy": true,
+        "diabetes": true
+      },
+      "mealTypes": ["breakfast", "lunch", "dinner"],
+      "fillerFor": {
+        "lunch": true,
+        "dinner": false
+      },
+      "seasonal": {
+        "months": [1,2,3,4,5,6,7,8,9,10,11,12],
+        "isReversed": false
+      },
+      "metadata": {
+        "addedDate": "2025-08-11",
+        "source": "original_system", 
+        "verified": true
+      }
+    },
+    {
+      "id": "meal_0003",
+      "name": "Tavuklu Salata",
+      "categories": ["SALADS", "MAIN_DISHES", "LUNCH"], 
+      "role": "mainDish",
+      "subRoles": ["protein_source", "low_carb", "filling"],
+      "macros": {
+        "calories": 250,
+        "protein": 25,
+        "carbs": 8,
+        "fat": 15,
+        "unit": "per_serving"
+      },
+      "portion": {
+        "defaultSize": 1,
+        "unit": "porsiyon",
+        "minQuantity": 0.5,
+        "maxQuantity": 1.5,
+        "step": 0.5,
+        "isFixed": false
+      },
+      "tags": ["tavuk", "salata", "protein", "yeşillik"],
+      "compatibility": {
+        "positive": ["zeytinyağı", "limon", "avokado", "ceviz"],
+        "negative": ["ağır_soslar", "kızarmış"],
+        "neutral": ["peynir", "zeytin"]
+      },
+      "dietTypes": {
+        "keto": true,
+        "lowcarb": true,
+        "elim_keto": false, 
+        "sport": true,
+        "pregnancy": true,
+        "diabetes": true
+      },
+      "mealTypes": ["lunch", "dinner"],
+      "fillerFor": {
+        "lunch": false,
+        "dinner": false
+      },
+      "seasonal": {
+        "months": [1,2,3,4,5,6,7,8,9,10,11,12],
+        "isReversed": false
+      },
+      "metadata": {
+        "addedDate": "2025-08-11",
+        "source": "converted_example",
+        "verified": true
+      }
+    }
+  ]
+}

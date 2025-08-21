@@ -1,0 +1,220 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-21T07:07:46.360Z",
+  "factorHierarchy": [
+    {
+      "id": "macro_targets",
+      "name": "Hedef Makro Değerleri",
+      "description": "Protein, karbonhidrat, yağ hedefleri",
+      "priority": 1,
+      "weight": 75,
+      "type": "high",
+      "violationType": "warning",
+      "editable": true
+    },
+    {
+      "id": "liked_foods",
+      "name": "Sevilen Yemekler",
+      "description": "Hastanın sevdiği yemeklerin pozitif ayrımcılığı",
+      "priority": 2,
+      "weight": 65,
+      "type": "medium",
+      "violationType": "info",
+      "editable": true
+    },
+    {
+      "id": "repetition_frequency",
+      "name": "Tekrar Sıklığı",
+      "description": "Aynı yemeğin ne sıklıkla tekrarlanabileceği",
+      "priority": 3,
+      "weight": 35,
+      "type": "low",
+      "violationType": "info",
+      "editable": true
+    },
+    {
+      "id": "allergies_dislikes",
+      "name": "Alerji & Sevmediği Gıdalar",
+      "description": "Hasta alerji ve sevmediği gıdalar - mutlak öncelik",
+      "priority": 4,
+      "weight": 100,
+      "type": "critical",
+      "violationType": "forbidden",
+      "editable": false
+    },
+    {
+      "id": "meal_type_restrictions",
+      "name": "Öğün Türü Kısıtlamaları",
+      "description": "Yemeklerin hangi öğünlerde kullanılabileceği",
+      "priority": 5,
+      "weight": 95,
+      "type": "critical",
+      "violationType": "forbidden",
+      "editable": false
+    },
+    {
+      "id": "diet_compatibility",
+      "name": "Diyet Türü Uyumluluğu",
+      "description": "Seçilen diyet türüne uygunluk",
+      "priority": 6,
+      "weight": 90,
+      "type": "critical",
+      "violationType": "forbidden",
+      "editable": true
+    },
+    {
+      "id": "seasonal_restrictions",
+      "name": "Sezon Kısıtlamaları",
+      "description": "Mevsimsel yemek kısıtlamaları",
+      "priority": 7,
+      "weight": 85,
+      "type": "high",
+      "violationType": "warning",
+      "editable": true
+    },
+    {
+      "id": "hierarchical_rules",
+      "name": "Hiyerarşik Kurallar",
+      "description": "Kullanıcı tanımlı özel kurallar",
+      "priority": 8,
+      "weight": 80,
+      "type": "high",
+      "violationType": "configurable",
+      "editable": true
+    },
+    {
+      "id": "food_compatibility",
+      "name": "Yemek Uyumluluğu",
+      "description": "Ana yemeklerin yan yemeklerle uyumu",
+      "priority": 9,
+      "weight": 60,
+      "type": "medium",
+      "violationType": "info",
+      "editable": true
+    },
+    {
+      "id": "meal_counts",
+      "name": "Öğün Yemek Sayıları",
+      "description": "Her öğündeki yemek sayısı aralıkları",
+      "priority": 10,
+      "weight": 55,
+      "type": "medium",
+      "violationType": "warning",
+      "editable": true
+    },
+    {
+      "id": "filler_foods",
+      "name": "Dolgu Yemekler",
+      "description": "Makro hedeflere ulaşmak için ek yemekler",
+      "priority": 11,
+      "weight": 50,
+      "type": "low",
+      "violationType": "info",
+      "editable": true
+    },
+    {
+      "id": "portion_adjustments",
+      "name": "Porsiyon Ayarlamaları",
+      "description": "Yemeklerin porsiyon katsayı değişimleri",
+      "priority": 12,
+      "weight": 45,
+      "type": "low",
+      "violationType": "info",
+      "editable": true
+    },
+    {
+      "id": "variety_control",
+      "name": "Çeşitlilik Kontrolü",
+      "description": "Yemeklerin tekrar sıklığı ve çeşitlilik",
+      "priority": 13,
+      "weight": 40,
+      "type": "low",
+      "violationType": "info",
+      "editable": true
+    }
+  ],
+  "factorSettings": {
+    "allergies_dislikes": {
+      "checkAllergies": true,
+      "checkDislikes": true,
+      "strictMode": true,
+      "keywordMatching": true,
+      "tagMatching": true
+    },
+    "meal_type_restrictions": {
+      "enforceStrict": true,
+      "allowCrossover": false
+    },
+    "diet_compatibility": {
+      "strictMode": true,
+      "allowExceptions": false,
+      "checkTags": true
+    },
+    "seasonal_restrictions": {
+      "enabled": true,
+      "currentMonth": null,
+      "tolerance": 0
+    },
+    "macro_targets": {
+      "tolerance": 0.15,
+      "prioritizeProtein": true,
+      "allowDeficit": 0.1,
+      "allowExcess": 0.2
+    },
+    "liked_foods": {
+      "boostFrequency": 0.25,
+      "keywordMatching": true,
+      "tagMatching": true
+    },
+    "food_compatibility": {
+      "enforcePositive": true,
+      "enforceNegative": true,
+      "compatibilityStrength": 0.6
+    },
+    "meal_counts": {
+      "allowFlexibility": true,
+      "preferMaxCounts": false
+    },
+    "filler_foods": {
+      "enabled": true,
+      "maxFillersPerMeal": 1,
+      "prioritizeProtein": true
+    },
+    "portion_adjustments": {
+      "enabled": true,
+      "maxAdjustment": 0.5,
+      "minAdjustment": 0.5
+    },
+    "variety_control": {
+      "minDaysBetweenSame": 2,
+      "categoryVariety": true,
+      "roleVariety": true
+    },
+    "repetition_frequency": {
+      "dailyRepetition": false,
+      "weeklyLimit": 3,
+      "categoryLimit": 2
+    }
+  },
+  "scoringWeights": {
+    "critical": 100,
+    "high": 75,
+    "medium": 50,
+    "low": 25
+  },
+  "uiCriteriaOrder": [
+    "allergies",
+    "portion_sizes",
+    "calorie_distribution",
+    "macro_targets",
+    "liked_foods",
+    "seasonal_foods",
+    "repetition_frequency",
+    "medical_conditions",
+    "food_groups",
+    "cooking_methods",
+    "budget_constraints",
+    "preparation_time",
+    "meal_timing"
+  ]
+}

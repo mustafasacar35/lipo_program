@@ -1,0 +1,23 @@
+{
+  "dietitians": [
+    {
+      "id": "dietitian_001",
+      "name": "Dt. Fatma Kaya", 
+      "certification": "Klinik Diyetisyen",
+      "isActive": true,
+      "createdAt": "2025-08-17"
+    },
+    {
+      "id": "dietitian_002",
+      "name": "Dt. Mehmet Öz",
+      "certification": "Sporcu Beslenmesi Uzmanı", 
+      "isActive": true,
+      "createdAt": "2025-08-17"
+    }
+  ],
+  "lastDietitianId": 2,
+  "metadata": {
+    "created": "2025-08-17",
+    "version": "1.0"
+  }
+}

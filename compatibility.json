@@ -1,0 +1,127 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-11T00:00:00Z",
+  "metadata": {
+    "description": "Yemek uyumluluk ve çakışma kuralları",
+    "source": "original_system_converted"
+  },
+  "positiveCompatibility": [
+    {
+      "id": "compat_001",
+      "primary": "tost",
+      "compatible": ["yumurta", "peynir", "zeytin", "avokado"],
+      "score": 5,
+      "description": "Tost ile uyumlu malzemeler"
+    },
+    {
+      "id": "compat_002", 
+      "primary": "salata",
+      "compatible": ["zeytinyağı", "limon", "peynir", "ceviz", "kuruyemiş"],
+      "score": 4,
+      "description": "Salata ile uyumlu soslar ve eklemeler"
+    },
+    {
+      "id": "compat_003",
+      "primary": "et",
+      "compatible": ["sebze", "salata", "tereyağı"],
+      "score": 4,
+      "description": "Et yemekleri ile uyumlu yan ürünler"
+    },
+    {
+      "id": "compat_004",
+      "primary": "tavuk",
+      "compatible": ["yeşillik", "salata", "sebze", "pirinç"],
+      "score": 4,
+      "description": "Tavuk ile uyumlu garnitürler"
+    },
+    {
+      "id": "compat_005",
+      "primary": "balık",
+      "compatible": ["limon", "yeşillik", "salata", "zeytinyağı"],
+      "score": 5,
+      "description": "Balık ile mükemmel uyum"
+    }
+  ],
+  "negativeCompatibility": [
+    {
+      "id": "conflict_001",
+      "primary": "yumurta",
+      "conflicts": ["yumurta", "yumurtalı", "krep", "omlet"],
+      "penalty": -5,
+      "scope": "meal",
+      "description": "Aynı öğünde birden fazla yumurta bazlı yemek"
+    },
+    {
+      "id": "conflict_002",
+      "primary": "ıspanaklı",
+      "conflicts": ["ıspanaklı", "ıspanak"],
+      "penalty": -5,
+      "scope": "meal",
+      "description": "Aynı öğünde birden fazla ıspanak"
+    },
+    {
+      "id": "conflict_003",
+      "primary": "menemen",
+      "conflicts": ["yumurta", "omlet", "yumurtalı", "çılbır"],
+      "penalty": -5,
+      "scope": "meal",
+      "description": "Menemen ile diğer yumurta yemekleri"
+    },
+    {
+      "id": "conflict_004",
+      "primary": "keto_tost",
+      "conflicts": ["füme", "omlet", "yumurta", "yumurtalı"],
+      "penalty": -5,
+      "scope": "meal",
+      "description": "Keto tost ile protein çakışması"
+    }
+  ],
+  "categoryRules": [
+    {
+      "id": "cat_rule_001",
+      "category": "protein_sources",
+      "maxPerMeal": 2,
+      "description": "Öğün başına maksimum 2 protein kaynağı"
+    },
+    {
+      "id": "cat_rule_002",
+      "category": "heavy_carbs",
+      "maxPerMeal": 1,
+      "description": "Öğün başına maksimum 1 ağır karbonhidrat"
+    }
+  ],
+  "magnetRules": [
+    {
+      "id": "magnet_001",
+      "trigger": "salata_ile_iyi",
+      "attracts": ["salata", "yeşillik", "sebze"],
+      "bonus": 2,
+      "description": "Salata dostu yemekler için bonus"
+    },
+    {
+      "id": "magnet_002",
+      "trigger": "etli_ana",
+      "attracts": ["salata_ile_iyi", "sebze", "tereyağı"],
+      "bonus": 3,
+      "description": "Etli ana yemekler için uygun garnitürler"
+    }
+  ],
+  "tagExclusions": [
+    {
+      "excludedTags": ["keto", "ketojenik", "lowcarb"],
+      "reason": "Diyet etiketleri çakışma kontrolünden muaf",
+      "scope": "global"
+    },
+    {
+      "excludedTags": ["zeytinyağı"],
+      "reason": "Genel kullanım etiketi",
+      "scope": "global"  
+    }
+  ],
+  "weights": {
+    "positiveCompatibility": 1.0,
+    "negativeCompatibility": 2.0,
+    "magnetBonus": 1.5,
+    "categoryPenalty": 1.8
+  }
+}

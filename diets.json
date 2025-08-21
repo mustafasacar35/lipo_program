@@ -1,0 +1,184 @@
+{
+  "diets": [
+    {
+      "id": "elim_keto",
+      "name": "Eliminasyon Ketojenik",
+      "code": "elim_keto",
+      "icon": "🥑",
+      "description": "İlk 2 hafta - süt ürünleri ve belirli gıdalar kısıtlı",
+      "status": "active",
+      "macros": {
+        "carbs": 5,
+        "protein": 25,
+        "fat": 70
+      },
+      "criteria": {
+        "caloriesMin": 1200,
+        "caloriesMax": 1800,
+        "water": 3.0,
+        "mealGap": 4,
+        "weightLoss": 0.8
+      },
+      "restrictions": ["dairy", "nuts", "nightshades"],
+      "notes": "İlk 2 hafta eliminasyon aşaması - süt ürünleri ve fındık yasak",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "keto",
+      "name": "Ketojenik",
+      "code": "keto",
+      "icon": "🥑",
+      "description": "Standart keto diyet - 3-9. haftalar",
+      "status": "active",
+      "macros": {
+        "carbs": 5,
+        "protein": 20,
+        "fat": 75
+      },
+      "criteria": {
+        "caloriesMin": 1300,
+        "caloriesMax": 2000,
+        "water": 3.0,
+        "mealGap": 4,
+        "weightLoss": 0.7
+      },
+      "restrictions": ["sugar", "bread"],
+      "notes": "Ketoz durumu takip edilmeli - süt ürünleri ve fındık artık serbest",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "lowcarb",
+      "name": "Düşük Karbonhidrat",
+      "code": "lowcarb",
+      "icon": "🥩",
+      "description": "Geçiş dönemi - 10-13. haftalar",
+      "status": "active",
+      "macros": {
+        "carbs": 20,
+        "protein": 25,
+        "fat": 55
+      },
+      "criteria": {
+        "caloriesMin": 1400,
+        "caloriesMax": 2200,
+        "water": 2.5,
+        "mealGap": 3,
+        "weightLoss": 0.5
+      },
+      "restrictions": ["sugar"],
+      "notes": "Geçiş dönemi - karbonhidrat kısmi artırımı",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "sporcu",
+      "name": "Sporcu Beslenmesi",
+      "code": "sporcu",
+      "icon": "💪",
+      "description": "Yüksek aktivite seviyesi için optimize edilmiş",
+      "status": "active",
+      "macros": {
+        "carbs": 35,
+        "protein": 30,
+        "fat": 35
+      },
+      "criteria": {
+        "caloriesMin": 2000,
+        "caloriesMax": 3500,
+        "water": 3.5,
+        "mealGap": 2,
+        "weightLoss": 0.0
+      },
+      "restrictions": [],
+      "notes": "Antrenman öncesi/sonrası öğün zamanlaması önemli",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "gebelik",
+      "name": "Gebelik Beslenmesi",
+      "code": "gebelik",
+      "icon": "🤱",
+      "description": "Hamilelik dönemine özel beslenme programı",
+      "status": "active",
+      "macros": {
+        "carbs": 35,
+        "protein": 20,
+        "fat": 45
+      },
+      "criteria": {
+        "caloriesMin": 1800,
+        "caloriesMax": 2500,
+        "water": 2.8,
+        "mealGap": 3,
+        "weightLoss": 0.0
+      },
+      "restrictions": ["alcohol", "raw_fish"],
+      "notes": "Folik asit ve demir takviyeleri önemli",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "mediterranean",
+      "name": "Akdeniz Diyeti",
+      "code": "mediterranean",
+      "icon": "🐟",
+      "description": "Balık, zeytinyağı ve sebze ağırlıklı diyet",
+      "status": "active",
+      "macros": {
+        "carbs": 45,
+        "protein": 20,
+        "fat": 35
+      },
+      "criteria": {
+        "caloriesMin": 1500,
+        "caloriesMax": 2300,
+        "water": 2.0,
+        "mealGap": 3,
+        "weightLoss": 0.3
+      },
+      "restrictions": [],
+      "notes": "Kalp sağlığı için idealdir - zeytinyağı ve balık odaklı",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "diabetes",
+      "name": "Diyabet Dostu",
+      "code": "diabetes",
+      "icon": "📊",
+      "description": "Kan şekeri kontrolü için optimize edilmiş",
+      "status": "active",
+      "macros": {
+        "carbs": 30,
+        "protein": 25,
+        "fat": 45
+      },
+      "criteria": {
+        "caloriesMin": 1400,
+        "caloriesMax": 2000,
+        "water": 2.5,
+        "mealGap": 3,
+        "weightLoss": 0.4
+      },
+      "restrictions": ["sugar", "white_flour", "processed"],
+      "notes": "Kan şekeri kontrolü için düşük glisemik indeks odaklı",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "metadata": {
+    "version": "2.0",
+    "lastUpdated": "2025-08-17T00:00:00Z",
+    "totalDiets": 7,
+    "description": "Yenilenmiş diyet yönetim sistemi",
+    "author": "Sistem v2.0"
+  },
+  "legacy": {
+    "oldVersion": "1.0",
+    "migrationDate": "2025-08-17T00:00:00Z",
+    "note": "Eski karmaşık yapı basitleştirilerek yeni UI sistemi ile uyumlu hale getirildi"
+  }
+}

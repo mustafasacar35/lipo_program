@@ -1,0 +1,146 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "templates": [
+    {
+      "id": "template_keto_breakfast",
+      "name": "Keto Kahvaltı Klassik",
+      "description": "Ketojenik diyet için klasik kahvaltı menüsü",
+      "dietType": "ketojenik",
+      "mealType": "breakfast",
+      "meals": [
+        {
+          "name": "Kurşun Geçirmez Kahve",
+          "portion": 1,
+          "required": true
+        },
+        {
+          "name": "Menemen",
+          "portion": 1,
+          "required": false
+        }
+      ],
+      "targetMacros": {
+        "calories": 400,
+        "protein": 20,
+        "carbs": 8,
+        "fat": 35
+      },
+      "tags": ["keto", "breakfast", "klassik"],
+      "created": "2025-08-17T00:00:00.000Z",
+      "createdBy": "system",
+      "active": true,
+      "usage": 0
+    },
+    
+    {
+      "id": "template_lowcarb_lunch",
+      "name": "Low Carb Öğle Menüsü",
+      "description": "Düşük karbonhidrat öğle yemeği",
+      "dietType": "lowcarb", 
+      "mealType": "lunch",
+      "meals": [
+        {
+          "name": "Izgara Tavuk",
+          "portion": 1,
+          "required": true
+        },
+        {
+          "name": "Karışık Salata", 
+          "portion": 1,
+          "required": true
+        },
+        {
+          "name": "Sebze Çorbası",
+          "portion": 0.5,
+          "required": false
+        }
+      ],
+      "targetMacros": {
+        "calories": 550,
+        "protein": 45,
+        "carbs": 25,
+        "fat": 30
+      },
+      "tags": ["lowcarb", "lunch", "protein"],
+      "created": "2025-08-17T00:00:00.000Z", 
+      "createdBy": "system",
+      "active": true,
+      "usage": 0
+    },
+    
+    {
+      "id": "template_med_dinner",
+      "name": "Akdeniz Akşam Yemeği",
+      "description": "Balık ağırlıklı akdeniz menüsü",
+      "dietType": "akdeniz",
+      "mealType": "dinner",
+      "meals": [
+        {
+          "name": "Fırında Somon",
+          "portion": 1,
+          "required": true
+        },
+        {
+          "name": "Zeytinyağlı Sebze",
+          "portion": 1,
+          "required": true
+        },
+        {
+          "name": "Bulgur Pilavı",
+          "portion": 0.5,
+          "required": false
+        }
+      ],
+      "targetMacros": {
+        "calories": 480,
+        "protein": 35,
+        "carbs": 40,
+        "fat": 22
+      },
+      "tags": ["akdeniz", "dinner", "balık"],
+      "created": "2025-08-17T00:00:00.000Z",
+      "createdBy": "system", 
+      "active": true,
+      "usage": 0
+    }
+  ],
+  
+  "customTemplates": [],
+  
+  "templateCategories": [
+    {
+      "id": "breakfast",
+      "name": "Kahvaltı Şablonları",
+      "description": "Kahvaltı öğünü için hazır menüler"
+    },
+    {
+      "id": "lunch", 
+      "name": "Öğle Şablonları", 
+      "description": "Öğle yemeği için hazır menüler"
+    },
+    {
+      "id": "dinner",
+      "name": "Akşam Şablonları",
+      "description": "Akşam yemeği için hazır menüler"
+    },
+    {
+      "id": "snack",
+      "name": "Ara Öğün Şablonları", 
+      "description": "Ara öğünler için hazır menüler"
+    },
+    {
+      "id": "fullDay",
+      "name": "Tam Gün Şablonları",
+      "description": "Bütün günlük beslenme şablonları"
+    }
+  ],
+  
+  "templateSettings": {
+    "allowPortionAdjustment": true,
+    "allowMealSubstitution": true,
+    "requireAllMeals": false,
+    "autoCalculateMacros": true
+  }
+}

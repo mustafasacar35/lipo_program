@@ -1,0 +1,36 @@
+{
+  "patientId": "TEMPLATE",
+  "version": "1.0.0",
+  "createdAt": "2025-08-17T00:00:00.000Z",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  "customSettings": {
+    "dietType": "standard",
+    "targetCalories": 1800,
+    "mealCounts": {
+      "breakfast": {
+        "min": 2,
+        "max": 4
+      },
+      "lunch": {
+        "min": 3,
+        "max": 5
+      },
+      "snack": {
+        "min": 1,
+        "max": 2
+      },
+      "dinner": {
+        "min": 3,
+        "max": 5
+      }
+    },
+    "variety": "medium",
+    "planDays": 7,
+    "specialPreferences": {
+      "allowMealRepetition": true,
+      "strictCalorieTarget": false,
+      "seasonalPreference": true
+    }
+  },
+  "isCustomized": false
+}

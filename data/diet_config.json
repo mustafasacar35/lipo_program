@@ -1,0 +1,163 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "diets": {
+    "ketojenik": {
+      "id": "ketojenik",
+      "name": "Ketojenik Diyet",
+      "description": "Çok düşük karbonhidrat, yüksek yağ diyeti",
+      "macros": {
+        "protein": 25,
+        "carbs": 5,
+        "fat": 70
+      },
+      "macroCoefficients": {
+        "carbs": 0.3,
+        "protein": 0.8,
+        "fat": 1.2
+      },
+      "calorieMultipliers": {
+        "sedentary": 0.8,
+        "lightlyActive": 0.9,
+        "moderatelyActive": 1.0,
+        "veryActive": 1.1,
+        "extraActive": 1.2
+      },
+      "restrictions": [
+        "Günlük karbonhidrat < 50g",
+        "Şeker yasak",
+        "Tahıl ürünleri yasak"
+      ],
+      "allowedFoods": ["Et", "Balık", "Yumurta", "Yeşil yapraklı sebzeler", "Sert peynirler", "Tereyağı", "Zeytinyağı"],
+      "editable": true,
+      "active": true
+    },
+    
+    "lowcarb": {
+      "id": "lowcarb", 
+      "name": "Düşük Karbonhidrat",
+      "description": "Karbonhidratı azaltılmış, protein ağırlıklı diyet",
+      "macros": {
+        "protein": 30,
+        "carbs": 20,
+        "fat": 50
+      },
+      "macroCoefficients": {
+        "carbs": 0.6,
+        "protein": 0.8,
+        "fat": 1.2
+      },
+      "calorieMultipliers": {
+        "sedentary": 0.8,
+        "lightlyActive": 0.9,
+        "moderatelyActive": 1.0,
+        "veryActive": 1.1,
+        "extraActive": 1.2
+      },
+      "restrictions": [
+        "Günlük karbonhidrat < 100g",
+        "İşlenmiş gıdalar sınırlı",
+        "Şeker sınırlı"
+      ],
+      "allowedFoods": ["Et", "Balık", "Yumurta", "Sebzeler", "Meyveler (sınırlı)", "Kuruyemişler", "Peynir"],
+      "editable": true,
+      "active": true
+    },
+    
+    "akdeniz": {
+      "id": "akdeniz",
+      "name": "Akdeniz Diyeti", 
+      "description": "Zeytinyağı ve deniz ürünleri ağırlıklı diyet",
+      "macros": {
+        "protein": 20,
+        "carbs": 45,
+        "fat": 35
+      },
+      "macroCoefficients": {
+        "carbs": 1.2,
+        "protein": 0.6,
+        "fat": 0.8
+      },
+      "calorieMultipliers": {
+        "sedentary": 0.8,
+        "lightlyActive": 0.9,
+        "moderatelyActive": 1.0,
+        "veryActive": 1.1,
+        "extraActive": 1.2
+      },
+      "restrictions": [
+        "Kırmızı et haftada 2 kez",
+        "İşlenmiş gıda sınırlı",
+        "Şeker sınırlı"
+      ],
+      "allowedFoods": ["Balık", "Deniz ürünleri", "Zeytinyağı", "Sebzeler", "Meyveler", "Tam tahıllar", "Baklagiller"],
+      "editable": true,
+      "active": true
+    },
+    
+    "sporcu": {
+      "id": "sporcu",
+      "name": "Sporcu Beslenmesi",
+      "description": "Yüksek protein ve karbonhidrat içerikli diyet", 
+      "macros": {
+        "protein": 35,
+        "carbs": 40,
+        "fat": 25
+      },
+      "macroCoefficients": {
+        "carbs": 1.5,
+        "protein": 1.2,
+        "fat": 0.6
+      },
+      "calorieMultipliers": {
+        "sedentary": 1.4,
+        "lightlyActive": 1.6,
+        "moderatelyActive": 1.8,
+        "veryActive": 2.0,
+        "extraActive": 2.2
+      },
+      "restrictions": [
+        "Yeterli hidrasyon",
+        "Antrenman öncesi/sonrası beslenme önemli"
+      ],
+      "allowedFoods": ["Protein tozu", "Et", "Balık", "Yumurta", "Tam tahıllar", "Sebzeler", "Meyveler", "Kuruyemişler"],
+      "editable": true,
+      "active": true
+    },
+    
+    "gebelik": {
+      "id": "gebelik", 
+      "name": "Gebelik Beslenmesi",
+      "description": "Hamilelik dönemine özel beslenme programı",
+      "macros": {
+        "protein": 25,
+        "carbs": 50,
+        "fat": 25
+      },
+      "macroCoefficients": {
+        "carbs": 1.8,
+        "protein": 0.9,
+        "fat": 0.7
+      },
+      "calorieMultipliers": {
+        "sedentary": 0.8,
+        "lightlyActive": 0.9,
+        "moderatelyActive": 1.0,
+        "veryActive": 1.1,
+        "extraActive": 1.2
+      },
+      "restrictions": [
+        "Alkol yasak",
+        "Çiğ et/balık yasak", 
+        "Kafein sınırlı (günde 200mg)"
+      ],
+      "allowedFoods": ["Protein kaynakları", "Tam tahıllar", "Sebzeler", "Meyveler", "Süt ürünleri", "Folat kaynakları"],
+      "specialNutrients": ["Folik asit", "Demir", "Kalsiyum", "Omega-3"],
+      "editable": true,
+      "active": true
+    }
+  },
+  
+  "customDiets": []
+}

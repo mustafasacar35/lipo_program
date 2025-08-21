@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yemek Veritabanı Dönüştürücü</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .stats { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .progress { width: 100%; height: 20px; background: #ddd; border-radius: 10px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #4CAF50; transition: width 0.3s; }
+        .results { background: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .error { background: #ffebee; color: #c62828; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .category-mapping { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .download-btn { background: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .download-btn:hover { background: #1976D2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ Yemek Veritabanı Standardizasyonu</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">📁 Dosya Yükleme</h5>
+                <div class="mb-3">
+                    <label for="fileInput" class="form-label">yemekler_plain.json dosyasını seçin:</label>
+                    <input type="file" class="form-control" id="fileInput" accept=".json" onchange="loadFile()">
+                </div>
+                <div id="fileStatus" class="alert" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="stats" id="originalStats" style="display: none;">
+            <h3>📊 Mevcut Veri Analizi</h3>
+            <div id="originalStatsContent"></div>
+        </div>
+
+        <div id="categoryMapping" style="display: none;">
+            <h3>🏷️ Kategori Eşleştirmesi</h3>
+            <div class="category-mapping" id="mappingGrid"></div>
+            <button onclick="startConversion()" class="download-btn">🔄 Dönüşümü Başlat</button>
+        </div>
+
+        <div id="progress" style="display: none;">
+            <h3>⚙️ Dönüştürme İşlemi</h3>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p id="progressText">İşlem başlıyor...</p>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <h3>✅ Dönüştürme Tamamlandı</h3>
+            <div id="conversionStats"></div>
+            <button onclick="downloadJSON()" class="download-btn">📥 Yeni meals.json İndir</button>
+            <button onclick="downloadReport()" class="download-btn">📋 Rapor İndir</button>
+            <button onclick="showSamplePreview()" class="download-btn">👁️ Örnek Göster</button>
+        </div>
+
+        <div class="results" id="samplePreview" style="display: none;">
+            <h3>👁️ Dönüştürme Örneği</h3>
+            <div id="sampleContent"></div>
+        </div>
+
+        <div class="error" id="errorDiv" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Global değişkenler  
+        let originalData = [];
+        let convertedData = {};
+        let conversionReport = [];
+        let categoryMapping = {};
+
+        // Dosya yükleme fonksiyonu
+        function loadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            const statusDiv = document.getElementById('fileStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'alert alert-info';
+            statusDiv.textContent = 'Dosya okunuyor...';
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    originalData = JSON.parse(e.target.result);
+                    statusDiv.className = 'alert alert-success';
+                    statusDiv.textContent = `✅ ${originalData.length} yemek başarıyla yüklendi!`;
+                    
+                    analyzeOriginalData();
+                    setupCategoryMapping();
+                    document.getElementById('originalStats').style.display = 'block';
+                } catch (error) {
+                    statusDiv.className = 'alert alert-danger';
+                    statusDiv.textContent = `❌ JSON dosyası okunamadı: ${error.message}`;
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        const roleMapping = {
+            'mainDish': 'mainDish',
+            'sideDish': 'sideDish', 
+            'soup': 'soup',
+            'dessert': 'dessert',
+            'drink': 'drink',
+            'bread': 'bread',
+            'supplement': 'supplement',
+            'snack': 'snack',
+            'filler': 'filler'
+        };
+
+        // Dosya yükleme fonksiyonu
+        function loadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            const statusDiv = document.getElementById('fileStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'alert alert-info';
+            statusDiv.textContent = 'Dosya okunuyor...';
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    originalData = JSON.parse(e.target.result);
+                    statusDiv.className = 'alert alert-success';
+                    statusDiv.textContent = `✅ ${originalData.length} yemek başarıyla yüklendi!`;
+                    
+                    analyzeOriginalData();
+                    setupCategoryMapping();
+                    document.getElementById('originalStats').style.display = 'block';
+                } catch (error) {
+                    statusDiv.className = 'alert alert-danger';
+                    statusDiv.textContent = `❌ JSON dosyası okunamadı: ${error.message}`;
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function analyzeOriginalData() {
+            const stats = {
+                totalItems: originalData.length,
+                categories: {},
+                roles: {},
+                dietTypes: { keto: 0, lowcarb: 0 },
+                problems: []
+            };
+
+            originalData.forEach((item, index) => {
+                // Kategori analizi
+                const cat = item.category || 'null';
+                stats.categories[cat] = (stats.categories[cat] || 0) + 1;
+
+                // Rol analizi  
+                const role = item.role || 'unknown';
+                stats.roles[role] = (stats.roles[role] || 0) + 1;
+
+                // Diyet tipi analizi
+                if (item.keto) stats.dietTypes.keto++;
+                if (item.lowcarb) stats.dietTypes.lowcarb++;
+
+                // Problem tespiti
+                if (!item.name || item.name.trim() === '') {
+                    stats.problems.push(`İndeks ${index}: İsim eksik`);
+                }
+                if (!item.calories || item.calories <= 0) {
+                    stats.problems.push(`İndeks ${index}: Kalori eksik/geçersiz`);
+                }
+                if (!item.role) {
+                    stats.problems.push(`İndeks ${index}: Rol eksik`);
+                }
+            });
+
+            displayOriginalStats(stats);
+        }
+
+        function displayOriginalStats(stats) {
+            const html = `
+                <h3>📊 Mevcut Veri Analizi</h3>
+                <p><strong>Toplam Yemek:</strong> ${stats.totalItems}</p>
+                <p><strong>Kategoriler:</strong> ${Object.keys(stats.categories).length} adet</p>
+                <ul>${Object.entries(stats.categories).map(([k,v]) => `<li>${k}: ${v} adet</li>`).join('')}</ul>
+                <p><strong>Roller:</strong> ${Object.keys(stats.roles).length} adet</p>
+                <ul>${Object.entries(stats.roles).map(([k,v]) => `<li>${k}: ${v} adet</li>`).join('')}</ul>
+                <p><strong>Diyet Dağılımı:</strong> Keto: ${stats.dietTypes.keto}, Low-carb: ${stats.dietTypes.lowcarb}</p>
+                ${stats.problems.length > 0 ? `<p><strong>⚠️ Problemler:</strong> ${stats.problems.length} adet</p>` : '<p>✅ Veri kalitesi iyi görünüyor</p>'}
+            `;
+            document.getElementById('originalStatsContent').innerHTML = html;
+        }
+
+        function setupCategoryMapping() {
+            const mappingGrid = document.getElementById('mappingGrid');
+            
+            // Mevcut kategorileri al
+            const existingCategories = new Set();
+            originalData.forEach(item => {
+                const cat = item.category || 'null';
+                existingCategories.add(cat);
+            });
+            
+            // Eşleştirme tablosu oluştur
+            let html = '<h4>Kategori Eşleştirme Tablosu</h4>';
+            html += '<table class="table table-sm"><thead><tr><th>Eski Kategori</th><th>Yeni Kategori(ler)</th><th>Yemek Sayısı</th></tr></thead><tbody>';
+            
+            existingCategories.forEach(oldCat => {
+                const count = originalData.filter(item => (item.category || 'null') === oldCat).length;
+                const newCats = categoryMapping[oldCat] || ['SPECIAL'];
+                
+                html += `<tr>
+                    <td><code>${oldCat}</code></td>
+                    <td><span class="badge bg-primary">${newCats.join('</span> <span class="badge bg-primary">')}</span></td>
+                    <td>${count} yemek</td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            html += '<div class="alert alert-info"><strong>📋 Dönüşüm Kuralları:</strong><br>';
+            html += '• KAHVALTI → BREAKFAST + BEVERAGES<br>';
+            html += '• ÖĞLEN → MAIN_DISHES + SIDE_DISHES + SALADS<br>';
+            html += '• AKŞAM → MAIN_DISHES + SIDE_DISHES + SOUPS<br>';
+            html += '• null/undefined → SPECIAL</div>';
+            
+            mappingGrid.innerHTML = html;
+            document.getElementById('categoryMapping').style.display = 'block';
+        }
+
+        async function startConversion() {
+            document.getElementById('progress').style.display = 'block';
+            
+            const totalItems = originalData.length;
+            let processedItems = 0;
+            
+            // Yeni veri yapısını hazırla
+            convertedData = {
+                version: "1.0",
+                lastUpdated: new Date().toISOString(),
+                metadata: {
+                    totalMeals: totalItems,
+                    categories: {
+                        "BEVERAGES": "İçecekler (kahve, çay, smoothie)",
+                        "BREAKFAST": "Kahvaltı yemekleri",
+                        "MAIN_DISHES": "Ana yemekler",
+                        "SIDE_DISHES": "Yan yemekler", 
+                        "SALADS": "Salatalar",
+                        "SOUPS": "Çorbalar",
+                        "DESSERTS": "Tatlılar",
+                        "BREADS": "Ekmek ve tahıl ürünleri",
+                        "SNACKS": "Atıştırmalıklar",
+                        "SUPPLEMENTS": "Ek gıdalar",
+                        "SPECIAL": "Özel/karma yemekler"
+                    },
+                    roles: roleMapping,
+                    conversionNotes: "Otomatik dönüştürme - 2025-08-11"
+                },
+                meals: []
+            };
+
+            // Her yemeği dönüştür
+            for (let i = 0; i < originalData.length; i++) {
+                const originalItem = originalData[i];
+                const convertedItem = convertMealItem(originalItem, i);
+                
+                if (convertedItem) {
+                    convertedData.meals.push(convertedItem);
+                }
+                
+                processedItems++;
+                updateProgress(processedItems, totalItems);
+                
+                // UI donmasını önlemek için
+                if (i % 100 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 1));
+                }
+            }
+
+            showResults();
+        }
+
+        function convertMealItem(original, index) {
+            try {
+                // Boş/geçersiz kayıtları atla
+                if (!original.name || original.name.trim() === '' || !original.calories) {
+                    conversionReport.push(`Atlandı (indeks ${index}): Eksik veri`);
+                    return null;
+                }
+                
+                // Kategorileri belirle
+                const originalCategory = original.category || 'null';
+                let categories = [...(categoryMapping[originalCategory] || ['SPECIAL'])];
+                
+                // Yemek tipine göre ek kategoriler (akıllı kategori tespiti)
+                if (original.tags && Array.isArray(original.tags)) {
+                    if (original.tags.some(t => t.toLowerCase().includes('salata'))) categories.push('SALADS');
+                    if (original.tags.some(t => t.toLowerCase().includes('çorba'))) categories.push('SOUPS');
+                    if (original.tags.some(t => t.toLowerCase().includes('tatlı'))) categories.push('DESSERTS');
+                    if (original.tags.some(t => t.toLowerCase().includes('ekmek'))) categories.push('BREADS');
+                    if (original.tags.some(t => t.toLowerCase().includes('kahve') || t.toLowerCase().includes('içecek'))) categories.push('BEVERAGES');
+                }
+                
+                // Role göre kategori ekleme
+                if (original.role === 'soup') categories.push('SOUPS');
+                if (original.role === 'dessert') categories.push('DESSERTS');
+                if (original.role === 'drink') categories.push('BEVERAGES');
+                if (original.role === 'bread') categories.push('BREADS');
+                
+                // Tekrarları temizle
+                categories = [...new Set(categories)];
+
+                // SubRoles oluştur (akıllı analiz)
+                const subRoles = [];
+                if (original.protein > 15) subRoles.push('protein_source');
+                if (original.carbs < 5) subRoles.push('low_carb'); 
+                if (original.fat > 15) subRoles.push('fat_source');
+                if (original.keto) subRoles.push('keto_friendly');
+                if (original.calories > 300) subRoles.push('filling');
+                if (original.calories < 100) subRoles.push('light');
+                
+                // Yemek adından subrole çıkarma
+                const nameLower = original.name.toLowerCase();
+                if (nameLower.includes('protein') || nameLower.includes('et') || nameLower.includes('tavuk') || nameLower.includes('balık')) {
+                    subRoles.push('protein_source');
+                }
+                if (nameLower.includes('energy') || nameLower.includes('enerji')) {
+                    subRoles.push('energy_boost');
+                }
+
+                const converted = {
+                    id: `meal_${String(index + 1).padStart(4, '0')}`,
+                    name: original.name.trim(),
+                    categories: categories,
+                    role: roleMapping[original.role] || original.role || 'unknown',
+                    subRoles: [...new Set(subRoles)], // tekrarları temizle
+                    macros: {
+                        calories: Math.round(original.calories || 0),
+                        protein: Math.round((original.protein || 0) * 10) / 10,
+                        carbs: Math.round((original.carbs || 0) * 10) / 10,
+                        fat: Math.round((original.fat || 0) * 10) / 10,
+                        unit: "per_serving"
+                    },
+                    portion: {
+                        defaultSize: original.maxQuantity || 1,
+                        unit: "porsiyon",
+                        minQuantity: original.minQuantity || 0.5,
+                        maxQuantity: original.maxQuantity || 1,
+                        step: original.step || 0.5,
+                        isFixed: original.portionFixed || false
+                    },
+                    tags: Array.isArray(original.tags) ? original.tags.filter(t => t && t.trim()) : [],
+                    compatibility: {
+                        positive: Array.isArray(original.compatibilityTags) ? original.compatibilityTags.filter(t => t && t.trim()) : [],
+                        negative: Array.isArray(original.incompatibilityTags) ? original.incompatibilityTags.filter(t => t && t.trim()) : [],
+                        neutral: []
+                    },
+                    dietTypes: {
+                        keto: original.keto === true,
+                        lowcarb: original.lowcarb === true,
+                        elim_keto: original.keto === true && original.carbs < 3, // daha sıkı keto
+                        sport: original.protein > 10, // protein bazlı spor uygunluğu
+                        pregnancy: !original.tags || !original.tags.some(t => 
+                            ['alkol', 'alcohol', 'çiğ', 'raw'].includes(t.toLowerCase())
+                        ),
+                        diabetes: original.carbs < 15
+                    },
+                    mealTypes: Array.isArray(original.mealType) ? original.mealType : [],
+                    fillerFor: {
+                        lunch: original.fillerLunch === true,
+                        dinner: original.fillerDinner === true
+                    },
+                    seasonal: {
+                        months: parseSeasonRange(original.seasonRange),
+                        isReversed: original.isReversedSeason === true
+                    },
+                    metadata: {
+                        addedDate: "2025-08-11",
+                        source: "original_system_converted",
+                        originalIndex: index,
+                        verified: false,
+                        conversionNotes: []
+                    }
+                };
+
+                // Kalite kontrol notları
+                if (converted.macros.calories === 0) {
+                    converted.metadata.conversionNotes.push("Kalori bilgisi eksik");
+                }
+                if (converted.tags.length === 0) {
+                    converted.metadata.conversionNotes.push("Etiket bilgisi yok");
+                }
+                if (converted.role === 'unknown') {
+                    converted.metadata.conversionNotes.push("Rol belirsiz");
+                }
+
+                return converted;
+
+            } catch (error) {
+                conversionReport.push(`Hata (indeks ${index}): ${error.message}`);
+                return null;
+            }
+        }
+
+        function parseSeasonRange(seasonRange) {
+            if (!seasonRange) return [1,2,3,4,5,6,7,8,9,10,11,12];
+            
+            try {
+                const range = JSON.parse(seasonRange);
+                if (Array.isArray(range) && range.length === 2) {
+                    const [start, end] = range;
+                    if (start <= end) {
+                        return Array.from({length: end - start + 1}, (_, i) => start + i);
+                    } else {
+                        // Yıl sonu - yıl başı aralığı
+                        return [...Array.from({length: 12 - start + 1}, (_, i) => start + i),
+                               ...Array.from({length: end}, (_, i) => i + 1)];
+                    }
+                }
+            } catch (e) {
+                // Hatalı format, tüm yıl kabul et
+            }
+            
+            return [1,2,3,4,5,6,7,8,9,10,11,12];
+        }
+
+        function updateProgress(current, total) {
+            const percent = (current / total) * 100;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').textContent = 
+                `İşleniyor: ${current}/${total} (${percent.toFixed(1)}%)`;
+        }
+
+        function showResults() {
+            document.getElementById('results').style.display = 'block';
+            
+            // Detaylı istatistikler
+            const roleStats = {};
+            const categoryStats = {};
+            const dietStats = { keto: 0, lowcarb: 0, elim_keto: 0, sport: 0 };
+            const problemStats = { noTags: 0, zeroCal: 0, unknownRole: 0 };
+            
+            convertedData.meals.forEach(meal => {
+                // Rol istatistikleri
+                roleStats[meal.role] = (roleStats[meal.role] || 0) + 1;
+                
+                // Kategori istatistikleri
+                meal.categories.forEach(cat => {
+                    categoryStats[cat] = (categoryStats[cat] || 0) + 1;
+                });
+                
+                // Diyet istatistikleri
+                if (meal.dietTypes.keto) dietStats.keto++;
+                if (meal.dietTypes.lowcarb) dietStats.lowcarb++;
+                if (meal.dietTypes.elim_keto) dietStats.elim_keto++;
+                if (meal.dietTypes.sport) dietStats.sport++;
+                
+                // Problem istatistikleri
+                if (meal.tags.length === 0) problemStats.noTags++;
+                if (meal.macros.calories === 0) problemStats.zeroCal++;
+                if (meal.role === 'unknown') problemStats.unknownRole++;
+            });
+            
+            const stats = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>📊 Genel İstatistikler</h5>
+                        <p><strong>✅ Başarıyla dönüştürülen:</strong> ${convertedData.meals.length} yemek</p>
+                        <p><strong>❌ Atlanan kayıtlar:</strong> ${448 - convertedData.meals.length} adet</p>
+                        <p><strong>📁 JSON boyutu:</strong> ~${Math.round(JSON.stringify(convertedData).length / 1024)} KB</p>
+                        
+                        <h6>🎭 Rol Dağılımı</h6>
+                        <ul class="list-unstyled">
+                            ${Object.entries(roleStats).map(([role, count]) => 
+                                `<li><span class="badge bg-secondary">${role}</span> ${count} adet</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>�️ Diyet Uygunluğu</h5>
+                        <ul class="list-unstyled">
+                            <li><span class="badge bg-success">Keto</span> ${dietStats.keto} yemek</li>
+                            <li><span class="badge bg-info">Low-carb</span> ${dietStats.lowcarb} yemek</li>
+                            <li><span class="badge bg-warning">Elim-keto</span> ${dietStats.elim_keto} yemek</li>
+                            <li><span class="badge bg-primary">Sport</span> ${dietStats.sport} yemek</li>
+                        </ul>
+                        
+                        <h6>⚠️ Kalite Kontrol</h6>
+                        <ul class="list-unstyled">
+                            <li class="${problemStats.noTags > 0 ? 'text-warning' : 'text-success'}">
+                                Etiket eksik: ${problemStats.noTags} yemek
+                            </li>
+                            <li class="${problemStats.zeroCal > 0 ? 'text-warning' : 'text-success'}">
+                                Kalori eksik: ${problemStats.zeroCal} yemek
+                            </li>
+                            <li class="${problemStats.unknownRole > 0 ? 'text-danger' : 'text-success'}">
+                                Rol belirsiz: ${problemStats.unknownRole} yemek
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>📋 En Popüler Kategoriler</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        ${Object.entries(categoryStats)
+                            .sort(([,a], [,b]) => b - a)
+                            .slice(0, 8)
+                            .map(([cat, count]) => 
+                                `<span class="badge bg-outline-primary">${cat} (${count})</span>`
+                            ).join('')}
+                    </div>
+                </div>
+                
+                ${conversionReport.length > 0 ? `
+                <div class="mt-3">
+                    <h6>⚠️ Dönüştürme Raporları (${conversionReport.length} adet)</h6>
+                    <div style="max-height: 100px; overflow-y: auto;" class="bg-light p-2 rounded">
+                        ${conversionReport.slice(0, 10).map(report => `<small class="d-block">${report}</small>`).join('')}
+                        ${conversionReport.length > 10 ? `<small class="text-muted">... ve ${conversionReport.length - 10} adet daha</small>` : ''}
+                    </div>
+                </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('conversionStats').innerHTML = stats;
+        }
+
+        function downloadJSON() {
+            const jsonData = JSON.stringify(convertedData, null, 2);
+            downloadFile('meals_new.json', jsonData, 'application/json');
+        }
+
+        function downloadReport() {
+            const report = {
+                conversionDate: new Date().toISOString(),
+                originalCount: originalData.length,
+                convertedCount: convertedData.meals.length,
+                problems: conversionReport,
+                categoryMapping: categoryMapping,
+                sampleItems: convertedData.meals.slice(0, 5)
+            };
+            
+            const reportData = JSON.stringify(report, null, 2);
+            downloadFile('conversion_report.json', reportData, 'application/json');
+        }
+
+        function showSamplePreview() {
+            if (!convertedData || !convertedData.meals) {
+                alert('Önce dönüştürme işlemini çalıştırın!');
+                return;
+            }
+
+            const sampleDiv = document.getElementById('samplePreview');
+            const contentDiv = document.getElementById('sampleContent');
+            
+            // İlk 3 dönüştürülmüş yemeği göster
+            const samples = convertedData.meals.slice(0, 3);
+            
+            let html = '';
+            samples.forEach((meal, index) => {
+                html += `
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Örnek ${index + 1}: ${meal.name}</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Temel Bilgiler:</h6>
+                                    <ul>
+                                        <li><strong>ID:</strong> ${meal.id}</li>
+                                        <li><strong>Kategori:</strong> ${meal.category}</li>
+                                        <li><strong>Rol:</strong> ${meal.role}</li>
+                                        <li><strong>Kalori:</strong> ${meal.calories}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Uyumluluk:</h6>
+                                    <p><strong>Pozitif:</strong> ${meal.compatibility.positive.join(', ') || 'Yok'}</p>
+                                    <p><strong>Negatif:</strong> ${meal.compatibility.negative.join(', ') || 'Yok'}</p>
+                                    <p><strong>Diyet Uyumlu:</strong> ${meal.diet_compatible.join(', ') || 'Yok'}</p>
+                                </div>
+                            </div>
+                            <h6>Malzemeler:</h6>
+                            <p class="text-muted">${meal.ingredients.slice(0, 3).join(', ')}${meal.ingredients.length > 3 ? '...' : ''}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            contentDiv.innerHTML = html;
+            sampleDiv.style.display = 'block';
+            sampleDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadFile(filename, content, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function showError(message, isError = true) {
+            const errorDiv = document.getElementById('errorDiv');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            errorDiv.className = isError ? 'error' : 'results';
+        }
+    </script>
+</body>
+</html>

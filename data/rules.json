@@ -1,0 +1,221 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "ruleTypes": [
+    {
+      "id": "frequency",
+      "name": "Sıklık Kuralları",
+      "description": "Yemeklerin öğün, gün, hafta bazında sıklık ayarları"
+    },
+    {
+      "id": "compatibility", 
+      "name": "Uyumluluk Kuralları",
+      "description": "Yemeklerin birlikte kullanım kuralları"
+    },
+    {
+      "id": "restriction",
+      "name": "Kısıtlama Kuralları", 
+      "description": "Belirli yemeklerin yasak veya zorunlu olması"
+    },
+    {
+      "id": "nutritional",
+      "name": "Beslenme Kuralları",
+      "description": "Makro ve mikro besin değerleri kuralları"
+    }
+  ],
+  
+  "rules": [
+    {
+      "id": "rule_001",
+      "name": "Ana Yemek Kuralı - Öğle/Akşam",
+      "description": "Öğle ve akşam öğünlerinde maksimum 1 ana yemek",
+      "type": "frequency",
+      "priority": 1,
+      "active": true,
+      "target": {
+        "selector": "role",
+        "value": "mainDish"
+      },
+      "constraint": {
+        "scope": "meal", 
+        "meals": ["lunch", "dinner"],
+        "weeks": "all",
+        "frequency": {
+          "type": "max",
+          "value": 1,
+          "period": "perMeal"
+        }
+      },
+      "violation": "critical",
+      "created": "2025-08-17T00:00:00.000Z"
+    },
+    
+    {
+      "id": "rule_002", 
+      "name": "Kahvaltı İçecek Kuralı",
+      "description": "Kahvaltıda mutlaka 1 içecek olmalı",
+      "type": "restriction",
+      "priority": 2,
+      "active": true,
+      "target": {
+        "selector": "role",
+        "value": "drink"
+      },
+      "constraint": {
+        "scope": "meal",
+        "meals": ["breakfast"],
+        "weeks": "all",
+        "frequency": {
+          "type": "fixed",
+          "value": 1,
+          "period": "perMeal"
+        }
+      },
+      "violation": "critical",
+      "created": "2025-08-17T00:00:00.000Z"
+    },
+    
+    {
+      "id": "rule_003",
+      "name": "Günlük Çorba Sıklığı",
+      "description": "Günde maksimum 1 çorba",
+      "type": "frequency", 
+      "priority": 3,
+      "active": true,
+      "target": {
+        "selector": "tags",
+        "value": ["çorba", "soup"]
+      },
+      "constraint": {
+        "scope": "day",
+        "weeks": "all",
+        "frequency": {
+          "type": "max", 
+          "value": 1,
+          "period": "perDay"
+        }
+      },
+      "violation": "warning",
+      "created": "2025-08-17T00:00:00.000Z"
+    },
+    
+    {
+      "id": "rule_004",
+      "name": "Haftalık Et Çeşitliliği",
+      "description": "Haftada en az 3 farklı et türü",
+      "type": "nutritional",
+      "priority": 4, 
+      "active": true,
+      "target": {
+        "selector": "tags",
+        "value": ["et", "tavuk", "balık", "kuzu"]
+      },
+      "constraint": {
+        "scope": "week",
+        "frequency": {
+          "type": "min",
+          "value": 3,
+          "period": "perWeek",
+          "uniqueItems": true
+        }
+      },
+      "violation": "info",
+      "created": "2025-08-17T00:00:00.000Z"
+    },
+    
+    {
+      "id": "rule_005",
+      "name": "Ekmek Kısıtlaması - Keto",
+      "description": "Ketojenik diyette ekmek yasak", 
+      "type": "restriction",
+      "priority": 1,
+      "active": true,
+      "target": {
+        "selector": "tags",
+        "value": ["ekmek", "bread"]
+      },
+      "constraint": {
+        "scope": "global",
+        "dietTypes": ["ketojenik"],
+        "frequency": {
+          "type": "forbidden",
+          "value": 0
+        }
+      },
+      "violation": "critical",
+      "created": "2025-08-17T00:00:00.000Z"
+    }
+  ],
+  
+  "compatibilityRules": [
+    {
+      "id": "compat_001",
+      "name": "Ana Yemek - Salata Uyumu",
+      "description": "Ana yemeklerin salata ile uyumu",
+      "active": true,
+      "mainItem": {
+        "selector": "role", 
+        "value": "mainDish"
+      },
+      "compatibleWith": {
+        "selector": "tags",
+        "value": ["salata", "yeşillik"]
+      },
+      "incompatibleWith": {
+        "selector": "tags",
+        "value": ["tatlı", "dessert"]
+      },
+      "strength": "strong",
+      "created": "2025-08-17T00:00:00.000Z"
+    },
+    
+    {
+      "id": "compat_002",
+      "name": "Çorba - Ekmek Uyumu",
+      "description": "Çorbaların ekmek ile uyumu",
+      "active": true,
+      "mainItem": {
+        "selector": "tags",
+        "value": ["çorba"]
+      },
+      "compatibleWith": {
+        "selector": "tags", 
+        "value": ["ekmek", "bread"]
+      },
+      "incompatibleWith": {
+        "selector": "role",
+        "value": "mainDish"
+      },
+      "strength": "medium",
+      "created": "2025-08-17T00:00:00.000Z"
+    }
+  ],
+  
+  "priorityLevels": [
+    {
+      "level": 1,
+      "name": "Kritik",
+      "description": "Asla ihlal edilemez kurallar",
+      "color": "#dc3545"
+    },
+    {
+      "level": 2, 
+      "name": "Yüksek",
+      "description": "Çok önemli kurallar",
+      "color": "#fd7e14"
+    },
+    {
+      "level": 3,
+      "name": "Orta", 
+      "description": "Önemli kurallar",
+      "color": "#ffc107"
+    },
+    {
+      "level": 4,
+      "name": "Düşük",
+      "description": "Öneri niteliğinde kurallar",
+      "color": "#28a745"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "id": "doctor_001",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "personalInfo": {
+    "title": "Dr.",
+    "firstName": "Ahmet",
+    "lastName": "Kaya",
+    "specialization": "İç Hastalıkları",
+    "licenseNumber": "12345",
+    "phone": "5551112233",
+    "email": "dr.ahmet.kaya@hastane.com",
+    "createdDate": "2025-08-17T00:00:00.000Z"
+  },
+  
+  "workInfo": {
+    "hospital": "Şehir Hastanesi",
+    "department": "İç Hastalıkları",
+    "position": "Uzman Doktor"
+  },
+  
+  "permissions": {
+    "canCreatePatients": true,
+    "canEditPatients": true,
+    "canDeletePatients": false,
+    "canViewAllPatients": true,
+    "canCreatePlans": true,
+    "canModifySystemSettings": false,
+    "canAccessReports": true
+  },
+  
+  "assignedPatients": ["patient_001"],
+  
+  "preferences": {
+    "defaultDietType": "lowcarb", 
+    "preferredPlanDuration": 7,
+    "notificationSettings": {
+      "emailNotifications": true,
+      "smsNotifications": false
+    }
+  },
+  
+  "notes": "Diyabet hastalarında uzman",
+  
+  "status": "active"
+}

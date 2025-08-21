@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "id": "patient_002", 
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "personalInfo": {
+    "firstName": "Mehmet",
+    "lastName": "Demir",
+    "age": 42,
+    "gender": "erkek",
+    "phone": "5559876543",
+    "email": "mehmet.demir@email.com", 
+    "height": 180,
+    "weight": 95.0,
+    "activityLevel": 4,
+    "createdDate": "2025-08-17T00:00:00.000Z"
+  },
+  
+  "healthInfo": {
+    "diseases": [],
+    "allergies": ["Fındık", "Fıstık"],
+    "medications": [],
+    "notes": "Sporcu profili. Kas kütlesi artırma hedefi.",
+    "bloodTests": {
+      "lastDate": "2025-08-05T00:00:00.000Z",
+      "glucose": 95,
+      "cholesterol": 180
+    }
+  },
+  
+  "nutritionPreferences": {
+    "likedFoods": ["et", "tavuk", "yumurta", "protein tozu"],
+    "dislikedFoods": ["kabak", "patlıcan"],
+    "dietType": "sporcu",
+    "targetCalories": 2800,
+    "targetMacros": {
+      "protein": 35,
+      "carbs": 40,
+      "fat": 25
+    }
+  },
+  
+  "planningSettings": {
+    "mealCounts": {
+      "breakfast": {"min": 2, "max": 4, "fixed": null},
+      "lunch": {"min": 4, "max": 5, "fixed": null},
+      "dinner": {"min": 3, "max": 4, "fixed": null}
+    },
+    "planningFactors": "default",
+    "customRules": [],
+    "likedFoodsBoost": 35,
+    "varietyLevel": "high"
+  },
+  
+  "medicalTeam": {
+    "assignedDoctor": "doctor_002",
+    "assignedDietitian": "dietitian_002",
+    "permissions": {
+      "doctorCanEdit": true,
+      "dietitianCanEdit": true, 
+      "patientCanView": true
+    }
+  },
+  
+  "planHistory": [],
+  
+  "notes": "Antrenman günlerinde kalori ihtiyacı artırılabilir.",
+  
+  "status": "active"
+}

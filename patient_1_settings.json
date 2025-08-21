@@ -1,0 +1,83 @@
+{
+  "patientId": "1",
+  "version": "1.0.0",
+  "createdAt": "2025-08-17T14:34:08.288Z",
+  "lastUpdated": "2025-08-17T14:34:08.288Z",
+  "customSettings": {
+    "dietType": "lowcarb",
+    "targetCalories": 2200,
+    "mealCounts": {
+      "breakfast": {
+        "min": 1,
+        "max": 1
+      },
+      "lunch": {
+        "min": 3,
+        "max": 5
+      },
+      "dinner": {
+        "min": 3,
+        "max": 5
+      },
+      "snack": {
+        "min": 1,
+        "max": 2
+      }
+    },
+    "variety": "medium",
+    "days": 7,
+    "planType": "advanced",
+    "rules": [],
+    "advancedRules": {
+      "ruleSet": "system",
+      "mealRules": {
+        "breakfast": {
+          "min": 1,
+          "max": 1,
+          "fixed": null
+        },
+        "lunch": {
+          "min": 3,
+          "max": 5,
+          "fixed": null
+        },
+        "dinner": {
+          "min": 3,
+          "max": 5,
+          "fixed": null
+        }
+      },
+      "roleRules": [
+        {
+          "role": "main",
+          "scope": "meal",
+          "min": 1,
+          "max": 1,
+          "fixed": 1,
+          "meals": [
+            "lunch",
+            "dinner"
+          ],
+          "weeks": ""
+        },
+        {
+          "role": "side",
+          "scope": "meal",
+          "min": 1,
+          "max": 3,
+          "fixed": null,
+          "meals": [
+            "lunch",
+            "dinner"
+          ],
+          "weeks": ""
+        }
+      ],
+      "categoryRules": [],
+      "nameRules": [],
+      "keywordRules": []
+    }
+  },
+  "isCustomized": true,
+  "dataSource": "fileSystem"
+}

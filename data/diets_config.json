@@ -1,0 +1,99 @@
+{
+  "diets": {
+    "ketojenik": {
+      "name": "Ketojenik Diyet",
+      "description": "Çok düşük karbonhidrat, yüksek yağ oranı",
+      "macros": {
+        "protein": 25,
+        "carbs": 5,
+        "fat": 70
+      },
+      "calorieMultipliers": {
+        "sedentary": 1.0,
+        "light": 1.2,
+        "moderate": 1.4,
+        "active": 1.6,
+        "veryActive": 1.8
+      },
+      "restrictions": [
+        "no_high_carb_foods",
+        "limit_fruit_intake"
+      ],
+      "editable": true
+    },
+    "lowcarb": {
+      "name": "Düşük Karbonhidrat",
+      "description": "Orta düzeyde karbonhidrat kısıtlaması",
+      "macros": {
+        "protein": 30,
+        "carbs": 20,
+        "fat": 50
+      },
+      "calorieMultipliers": {
+        "sedentary": 1.0,
+        "light": 1.2,
+        "moderate": 1.4,
+        "active": 1.6,
+        "veryActive": 1.8
+      },
+      "restrictions": [
+        "limit_refined_carbs"
+      ],
+      "editable": true
+    },
+    "akdeniz": {
+      "name": "Akdeniz Diyeti",
+      "description": "Zeytinyağı ve balık ağırlıklı beslenme",
+      "macros": {
+        "protein": 20,
+        "carbs": 45,
+        "fat": 35
+      },
+      "calorieMultipliers": {
+        "sedentary": 1.0,
+        "light": 1.2,
+        "moderate": 1.4,
+        "active": 1.6,
+        "veryActive": 1.8
+      },
+      "restrictions": [],
+      "editable": true
+    },
+    "sporcu_beslenmesi": {
+      "name": "Sporcu Beslenmesi",
+      "description": "Yüksek protein ve karbonhidrat",
+      "macros": {
+        "protein": 35,
+        "carbs": 45,
+        "fat": 20
+      },
+      "calorieMultipliers": {
+        "sedentary": 1.2,
+        "light": 1.4,
+        "moderate": 1.6,
+        "active": 1.8,
+        "veryActive": 2.0
+      },
+      "restrictions": [],
+      "editable": true
+    },
+    "standart": {
+      "name": "Standart Beslenme",
+      "description": "Dengeli makrobesin dağılımı",
+      "macros": {
+        "protein": 25,
+        "carbs": 45,
+        "fat": 30
+      },
+      "calorieMultipliers": {
+        "sedentary": 1.0,
+        "light": 1.2,
+        "moderate": 1.4,
+        "active": 1.6,
+        "veryActive": 1.8
+      },
+      "restrictions": [],
+      "editable": true
+    }
+  }
+}

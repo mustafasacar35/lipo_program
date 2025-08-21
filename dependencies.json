@@ -1,0 +1,179 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-11T00:00:00Z",
+  "metadata": {
+    "description": "Yemek bağımlılık kuralları - X varsa Y olmalı/olmamalı",
+    "source": "original_system_converted"
+  },
+  "dependencies": [
+    {
+      "id": "dep_001",
+      "name": "Tofu - Yoğurtlu Pancar Bağımlılığı",
+      "trigger": {
+        "type": "food",
+        "value": "Tofu"
+      },
+      "requirement": {
+        "type": "food",
+        "value": "Yoğurtlu Kırmızı Pancar Salatası",
+        "condition": "must_have"
+      },
+      "scope": "meal",
+      "priority": "medium",
+      "description": "Tofu var ise aynı öğünde yoğurtlu pancar salatası bulunmalı"
+    },
+    {
+      "id": "dep_002", 
+      "name": "Kenevir Tohumu - Salata Bağımlılığı",
+      "trigger": {
+        "type": "food",
+        "value": "Kenevir Tohumu (salata üzerine 1 yemek kaşığı)"
+      },
+      "requirement": {
+        "type": "tag",
+        "value": "salata",
+        "condition": "must_have"
+      },
+      "scope": "meal",
+      "priority": "high",
+      "description": "Kenevir tohumu var ise aynı öğünde salata bulunmalı"
+    },
+    {
+      "id": "dep_003",
+      "name": "Keten Tohumu - Salata Bağımlılığı", 
+      "trigger": {
+        "type": "food",
+        "value": "yarım tatlı kaşığı keten tohumu (salata üzerine)"
+      },
+      "requirement": {
+        "type": "tag",
+        "value": "salata",
+        "condition": "must_have"
+      },
+      "scope": "meal",
+      "priority": "high",
+      "description": "Keten tohumu var ise aynı öğünde salata bulunmalı"
+    },
+    {
+      "id": "dep_004",
+      "name": "Protein Ana Yemek - Sebze Kombinasyonu",
+      "trigger": {
+        "type": "role",
+        "value": "mainDish",
+        "additionalCondition": {
+          "tags": ["et", "tavuk", "balık"]
+        }
+      },
+      "requirement": {
+        "type": "category",
+        "value": "SALADS",
+        "condition": "recommended"
+      },
+      "scope": "meal",
+      "priority": "low",
+      "description": "Protein ana yemek var ise salata önerilir"
+    },
+    {
+      "id": "dep_005",
+      "name": "Yoğun Karbonhidrat - Protein Dengesi",
+      "trigger": {
+        "type": "nutrition",
+        "value": "carbs > 30"
+      },
+      "requirement": {
+        "type": "nutrition", 
+        "value": "protein > 20",
+        "condition": "must_have"
+      },
+      "scope": "meal",
+      "priority": "medium",
+      "description": "Yüksek karbonhidrat varsa yeterli protein gerekli"
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "excl_001",
+      "name": "Aynı Gün Aynı Ana Yemek",
+      "trigger": {
+        "type": "food_name",
+        "value": "*"
+      },
+      "exclusion": {
+        "type": "same_food",
+        "scope": "day",
+        "except": ["bread", "supplement"]
+      },
+      "priority": "high",
+      "description": "Aynı gün aynı ana yemek tekrar edemez (ekmek ve ek gıdalar hariç)"
+    },
+    {
+      "id": "excl_002", 
+      "name": "Haftalık Ekmek Kilidi",
+      "trigger": {
+        "type": "role",
+        "value": "bread"
+      },
+      "exclusion": {
+        "type": "different_bread_types",
+        "scope": "week"
+      },
+      "priority": "high",
+      "description": "Haftada sadece bir tip ekmek"
+    },
+    {
+      "id": "excl_003",
+      "name": "Alerji Mutlak Yasağı",
+      "trigger": {
+        "type": "patient_allergy",
+        "value": "*"
+      },
+      "exclusion": {
+        "type": "contains_allergen",
+        "scope": "global"
+      },
+      "priority": "critical",
+      "description": "Hasta alerjisi var ise o gıda asla kullanılamaz"
+    }
+  ],
+  "conditionalRules": [
+    {
+      "id": "cond_001",
+      "name": "Kahvaltı Sonrası Öğle Hafifliği",
+      "condition": {
+        "previousMeal": "breakfast",
+        "caloriesOver": 400
+      },
+      "action": {
+        "nextMeal": "lunch",
+        "calorieReduction": 0.15
+      },
+      "priority": "low",
+      "description": "Kahvaltı ağır ise öğle hafifletilir"
+    },
+    {
+      "id": "cond_002",
+      "name": "Hafta Sonu Çeşitlilik Artışı",
+      "condition": {
+        "day": ["saturday", "sunday"]
+      },
+      "action": {
+        "diversityBonus": 1.2,
+        "newFoodPreference": 1.3
+      },
+      "priority": "low",
+      "description": "Hafta sonu yeni yemek deneme eğilimi"
+    }
+  ],
+  "processingOrder": [
+    "critical_exclusions",
+    "high_priority_dependencies", 
+    "medium_priority_dependencies",
+    "conditional_rules",
+    "low_priority_dependencies"
+  ],
+  "weights": {
+    "dependency_fulfillment": 2.0,
+    "exclusion_violation": -10.0,
+    "conditional_bonus": 0.5
+  }
+}

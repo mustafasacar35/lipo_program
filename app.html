@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍽️ Otomatik Yemek Planlama Sistemi</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #ecf0f1;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            background: var(--primary-color);
+            color: white;
+            min-height: 600px;
+            padding: 0;
+        }
+        
+        .sidebar .nav-link {
+            color: #bdc3c7;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--secondary-color);
+            color: white;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .content-area {
+            padding: 30px;
+            min-height: 600px;
+        }
+        
+        .module-card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .module-header {
+            background: linear-gradient(45deg, var(--secondary-color), var(--success-color));
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .btn-custom {
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(45deg, var(--secondary-color), var(--success-color));
+            border: none;
+            color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .meal-plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .meal-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .meal-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .meal-time {
+            background: var(--light-bg);
+            padding: 10px 15px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .github-sync {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .user-mode-toggle {
+            background: white;
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .user-mode-toggle .btn {
+            border-radius: 20px;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--primary-color);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-utensils"></i> Otomatik Yemek Planlama
+            </a>
+            
+            <!-- User Mode Toggle -->
+            <div class="user-mode-toggle">
+                <button class="btn btn-sm btn-primary" id="patientMode" onclick="setUserMode('patient')">
+                    <i class="fas fa-user"></i> Hasta
+                </button>
+                <button class="btn btn-sm btn-outline-primary" id="dietitianMode" onclick="setUserMode('dietitian')">
+                    <i class="fas fa-user-md"></i> Diyetisyen
+                </button>
+            </div>
+            
+            <!-- GitHub Sync Status -->
+            <div class="navbar-nav">
+                <span class="nav-link" id="githubStatus">
+                    <i class="fab fa-github"></i> Offline
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="row g-0">
+                <!-- Sidebar -->
+                <div class="col-md-3 sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" onclick="showModule('dashboard')">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a class="nav-link" href="#" onclick="showModule('planner')">
+                            <i class="fas fa-calendar-alt"></i> Plan Oluştur
+                        </a>
+                        <a class="nav-link" href="#" onclick="showModule('meals')">
+                            <i class="fas fa-utensils"></i> Yemek Veritabanı
+                        </a>
+                        <a class="nav-link" href="#" onclick="showModule('diets')">
+                            <i class="fas fa-leaf"></i> Diyet Tipleri
+                        </a>
+                        <a class="nav-link" href="#" onclick="showModule('patients')">
+                            <i class="fas fa-users"></i> Hasta Yönetimi
+                        </a>
+                        <a class="nav-link" href="#" onclick="showModule('analytics')">
+                            <i class="fas fa-chart-bar"></i> Analitik
+                        </a>
+                        <a class="nav-link" href="#" onclick="showModule('settings')">
+                            <i class="fas fa-cog"></i> Ayarlar
+                        </a>
+                    </nav>
+                </div>
+                
+                <!-- Content Area -->
+                <div class="col-md-9 content-area">
+                    <!-- Dashboard Module -->
+                    <div id="dashboard" class="module active">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary-custom btn-custom" onclick="syncWithGitHub()">
+                                    <i class="fab fa-github"></i> GitHub Sync
+                                </button>
+                                <button class="btn btn-success btn-custom" onclick="quickPlan()">
+                                    <i class="fas fa-magic"></i> Hızlı Plan
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="stats-card">
+                                    <div class="stats-number" id="totalMeals">---</div>
+                                    <div class="text-muted">Toplam Yemek</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card">
+                                    <div class="stats-number" id="activePlans">---</div>
+                                    <div class="text-muted">Aktif Plan</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card">
+                                    <div class="stats-number" id="totalPatients">---</div>
+                                    <div class="text-muted">Hasta Sayısı</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card">
+                                    <div class="stats-number" id="systemHealth">---</div>
+                                    <div class="text-muted">Sistem Sağlığı</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Activity -->
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5><i class="fas fa-clock"></i> Son Aktiviteler</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentActivity">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Other Modules (Hidden by default) -->
+                    <div id="planner" class="module" style="display: none;">
+                        <h2><i class="fas fa-calendar-alt"></i> Plan Oluşturucu</h2>
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5>Yeni Plan Oluştur</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Plan oluşturucu modülü geliştirilecek...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="meals" class="module" style="display: none;">
+                        <h2><i class="fas fa-utensils"></i> Yemek Veritabanı</h2>
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5>Yemek Yönetimi</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Yemek veritabanı modülü geliştirilecek...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="diets" class="module" style="display: none;">
+                        <h2><i class="fas fa-leaf"></i> Diyet Tipleri</h2>
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5>Diyet Yönetimi</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Diyet tipleri modülü geliştirilecek...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="patients" class="module" style="display: none;">
+                        <h2><i class="fas fa-users"></i> Hasta Yönetimi</h2>
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5>Hasta Profilleri</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Hasta yönetimi modülü geliştirilecek...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="analytics" class="module" style="display: none;">
+                        <h2><i class="fas fa-chart-bar"></i> Analitik</h2>
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5>Sistem Analitikleri</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Analitik modülü geliştirilecek...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="settings" class="module" style="display: none;">
+                        <h2><i class="fas fa-cog"></i> Sistem Ayarları</h2>
+                        
+                        <!-- AI Management Card -->
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5><i class="fas fa-robot"></i> AI Yönetimi</h5>
+                            </div>
+                            <div class="card-body">
+                                <button class="btn btn-primary-custom btn-custom mb-3" onclick="openAIModal()">
+                                    <i class="fas fa-brain"></i> AI Panel Aç
+                                </button>
+                                <p class="text-muted">GPT ve Grok AI modellerini yönetin, API anahtarlarını ayarlayın.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Other Settings -->
+                        <div class="module-card">
+                            <div class="module-header">
+                                <h5>Sistem Konfigürasyonu</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Diğer sistem ayarları burada yer alacak...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- GitHub Sync Button -->
+    <div class="github-sync">
+        <button class="btn btn-dark btn-lg rounded-circle" onclick="toggleGitHubPanel()" title="GitHub Entegrasyonu">
+            <i class="fab fa-github"></i>
+        </button>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-spinner">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+        <p class="mt-3">İşlem yapılıyor...</p>
+    </div>
+
+    <!-- Unified AI Management Modal -->
+    <div class="modal fade" id="aiManagementModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
+                    <h5 class="modal-title">
+                        <i class="fas fa-robot"></i> Birleşik AI Yönetim Paneli
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- AI Selection -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6><i class="fas fa-toggle-on"></i> AI Seçimi</h6>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="aiChoice" id="choiceGPT" value="gpt" checked onchange="switchAI('gpt')">
+                                <label class="btn btn-outline-primary" for="choiceGPT">
+                                    <i class="fas fa-openai"></i> OpenAI GPT
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="aiChoice" id="choiceGrok" value="grok" onchange="switchAI('grok')">
+                                <label class="btn btn-outline-primary" for="choiceGrok">
+                                    <i class="fas fa-brain"></i> xAI Grok
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- GPT Settings -->
+                    <div id="gptSettings">
+                        <h6><i class="fas fa-openai"></i> OpenAI GPT Ayarları</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">API Anahtarı</label>
+                                    <input type="password" class="form-control" id="gptApiKey" placeholder="sk-...">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Model</label>
+                                    <select class="form-select" id="gptModel">
+                                        <option value="gpt-4o">GPT-4o (Latest)</option>
+                                        <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                        <option value="gpt-4">GPT-4</option>
+                                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Temperature</label>
+                                    <input type="range" class="form-range" id="gptTemperature" min="0" max="2" step="0.1" value="0.7">
+                                    <div class="text-center"><span id="gptTempValue">0.7</span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Max Tokens</label>
+                                    <input type="number" class="form-control" id="gptMaxTokens" value="4000" min="1" max="8000">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Top P</label>
+                                    <input type="range" class="form-range" id="gptTopP" min="0" max="1" step="0.1" value="1">
+                                    <div class="text-center"><span id="gptTopPValue">1.0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-success btn-sm" onclick="testGPTConnection()" id="gptTestBtn">
+                            <i class="fas fa-vial"></i> <span id="gptTestText">Bağlantı Test Et</span>
+                        </button>
+                        <div class="mt-2">
+                            <small id="gptTestStatus" class="text-muted">Test edilmedi</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Grok Settings -->
+                    <div id="grokSettings" style="display: none;">
+                        <h6><i class="fas fa-brain"></i> xAI Grok Ayarları</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">API Anahtarı</label>
+                                    <input type="password" class="form-control" id="grokApiKey" placeholder="xai-...">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Model</label>
+                                    <select class="form-select" id="grokModel">
+                                        <option value="grok-2-1212">Grok 2 (December 2024)</option>
+                                        <option value="grok-2-vision-1212">Grok 2 Vision (December 2024)</option>
+                                        <option value="grok-2-public">Grok 2 Public</option>
+                                        <option value="grok-vision-beta">Grok Vision Beta</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Temperature</label>
+                                    <input type="range" class="form-range" id="grokTemperature" min="0" max="2" step="0.1" value="0.7">
+                                    <div class="text-center"><span id="grokTempValue">0.7</span></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Max Tokens</label>
+                                    <input type="number" class="form-control" id="grokMaxTokens" value="4000" min="1" max="8000">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Top P</label>
+                                    <input type="range" class="form-range" id="grokTopP" min="0" max="1" step="0.1" value="1">
+                                    <div class="text-center"><span id="grokTopPValue">1.0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-success btn-sm" onclick="testGrokConnection()" id="grokTestBtn">
+                            <i class="fas fa-vial"></i> <span id="grokTestText">Bağlantı Test Et</span>
+                        </button>
+                        <div class="mt-2">
+                            <small id="grokTestStatus" class="text-muted">Test edilmedi</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAISettings()">
+                        <i class="fas fa-save"></i> Ayarları Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global State Management
+        const AppState = {
+            currentUser: 'patient', // 'patient' or 'dietitian'
+            currentModule: 'dashboard',
+            githubConnected: false,
+            dataLoaded: false,
+            meals: [],
+            plans: [],
+            patients: []
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            console.log('🚀 Otomatik Yemek Planlama Sistemi başlatılıyor...');
+            
+            // Load initial data
+            loadSystemData();
+            
+            // Set initial UI state
+            updateUIForUserMode(AppState.currentUser);
+            
+            // Check GitHub connection
+            checkGitHubConnection();
+            
+            console.log('✅ Sistem hazır!');
+        }
+
+        // User Mode Management
+        function setUserMode(mode) {
+            AppState.currentUser = mode;
+            updateUIForUserMode(mode);
+            
+            // Update button states
+            document.getElementById('patientMode').className = 
+                mode === 'patient' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary';
+            document.getElementById('dietitianMode').className = 
+                mode === 'dietitian' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary';
+        }
+
+        function updateUIForUserMode(mode) {
+            // Hide/show menu items based on user mode
+            const patientOnlyItems = ['patients', 'analytics'];
+            const dietitianOnlyItems = [];
+            
+            if (mode === 'patient') {
+                patientOnlyItems.forEach(item => {
+                    const element = document.querySelector(`[onclick="showModule('${item}')"]`);
+                    if (element) element.style.display = 'none';
+                });
+            } else {
+                patientOnlyItems.forEach(item => {
+                    const element = document.querySelector(`[onclick="showModule('${item}')"]`);
+                    if (element) element.style.display = 'block';
+                });
+            }
+        }
+
+        // Module Navigation
+        function showModule(moduleName) {
+            // Hide all modules
+            document.querySelectorAll('.module').forEach(module => {
+                module.style.display = 'none';
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected module
+            document.getElementById(moduleName).style.display = 'block';
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            // Update app state
+            AppState.currentModule = moduleName;
+            
+            // Load module data
+            loadModuleData(moduleName);
+        }
+
+        // Data Loading Functions
+        async function loadSystemData() {
+            try {
+                showLoading(true);
+                
+                // Simulate data loading
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Update dashboard stats
+                document.getElementById('totalMeals').textContent = '448';
+                document.getElementById('activePlans').textContent = '12';
+                document.getElementById('totalPatients').textContent = '8';
+                document.getElementById('systemHealth').textContent = '98%';
+                
+                // Load recent activity
+                loadRecentActivity();
+                
+                AppState.dataLoaded = true;
+                showLoading(false);
+                
+            } catch (error) {
+                console.error('Veri yükleme hatası:', error);
+                showLoading(false);
+            }
+        }
+
+        function loadRecentActivity() {
+            const activities = [
+                { time: '2 dk önce', action: 'Yeni hasta planı oluşturuldu', user: 'Dr. Ayşe' },
+                { time: '15 dk önce', action: 'Yemek veritabanı güncellendi', user: 'Sistem' },
+                { time: '1 saat önce', action: 'Plan onaylandı', user: 'Mehmet A.' },
+                { time: '3 saat önce', action: 'GitHub sync tamamlandı', user: 'Sistem' }
+            ];
+            
+            const html = activities.map(activity => `
+                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <div>
+                        <strong>${activity.action}</strong>
+                        <br><small class="text-muted">by ${activity.user}</small>
+                    </div>
+                    <small class="text-muted">${activity.time}</small>
+                </div>
+            `).join('');
+            
+            document.getElementById('recentActivity').innerHTML = html;
+        }
+
+        function loadModuleData(moduleName) {
+            console.log(`📊 ${moduleName} modülü yükleniyor...`);
+            
+            // Module-specific data loading will be implemented
+            switch(moduleName) {
+                case 'meals':
+                    // Load meals data
+                    break;
+                case 'planner':
+                    // Load planner data
+                    break;
+                // Add other cases as needed
+            }
+        }
+
+        // GitHub Integration
+        function checkGitHubConnection() {
+            // Simulate GitHub connection check
+            setTimeout(() => {
+                AppState.githubConnected = false;
+                updateGitHubStatus();
+            }, 500);
+        }
+
+        function updateGitHubStatus() {
+            const statusElement = document.getElementById('githubStatus');
+            if (AppState.githubConnected) {
+                statusElement.innerHTML = '<i class="fab fa-github text-success"></i> Connected';
+            } else {
+                statusElement.innerHTML = '<i class="fab fa-github text-muted"></i> Offline';
+            }
+        }
+
+        async function syncWithGitHub() {
+            try {
+                showLoading(true);
+                
+                // Simulate GitHub sync
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                AppState.githubConnected = true;
+                updateGitHubStatus();
+                
+                // Show success notification
+                showNotification('GitHub sync başarılı!', 'success');
+                
+            } catch (error) {
+                console.error('GitHub sync hatası:', error);
+                showNotification('GitHub sync başarısız!', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function toggleGitHubPanel() {
+            // GitHub panel implementation will be added
+            console.log('GitHub panel açılıyor...');
+        }
+
+        // Quick Actions
+        function quickPlan() {
+            showLoading(true);
+            
+            // Switch to planner module
+            setTimeout(() => {
+                showModule('planner');
+                showLoading(false);
+                showNotification('Hızlı plan modülü açıldı!', 'info');
+            }, 500);
+        }
+
+        // Utility Functions
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = show ? 'block' : 'none';
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        // Debug functions for development
+        window.AppState = AppState;
+        window.showModule = showModule;
+        window.setUserMode = setUserMode;
+        
+        // AI Management Functions
+        let currentAI = 'gpt';
+        
+        function openAIModal() {
+            loadAISettings();
+            const modal = new bootstrap.Modal(document.getElementById('aiManagementModal'));
+            modal.show();
+        }
+        
+        function switchAI(aiType) {
+            currentAI = aiType;
+            
+            // Hide all settings panels
+            document.getElementById('gptSettings').style.display = 'none';
+            document.getElementById('grokSettings').style.display = 'none';
+            
+            // Show selected AI settings
+            document.getElementById(aiType + 'Settings').style.display = 'block';
+            
+            console.log(`🤖 AI switched to: ${aiType.toUpperCase()}`);
+        }
+        
+        function loadAISettings() {
+            // Load saved settings from localStorage
+            const savedSettings = JSON.parse(localStorage.getItem('aiSettings') || '{}');
+            
+            // GPT Settings
+            if (savedSettings.gpt) {
+                document.getElementById('gptApiKey').value = savedSettings.gpt.apiKey || '';
+                document.getElementById('gptModel').value = savedSettings.gpt.model || 'gpt-4o';
+                document.getElementById('gptTemperature').value = savedSettings.gpt.temperature || 0.7;
+                document.getElementById('gptMaxTokens').value = savedSettings.gpt.maxTokens || 4000;
+                document.getElementById('gptTopP').value = savedSettings.gpt.topP || 1;
+                updateSliderValue('gptTemperature', 'gptTempValue');
+                updateSliderValue('gptTopP', 'gptTopPValue');
+            }
+            
+            // Grok Settings  
+            if (savedSettings.grok) {
+                document.getElementById('grokApiKey').value = savedSettings.grok.apiKey || '';
+                document.getElementById('grokModel').value = savedSettings.grok.model || 'grok-2-1212';
+                document.getElementById('grokTemperature').value = savedSettings.grok.temperature || 0.7;
+                document.getElementById('grokMaxTokens').value = savedSettings.grok.maxTokens || 4000;
+                document.getElementById('grokTopP').value = savedSettings.grok.topP || 1;
+                updateSliderValue('grokTemperature', 'grokTempValue');
+                updateSliderValue('grokTopP', 'grokTopPValue');
+            }
+            
+            // Set current AI selection
+            const savedAI = savedSettings.currentAI || 'gpt';
+            document.getElementById('choice' + savedAI.charAt(0).toUpperCase() + savedAI.slice(1)).checked = true;
+            switchAI(savedAI);
+        }
+        
+        function saveAISettings() {
+            const settings = {
+                currentAI: currentAI,
+                gpt: {
+                    apiKey: document.getElementById('gptApiKey').value,
+                    model: document.getElementById('gptModel').value,
+                    temperature: parseFloat(document.getElementById('gptTemperature').value),
+                    maxTokens: parseInt(document.getElementById('gptMaxTokens').value),
+                    topP: parseFloat(document.getElementById('gptTopP').value)
+                },
+                grok: {
+                    apiKey: document.getElementById('grokApiKey').value,
+                    model: document.getElementById('grokModel').value,
+                    temperature: parseFloat(document.getElementById('grokTemperature').value),
+                    maxTokens: parseInt(document.getElementById('grokMaxTokens').value),
+                    topP: parseFloat(document.getElementById('grokTopP').value)
+                }
+            };
+            
+            localStorage.setItem('aiSettings', JSON.stringify(settings));
+            showNotification('AI ayarları kaydedildi!', 'success');
+            
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('aiManagementModal')).hide();
+        }
+        
+        async function testGPTConnection() {
+            const apiKey = document.getElementById('gptApiKey').value;
+            const model = document.getElementById('gptModel').value;
+            const statusElement = document.getElementById('gptTestStatus');
+            const testBtn = document.getElementById('gptTestBtn');
+            const testText = document.getElementById('gptTestText');
+            
+            if (!apiKey) {
+                statusElement.innerHTML = '❌ API anahtarı gerekli';
+                statusElement.className = 'text-danger';
+                showNotification('GPT API anahtarı gerekli!', 'warning');
+                return;
+            }
+            
+            if (!apiKey.startsWith('sk-')) {
+                statusElement.innerHTML = '❌ Geçersiz API key formatı';
+                statusElement.className = 'text-danger';
+                showNotification('GPT API anahtarı "sk-" ile başlamalı!', 'warning');
+                return;
+            }
+            
+            try {
+                // Test başlangıcı
+                statusElement.innerHTML = '⏳ Test ediliyor...';
+                statusElement.className = 'text-primary';
+                testBtn.disabled = true;
+                testText.textContent = 'Test Ediliyor...';
+                showLoading(true);
+                
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [{ 
+                            role: 'user', 
+                            content: 'Bu bir bağlantı testi. Kısaca "Bağlantı başarılı" yanıtı ver.' 
+                        }],
+                        max_tokens: 20,
+                        temperature: 0.1
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    statusElement.innerHTML = `✅ Başarılı - Model: ${model}`;
+                    statusElement.className = 'text-success';
+                    showNotification(`✅ GPT bağlantısı başarılı! Model: ${model}`, 'success');
+                    console.log('GPT Test Response:', result);
+                } else {
+                    const error = await response.json();
+                    let errorMsg = 'Bilinmeyen hata';
+                    
+                    if (error.error) {
+                        errorMsg = error.error.message || error.error.type || 'API hatası';
+                        
+                        // Özel hata mesajları
+                        if (errorMsg.includes('model')) {
+                            errorMsg += ` - Model "${model}" bulunamadı veya erişim yok`;
+                        }
+                        if (errorMsg.includes('key')) {
+                            errorMsg = 'API anahtarı geçersiz';
+                        }
+                        if (errorMsg.includes('quota')) {
+                            errorMsg = 'API kotanız dolmuş';
+                        }
+                    }
+                    
+                    statusElement.innerHTML = `❌ Hata (${response.status})`;
+                    statusElement.className = 'text-danger';
+                    showNotification(`❌ GPT Hata (${response.status}): ${errorMsg}`, 'error');
+                    console.error('GPT Test Error:', error);
+                }
+            } catch (error) {
+                console.error('GPT test error:', error);
+                statusElement.innerHTML = '❌ Bağlantı hatası';
+                statusElement.className = 'text-danger';
+                showNotification(`❌ GPT bağlantı hatası: ${error.message}`, 'error');
+            } finally {
+                testBtn.disabled = false;
+                testText.textContent = 'Bağlantı Test Et';
+                showLoading(false);
+            }
+        }
+        
+        async function testGrokConnection() {
+            const apiKey = document.getElementById('grokApiKey').value;
+            const model = document.getElementById('grokModel').value;
+            const statusElement = document.getElementById('grokTestStatus');
+            const testBtn = document.getElementById('grokTestBtn');
+            const testText = document.getElementById('grokTestText');
+            
+            if (!apiKey) {
+                statusElement.innerHTML = '❌ API anahtarı gerekli';
+                statusElement.className = 'text-danger';
+                showNotification('Grok API anahtarı gerekli!', 'warning');
+                return;
+            }
+            
+            if (!apiKey.startsWith('xai-')) {
+                statusElement.innerHTML = '❌ Geçersiz API key formatı';
+                statusElement.className = 'text-danger';
+                showNotification('Grok API anahtarı "xai-" ile başlamalı!', 'warning');
+                return;
+            }
+            
+            try {
+                // Test başlangıcı
+                statusElement.innerHTML = '⏳ Test ediliyor...';
+                statusElement.className = 'text-primary';
+                testBtn.disabled = true;
+                testText.textContent = 'Test Ediliyor...';
+                showLoading(true);
+                
+                const response = await fetch('https://api.x.ai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [{ 
+                            role: 'user', 
+                            content: 'Bu bir bağlantı testi. Kısaca "Bağlantı başarılı" yanıtı ver.' 
+                        }],
+                        max_tokens: 20,
+                        temperature: 0.1,
+                        stream: false
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    statusElement.innerHTML = `✅ Başarılı - Model: ${model}`;
+                    statusElement.className = 'text-success';
+                    showNotification(`✅ Grok bağlantısı başarılı! Model: ${model}`, 'success');
+                    console.log('Grok Test Response:', result);
+                } else {
+                    const error = await response.json();
+                    let errorMsg = 'Bilinmeyen hata';
+                    
+                    if (response.status === 404) {
+                        errorMsg = `Model "${model}" bulunamadı - xAI'da bu model mevcut değil`;
+                    } else if (response.status === 401) {
+                        errorMsg = 'API anahtarı geçersiz veya yetkilendirme hatası';
+                    } else if (response.status === 403) {
+                        errorMsg = 'Bu modele erişim izniniz yok';
+                    } else if (response.status === 429) {
+                        errorMsg = 'Rate limit - çok fazla istek';
+                    } else if (error.error) {
+                        errorMsg = error.error.message || error.error.type || 'API hatası';
+                    }
+                    
+                    statusElement.innerHTML = `❌ Hata (${response.status})`;
+                    statusElement.className = 'text-danger';
+                    showNotification(`❌ Grok Hata (${response.status}): ${errorMsg}`, 'error');
+                    console.error('Grok Test Error:', error);
+                }
+            } catch (error) {
+                console.error('Grok test error:', error);
+                let errorMsg = error.message;
+                
+                // Network hatası kontrolü
+                if (error.message.includes('Failed to fetch')) {
+                    errorMsg = 'xAI API\'sine bağlanılamıyor - internet bağlantısını kontrol edin';
+                }
+                
+                statusElement.innerHTML = '❌ Bağlantı hatası';
+                statusElement.className = 'text-danger';
+                showNotification(`❌ Grok bağlantı hatası: ${errorMsg}`, 'error');
+            } finally {
+                testBtn.disabled = false;
+                testText.textContent = 'Bağlantı Test Et';
+                showLoading(false);
+            }
+        }
+        
+        function updateSliderValue(sliderId, valueId) {
+            const slider = document.getElementById(sliderId);
+            const valueSpan = document.getElementById(valueId);
+            if (slider && valueSpan) {
+                valueSpan.textContent = parseFloat(slider.value).toFixed(1);
+                slider.oninput = function() {
+                    valueSpan.textContent = parseFloat(this.value).toFixed(1);
+                };
+            }
+        }
+        
+        // Initialize slider updates on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSliderValue('gptTemperature', 'gptTempValue');
+            updateSliderValue('gptTopP', 'gptTopPValue');
+            updateSliderValue('grokTemperature', 'grokTempValue');
+            updateSliderValue('grokTopP', 'grokTopPValue');
+        });
+        
+        // Expose AI functions globally
+        window.openAIModal = openAIModal;
+        window.switchAI = switchAI;
+        window.saveAISettings = saveAISettings;
+        window.testGPTConnection = testGPTConnection;
+        window.testGrokConnection = testGrokConnection;
+    </script>
+</body>
+</html>

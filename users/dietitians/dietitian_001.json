@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "id": "dietitian_001",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "personalInfo": {
+    "title": "Dyt.",
+    "firstName": "Elif", 
+    "lastName": "Çelik",
+    "specialization": "Klinik Beslenme",
+    "licenseNumber": "DYT-54321",
+    "phone": "5554445566",
+    "email": "dyt.elif.celik@klinik.com",
+    "createdDate": "2025-08-17T00:00:00.000Z"
+  },
+  
+  "workInfo": {
+    "clinic": "Beslenme Merkezi",
+    "department": "Klinik Beslenme",
+    "position": "Klinik Diyetisyen"
+  },
+  
+  "permissions": {
+    "canCreatePatients": true,
+    "canEditPatients": true,
+    "canDeletePatients": false,
+    "canViewAssignedPatients": true,
+    "canCreatePlans": true,
+    "canModifyDietSettings": true,
+    "canCreateTemplates": true,
+    "canAccessReports": true
+  },
+  
+  "assignedPatients": ["patient_001"],
+  
+  "expertise": {
+    "dietTypes": ["lowcarb", "ketojenik", "akdeniz"],
+    "specialConditions": ["diyabet", "obezite", "metabolik sendrom"],
+    "ageGroups": ["adult"]
+  },
+  
+  "preferences": {
+    "defaultDietType": "lowcarb",
+    "preferredPlanDuration": 14,
+    "defaultCalorieRange": {
+      "min": 1200,
+      "max": 2500
+    },
+    "notificationSettings": {
+      "emailNotifications": true,
+      "smsNotifications": true
+    }
+  },
+  
+  "statistics": {
+    "totalPatientsServed": 1,
+    "activePlans": 1,
+    "successRate": 85
+  },
+  
+  "notes": "Metabolik hastalıklarda deneyimli",
+  
+  "status": "active"
+}

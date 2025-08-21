@@ -1,0 +1,27 @@
+{
+  "patients": [
+    {
+      "id": "1",
+      "name": "Ahmet Yılmaz",
+      "status": "active",
+      "createdAt": "2025-08-12T10:00:00.000Z",
+      "lastUpdated": "2025-08-12T10:00:00.000Z",
+      "dataFile": "patient_1.json"
+    },
+    {
+      "id": "2", 
+      "name": "Ayşe Kaya",
+      "status": "active",
+      "createdAt": "2025-08-12T11:30:00.000Z",
+      "lastUpdated": "2025-08-12T11:30:00.000Z",
+      "dataFile": "patient_2.json"
+    }
+  ],
+  "lastPatientId": 2,
+  "metadata": {
+    "created": "2025-08-12",
+    "version": "2.0",
+    "description": "Hasta listesi - detaylar ayrı dosyalarda",
+    "lastUpdated": "2025-08-12T12:00:00.000Z"
+  }
+}

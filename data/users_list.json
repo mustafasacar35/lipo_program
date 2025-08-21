@@ -1,0 +1,67 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "patients": [
+    {
+      "id": "patient_001",
+      "firstName": "Ayşe",
+      "lastName": "Yılmaz", 
+      "status": "active",
+      "createdDate": "2025-08-17T00:00:00.000Z",
+      "lastUpdated": "2025-08-17T00:00:00.000Z"
+    },
+    {
+      "id": "patient_002",
+      "firstName": "Mehmet",
+      "lastName": "Demir",
+      "status": "active", 
+      "createdDate": "2025-08-17T00:00:00.000Z",
+      "lastUpdated": "2025-08-17T00:00:00.000Z"
+    }
+  ],
+  
+  "doctors": [
+    {
+      "id": "doctor_001", 
+      "firstName": "Dr. Ahmet",
+      "lastName": "Kaya",
+      "specialization": "İç Hastalıkları",
+      "status": "active",
+      "createdDate": "2025-08-17T00:00:00.000Z"
+    },
+    {
+      "id": "doctor_002",
+      "firstName": "Dr. Zeynep", 
+      "lastName": "Özkan",
+      "specialization": "Endokrinoloji",
+      "status": "active",
+      "createdDate": "2025-08-17T00:00:00.000Z"
+    }
+  ],
+  
+  "dietitians": [
+    {
+      "id": "dietitian_001",
+      "firstName": "Dyt. Elif",
+      "lastName": "Çelik", 
+      "specialization": "Klinik Beslenme",
+      "status": "active",
+      "createdDate": "2025-08-17T00:00:00.000Z"
+    },
+    {
+      "id": "dietitian_002",
+      "firstName": "Dyt. Can",
+      "lastName": "Arslan",
+      "specialization": "Sporcu Beslenmesi", 
+      "status": "active",
+      "createdDate": "2025-08-17T00:00:00.000Z"
+    }
+  ],
+  
+  "counters": {
+    "lastPatientId": 2,
+    "lastDoctorId": 2,
+    "lastDietitianId": 2
+  }
+}

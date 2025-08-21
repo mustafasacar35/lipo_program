@@ -1,0 +1,153 @@
+{
+  "version": "2.1.0",
+  "lastUpdated": "2025-08-19T21:06:44.902Z",
+  "systemDefaults": {
+    "dietType": "sporcu",
+    "defaultCalorieMethod": "custom",
+    "userSettings": {
+      "age": 46,
+      "weight": 75,
+      "activity": "1.9",
+      "height": 165,
+      "gender": "female",
+      "targetCalories": 1368
+    },
+    "mealPercentages": {
+      "breakfast": 25,
+      "snack1": 10,
+      "lunch": 30,
+      "snack2": 10,
+      "dinner": 25
+    },
+    "customFormula": {
+      "coeff": {
+        "carbs": 0.3,
+        "protein": 0.8,
+        "fat": 1.2
+      },
+      "act": {
+        "1": 0.8,
+        "2": 0.9,
+        "3": 1,
+        "4": 1.1,
+        "5": 1.2
+      },
+      "coeffByDiet": {
+        "sporcu": {
+          "carbs": 0.3,
+          "protein": 0.8,
+          "fat": 1.2
+        }
+      }
+    },
+    "mealSettings": {
+      "breakfast": {
+        "min": 2,
+        "max": 4,
+        "fixed": null
+      },
+      "snack1": {
+        "min": 1,
+        "max": 2,
+        "fixed": 0
+      },
+      "lunch": {
+        "min": 3,
+        "max": 5,
+        "fixed": null
+      },
+      "snack2": {
+        "min": 1,
+        "max": 2,
+        "fixed": 0
+      },
+      "dinner": {
+        "min": 3,
+        "max": 5,
+        "fixed": null
+      }
+    },
+    "criteriaHierarchy": [
+      {
+        "id": "allergies",
+        "priority": 1,
+        "enabled": true
+      },
+      {
+        "id": "calorie_distribution",
+        "priority": 2,
+        "enabled": true
+      },
+      {
+        "id": "macro_targets",
+        "priority": 3,
+        "enabled": true
+      },
+      {
+        "id": "liked_foods",
+        "priority": 4,
+        "enabled": true
+      },
+      {
+        "id": "portion_sizes",
+        "priority": 5,
+        "enabled": true
+      },
+      {
+        "id": "seasonal_foods",
+        "priority": 6,
+        "enabled": true
+      },
+      {
+        "id": "repetition_frequency",
+        "priority": 7,
+        "enabled": true
+      },
+      {
+        "id": "medical_conditions",
+        "priority": 8,
+        "enabled": false
+      },
+      {
+        "id": "food_groups",
+        "priority": 9,
+        "enabled": false
+      },
+      {
+        "id": "cooking_methods",
+        "priority": 10,
+        "enabled": false
+      },
+      {
+        "id": "budget_constraints",
+        "priority": 11,
+        "enabled": false
+      },
+      {
+        "id": "preparation_time",
+        "priority": 12,
+        "enabled": false
+      },
+      {
+        "id": "meal_timing",
+        "priority": 13,
+        "enabled": false
+      }
+    ],
+    "criteriaSettings": {
+      "allergies": true,
+      "calorie_distribution": true,
+      "macro_targets": true,
+      "liked_foods": true,
+      "portion_sizes": true,
+      "seasonal_foods": true,
+      "repetition_frequency": true,
+      "medical_conditions": false,
+      "food_groups": false,
+      "cooking_methods": false,
+      "budget_constraints": false,
+      "preparation_time": false,
+      "meal_timing": false
+    }
+  }
+}

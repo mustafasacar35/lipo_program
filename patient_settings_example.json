@@ -1,0 +1,92 @@
+{
+  "patientId": "P001",
+  "customSettings": {
+    "dietType": "ketojenik",
+    "mealCount": 5,
+    "useSystemRules": false,
+    "mealLines": {
+      "breakfast": 4,
+      "snack1": 2,
+      "lunch": 5,
+      "snack2": 2,
+      "dinner": 4,
+      "night": 1
+    },
+    "customRulesHierarchy": [
+      {
+        "id": "allergies",
+        "priority": 1,
+        "active": true
+      },
+      {
+        "id": "liked_foods",
+        "priority": 2,
+        "active": true
+      },
+      {
+        "id": "medical_conditions",
+        "priority": 3,
+        "active": true
+      },
+      {
+        "id": "macro_targets",
+        "priority": 4,
+        "active": true
+      },
+      {
+        "id": "calorie_distribution",
+        "priority": 5,
+        "active": true
+      },
+      {
+        "id": "meal_timing",
+        "priority": 6,
+        "active": false
+      },
+      {
+        "id": "food_groups",
+        "priority": 7,
+        "active": true
+      },
+      {
+        "id": "portion_sizes",
+        "priority": 8,
+        "active": true
+      },
+      {
+        "id": "cooking_methods",
+        "priority": 9,
+        "active": false
+      },
+      {
+        "id": "seasonal_foods",
+        "priority": 10,
+        "active": false
+      },
+      {
+        "id": "budget_constraints",
+        "priority": 11,
+        "active": false
+      },
+      {
+        "id": "preparation_time",
+        "priority": 12,
+        "active": false
+      },
+      {
+        "id": "repetition_frequency",
+        "priority": 13,
+        "active": true
+      }
+    ],
+    "specialNotes": "Bu hasta ketojenik diyetle çok iyi sonuç alıyor. Karbonhidrat oranı %5'in altında tutulmalı.",
+    "lastUpdated": "2025-08-17T10:30:00.000Z",
+    "createdBy": "system"
+  },
+  "planningOverrides": {
+    "forceIncludeFoods": ["avokado", "tereyağı", "somon"],
+    "forceExcludeFoods": ["ekmek", "pirinç", "makarna"],
+    "maxRepeatDays": 2,
+    "minVariety": 15
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "version": "1.0",
+  "id": "patient_001",
+  "lastUpdated": "2025-08-17T00:00:00.000Z",
+  
+  "personalInfo": {
+    "firstName": "Ayşe",
+    "lastName": "Yılmaz",
+    "age": 35,
+    "gender": "kadın",
+    "phone": "5551234567",
+    "email": "ayse.yilmaz@email.com",
+    "height": 165,
+    "weight": 70.5,
+    "activityLevel": 3,
+    "createdDate": "2025-08-17T00:00:00.000Z"
+  },
+  
+  "healthInfo": {
+    "diseases": ["Diyabet Tip 2", "Hipertansiyon"],
+    "allergies": ["Gluten", "Süt ürünleri"],
+    "medications": ["Metformin 850mg 2x1", "Ramipril 5mg 1x1"],
+    "notes": "Kan şekeri takibi düzenli yapılmalı. Kilo verme hedefi var.",
+    "bloodTests": {
+      "lastDate": "2025-08-10T00:00:00.000Z",
+      "hba1c": 7.2,
+      "glucose": 140,
+      "cholesterol": 220
+    }
+  },
+  
+  "nutritionPreferences": {
+    "likedFoods": ["tavuk", "sebze", "salata", "zeytinyağı"],
+    "dislikedFoods": ["balık", "organ etleri", "acı biber"],
+    "dietType": "lowcarb",
+    "targetCalories": 1800,
+    "targetMacros": {
+      "protein": 30,
+      "carbs": 20, 
+      "fat": 50
+    }
+  },
+  
+  "planningSettings": {
+    "mealCounts": {
+      "breakfast": {"min": 2, "max": 3, "fixed": null},
+      "lunch": {"min": 3, "max": 4, "fixed": null}, 
+      "dinner": {"min": 2, "max": 3, "fixed": null}
+    },
+    "planningFactors": "default",
+    "customRules": [],
+    "likedFoodsBoost": 25,
+    "varietyLevel": "medium"
+  },
+  
+  "medicalTeam": {
+    "assignedDoctor": "doctor_001",
+    "assignedDietitian": "dietitian_001", 
+    "permissions": {
+      "doctorCanEdit": true,
+      "dietitianCanEdit": true,
+      "patientCanView": true
+    }
+  },
+  
+  "planHistory": [],
+  
+  "weeklyPlans": [
+    {
+      "weekNumber": 1,
+      "startDate": "2025-08-18",
+      "endDate": "2025-08-24",
+      "dateRange": "18.08.25 - 24.08.25",
+      "status": "active",
+      "createdDate": "2025-08-17T00:00:00.000Z",
+      "createdBy": "dietitian_001",
+      "plan": {
+        "monday": {
+          "date": "2025-08-18",
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        },
+        "tuesday": {
+          "date": "2025-08-19", 
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        },
+        "wednesday": {
+          "date": "2025-08-20",
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        },
+        "thursday": {
+          "date": "2025-08-21",
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        },
+        "friday": {
+          "date": "2025-08-22",
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        },
+        "saturday": {
+          "date": "2025-08-23",
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        },
+        "sunday": {
+          "date": "2025-08-24",
+          "meals": {
+            "breakfast": [],
+            "lunch": [],
+            "dinner": []
+          },
+          "dailyTotals": {
+            "calories": 0,
+            "protein": 0,
+            "carbs": 0,
+            "fat": 0
+          }
+        }
+      },
+      "weeklyAverages": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0
+      },
+      "notes": ""
+    }
+  ],
+  
+  "notes": "Hasta motivasyon açısından iyi durumda. Beslenme planına uyum sağlayabiliyor.",
+  
+  "status": "active"
+}

@@ -1,0 +1,37 @@
+{
+  "github": {
+    "enabled": false,
+    "repository": "",
+    "branch": "main",
+    "autoSync": false,
+    "syncInterval": 3600,
+    "lastSync": null
+  },
+  "system": {
+    "version": "1.0.0",
+    "dataPath": "./data/",
+    "maxMealsPerPlan": 21,
+    "defaultDiet": "standard",
+    "language": "tr",
+    "timezone": "Europe/Istanbul"
+  },
+  "ui": {
+    "theme": "default",
+    "compactMode": false,
+    "showAdvancedOptions": false,
+    "defaultUserMode": "patient"
+  },
+  "features": {
+    "analytics": true,
+    "multiplePatients": true,
+    "exportPlans": true,
+    "importMeals": true,
+    "customDiets": false
+  },
+  "notifications": {
+    "planUpdates": true,
+    "githubSync": true,
+    "dataChanges": false,
+    "errors": true
+  }
+}
