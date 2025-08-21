@@ -6204,6 +6204,12 @@
                     const value = sel.value;
                     const badge = document.getElementById('criteria-scope-badge');
                     
+                    // Event looping önleme
+                    if (sel.dataset.updating === 'true') {
+                        console.log(`⚠️ [TEMPLATE-CHANGE] Dropdown güncelleniyor, event atlandı`);
+                        return;
+                    }
+                    
                     // ÖNCEKİ TEMPLATE'İN VERİLERİNİ KAYDET
                     const previousTemplateId = getCurrentTemplateId();
                     console.log(`🔄 [TEMPLATE-CHANGE] Önceki template: ${previousTemplateId}, Yeni value: ${value}`);
@@ -6226,6 +6232,9 @@
                         await saveFixedMealsToStorage();
                         console.log(`💾 [TEMPLATE-CHANGE] Önceki template ${previousTemplateId} sabit yemekleri kaydedildi`);
                     }
+                    
+                    // Event loop flag
+                    sel.dataset.updating = 'true';
                     
                     if (value === 'system') {
                         try { 
@@ -6264,6 +6273,11 @@
                             console.log(`🍽️ [DROPDOWN] Hasta hafta ${weekNo} sabit yemekleri yüklendi`);
                         } catch(_) {}
                     }
+                    
+                    // Event loop flag temizle
+                    setTimeout(() => {
+                        sel.dataset.updating = 'false';
+                    }, 500);
                 };
                 
                 // İlk açılışta sistem varsayılanını uygula
@@ -13114,7 +13128,7 @@
                     <div class=\"btn-group btn-group-sm\">
                         <button class=\"btn btn-outline-secondary\" onclick=\"editSystemWeekProfile(${k})\" title=\"Bu şablonu düzenlemek için yükle\"><i class='fas fa-edit'></i> Düzenle</button>
                         <button class=\"btn btn-outline-success\" onclick=\"saveCurrentSettingsToTemplate(${k})\" title=\"Mevcut ayarları bu şablona kaydet\"><i class='fas fa-save'></i> Kaydet</button>
-                        <button class=\"btn btn-outline-primary\" onclick=\"(async () => await applySystemWeekProfile(${k}))()\" title=\"Bu şablonu mevcut ayarlara uygula\"><i class='fas fa-download'></i> Uygula</button>
+                        <button class=\"btn btn-outline-primary\" onclick=\"(async () => { const weekSelect = document.getElementById('criteria-week-select'); if(weekSelect) { weekSelect.dataset.updating = 'true'; await applySystemWeekProfile(${k}); setTimeout(() => weekSelect.dataset.updating = 'false', 300); } })()\" title=\"Bu şablonu mevcut ayarlara uygula\"><i class='fas fa-download'></i> Uygula</button>
                         <button class=\"btn btn-outline-danger\" onclick=\"deleteSystemWeekProfile(${k})\"><i class='fas fa-trash'></i></button>
                     </div>
                 </div>`;
@@ -13364,11 +13378,15 @@
 
                 console.log(`✅ [TEMPLATE-APPLY] Hafta ${weekNo} şablonu başarıyla uygulandı`);
                 
-                // Dropdown'ı güncelle
+                // Dropdown'ı güncelle (event loop önleme ile)
                 const weekSelect = document.getElementById('criteria-week-select');
                 if (weekSelect) {
+                    weekSelect.dataset.updating = 'true';
                     weekSelect.value = templateId;
                     console.log(`🔄 [TEMPLATE-APPLY] Dropdown güncellendi: ${templateId}`);
+                    setTimeout(() => {
+                        weekSelect.dataset.updating = 'false';
+                    }, 200);
                 }
                 
                 // Criteria checkbox'larını yeniden kur
