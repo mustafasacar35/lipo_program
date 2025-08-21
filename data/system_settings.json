@@ -201,7 +201,7 @@
           "breakfast": [
             {
               "name": "Ketojenik Köfte",
-              "amount": "1",
+              "amount": "0.5",
               "calories": 360,
               "carbs": 4,
               "protein": 23,
@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:10:48.198Z",
-      "updated": "21.08.2025 23:10:48",
+      "updatedAt": "2025-08-21T20:10:52.455Z",
+      "updated": "21.08.2025 23:10:52",
       "criteriaStates": {},
       "criteriaOrder": []
     },
