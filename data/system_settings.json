@@ -1,7 +1,7 @@
 {
   "systemDefaults": {
     "patientData": {
-      "age": 35,
+      "age": 33,
       "weight": 70,
       "height": 165,
       "gender": "female",
@@ -14,7 +14,7 @@
         "min": 2,
         "max": 2,
         "fixed": null,
-        "macroPercent": 25
+        "macroPercent": 22
       },
       "snack1": {
         "min": 1,
@@ -94,7 +94,7 @@
       "repetition_frequency": true
     },
     "fixedMeals": {},
-    "timestamp": "2025-08-21T21:04:47.536Z"
+    "timestamp": "2025-08-21T21:08:17.632Z"
   },
   "weeklyProfiles": {
     "1": {
@@ -417,8 +417,8 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T21:08:12.840Z",
-      "updated": "22.08.2025 00:08:12",
+      "updatedAt": "2025-08-21T21:08:21.371Z",
+      "updated": "22.08.2025 00:08:21",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
