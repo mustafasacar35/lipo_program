@@ -696,6 +696,9 @@
                 <li><a href="#" onclick="loadCriteriaManager()">
                     <i class="fas fa-list-ol"></i> Kriter Yöneticisi
                 </a></li>
+                <li><a href="#" onclick="showGitHubManager()">
+                    <i class="fab fa-github"></i> GitHub Yönetimi
+                </a></li>
             </ul>
         </div>
         
@@ -3032,6 +3035,27 @@
 
                 // Dashboard sayılarını güncelle
                 updateDashboardStats();
+                
+                // İlk hastayı otomatik seç (currentPatient'ı set et)
+                if (window.patients && window.patients.length > 0) {
+                    const lastPatientId = localStorage.getItem('currentPatientId');
+                    let selectedPatient = null;
+                    
+                    if (lastPatientId) {
+                        selectedPatient = window.patients.find(p => p.id === lastPatientId);
+                    }
+                    
+                    if (!selectedPatient) {
+                        selectedPatient = window.patients[0];
+                    }
+                    
+                    if (selectedPatient) {
+                        currentPatient = selectedPatient;
+                        window.currentPatientId = selectedPatient.id;
+                        localStorage.setItem('currentPatientId', selectedPatient.id);
+                        console.log('👤 Otomatik hasta seçildi:', selectedPatient.id);
+                    }
+                }
                 
                 // Son senkronizasyon zamanını kaydet
                 localStorage.setItem('lastSync', new Date().toLocaleString('tr-TR'));
@@ -12666,8 +12690,25 @@
             if (currentPatient && currentPatient.personalInfo && currentPatient.personalInfo.id) {
                 return currentPatient.personalInfo.id;
             }
-            // Yoksa window'dan al
-            return window.currentPatientId || null;
+            
+            // currentPatient.id'den al
+            if (currentPatient && currentPatient.id) {
+                return currentPatient.id;
+            }
+            
+            // window.currentPatientId'den al
+            if (window.currentPatientId) {
+                return window.currentPatientId;
+            }
+            
+            // localStorage'dan al
+            const storedId = localStorage.getItem('currentPatientId');
+            if (storedId) {
+                return storedId;
+            }
+            
+            console.warn('⚠️ getCurrentPatientId: Hasta ID bulunamadı');
+            return null;
         }
 
         // === YENİ: TEMPLATE-SPECIFIC STORAGE SYSTEM (RADIKAL ÇÖZÜM) ===
@@ -16156,6 +16197,36 @@
                     statusElement.textContent = 'Bağlı Değil';
                 }
             }
+        }
+
+        // GitHub yönetim panelini göster
+        function showGitHubManager() {
+            if (!GITHUB_CONFIG.token) {
+                showNotification('Önce GitHub token girin!', 'warning');
+                document.getElementById('githubLoginOverlay').classList.remove('hidden');
+                return;
+            }
+            
+            alert(`GitHub Yönetimi
+            
+Repository: ${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}
+Token: ✅ Aktif
+Bağlantı: ✅ Başarılı
+            
+Mevcut Fonksiyonlar:
+• Verileri Yenile (Dashboard'dan)
+• Tüm Verileri Kaydet (Dashboard'dan)  
+• Dosya Listesi Görüntüle (Dashboard'dan)
+• Otomatik Senkronizasyon: Aktif
+            
+Desteklenen Dosyalar:
+• meals_new.json
+• data/patients_list.json
+• data/doctors_list.json
+• data/dietitians_list.json
+• data/rules.json
+• data/system_settings.json
+• data/diet_config.json`);
         }
 
         // Sayfa yüklendiğinde bağlantı durumunu güncelle
