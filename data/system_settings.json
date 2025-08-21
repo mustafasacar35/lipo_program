@@ -1,9 +1,9 @@
 {
   "systemDefaults": {
     "patientData": {
-      "age": 35,
+      "age": 32,
       "weight": 70,
-      "height": 165,
+      "height": 162,
       "gender": "female",
       "activity": "1.55",
       "dietType": "lowcarb",
@@ -14,7 +14,7 @@
         "min": 2,
         "max": 2,
         "fixed": null,
-        "macroPercent": 25
+        "macroPercent": 22
       },
       "snack1": {
         "min": 1,
@@ -60,12 +60,17 @@
           "carbs": 0.6,
           "protein": 0.8,
           "fat": 1
+        },
+        "ketojenik": {
+          "carbs": 0.3,
+          "protein": 0.8,
+          "fat": 1.2
         }
       }
     },
     "criteriaHierarchy": [
-      "allergies",
       "liked_foods",
+      "allergies",
       "medical_conditions",
       "macro_targets",
       "calorie_distribution",
@@ -79,8 +84,8 @@
       "repetition_frequency"
     ],
     "criteriaSettings": {
+      "liked_foods": false,
       "allergies": false,
-      "liked_foods": true,
       "medical_conditions": true,
       "macro_targets": true,
       "calorie_distribution": true,
@@ -93,29 +98,46 @@
       "preparation_time": true,
       "repetition_frequency": true
     },
-    "fixedMeals": {},
-    "timestamp": "2025-08-21T20:41:41.821Z"
+    "fixedMeals": {
+      "breakfast": [
+        {
+          "name": "Yaban Mersinli Smoothie (1 porsiyon)",
+          "amount": "1",
+          "calories": 430,
+          "carbs": 2,
+          "protein": 20,
+          "fat": 38,
+          "minQuantity": 1,
+          "maxQuantity": 1
+        }
+      ],
+      "snack1": [],
+      "lunch": [],
+      "snack2": [],
+      "dinner": []
+    },
+    "timestamp": "2025-08-21T19:39:59.340Z"
   },
   "weeklyProfiles": {
     "1": {
       "name": "11",
       "weekNumber": 1,
-      "createdAt": "2025-08-21T19:22:39.355Z",
+      "createdAt": "2025-08-21T19:39:29.148Z",
       "patientData": {
         "age": 31,
-        "weight": 71,
+        "weight": 70,
         "height": 161,
         "gender": "female",
         "activity": "1.55",
         "dietType": "lowcarb",
-        "targetCalories": 1037
+        "targetCalories": 1022
       },
       "mealSettings": {
         "breakfast": {
           "min": 1,
           "max": 1,
           "fixed": null,
-          "macroPercent": 11
+          "macroPercent": 25
         },
         "snack1": {
           "min": 1,
@@ -161,6 +183,11 @@
             "carbs": 0.6,
             "protein": 0.8,
             "fat": 1
+          },
+          "ketojenik": {
+            "carbs": 0.3,
+            "protein": 0.8,
+            "fat": 1.2
           }
         }
       },
@@ -181,7 +208,7 @@
       ],
       "criteriaSettings": {
         "allergies": false,
-        "liked_foods": false,
+        "liked_foods": true,
         "medical_conditions": true,
         "macro_targets": true,
         "calorie_distribution": true,
@@ -194,8 +221,25 @@
         "preparation_time": true,
         "repetition_frequency": true
       },
-      "fixedMeals": {},
-      "timestamp": "2025-08-21T19:22:39.355Z",
+      "fixedMeals": {
+        "breakfast": [
+          {
+            "name": "Yaban Mersinli Smoothie (1 porsiyon)",
+            "amount": "1",
+            "calories": 430,
+            "carbs": 2,
+            "protein": 20,
+            "fat": 38,
+            "minQuantity": 1,
+            "maxQuantity": 1
+          }
+        ],
+        "snack1": [],
+        "lunch": [],
+        "snack2": [],
+        "dinner": []
+      },
+      "timestamp": "2025-08-21T19:39:29.148Z",
       "templateData": {
         "fixedMeals": {
           "breakfast": [],
@@ -203,45 +247,28 @@
           "lunch": [],
           "snack2": [],
           "dinner": []
-        },
-        "criteriaStates": {
-          "allergies": false,
-          "liked_foods": true,
-          "medical_conditions": true,
-          "macro_targets": true,
-          "calorie_distribution": true,
-          "meal_timing": true,
-          "food_groups": true,
-          "portion_sizes": true,
-          "cooking_methods": true,
-          "seasonal_foods": true,
-          "budget_constraints": true,
-          "preparation_time": true,
-          "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:41:57.246Z",
-      "updated": "21.08.2025 23:41:57",
-      "criteriaStates": {},
-      "criteriaOrder": []
+      "updatedAt": "2025-08-21T19:53:09.846Z",
+      "updated": "21.08.2025 22:53:09"
     },
     "2": {
       "name": "22",
       "weekNumber": 2,
-      "createdAt": "2025-08-21T19:23:19.906Z",
+      "createdAt": "2025-08-21T19:39:56.057Z",
       "patientData": {
         "age": 32,
-        "weight": 72,
+        "weight": 70,
         "height": 162,
         "gender": "female",
         "activity": "1.55",
         "dietType": "lowcarb",
-        "targetCalories": 1051
+        "targetCalories": 1022
       },
       "mealSettings": {
         "breakfast": {
-          "min": 1,
-          "max": 1,
+          "min": 2,
+          "max": 2,
           "fixed": null,
           "macroPercent": 22
         },
@@ -289,6 +316,11 @@
             "carbs": 0.6,
             "protein": 0.8,
             "fat": 1
+          },
+          "ketojenik": {
+            "carbs": 0.3,
+            "protein": 0.8,
+            "fat": 1.2
           }
         }
       },
@@ -308,10 +340,10 @@
         "repetition_frequency"
       ],
       "criteriaSettings": {
-        "liked_foods": true,
-        "allergies": true,
-        "medical_conditions": false,
-        "macro_targets": false,
+        "liked_foods": false,
+        "allergies": false,
+        "medical_conditions": true,
+        "macro_targets": true,
         "calorie_distribution": true,
         "meal_timing": true,
         "food_groups": true,
@@ -322,8 +354,25 @@
         "preparation_time": true,
         "repetition_frequency": true
       },
-      "fixedMeals": {},
-      "timestamp": "2025-08-21T19:23:19.906Z",
+      "fixedMeals": {
+        "breakfast": [
+          {
+            "name": "Yaban Mersinli Smoothie (1 porsiyon)",
+            "amount": "1",
+            "calories": 430,
+            "carbs": 2,
+            "protein": 20,
+            "fat": 38,
+            "minQuantity": 1,
+            "maxQuantity": 1
+          }
+        ],
+        "snack1": [],
+        "lunch": [],
+        "snack2": [],
+        "dinner": []
+      },
+      "timestamp": "2025-08-21T19:39:56.057Z",
       "templateData": {
         "fixedMeals": {
           "breakfast": [
@@ -343,71 +392,27 @@
           "lunch": [],
           "snack2": [],
           "dinner": []
-        },
-        "criteriaStates": {
-          "liked_foods": true,
-          "allergies": true,
-          "medical_conditions": false,
-          "macro_targets": false,
-          "calorie_distribution": true,
-          "meal_timing": true,
-          "food_groups": true,
-          "portion_sizes": true,
-          "cooking_methods": true,
-          "seasonal_foods": true,
-          "budget_constraints": true,
-          "preparation_time": true,
-          "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T20:41:59.424Z",
-      "updated": "21.08.2025 23:41:59",
-      "criteriaStates": {},
-      "criteriaOrder": []
+      "updatedAt": "2025-08-21T20:46:35.965Z",
+      "updated": "21.08.2025 23:46:35"
     },
     "9": {
       "name": "9",
-      "created": "21.08.2025 23:00:06",
-      "createdAt": "2025-08-21T20:00:06.103Z",
+      "created": "21.08.2025 22:40:11",
+      "createdAt": "2025-08-21T19:40:11.021Z",
       "templateData": {
-        "criteriaStates": {
-          "liked_foods": true,
-          "allergies": true,
-          "medical_conditions": true,
-          "macro_targets": true,
-          "calorie_distribution": true,
-          "meal_timing": true,
-          "food_groups": false,
-          "portion_sizes": false,
-          "cooking_methods": true,
-          "seasonal_foods": true,
-          "budget_constraints": true,
-          "preparation_time": true,
-          "repetition_frequency": true
-        },
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "1 Kase Sote Edilmiş Ispanak + 1 tatlı kaşığı zeytinyağı",
+              "name": "Yaban Mersinli Smoothie (1 porsiyon)",
               "amount": "1",
-              "calories": 95,
-              "carbs": 3,
-              "protein": 5,
-              "fat": 7,
+              "calories": 430,
+              "carbs": 2,
+              "protein": 20,
+              "fat": 38,
               "minQuantity": 1,
-              "maxQuantity": 1,
-              "step": 1
-            },
-            {
-              "name": "Mantarlı Yumurta (100 gram mantar, 1 yemek kaşığı tereyağı, 1 adet yumurta, tuz ve baharatlar)",
-              "amount": "0.5",
-              "calories": 160,
-              "carbs": 4,
-              "protein": 9,
-              "fat": 12,
-              "minQuantity": 0.5,
-              "maxQuantity": 1,
-              "step": 1
+              "maxQuantity": 1
             }
           ],
           "snack1": [],
@@ -416,22 +421,11 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T20:39:24.871Z",
-      "updated": "21.08.2025 23:39:24",
-      "criteriaStates": {},
-      "criteriaOrder": [],
-      "patientData": {
-        "age": 39,
-        "weight": 72,
-        "height": 169,
-        "gender": "female",
-        "activity": "1.55",
-        "dietType": "ketojenik",
-        "targetCalories": 1094
-      },
-      "fixedMeals": {}
+      "updatedAt": "2025-08-21T19:40:11.021Z",
+      "updated": "21.08.2025 22:40:11"
     }
   },
-  "lastUpdated": "2025-08-21T20:41:24.316Z",
-  "version": "2.1.0"
+  "lastUpdated": "2025-08-21T20:46:16.932Z",
+  "version": "2.1.0",
+  "interactionLog": []
 }
