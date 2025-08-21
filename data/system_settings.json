@@ -181,7 +181,7 @@
       ],
       "criteriaSettings": {
         "allergies": false,
-        "liked_foods": false,
+        "liked_foods": true,
         "medical_conditions": true,
         "macro_targets": true,
         "calorie_distribution": true,
@@ -232,8 +232,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:05:19.141Z",
-      "updated": "22.08.2025 00:05:19",
+      "updatedAt": "2025-08-21T21:05:29.554Z",
+      "updated": "22.08.2025 00:05:29",
       "criteriaStates": {},
       "criteriaOrder": []
     },
