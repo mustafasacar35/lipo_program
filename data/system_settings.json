@@ -340,15 +340,15 @@
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "Menemen (2 adet yumurta, 1 adet domates, 1 adet biber, 1/4 soğan)",
+              "name": "Ketojenik Köfte",
               "amount": "1",
-              "calories": 229,
-              "carbs": 5,
-              "protein": 14,
-              "fat": 17,
-              "minQuantity": 1,
+              "calories": 360,
+              "carbs": 4,
+              "protein": 23,
+              "fat": 28,
+              "minQuantity": 0.5,
               "maxQuantity": 1,
-              "step": 1
+              "step": 0.5
             }
           ],
           "snack1": [],
@@ -372,8 +372,8 @@
           "repetition_frequency": true
         }
       },
-      "updatedAt": "2025-08-21T21:28:17.380Z",
-      "updated": "22.08.2025 00:28:17",
+      "updatedAt": "2025-08-21T21:28:20.516Z",
+      "updated": "22.08.2025 00:28:20",
       "criteriaStates": {},
       "criteriaOrder": []
     },
@@ -417,8 +417,8 @@
           "dinner": []
         }
       },
-      "updatedAt": "2025-08-21T21:28:09.869Z",
-      "updated": "22.08.2025 00:28:09",
+      "updatedAt": "2025-08-21T21:28:22.236Z",
+      "updated": "22.08.2025 00:28:22",
       "criteriaStates": {},
       "criteriaOrder": [],
       "patientData": {
