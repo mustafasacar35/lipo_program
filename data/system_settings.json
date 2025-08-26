@@ -198,11 +198,24 @@
       "timestamp": "2025-08-21T16:51:54.723Z",
       "criteriaStates": {},
       "criteriaOrder": [],
-      "updatedAt": "2025-08-26T22:36:38.932Z",
-      "updated": "27.08.2025 01:36:38",
+      "updatedAt": "2025-08-26T22:36:41.778Z",
+      "updated": "27.08.2025 01:36:41",
       "templateData": {
         "fixedMeals": {
-          "breakfast": [],
+          "breakfast": [
+            {
+              "name": "m",
+              "amount": "1",
+              "calories": 0,
+              "carbs": 0,
+              "protein": 0,
+              "fat": 0,
+              "minQuantity": 1,
+              "maxQuantity": 2,
+              "step": 0.5,
+              "isManual": true
+            }
+          ],
           "snack1": [],
           "lunch": [],
           "snack2": [],
