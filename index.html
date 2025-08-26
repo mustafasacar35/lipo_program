@@ -2872,23 +2872,55 @@
             owner: 'mustafasacar35',
             repo: 'lipo_program',
             apiUrl: 'https://api.github.com',
+            rawBase: 'https://raw.githubusercontent.com/mustafasacar35/lipo_program/main',
+            apiBase: 'https://api.github.com/repos/mustafasacar35/lipo_program',
             token: null
         };
+
+        // GitHub bağlantı fonksiyonu
+        function connectToGitHub() {
+            const token = prompt('GitHub Personal Access Token girin:');
+            if (token) {
+                setGitHubToken(token);
+                checkGitHubToken();
+            }
+        }
+
+        function setGitHubToken(token) {
+            localStorage.setItem('github_token', token);
+            localStorage.setItem('githubToken', token); // Backward compatibility
+            GITHUB_CONFIG.token = token;
+        }
 
         // GitHub Token Management
         function checkGitHubToken() {
             const token = localStorage.getItem('github_token');
             if (token) {
                 GITHUB_CONFIG.token = token;
-                document.getElementById('githubLoginOverlay').classList.add('hidden');
+                hideGitHubModal();
                 updateGitHubStatus(true);
                 updateConnectionStatusDisplay();
-                loadSystemDataFromGitHub();
-            } else {
-                document.getElementById('githubLoginOverlay').classList.remove('hidden');
+                return true;
+            }
+            return false;
+        }
+
+        function requireGitHubToken() {
+            const hasToken = checkGitHubToken();
+            if (!hasToken) {
+                showGitHubModal();
                 updateGitHubStatus(false);
                 updateConnectionStatusDisplay();
             }
+            return hasToken;
+        }
+
+        function showGitHubModal() {
+            document.getElementById('githubLoginOverlay').classList.remove('hidden');
+        }
+
+        function hideGitHubModal() {
+            document.getElementById('githubLoginOverlay').classList.add('hidden');
         }
 
         function connectGitHub() {
@@ -2900,16 +2932,18 @@
 
             GITHUB_CONFIG.token = token;
             localStorage.setItem('github_token', token);
+            localStorage.setItem('githubToken', token); // Backward compatibility
             
             // Test token
             testConnection().then(success => {
                 if (success) {
-                    document.getElementById('githubLoginOverlay').classList.add('hidden');
+                    hideGitHubModal();
                     updateGitHubStatus(true);
                     loadSystemDataFromGitHub();
                     showNotification('GitHub bağlantısı başarılı!', 'success');
                 } else {
                     localStorage.removeItem('github_token');
+                    localStorage.removeItem('githubToken');
                     GITHUB_CONFIG.token = null;
                     showNotification('GitHub token geçersiz!', 'error');
                 }
@@ -3122,8 +3156,18 @@
         }
 
         // Sayfa yüklendiğinde GitHub token kontrolü
-        document.addEventListener('DOMContentLoaded', function() {
-            checkGitHubToken();
+        document.addEventListener('DOMContentLoaded', async function() {
+            // GitHub token'ı kontrol et, varsa otomatik kullan
+            const hasToken = checkGitHubToken();
+            if (hasToken) {
+                console.log('✅ GitHub token mevcut, otomatik bağlanıyor...');
+                await loadSystemDataFromGitHub();
+            }
+            
+            // Kuralları yükle
+            await loadSystemRulesArchive();
+            // Kural arayüzünü güncelle
+            renderRulesHierarchyList();
         });
 
         // Toggle function for rules engine accordion
@@ -5243,23 +5287,10 @@
                         console.log('📋 [INIT] Hafta şablonları listelendi');
                     }
                     
-                    // Template dropdown'larını yenile - KRITIK BÖLÜM
+                    // Hafta şablonlarını listele
                     if (typeof renderCriteriaWeekControls === 'function') {
                         await renderCriteriaWeekControls();
-                        console.log('🔄 [INIT] Template dropdown yenilendi');
-                        
-                        // Dropdown içeriğini kontrol et
-                        const weekSelect = document.getElementById('criteria-week-select');
-                        if (weekSelect) {
-                            const options = weekSelect.querySelectorAll('option');
-                            console.log(`🔍 [INIT] Dropdown seçenekleri (${options.length} adet):`, 
-                                Array.from(options).map(opt => `${opt.value}: ${opt.textContent}`));
-                                
-                            // Template seçeneklerini filtrele
-                            const templateOptions = Array.from(options).filter(opt => opt.value.startsWith('template_'));
-                            console.log(`📋 [INIT] Template seçenekleri (${templateOptions.length} adet):`,
-                                templateOptions.map(opt => opt.value));
-                        }
+                        console.log('🔄 [INIT] Status gösterici hazırlandı');
                     }
                     
                     // Etkileşim geçmişini yükle
@@ -5638,7 +5669,6 @@
                 // **YENİ: TEMPLATE-SPECIFIC KAYDETME**
                 const templateId = getCurrentTemplateId();
                 console.log(`🔍 [DEBUG] getCurrentTemplateId() = ${templateId}`);
-                console.log(`🔍 [DEBUG] criteria-week-select value =`, document.getElementById('criteria-week-select')?.value);
                 
                 if (templateId) {
                     console.log(`🎯 [TEMPLATE-CRITERIA] Şablon ${templateId} için ${criteriaId} = ${isEnabled} kaydediliyor...`);
@@ -5792,11 +5822,6 @@
                 currentWeekNumber = currentWeek.weekNumber;
             } else if (currentPatient && currentPatient.lastSelectedWeek) {
                 currentWeekNumber = currentPatient.lastSelectedWeek;
-            } else {
-                const weekSelect = document.getElementById('criteria-week-select');
-                if (weekSelect && weekSelect.value) {
-                    currentWeekNumber = parseInt(weekSelect.value) || 1;
-                }
             }
             
             const patientId = currentPatient?.id || 'unknown';
@@ -5959,11 +5984,10 @@
             return [...cont.querySelectorAll('.criteria-item')].map(el => el.getAttribute('data-criteria-id')).filter(Boolean);
         }
 
-        // Aktif haftayı kriter paneli için tespit et (dropdown > currentWeek > lastSelectedWeek)
+        // Aktif haftayı kriter paneli için tespit et (currentWeek > lastSelectedWeek)
         function resolveActiveWeekForCriteriaPanel() {
             try {
-                const sel = document.getElementById('criteria-week-select');
-                const prefer = sel ? parseInt(sel.value) : (currentWeek?.weekNumber || currentPatient?.lastSelectedWeek);
+                const prefer = currentWeek?.weekNumber || currentPatient?.lastSelectedWeek;
                 const weeks = Array.isArray(currentPatient?.weeklyPlans) ? currentPatient.weeklyPlans : [];
                 const wk = weeks.find(w => w.weekNumber === prefer) || weeks[0];
                 return wk || null;
@@ -6162,127 +6186,18 @@
                 }
             }
 
-            // Sistem hafta şablonlarını al
-            const weeklyProfiles = systemSettings.weeklyProfiles || {};
-            const weekProfileKeys = Object.keys(weeklyProfiles).sort((a,b) => Number(a) - Number(b));
-
-            // Dropdown seçeneklerini oluştur
-            let options = [`<option value="system">Genel (Sistem Varsayılanı)</option>`];
-            
-            // Hasta haftalarını ekle (varsa)
-            if (currentPatient && Array.isArray(currentPatient.weeklyPlans) && currentPatient.weeklyPlans.length > 0) {
-                currentPatient.weeklyPlans.forEach(week => {
-                    const desc = week.description || `otomatik oluşturulan başlangıç planı`;
-                    options.push(`<option value="${week.weekNumber}">Hasta Hafta ${week.weekNumber}: ${desc}</option>`);
-                });
-            }
-            
-            // Sistem hafta şablonlarını ekle - GÜÇLENDIRILDI
-            if (weekProfileKeys && weekProfileKeys.length > 0) {
-                console.log(`🔍 [DROPDOWN] ${weekProfileKeys.length} hafta şablonu dropdown'a ekleniyor:`, weekProfileKeys);
-                weekProfileKeys.forEach(weekNo => {
-                    const profile = weeklyProfiles[weekNo];
-                    const name = profile?.name || weekNo.toString();
-                    const option = `<option value="template_${weekNo}">Şablon Hafta ${weekNo}: ${name}</option>`;
-                    options.push(option);
-                    console.log(`📋 [DROPDOWN] Template option eklendi: template_${weekNo} - ${name}`);
-                });
-            } else {
-                console.log(`⚠️ [DROPDOWN] Hafta şablonu bulunamadı, sadece sistem ve hasta seçenekleri gösterilecek`);
-            }
-
+            // Dropdown kaldırıldı - sadece durum gösterici 
             cont.innerHTML = `
-                <label class="form-label mb-0 me-2">Aktif Hafta:</label>
-                <select id="criteria-week-select" class="form-select form-select-sm" style="max-width: 320px;">
-                    ${options.join('')}
-                </select>
-                <span id="criteria-scope-badge" class="badge bg-secondary">Kapsam: Genel</span>`;
-
-            const sel = document.getElementById('criteria-week-select');
-            if (sel) {
-                sel.onchange = async () => {
-                    const value = sel.value;
-                    const badge = document.getElementById('criteria-scope-badge');
-                    
-                    // Event looping önleme
-                    if (sel.dataset.updating === 'true') {
-                        console.log(`⚠️ [TEMPLATE-CHANGE] Dropdown güncelleniyor, event atlandı`);
-                        return;
-                    }
-                    
-                    // ÖNCEKİ TEMPLATE'İN VERİLERİNİ KAYDET
-                    const previousTemplateId = getCurrentTemplateId();
-                    console.log(`🔄 [TEMPLATE-CHANGE] Önceki template: ${previousTemplateId}, Yeni value: ${value}`);
-                    
-                    if (previousTemplateId) {
-                        // Önceki template'in kriter durumlarını kaydet
-                        const allCriteriaStates = {};
-                        const allCheckboxes = document.querySelectorAll('.criteria-checkbox-input');
-                        allCheckboxes.forEach(cb => {
-                            const cbId = cb.getAttribute('data-criteria-id');
-                            if (cbId) {
-                                allCriteriaStates[cbId] = cb.checked;
-                            }
-                        });
-                        
-                        console.log(`💾 [TEMPLATE-CHANGE] Önceki template ${previousTemplateId} kriter durumları kaydediliyor:`, allCriteriaStates);
-                        await saveTemplateSpecificData(previousTemplateId, 'criteriaStates', allCriteriaStates);
-                        
-                        // Sabit yemekleri de kaydet
-                        await saveFixedMealsToStorage();
-                        console.log(`💾 [TEMPLATE-CHANGE] Önceki template ${previousTemplateId} sabit yemekleri kaydedildi`);
-                    }
-                    
-                    // Event loop flag
-                    sel.dataset.updating = 'true';
-                    
-                    if (value === 'system') {
-                        try { 
-                            // Mevcut sabit yemekleri kaydet
-                            await saveFixedMealsToStorage();
-                            applySystemDefaultsCriteriaToUI(); 
-                            await loadFixedMealsFromStorage(); // Sistem sabit yemeklerini yükle
-                            console.log('🍽️ [DROPDOWN] Sistem sabit yemekleri yüklendi');
-                        } catch(_) {}
-                        if (badge) badge.textContent = 'Kapsam: Genel';
-                    } else if (value.startsWith('template_')) {
-                        // Şablon seçildi - önce mevcut durumu kaydet
-                        try { 
-                            await saveFixedMealsToStorage();
-                        } catch(_) {}
-                        
-                        // ✅ ÖNEMLİ: Template uygula (sabit yemekleri de yükler) - Dropdown güncellemesini atla
-                        const weekNo = parseInt(value.replace('template_', ''));
-                        await applySystemWeekProfile(weekNo, true); // skipDropdownUpdate = true
-                        
-                        if (badge) badge.textContent = `Kapsam: Şablon ${weekNo}`;
-                    } else {
-                        // Hasta haftası seçildi - önce mevcut durumu kaydet
-                        try { 
-                            await saveFixedMealsToStorage();
-                        } catch(_) {}
-                        
-                        // Hasta haftası seçildi
-                        const weekNo = parseInt(value);
-                        await selectWeekFromCriteriaPanel(weekNo);
-                        if (badge) badge.textContent = `Kapsam: Hasta Hafta ${weekNo}`;
-                        
-                        // Hasta hafta sabit yemeklerini yükle (selectWeekFromCriteriaPanel'de de var ama double-check)
-                        try {
-                            await loadFixedMealsFromStorage();
-                            console.log(`🍽️ [DROPDOWN] Hasta hafta ${weekNo} sabit yemekleri yüklendi`);
-                        } catch(_) {}
-                    }
-                    
-                    // Event loop flag temizle
-                    setTimeout(() => {
-                        sel.dataset.updating = 'false';
-                    }, 500);
-                };
-                
-                // İlk açılışta sistem varsayılanını uygula
-                try { applySystemDefaultsCriteriaToUI(); } catch(_) {}
-            }
+                <div class="d-flex align-items-center gap-2">
+                    <label class="form-label mb-0">Aktif Durum:</label>
+                    <span id="criteria-scope-badge" class="badge bg-secondary">Kapsam: Genel</span>
+                    <small class="text-muted">Şablon değiştirmek için sağ alttaki "Kayıtlı Hafta Şablonları" bölümünü kullanın</small>
+                </div>`;
+            
+            // Dropdown event handler'ları kaldırıldı - artık sadece sağ alttaki şablon butonları kullanılacak
+            
+            // İlk açılışta sistem varsayılanını uygula
+            try { applySystemDefaultsCriteriaToUI(); } catch(_) {}
         }
 
         // Kriter panelinden hafta değiştir (sayfayı değiştirmeden)
@@ -9978,7 +9893,6 @@
             // **YENİ: TEMPLATE-SPECIFIC SABİT YEMEK KAYDETME**
             const templateId = getCurrentTemplateId();
             console.log(`🔍 [DEBUG-FIXED-MEALS] getCurrentTemplateId() = ${templateId}`);
-            console.log(`🔍 [DEBUG-FIXED-MEALS] criteria-week-select value =`, document.getElementById('criteria-week-select')?.value);
             
             if (templateId) {
                 console.log(`💾 [TEMPLATE-FIXED-MEALS] Şablon ${templateId} sabit yemekleri kaydediliyor:`, fixedMeals);
@@ -10059,64 +9973,23 @@
                     }
                 }
                 
-                // ESKİ SİSTEM: Hafta veya sistem varsayılan yükleme
-                const weekSelect = document.getElementById('criteria-week-select');
-                const selectedValue = weekSelect?.value;
-                console.log('🔍 [SABIT YEMEK YÜKLEME] Seçili değer:', selectedValue);
+                // Template ID'yi global değişkenden al
+                const activeTemplateId = getCurrentTemplateId();
+                console.log('🔍 [SABIT YEMEK YÜKLEME] Aktif template:', activeTemplateId);
                 
-                if (selectedValue && selectedValue !== 'system') {
-                    // Hafta şablonu seçilmiş - o haftanın sabit yemeklerini yükle
-                    if (selectedValue.startsWith('template_')) {
-                        const weekNo = parseInt(selectedValue.replace('template_', ''));
-                        console.log('🔍 [ŞABLON YÜKLEME] Hafta numarası:', weekNo);
-                        
-                        // JSON server'dan sistem ayarlarını yükle
-                        if (JSON_SERVER_ENABLED) {
-                            try {
-                                const response = await fetch('http://localhost:3000/data/system_settings.json');
-                                if (response.ok) {
-                                    const systemSettings = await response.json();
-                                    const profile = systemSettings?.weeklyProfiles?.[weekNo];
-                                    console.log('🔍 [ŞABLON PROFIL]:', profile);
-                                    console.log('🔍 [ŞABLON SABIT YEMEK]:', profile?.fixedMeals);
-                                    
-                                    if (profile && profile.fixedMeals) {
-                                        fixedMeals = profile.fixedMeals;
-                                        console.log(`🔄 [FİZİKSEL JSON] Şablon ${weekNo} sabit yemekleri yükleniyor:`, fixedMeals);
-                                    } else {
-                                        console.log(`⚠️ Şablon ${weekNo} için fixedMeals bulunamadı`);
-                                        fixedMeals = { breakfast: [], snack1: [], lunch: [], snack2: [], dinner: [] };
-                                    }
-                                }
-                            } catch (e) {
-                                console.warn('JSON server\'dan şablon sabit yemek yüklenemedi, localStorage\'a geçiliyor');
-                            }
-                        }
-                        
-                        // Fallback: localStorage'dan yükle
-                        if (!fixedMeals) {
-                            const systemSettings = JSON.parse(localStorage.getItem('systemSettings_v2') || '{}');
-                            const profile = systemSettings?.weeklyProfiles?.[weekNo];
-                            
-                            if (profile && profile.fixedMeals) {
-                                fixedMeals = profile.fixedMeals;
-                                console.log(`🔄 [FALLBACK] Şablon ${weekNo} sabit yemekleri localStorage\'dan yükleniyor:`, fixedMeals);
-                            } else {
-                                fixedMeals = { breakfast: [], snack1: [], lunch: [], snack2: [], dinner: [] };
-                            }
-                        }
+                if (activeTemplateId) {
+                    // Template seçilmiş - template-specific sabit yemekleri yükle  
+                    const weekNo = parseInt(activeTemplateId);
+                    console.log('🔍 [ŞABLON YÜKLEME] Hafta numarası:', weekNo);
+                    
+                    // Template-specific sabit yemekleri yükle
+                    const templateFixedMeals = await loadTemplateSpecificData(`template_${weekNo}`, 'fixedMeals');
+                    if (templateFixedMeals && Object.keys(templateFixedMeals).length > 0) {
+                        fixedMeals = templateFixedMeals;
+                        console.log(`🔄 [TEMPLATE] Şablon ${weekNo} template-specific sabit yemekleri yüklendi:`, fixedMeals);
                     } else {
-                        // Hasta haftası seçilmiş - hasta haftasının sabit yemeklerini yükle
-                        const weekNo = parseInt(selectedValue);
-                        if (currentPatient && currentPatient.weeklyPlans) {
-                            const weekPlan = currentPatient.weeklyPlans.find(w => w.weekNumber === weekNo);
-                            if (weekPlan && weekPlan.fixedMeals) {
-                                fixedMeals = weekPlan.fixedMeals;
-                                console.log(`🔄 [FİZİKSEL JSON] Hasta hafta ${weekNo} sabit yemekleri yükleniyor:`, fixedMeals);
-                            } else {
-                                fixedMeals = { breakfast: [], snack1: [], lunch: [], snack2: [], dinner: [] };
-                            }
-                        }
+                        console.log(`⚠️ Şablon ${weekNo} için template-specific sabit yemek bulunamadı, boş yükleniyor`);
+                        fixedMeals = { breakfast: [], snack1: [], lunch: [], snack2: [], dinner: [] };
                     }
                 } else {
                     // Sistem geneli (varsayılan) sabit yemekler
@@ -11981,25 +11854,22 @@
                 // Tüm form verilerini topla (hasta bilgisi, öğün ayarları, makro dağılımları, kriterler)
                 const allFormData = collectAllFormData();
                 
-                // Kapsam (Genel vs Hafta) belirle
-                const scopeSel = document.getElementById('criteria-week-select');
-                const scopeVal = scopeSel?.value || 'system';
+                // Kapsam belirleme - artık global template değişkenini kullan
+                const activeTemplateId = getCurrentTemplateId();
                 
                 let selectedWeekNo = null;
                 let isWeekScope = false;
                 let isTemplateScope = false;
                 
-                if (scopeVal !== 'system') {
-                    if (scopeVal.startsWith('template_')) {
-                        // Şablon hafta seçilmiş
-                        selectedWeekNo = parseInt(scopeVal.replace('template_', ''));
-                        isTemplateScope = true;
-                        isWeekScope = true;
-                    } else {
-                        // Normal hafta seçilmiş
-                        selectedWeekNo = parseInt(scopeVal);
-                        isWeekScope = !isNaN(selectedWeekNo);
-                    }
+                if (activeTemplateId) {
+                    // Template seçilmiş
+                    selectedWeekNo = parseInt(activeTemplateId);
+                    isTemplateScope = true;
+                    isWeekScope = true;
+                } else {
+                    // Sistem geneli
+                    isTemplateScope = false;
+                    isWeekScope = false;
                 }
                 
                 if (isTemplateScope) {
@@ -12976,30 +12846,30 @@
         
         // Template-specific storage fonksiyonları için yardımcı
         function isTemplateMode() {
-            const weekSelect = document.getElementById('criteria-week-select');
-            const selectedValue = weekSelect?.value;
-            
-            // Sadece template_ ile başlayanlarda template mode
-            const isTemplate = selectedValue && selectedValue.startsWith('template_');
-            console.log(`🔍 [TEMPLATE-CHECK] isTemplateMode: ${isTemplate}, value: ${selectedValue}`);
+            const isTemplate = currentActiveTemplate !== null;
+            console.log(`🔍 [TEMPLATE-CHECK] isTemplateMode: ${isTemplate}, activeTemplate: ${currentActiveTemplate}`);
             return isTemplate;
+        }
+
+        // Aktif şablon ID'sini takip için global değişken
+        let currentActiveTemplate = null;
+
+        // Sistem varsayılanlarına geç
+        function switchToSystemDefaults() {
+            currentActiveTemplate = null;
+            const badge = document.getElementById('criteria-scope-badge');
+            if (badge) {
+                badge.textContent = 'Kapsam: Genel';
+                console.log(`🔄 [SYSTEM] Status badge güncellendi: Genel`);
+            }
+            applySystemDefaultsCriteriaToUI();
+            loadFixedMealsFromStorage();
         }
 
         // Aktif şablon ID'sini al
         function getCurrentTemplateId() {
-            const weekSelect = document.getElementById('criteria-week-select');
-            const selectedValue = weekSelect?.value;
-            
-            console.log(`🔍 [TEMPLATE-ID] Dropdown value: ${selectedValue}`);
-            
-            if (selectedValue && selectedValue.startsWith('template_')) {
-                const templateId = selectedValue.replace('template_', '');
-                console.log(`🔍 [TEMPLATE-ID] Template ID çıkarıldı: ${templateId}`);
-                return templateId;
-            }
-            
-            console.log(`🔍 [TEMPLATE-ID] Template mode değil, null döndürülüyor`);
-            return null;
+            console.log(`🔍 [TEMPLATE-ID] Current active template: ${currentActiveTemplate}`);
+            return currentActiveTemplate;
         }
 
         // Hafta Şablonları (Sistem) – kaydet, listele, uygula, sil
@@ -13128,7 +12998,7 @@
                     <div class=\"btn-group btn-group-sm\">
                         <button class=\"btn btn-outline-secondary\" onclick=\"editSystemWeekProfile(${k})\" title=\"Bu şablonu düzenlemek için yükle\"><i class='fas fa-edit'></i> Düzenle</button>
                         <button class=\"btn btn-outline-success\" onclick=\"saveCurrentSettingsToTemplate(${k})\" title=\"Mevcut ayarları bu şablona kaydet\"><i class='fas fa-save'></i> Kaydet</button>
-                        <button class=\"btn btn-outline-primary\" onclick=\"(async () => { const weekSelect = document.getElementById('criteria-week-select'); if(weekSelect) { weekSelect.dataset.updating = 'true'; await applySystemWeekProfile(${k}, false); weekSelect.value = 'template_${k}'; setTimeout(() => weekSelect.dataset.updating = 'false', 300); } })()\" title=\"Bu şablonu mevcut ayarlara uygula\"><i class='fas fa-download'></i> Uygula</button>
+                        <button class=\"btn btn-outline-primary\" onclick=\"applySystemWeekProfile(${k})\" title=\"Bu şablonu mevcut ayarlara uygula\"><i class='fas fa-download'></i> Uygula</button>
                         <button class=\"btn btn-outline-danger\" onclick=\"deleteSystemWeekProfile(${k})\"><i class='fas fa-trash'></i></button>
                     </div>
                 </div>`;
@@ -13258,7 +13128,7 @@
         }
 
         // Hafta şablonu uygula
-        async function applySystemWeekProfile(weekNo, skipDropdownUpdate = false) {
+        async function applySystemWeekProfile(weekNo) {
             try {
                 console.log(`📥 [TEMPLATE-APPLY] Hafta ${weekNo} şablonu uygulanıyor...`);
                 
@@ -13378,19 +13248,14 @@
 
                 console.log(`✅ [TEMPLATE-APPLY] Hafta ${weekNo} şablonu başarıyla uygulandı`);
                 
-                // Dropdown'ı güncelle (sadece skipDropdownUpdate false ise)
-                if (!skipDropdownUpdate) {
-                    const weekSelect = document.getElementById('criteria-week-select');
-                    if (weekSelect) {
-                        weekSelect.dataset.updating = 'true';
-                        weekSelect.value = templateId;
-                        console.log(`🔄 [TEMPLATE-APPLY] Dropdown güncellendi: ${templateId}`);
-                        setTimeout(() => {
-                            weekSelect.dataset.updating = 'false';
-                        }, 200);
-                    }
-                } else {
-                    console.log(`⏭️ [TEMPLATE-APPLY] Dropdown güncelleme atlandı (skipDropdownUpdate=true)`);
+                // Global template tracking güncelle
+                currentActiveTemplate = weekNo.toString();
+                
+                // Status badge'i güncelle
+                const badge = document.getElementById('criteria-scope-badge');
+                if (badge) {
+                    badge.textContent = `Kapsam: Şablon ${weekNo}`;
+                    console.log(`🔄 [TEMPLATE-APPLY] Status badge güncellendi: Şablon ${weekNo}`);
                 }
                 
                 // Criteria checkbox'larını yeniden kur
@@ -15282,57 +15147,114 @@
             };
         }
 
-        function loadSystemRulesArchive() {
-            // 1) systemRulesArchive var mı? Yükle
-            try {
-                const rawArchive = localStorage.getItem('systemRulesArchive');
-                if (rawArchive) {
-                    systemRulesArchive = JSON.parse(rawArchive);
-                }
-            } catch (e) {
-                console.warn('systemRulesArchive parse hatası:', e);
-            }
-
-            // 2) Yoksa, eski anahtar (frequencyRules) var mı? Migrasyon yap
-            if (!systemRulesArchive) {
-                systemRulesArchive = initEmptySystemRulesArchive();
+        async function loadSystemRulesArchive() {
+            // 1) GitHub'dan kuralları yüklemeyi dene
+            const githubLoaded = await tryLoadRulesFromGitHub();
+            
+            if (!githubLoaded) {
+                // 2) localStorage'dan systemRulesArchive var mı? Yükle
                 try {
-                    const legacy = localStorage.getItem('frequencyRules');
-                    if (legacy) {
-                        const arr = JSON.parse(legacy) || [];
-                        systemRulesArchive.rules.frequency = Array.isArray(arr) ? arr : [];
-                        systemRulesArchive.lastUpdated = getNowISO();
-                        localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                        console.log('🔁 frequencyRules → systemRulesArchive migrasyonu yapıldı');
-                    }
-                    // Dependency rules için de eski veriler varsa yükle
-                    const legacyDep = localStorage.getItem('dependencyRules');
-                    if (legacyDep) {
-                        const arr = JSON.parse(legacyDep) || [];
-                        systemRulesArchive.rules.dependency = Array.isArray(arr) ? arr : [];
-                    }
-                    if (!legacy && !legacyDep) {
-                        // İlk kez oluşturuluyor - JSON dosyasından yüklemeyi dene
-                        loadRulesFromJSON().then(() => {
-                            localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                            console.log('🆕 Boş systemRulesArchive oluşturuldu ve JSON\'dan yüklendi');
-                        }).catch(() => {
-                            localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                            console.log('🆕 Boş systemRulesArchive oluşturuldu');
-                        });
+                    const rawArchive = localStorage.getItem('systemRulesArchive');
+                    if (rawArchive) {
+                        systemRulesArchive = JSON.parse(rawArchive);
                     }
                 } catch (e) {
-                    console.warn('systemRulesArchive oluşturma/migrasyon hatası:', e);
+                    console.warn('systemRulesArchive parse hatası:', e);
+                }
+
+                // 3) Yoksa, eski anahtar (frequencyRules) var mı? Migrasyon yap
+                if (!systemRulesArchive) {
+                    systemRulesArchive = initEmptySystemRulesArchive();
+                    try {
+                        const legacy = localStorage.getItem('frequencyRules');
+                        if (legacy) {
+                            const arr = JSON.parse(legacy) || [];
+                            systemRulesArchive.rules.frequency = Array.isArray(arr) ? arr : [];
+                            systemRulesArchive.lastUpdated = getNowISO();
+                            localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
+                            console.log('🔁 frequencyRules → systemRulesArchive migrasyonu yapıldı');
+                        }
+                        // Dependency rules için de eski veriler varsa yükle
+                        const legacyDep = localStorage.getItem('dependencyRules');
+                        if (legacyDep) {
+                            const arr = JSON.parse(legacyDep) || [];
+                            systemRulesArchive.rules.dependency = Array.isArray(arr) ? arr : [];
+                        }
+                        if (!legacy && !legacyDep) {
+                            // İlk kez oluşturuluyor - JSON dosyasından yüklemeyi dene
+                            loadRulesFromJSON().then(() => {
+                                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
+                                console.log('🆕 Boş systemRulesArchive oluşturuldu ve JSON\'dan yüklendi');
+                            }).catch(() => {
+                                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
+                                console.log('🆕 Boş systemRulesArchive oluşturuldu');
+                            });
+                        }
+                    } catch (e) {
+                        console.warn('systemRulesArchive oluşturma/migrasyon hatası:', e);
+                    }
                 }
             }
 
-            // 3) UI state'i senkronize et
+            // 4) UI state'i senkronize et
             const archivedFreq = systemRulesArchive?.rules?.frequency;
             const archivedDep = systemRulesArchive?.rules?.dependency;
             const archivedLock = systemRulesArchive?.rules?.lock;
             frequencyRules = Array.isArray(archivedFreq) ? [...archivedFreq] : [];
             dependencyRules = Array.isArray(archivedDep) ? [...archivedDep] : [];
             lockRules = Array.isArray(archivedLock) ? [...archivedLock] : [];
+            
+            console.log('📋 Kurallar yüklendi:', {
+                frequency: frequencyRules.length,
+                dependency: dependencyRules.length, 
+                lock: lockRules.length
+            });
+        }
+
+        // GitHub'dan kuralları yüklemeyi dene
+        async function tryLoadRulesFromGitHub() {
+            try {
+                console.log('📡 GitHub\'dan kurallar yükleniyor...');
+                
+                // Önce public raw URL'i deneyelim (token gerekmez)
+                const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json`;
+                console.log('Raw URL:', rawUrl);
+                
+                const response = await fetch(rawUrl);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('📄 GitHub\'dan alınan data:', data);
+                    
+                    if (data && data.rulesArchive) {
+                        systemRulesArchive = {
+                            rules: {
+                                frequency: Array.isArray(data.rulesArchive.frequencyRules) ? data.rulesArchive.frequencyRules : [],
+                                dependency: Array.isArray(data.rulesArchive.dependencyRules) ? data.rulesArchive.dependencyRules : [],
+                                lock: Array.isArray(data.rulesArchive.lockRules) ? data.rulesArchive.lockRules : []
+                            },
+                            lastUpdated: data.lastUpdated || new Date().toISOString()
+                        };
+                        
+                        console.log('✅ GitHub\'dan kurallar yüklendi:', {
+                            frequency: systemRulesArchive.rules.frequency.length,
+                            dependency: systemRulesArchive.rules.dependency.length,
+                            lock: systemRulesArchive.rules.lock.length
+                        });
+                        
+                        // localStorage'a da kaydet
+                        localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
+                        return true;
+                    }
+                } else {
+                    console.log(`GitHub raw fetch failed: ${response.status} ${response.statusText}`);
+                }
+            } catch (e) {
+                console.warn('GitHub\'dan kural yükleme hatası:', e);
+            }
+            
+            console.log('📡 GitHub token yok veya raw dosya erişimi başarısız, localStorage kullanılacak');
+            return false;
         }
 
         // JSON dosyasından kuralları yükle
