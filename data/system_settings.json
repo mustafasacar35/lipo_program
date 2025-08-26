@@ -198,13 +198,13 @@
       "timestamp": "2025-08-21T16:51:54.723Z",
       "criteriaStates": {},
       "criteriaOrder": [],
-      "updatedAt": "2025-08-26T22:36:41.778Z",
-      "updated": "27.08.2025 01:36:41",
+      "updatedAt": "2025-08-26T22:36:43.943Z",
+      "updated": "27.08.2025 01:36:43",
       "templateData": {
         "fixedMeals": {
           "breakfast": [
             {
-              "name": "m",
+              "name": "me",
               "amount": "1",
               "calories": 0,
               "carbs": 0,
