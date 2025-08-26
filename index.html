@@ -3160,8 +3160,16 @@
             // GitHub token'ı kontrol et, varsa otomatik kullan
             const hasToken = checkGitHubToken();
             if (hasToken) {
-                console.log('✅ GitHub token mevcut, otomatik bağlanıyor...');
+                console.log('✅ GitHub token mevcut, veriler GitHub\'dan yüklenecek');
                 await loadSystemDataFromGitHub();
+            } else {
+                console.log('ℹ️ GitHub token yok, localStorage ve fallback kullanılacak');
+                // Token yoksa kullanıcıya GitHub'a bağlanma seçeneği sun
+                setTimeout(() => {
+                    if (confirm('🔗 GitHub\'a bağlanarak verilerinizi senkronize etmek ister misiniz?\n\nBağlanmadan da sistem çalışır, sadece browser\'lar arası senkronizasyon olmaz.')) {
+                        showGitHubModal();
+                    }
+                }, 2000);
             }
             
             // Kuralları yükle
@@ -15216,56 +15224,83 @@
             try {
                 console.log('📡 GitHub\'dan kurallar yükleniyor...');
                 
-                // system_rules.json dosyasından kullanıcı kurallarını çek (cache-busting ile)
-                const timestamp = Date.now();
-                const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json?t=${timestamp}`;
-                console.log('📄 System rules URL:', rawUrl);
+                // GitHub token varsa API kullan, yoksa raw URL dene
+                const token = localStorage.getItem('github_token') || localStorage.getItem('githubToken');
+                let response;
                 
-                const response = await fetch(rawUrl, {
-                    cache: 'no-cache',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('📄 GitHub\'dan alınan system data:', data);
+                if (token) {
+                    // Token varsa GitHub API kullan (CORS problemi yok)
+                    const apiUrl = `${GITHUB_CONFIG.apiBase}/contents/system_rules.json?ref=main&_=${Date.now()}`;
+                    console.log('📄 GitHub API URL:', apiUrl);
                     
-                    // rulesArchive bölümünü kontrol et
-                    if (data && data.rulesArchive) {
-                        const archive = data.rulesArchive;
-                        systemRulesArchive = {
-                            rules: {
-                                frequency: Array.isArray(archive.frequencyRules) ? archive.frequencyRules : [],
-                                dependency: Array.isArray(archive.dependencyRules) ? archive.dependencyRules : [],
-                                lock: Array.isArray(archive.lockRules) ? archive.lockRules : []
-                            },
-                            lastUpdated: data.lastUpdated || new Date().toISOString()
-                        };
+                    response = await fetch(apiUrl, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const fileData = await response.json();
+                        const content = atob(fileData.content);
+                        const data = JSON.parse(content);
                         
-                        console.log('✅ GitHub\'dan kullanıcı kuralları yüklendi:', {
-                            frequency: systemRulesArchive.rules.frequency.length,
-                            dependency: systemRulesArchive.rules.dependency.length,
-                            lock: systemRulesArchive.rules.lock.length
-                        });
-                        
-                        // localStorage'a da kaydet
-                        localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                        return true;
-                    } else {
-                        console.log('⚠️ system_rules.json\'da rulesArchive bölümü bulunamadı');
+                        console.log('📄 GitHub API\'dan alınan system data:', data);
+                        return await processGitHubRulesData(data);
                     }
                 } else {
-                    console.log(`❌ GitHub system_rules.json fetch hatası: ${response.status} ${response.statusText}`);
+                    // Token yoksa raw URL dene (CORS hatası olabilir)
+                    const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json?t=${Date.now()}`;
+                    console.log('📄 Raw URL (fallback):', rawUrl);
+                    
+                    response = await fetch(rawUrl, {
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('📄 Raw URL\'den alınan system data:', data);
+                        return await processGitHubRulesData(data);
+                    }
                 }
+                
+                console.log(`❌ GitHub fetch hatası: ${response?.status} ${response?.statusText}`);
             } catch (e) {
                 console.warn('❌ GitHub\'dan kural yükleme hatası:', e);
             }
             
             console.log('📡 GitHub\'dan yükleme başarısız, localStorage kullanılacak');
             return false;
+        }
+        
+        async function processGitHubRulesData(data) {
+            // rulesArchive bölümünü kontrol et
+            if (data && data.rulesArchive) {
+                const archive = data.rulesArchive;
+                systemRulesArchive = {
+                    rules: {
+                        frequency: Array.isArray(archive.frequencyRules) ? archive.frequencyRules : [],
+                        dependency: Array.isArray(archive.dependencyRules) ? archive.dependencyRules : [],
+                        lock: Array.isArray(archive.lockRules) ? archive.lockRules : []
+                    },
+                    lastUpdated: data.lastUpdated || new Date().toISOString()
+                };
+                
+                console.log('✅ GitHub\'dan kullanıcı kuralları yüklendi:', {
+                    frequency: systemRulesArchive.rules.frequency.length,
+                    dependency: systemRulesArchive.rules.dependency.length,
+                    lock: systemRulesArchive.rules.lock.length
+                });
+                
+                // localStorage'a da kaydet
+                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
+                return true;
+            } else {
+                console.log('⚠️ system_rules.json\'da rulesArchive bölümü bulunamadı');
+                return false;
+            }
         }
 
         // JSON dosyasından kuralları yükle
