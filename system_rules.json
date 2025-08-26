@@ -3,19 +3,19 @@
   "rulesArchive": {},
   "criteriaSettings": {
     "repetition_frequency": {
-      "categories": [],
-      "roles": [],
-      "keywords": [
-        "dondurma5"
+      "categories": [
+        "EKMEKLER"
       ],
-      "scope": "week",
-      "minInterval": 1,
-      "maxCount": 3,
+      "roles": [],
+      "keywords": [],
+      "scope": "month",
+      "minInterval": 2,
+      "maxCount": 9,
       "flexible": false,
       "id": "repetition_frequency",
-      "lastUpdated": "2025-08-26T23:12:52.786Z",
+      "lastUpdated": "2025-08-26T23:14:47.981Z",
       "version": "1.0"
     }
   },
-  "lastUpdated": "2025-08-26T23:12:52.786Z"
+  "lastUpdated": "2025-08-26T23:14:47.981Z"
 }
