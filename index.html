@@ -618,7 +618,7 @@
 </head>
 <body>
     <!-- GitHub Token Giriş Modal -->
-    <div id="githubLoginOverlay" class="github-login-overlay">
+    <div id="githubLoginOverlay" class="github-login-overlay hidden">
         <div class="github-login-modal">
             <h3><i class="fab fa-github"></i> GitHub Bağlantısı</h3>
             <p>Sistem verilerini GitHub'dan çekmek için GitHub token'ınızı girin:</p>
@@ -627,7 +627,7 @@
                    placeholder="GitHub Personal Access Token">
             
             <div>
-                <button onclick="connectToGitHub()" class="github-login-btn">
+                <button onclick="connectGitHub()" class="github-login-btn">
                     <i class="fas fa-link"></i> Bağlan
                 </button>
                 <button onclick="testConnection()" class="github-login-btn" style="background: #17a2b8;">
@@ -3034,14 +3034,14 @@
             try {
                 showNotification('GitHub veriler yükleniyor...', 'info');
                 
-                // Ana veri dosyalarını çek
+                // Ana veri dosyalarını çek (token gerektirir)
                 const promises = [];
                 const fileMap = {
                     'meals_new.json': 'meals',
                     'data/patients_list.json': 'patients',
                     'data/doctors_list.json': 'doctors',
                     'data/dietitians_list.json': 'dietitians',
-                    'data/rules.json': 'systemRules',
+                    'data/rules.json': 'systemRuleTemplates', // Sistem kural şablonları
                     'data/system_settings.json': 'systemSettings',
                     'data/diet_config.json': 'dietConfig'
                 };
@@ -15216,27 +15216,29 @@
             try {
                 console.log('📡 GitHub\'dan kurallar yükleniyor...');
                 
-                // Önce public raw URL'i deneyelim (token gerekmez)
+                // system_rules.json dosyasından kullanıcı kurallarını çek
                 const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json`;
-                console.log('Raw URL:', rawUrl);
+                console.log('📄 System rules URL:', rawUrl);
                 
                 const response = await fetch(rawUrl);
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('📄 GitHub\'dan alınan data:', data);
+                    console.log('📄 GitHub\'dan alınan system data:', data);
                     
+                    // rulesArchive bölümünü kontrol et
                     if (data && data.rulesArchive) {
+                        const archive = data.rulesArchive;
                         systemRulesArchive = {
                             rules: {
-                                frequency: Array.isArray(data.rulesArchive.frequencyRules) ? data.rulesArchive.frequencyRules : [],
-                                dependency: Array.isArray(data.rulesArchive.dependencyRules) ? data.rulesArchive.dependencyRules : [],
-                                lock: Array.isArray(data.rulesArchive.lockRules) ? data.rulesArchive.lockRules : []
+                                frequency: Array.isArray(archive.frequencyRules) ? archive.frequencyRules : [],
+                                dependency: Array.isArray(archive.dependencyRules) ? archive.dependencyRules : [],
+                                lock: Array.isArray(archive.lockRules) ? archive.lockRules : []
                             },
                             lastUpdated: data.lastUpdated || new Date().toISOString()
                         };
                         
-                        console.log('✅ GitHub\'dan kurallar yüklendi:', {
+                        console.log('✅ GitHub\'dan kullanıcı kuralları yüklendi:', {
                             frequency: systemRulesArchive.rules.frequency.length,
                             dependency: systemRulesArchive.rules.dependency.length,
                             lock: systemRulesArchive.rules.lock.length
@@ -15245,15 +15247,17 @@
                         // localStorage'a da kaydet
                         localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
                         return true;
+                    } else {
+                        console.log('⚠️ system_rules.json\'da rulesArchive bölümü bulunamadı');
                     }
                 } else {
-                    console.log(`GitHub raw fetch failed: ${response.status} ${response.statusText}`);
+                    console.log(`❌ GitHub system_rules.json fetch hatası: ${response.status} ${response.statusText}`);
                 }
             } catch (e) {
-                console.warn('GitHub\'dan kural yükleme hatası:', e);
+                console.warn('❌ GitHub\'dan kural yükleme hatası:', e);
             }
             
-            console.log('📡 GitHub token yok veya raw dosya erişimi başarısız, localStorage kullanılacak');
+            console.log('📡 GitHub\'dan yükleme başarısız, localStorage kullanılacak');
             return false;
         }
 
