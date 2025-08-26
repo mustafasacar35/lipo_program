@@ -15194,36 +15194,53 @@
                     return false;
                 }
                 
-                // CORS bypass için raw URL kullan (public repo için çalışır)
-                const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json?cb=${Date.now()}&r=${Math.random().toString(36).slice(2,15)}&nocache=true`;
-                console.log('📄 GitHub Raw URL:', rawUrl);
+                // GitHub API ile en güncel dosyayı al (raw URL yerine)
+                const apiUrl = `${GITHUB_CONFIG.apiBase}/contents/system_rules.json?ref=main&t=${Date.now()}`;
+                console.log('📄 GitHub API URL:', apiUrl);
                 
-                const response = await fetch(rawUrl, {
-                    method: 'GET'
-                    // Raw URL için header yok - CORS sorununu önlemek için
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'User-Agent': 'Meal-Planning-App'
+                    }
                 });
                 
                 if (response.ok) {
-                    const rawText = await response.text();
-                    console.log('📄 GitHub Raw text alındı, length:', rawText.length);
+                    const apiResponse = await response.json();
+                    console.log('📄 GitHub API Response SHA:', apiResponse.sha);
                     
-                    // JSON'u parse et 
-                    let data;
+                    // Base64 decode et (UTF-8 encoding ile)
+                    const base64Content = apiResponse.content.replace(/\s/g, '');
+                    let content;
                     try {
-                        data = JSON.parse(rawText);
-                        console.log('📄 GitHub Raw\'dan parse edilen data (typeof):', typeof data);
-                        console.log('📄 GitHub Raw\'dan parse edilen data:', data);
-                    } catch (parseError) {
-                        console.error('JSON parse hatası:', parseError);
-                        return false;
+                        // Modern TextDecoder ile UTF-8 decode
+                        const binaryString = atob(base64Content);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const decoder = new TextDecoder('utf-8');
+                        content = decoder.decode(bytes);
+                        console.log('📄 UTF-8 decoded content preview:', content.substring(0, 200));
+                    } catch (utf8Error) {
+                        console.warn('UTF-8 decode hatası, standart decode deneniyor:', utf8Error);
+                        // Fallback: eski yöntem
+                        const decodedBytes = atob(base64Content);
+                        content = decodeURIComponent(escape(decodedBytes));
                     }
+                    
+                    const data = JSON.parse(content);
+                    console.log('📄 GitHub API\'dan parse edilen data (typeof):', typeof data);
+                    console.log('📄 GitHub API\'dan parse edilen data:', data);
                     
                     const processResult = await processGitHubRulesData(data);
                     console.log('🔍 processGitHubRulesData sonucu:', processResult);
                     
                     return processResult;
                 } else {
-                    console.log(`❌ GitHub Raw fetch hatası: ${response.status} ${response.statusText}`);
+                    console.log(`❌ GitHub API fetch hatası: ${response.status} ${response.statusText}`);
                 }
             } catch (e) {
                 console.warn('❌ GitHub\'dan kural yükleme hatası:', e);
