@@ -3161,18 +3161,17 @@
             const hasToken = checkGitHubToken();
             if (hasToken) {
                 console.log('✅ GitHub token mevcut, veriler GitHub\'dan yüklenecek');
-                await loadSystemDataFromGitHub();
             } else {
-                console.log('ℹ️ GitHub token yok, localStorage ve fallback kullanılacak');
+                console.log('ℹ️ GitHub token yok, kullanıcıya GitHub bağlantısı önerilecek');
                 // Token yoksa kullanıcıya GitHub'a bağlanma seçeneği sun
                 setTimeout(() => {
-                    if (confirm('🔗 GitHub\'a bağlanarak verilerinizi senkronize etmek ister misiniz?\n\nBağlanmadan da sistem çalışır, sadece browser\'lar arası senkronizasyon olmaz.')) {
+                    if (confirm('🔗 GitHub\'a bağlanarak verilerinizi browser\'lar arası senkronize etmek ister misiniz?\n\nToken olmadan sistem sadece bu browser\'da çalışır.')) {
                         showGitHubModal();
                     }
                 }, 2000);
             }
             
-            // Kuralları yükle
+            // Kuralları yükle (localStorage tamamen kaldırıldı, sadece GitHub)
             await loadSystemRulesArchive();
             // Kural arayüzünü güncelle
             renderRulesHierarchyList();
@@ -15160,51 +15159,12 @@
             const githubLoaded = await tryLoadRulesFromGitHub();
             
             if (!githubLoaded) {
-                // 2) localStorage'dan systemRulesArchive var mı? Yükle
-                try {
-                    const rawArchive = localStorage.getItem('systemRulesArchive');
-                    if (rawArchive) {
-                        systemRulesArchive = JSON.parse(rawArchive);
-                    }
-                } catch (e) {
-                    console.warn('systemRulesArchive parse hatası:', e);
-                }
-
-                // 3) Yoksa, eski anahtar (frequencyRules) var mı? Migrasyon yap
-                if (!systemRulesArchive) {
-                    systemRulesArchive = initEmptySystemRulesArchive();
-                    try {
-                        const legacy = localStorage.getItem('frequencyRules');
-                        if (legacy) {
-                            const arr = JSON.parse(legacy) || [];
-                            systemRulesArchive.rules.frequency = Array.isArray(arr) ? arr : [];
-                            systemRulesArchive.lastUpdated = getNowISO();
-                            localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                            console.log('🔁 frequencyRules → systemRulesArchive migrasyonu yapıldı');
-                        }
-                        // Dependency rules için de eski veriler varsa yükle
-                        const legacyDep = localStorage.getItem('dependencyRules');
-                        if (legacyDep) {
-                            const arr = JSON.parse(legacyDep) || [];
-                            systemRulesArchive.rules.dependency = Array.isArray(arr) ? arr : [];
-                        }
-                        if (!legacy && !legacyDep) {
-                            // İlk kez oluşturuluyor - JSON dosyasından yüklemeyi dene
-                            loadRulesFromJSON().then(() => {
-                                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                                console.log('🆕 Boş systemRulesArchive oluşturuldu ve JSON\'dan yüklendi');
-                            }).catch(() => {
-                                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                                console.log('🆕 Boş systemRulesArchive oluşturuldu');
-                            });
-                        }
-                    } catch (e) {
-                        console.warn('systemRulesArchive oluşturma/migrasyon hatası:', e);
-                    }
-                }
+                // GitHub yüklenemezse boş kurallarla başla
+                console.log('⚠️ GitHub\'dan yükleme başarısız, boş kurallarla başlanıyor');
+                systemRulesArchive = initEmptySystemRulesArchive();
             }
 
-            // 4) UI state'i senkronize et
+            // 2) UI state'i senkronize et
             const archivedFreq = systemRulesArchive?.rules?.frequency;
             const archivedDep = systemRulesArchive?.rules?.dependency;
             const archivedLock = systemRulesArchive?.rules?.lock;
@@ -15224,54 +15184,38 @@
             try {
                 console.log('📡 GitHub\'dan kurallar yükleniyor...');
                 
-                // GitHub token varsa API kullan, yoksa raw URL dene
+                // GitHub token kontrolü
                 const token = localStorage.getItem('github_token') || localStorage.getItem('githubToken');
-                let response;
                 
-                if (token) {
-                    // Token varsa GitHub API kullan (CORS problemi yok)
-                    const apiUrl = `${GITHUB_CONFIG.apiBase}/contents/system_rules.json?ref=main&_=${Date.now()}`;
-                    console.log('📄 GitHub API URL:', apiUrl);
-                    
-                    response = await fetch(apiUrl, {
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const fileData = await response.json();
-                        const content = atob(fileData.content);
-                        const data = JSON.parse(content);
-                        
-                        console.log('📄 GitHub API\'dan alınan system data:', data);
-                        return await processGitHubRulesData(data);
-                    }
-                } else {
-                    // Token yoksa raw URL dene (CORS hatası olabilir)
-                    const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json?t=${Date.now()}`;
-                    console.log('📄 Raw URL (fallback):', rawUrl);
-                    
-                    response = await fetch(rawUrl, {
-                        cache: 'no-cache',
-                        mode: 'cors'
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('📄 Raw URL\'den alınan system data:', data);
-                        return await processGitHubRulesData(data);
-                    }
+                if (!token) {
+                    console.log('⚠️ GitHub token yok - token gerekli!');
+                    return false;
                 }
                 
-                console.log(`❌ GitHub fetch hatası: ${response?.status} ${response?.statusText}`);
+                // CORS bypass için raw URL kullan (public repo için çalışır)
+                const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json?t=${Date.now()}`;
+                console.log('📄 GitHub Raw URL:', rawUrl);
+                
+                const response = await fetch(rawUrl, {
+                    method: 'GET',
+                    // Raw URL için özel header gerektirmez, CORS sorunsuz
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('📄 GitHub Raw\'dan alınan system data:', data);
+                    return await processGitHubRulesData(data);
+                } else {
+                    console.log(`❌ GitHub Raw fetch hatası: ${response.status} ${response.statusText}`);
+                }
             } catch (e) {
                 console.warn('❌ GitHub\'dan kural yükleme hatası:', e);
+                if (e.message.includes('CORS')) {
+                    console.warn('⚠️ CORS hatası - GitHub Pages CORS kısıtlaması');
+                }
             }
             
-            console.log('📡 GitHub\'dan yükleme başarısız, localStorage kullanılacak');
+            console.log('📡 GitHub\'dan yükleme başarısız');
             return false;
         }
         
@@ -15294,8 +15238,6 @@
                     lock: systemRulesArchive.rules.lock.length
                 });
                 
-                // localStorage'a da kaydet
-                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
                 return true;
             } else {
                 console.log('⚠️ system_rules.json\'da rulesArchive bölümü bulunamadı');
@@ -15345,23 +15287,18 @@
             systemRulesArchive.rules.dependency = Array.isArray(dependencyRules) ? [...dependencyRules] : [];
             systemRulesArchive.rules.lock = Array.isArray(lockRules) ? [...lockRules] : [];
             systemRulesArchive.lastUpdated = getNowISO();
-            // Kalıcılaştır
+            
+            // Sadece GitHub'a kaydet (localStorage tamamen kaldırıldı)
             try {
-                localStorage.setItem('systemRulesArchive', JSON.stringify(systemRulesArchive));
-                // Geriye dönük uyumluluk için ayrı anahtarı da güncel tutalım
-                localStorage.setItem('frequencyRules', JSON.stringify(frequencyRules));
-                localStorage.setItem('dependencyRules', JSON.stringify(dependencyRules));
-                localStorage.setItem('lockRules', JSON.stringify(lockRules));
-                // JSON dosyasına da yaz (system_rules.json)
-                saveRulesHierarchyToJSON();
+                await saveRulesHierarchyToJSON();
                 if (typeof logToConsole === 'function') {
                     const freqCount = frequencyRules.length || 0;
                     const depCount = dependencyRules.length || 0;
                     const lockCount = lockRules.length || 0;
-                    logToConsole(`💾 Sistem kural arşivi güncellendi (${freqCount} sıklık, ${depCount} bağımlılık, ${lockCount} kilit)`);
+                    logToConsole(`💾 Sistem kuralları GitHub'a kaydedildi (${freqCount} sıklık, ${depCount} bağımlılık, ${lockCount} kilit)`);
                 }
             } catch (e) {
-                console.warn('systemRulesArchive kaydetme hatası:', e);
+                console.warn('GitHub kural kaydetme hatası:', e);
             }
         }
 
