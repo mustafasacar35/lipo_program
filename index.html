@@ -15355,11 +15355,25 @@
                     priority: r.priority
                 }));
                 
+                // Lock rules (kategori kilidi)
+                const sortedLock = Array.isArray(lockRules)
+                    ? [...lockRules].sort((a, b) => (a.priority || 9999) - (b.priority || 9999))
+                    : [];
+                const compactLock = sortedLock.map(r => ({
+                    id: r.id,
+                    name: r.name || undefined,
+                    categories: r.categories || [],
+                    lockType: r.lockType || 'weekly',
+                    maxCount: r.maxCount || 0,
+                    priority: r.priority
+                }));
+                
                 const ok = await updateJsonFile('/system_rules.json', (json) => {
                     const out = { ...(json || {}) };
                     out.rulesArchive = out.rulesArchive || {};
                     out.rulesArchive.frequencyRules = compactFreq;
                     out.rulesArchive.dependencyRules = compactDep;
+                    out.rulesArchive.lockRules = compactLock;
                     out.rulesArchive.priorityPolicy = 'top-first';
                     out.lastUpdated = new Date().toISOString();
                     return out;
@@ -15367,7 +15381,8 @@
                 if (ok) {
                     const freqCount = compactFreq.length;
                     const depCount = compactDep.length;
-                    logToConsole(`📄 system_rules.json güncellendi (${freqCount} sıklık, ${depCount} bağımlılık kuralı)`);
+                    const lockCount = compactLock.length;
+                    logToConsole(`📄 system_rules.json güncellendi (${freqCount} sıklık, ${depCount} bağımlılık, ${lockCount} kilit kuralı)`);
                     
                     // GitHub'a da kaydet
                     try {
