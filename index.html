@@ -3173,8 +3173,10 @@
             
             // Kuralları yükle (localStorage tamamen kaldırıldı, sadece GitHub)
             await loadSystemRulesArchive();
-            // Kural arayüzünü güncelle
+            
+            // Kural arayüzlerini güncelle
             renderRulesHierarchyList();
+            renderFrequencyRulesTable();
         });
 
         // Toggle function for rules engine accordion
@@ -15204,7 +15206,11 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('📄 GitHub Raw\'dan alınan system data:', data);
-                    return await processGitHubRulesData(data);
+                    
+                    const processResult = await processGitHubRulesData(data);
+                    console.log('🔍 processGitHubRulesData sonucu:', processResult);
+                    
+                    return processResult;
                 } else {
                     console.log(`❌ GitHub Raw fetch hatası: ${response.status} ${response.statusText}`);
                 }
@@ -15220,10 +15226,15 @@
         }
         
         async function processGitHubRulesData(data) {
+            console.log('🔍 processGitHubRulesData çağrıldı, data:', data);
+            
             // rulesArchive bölümünü kontrol et
             if (data && data.rulesArchive) {
                 const archive = data.rulesArchive;
+                console.log('✅ rulesArchive bulundu:', archive);
+                
                 systemRulesArchive = {
+                    version: "1.0",
                     rules: {
                         frequency: Array.isArray(archive.frequencyRules) ? archive.frequencyRules : [],
                         dependency: Array.isArray(archive.dependencyRules) ? archive.dependencyRules : [],
@@ -15240,7 +15251,8 @@
                 
                 return true;
             } else {
-                console.log('⚠️ system_rules.json\'da rulesArchive bölümü bulunamadı');
+                console.log('⚠️ system_rules.json\'da rulesArchive bölümü bulunamadı, data:', data);
+                console.log('⚠️ data.rulesArchive değeri:', data?.rulesArchive);
                 return false;
             }
         }
@@ -15602,13 +15614,13 @@
             input.click();
         }
 
-        // Yükle (sayfa açılışında arşiv → UI)
-        (function bootRules() {
-            loadSystemRulesArchive();
-            renderFrequencyRulesTable();
-            // İlk yüklemede kurallar hiyerarşisi görünümü hazır olsun
-            try { renderRulesHierarchyList(); } catch {}
-        })();
+        // Yükle (DOMContentLoaded'da yapılacak, burada gereksiz)
+        // (function bootRules() {
+        //     loadSystemRulesArchive();
+        //     renderFrequencyRulesTable();
+        //     // İlk yüklemede kurallar hiyerarşisi görünümü hazır olsun
+        //     try { renderRulesHierarchyList(); } catch {}
+        // })();
 
         // UI helper: sadece frequencyRules değişimini kalıcı hale getir
         function persistFrequencyRules() {
