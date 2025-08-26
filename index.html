@@ -15216,11 +15216,18 @@
             try {
                 console.log('📡 GitHub\'dan kurallar yükleniyor...');
                 
-                // system_rules.json dosyasından kullanıcı kurallarını çek
-                const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json`;
+                // system_rules.json dosyasından kullanıcı kurallarını çek (cache-busting ile)
+                const timestamp = Date.now();
+                const rawUrl = `${GITHUB_CONFIG.rawBase}/system_rules.json?t=${timestamp}`;
                 console.log('📄 System rules URL:', rawUrl);
                 
-                const response = await fetch(rawUrl);
+                const response = await fetch(rawUrl, {
+                    cache: 'no-cache',
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                });
                 
                 if (response.ok) {
                     const data = await response.json();
@@ -15384,13 +15391,27 @@
                     const lockCount = compactLock.length;
                     logToConsole(`📄 system_rules.json güncellendi (${freqCount} sıklık, ${depCount} bağımlılık, ${lockCount} kilit kuralı)`);
                     
-                    // GitHub'a da kaydet
+                    // GitHub'a da kaydet - güncel verileri kullan
                     try {
-                        const rulesData = localStorage.getItem('systemRulesArchive');
-                        if (rulesData) {
-                            await saveToGitHub('data/system_rules.json', rulesData);
-                            console.log('✅ [GITHUB] system_rules.json GitHub\'a kaydedildi');
-                        }
+                        // Güncel kural verilerini hazırla
+                        const currentRulesData = {
+                            version: '2.0',
+                            lastUpdated: new Date().toISOString(),
+                            rulesArchive: {
+                                frequencyRules: compactFreq,
+                                dependencyRules: compactDep,
+                                lockRules: compactLock,
+                                priorityPolicy: 'top-first'
+                            }
+                        };
+                        
+                        await saveToGitHub('system_rules.json', JSON.stringify(currentRulesData, null, 2));
+                        console.log('✅ [GITHUB] system_rules.json GitHub\'a kaydedildi');
+                        console.log('📊 GitHub\'a kaydedilen kurallar:', {
+                            frequency: compactFreq.length,
+                            dependency: compactDep.length,
+                            lock: compactLock.length
+                        });
                     } catch (githubError) {
                         console.warn('❌ [GITHUB] system_rules.json GitHub\'a kaydedilemedi:', githubError);
                     }
