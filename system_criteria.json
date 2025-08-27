@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-08-27T16:24:25.292Z",
+  "lastUpdated": "2025-08-27T16:24:34.921Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -48,7 +48,7 @@
       "toleranceLevel": "orta",
       "crossMealCompatibility": false,
       "prioritizeMainDish": false,
-      "lastUpdated": "2025-08-27T16:19:12.334Z",
+      "lastUpdated": "2025-08-27T16:24:34.921Z",
       "id": "food_compatibility",
       "version": "1.0"
     }
