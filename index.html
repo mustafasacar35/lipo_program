@@ -9445,6 +9445,8 @@
                 if (macroInput) {
                     // Öğün sayısı 0 ise makro input'unu pasif yap
                     const shouldDisable = hasFixedValue && fixedValue === 0;
+                    const wasDisabled = macroInput.disabled;
+                    
                     macroInput.disabled = shouldDisable;
                     
                     if (shouldDisable) {
@@ -9454,6 +9456,20 @@
                     } else {
                         macroInput.style.backgroundColor = '';
                         macroInput.style.color = '';
+                        
+                        // Eğer öğün yeni aktif hale geldiyse ve makro değeri 0 ise varsayılan değeri yükle
+                        if (wasDisabled && parseInt(macroInput.value) === 0) {
+                            const defaultDistribution = {
+                                breakfast: 25,
+                                snack1: 10,
+                                lunch: 30,
+                                snack2: 10,
+                                dinner: 25
+                            };
+                            
+                            macroInput.value = defaultDistribution[mealType] || 25;
+                            logToConsole(`🔄 ${mealType} öğünü aktif hale geldi, varsayılan değer yüklendi: ${macroInput.value}%`);
+                        }
                     }
                     
                     // Makro toplamını güncelle
@@ -10678,6 +10694,9 @@
             const targetCalories = parseInt(document.getElementById('calculated-calories')?.textContent) || 1850;
             updateMealCalories(targetCalories);
             
+            // 🎯 YENİ: Kalori dağılımı kriteri ayarlarını da güncelle (otomatik senkronizasyon)
+            syncMealMacrosToCalorieDistribution();
+            
             logToConsole(`📊 Öğün makro toplamı: ${total}% (${remaining >= 0 ? '+' : ''}${remaining})`);
         }
         
@@ -11767,6 +11786,24 @@
                 return;
             }
 
+            // Kalori dağılımı kriteri için özel panel
+            if (criteriaId === 'calorie_distribution') {
+                openCalorieDistributionSettings();
+                return;
+            }
+
+            // Yemek uyumluluğu kriteri için özel panel
+            if (criteriaId === 'food_compatibility') {
+                openFoodCompatibilitySettings();
+                return;
+            }
+
+            // Tag çakışması kriteri için özel panel
+            if (criteriaId === 'tag_conflicts') {
+                openTagConflictsSettings();
+                return;
+            }
+
             // Diğer kriterler için genel ayar paneli (şimdilik alert)
             alert(`${criteria.name} ayar paneli henüz hazır değil`);
         }
@@ -12105,6 +12142,709 @@
             bootstrap.Modal.getInstance(document.getElementById('repetitionFrequencyModal')).hide();
             
             showToast('Tekrar sıklığı ayarları kaydedildi', 'success');
+        }
+
+        // 🧲 Yemek Uyumluluğu Ayar Modalı
+        function openFoodCompatibilitySettings() {
+            const modalHtml = `
+                <div class="modal fade" id="foodCompatibilityModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-magnet text-success"></i> Yemek Uyumluluğu & Magnetik Çekim
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <strong>Magnetik Çekim Sistemi:</strong> Ana yemekler (main dish) tag listelerindeki uyumluluk kelimeleriyle 
+                                    diğer yemekleri magnetik olarak çekebilir. Örneğin mantarlı omlet ana yemeği "zeytin, peynir, domates" 
+                                    uyumluluk kelimelerine sahipse, otomatik planlama sırasında taglarında bu kelimeler geçen yan yemekler 
+                                    (Girit ezmesi, zeytinyağlı domates vb.) pozitif ayrımcılık alır.
+                                </div>
+
+                                <!-- Magnetik Çekim Ayarları -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-magnet"></i> Magnetik Çekim Sistemi</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="fc-magneticEnabled" checked>
+                                            <label class="form-check-label" for="fc-magneticEnabled">
+                                                <strong>Magnetik çekimi etkinleştir</strong>
+                                            </label>
+                                        </div>
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Magnetik Güç</label>
+                                                <select class="form-select" id="fc-magneticStrength">
+                                                    <option value="zayif">🔸 Zayıf (+20% puan)</option>
+                                                    <option value="orta" selected>🔶 Orta (+40% puan)</option>
+                                                    <option value="guclu">🔴 Güçlü (+80% puan)</option>
+                                                </select>
+                                                <small class="text-muted">Uyumlu yemeklere verilecek puan artışı</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Çekim Mesafesi</label>
+                                                <input type="range" class="form-range" id="fc-magneticRadius" 
+                                                       min="1" max="10" value="3">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>Aynı Öğün</small>
+                                                    <span id="fc-magneticRadius-value">3 öğün çapında</span>
+                                                    <small>Tüm Gün</small>
+                                                </div>
+                                                <small class="text-muted">Ana yemeğin kaç öğün etrafını etkileyeceği</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="fc-prioritizeMainDish">
+                                                <label class="form-check-label" for="fc-prioritizeMainDish">
+                                                    Ana yemekleri önce planla (magnetik etki için)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Uyumluluk Puanlama -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-chart-line"></i> Puanlama Sistemi</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Uyumluluk Ağırlığı</label>
+                                                <input type="range" class="form-range" id="fc-compatibilityWeight" 
+                                                       min="0" max="100" value="40">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>0%</small>
+                                                    <span id="fc-compatibilityWeight-value">40%</span>
+                                                    <small>100%</small>
+                                                </div>
+                                                <small class="text-muted">Toplam puan içinde uyumluluğun payı</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Uyumsuzluk Cezası</label>
+                                                <input type="range" class="form-range" id="fc-incompatiblePenalty" 
+                                                       min="0" max="100" value="30">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>0%</small>
+                                                    <span id="fc-incompatiblePenalty-value">-30%</span>
+                                                    <small>-100%</small>
+                                                </div>
+                                                <small class="text-muted">Uyumsuz yemeklere verilecek puan cezası</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gelişmiş Ayarlar -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-cogs"></i> Gelişmiş Ayarlar</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="fc-crossMealCompatibility">
+                                            <label class="form-check-label" for="fc-crossMealCompatibility">
+                                                Öğünler arası uyumluluk kontrolü
+                                            </label>
+                                        </div>
+                                        <small class="text-muted">Bir öğündeki ana yemek bir sonraki öğünü de etkilesin mi?</small>
+                                        
+                                        <div class="mt-3">
+                                            <label class="form-label">Tolerans Seviyesi</label>
+                                            <select class="form-select" id="fc-toleranceLevel">
+                                                <option value="yok">🔴 Yok - Sadece tam eşleşme</option>
+                                                <option value="dusuk">🟡 Düşük - Benzer kelimeler (%10 tolerans)</option>
+                                                <option value="orta" selected>🟢 Orta - Yakın anlamlı kelimeler (%30 tolerans)</option>
+                                                <option value="yuksek">🔵 Yüksek - Geniş tolerans (%50 tolerans)</option>
+                                            </select>
+                                            <small class="text-muted">Kelime eşleştirme hassasiyeti</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Önizleme -->
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6><i class="fas fa-eye"></i> Sistem Önizlemesi</h6>
+                                        <div id="fc-preview" class="small">
+                                            <div><strong>🧲 Magnetik Çekim:</strong> <span class="text-success">Orta güçte aktif</span> - Uyumlu yemekler %40 puan artışı alacak</div>
+                                            <div><strong>📏 Çekim Mesafesi:</strong> Ana yemeğin 3 öğün çapındaki yemekleri etkileyecek</div>
+                                            <div><strong>⚖️ Puanlama:</strong> Uyumluluk %40 ağırlık, uyumsuzluk -%30 ceza</div>
+                                            <div><strong>🎯 Tolerans:</strong> Orta seviye - yakın anlamlı kelimeler de eşleşecek</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-success" onclick="saveFoodCompatibilitySettings()">
+                                    <i class="fas fa-magnet"></i> Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Eğer modal zaten varsa kaldır
+            const existingModal = document.getElementById('foodCompatibilityModal');
+            if (existingModal) existingModal.remove();
+
+            // Modal'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('foodCompatibilityModal'));
+            modal.show();
+
+            // Form elemanlarını initialize et
+            initializeFoodCompatibilityForm();
+        }
+
+        function initializeFoodCompatibilityForm() {
+            // Slider değişikliklerini dinle
+            const magneticRadiusSlider = document.getElementById('fc-magneticRadius');
+            const magneticRadiusValue = document.getElementById('fc-magneticRadius-value');
+            const compatibilityWeightSlider = document.getElementById('fc-compatibilityWeight');
+            const compatibilityWeightValue = document.getElementById('fc-compatibilityWeight-value');
+            const incompatiblePenaltySlider = document.getElementById('fc-incompatiblePenalty');
+            const incompatiblePenaltyValue = document.getElementById('fc-incompatiblePenalty-value');
+
+            if (magneticRadiusSlider) {
+                magneticRadiusSlider.addEventListener('input', function() {
+                    const value = parseInt(this.value);
+                    magneticRadiusValue.textContent = value === 1 ? 'Aynı Öğün' : 
+                                                     value >= 10 ? 'Tüm Gün' : `${value} öğün çapında`;
+                    updateFoodCompatibilityPreview();
+                });
+            }
+
+            if (compatibilityWeightSlider) {
+                compatibilityWeightSlider.addEventListener('input', function() {
+                    compatibilityWeightValue.textContent = `${this.value}%`;
+                    updateFoodCompatibilityPreview();
+                });
+            }
+
+            if (incompatiblePenaltySlider) {
+                incompatiblePenaltySlider.addEventListener('input', function() {
+                    incompatiblePenaltyValue.textContent = `-${this.value}%`;
+                    updateFoodCompatibilityPreview();
+                });
+            }
+
+            // Diğer form elemanları için event listener'lar
+            ['fc-magneticEnabled', 'fc-magneticStrength', 'fc-toleranceLevel'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', updateFoodCompatibilityPreview);
+                }
+            });
+
+            // Mevcut ayarları yükle
+            loadSavedFoodCompatibilitySettings();
+            updateFoodCompatibilityPreview();
+        }
+
+        function updateFoodCompatibilityPreview() {
+            const enabled = document.getElementById('fc-magneticEnabled')?.checked;
+            const strength = document.getElementById('fc-magneticStrength')?.value;
+            const radius = document.getElementById('fc-magneticRadius')?.value;
+            const weight = document.getElementById('fc-compatibilityWeight')?.value;
+            const penalty = document.getElementById('fc-incompatiblePenalty')?.value;
+            const tolerance = document.getElementById('fc-toleranceLevel')?.value;
+
+            const strengthLabels = {
+                'zayif': 'Zayıf (+20%)',
+                'orta': 'Orta (+40%)', 
+                'guclu': 'Güçlü (+80%)'
+            };
+
+            const toleranceLabels = {
+                'yok': 'Sadece tam eşleşme',
+                'dusuk': 'Benzer kelimeler (%10 tolerans)',
+                'orta': 'Yakın anlamlı kelimeler (%30 tolerans)',
+                'yuksek': 'Geniş tolerans (%50 tolerans)'
+            };
+
+            const previewElement = document.getElementById('fc-preview');
+            if (previewElement) {
+                const statusColor = enabled ? 'text-success' : 'text-danger';
+                const statusText = enabled ? `${strengthLabels[strength] || 'Orta (+40%)'} aktif` : 'Devre dışı';
+                
+                previewElement.innerHTML = `
+                    <div><strong>🧲 Magnetik Çekim:</strong> <span class="${statusColor}">${statusText}</span></div>
+                    <div><strong>📏 Çekim Mesafesi:</strong> ${radius === '1' ? 'Aynı öğün' : radius >= '10' ? 'Tüm gün' : `${radius} öğün çapında`}</div>
+                    <div><strong>⚖️ Puanlama:</strong> Uyumluluk %${weight} ağırlık, uyumsuzluk -%${penalty} ceza</div>
+                    <div><strong>🎯 Tolerans:</strong> ${toleranceLabels[tolerance] || 'Orta seviye'}</div>
+                `;
+            }
+        }
+
+        function loadSavedFoodCompatibilitySettings() {
+            // GitHub'dan ayarları yükle
+            fetchCriteriaSettingFromGitHub('food_compatibility').then(settings => {
+                if (settings) {
+                    document.getElementById('fc-magneticEnabled').checked = settings.magneticEffect !== false;
+                    document.getElementById('fc-magneticStrength').value = settings.magneticStrength || 'orta';
+                    document.getElementById('fc-magneticRadius').value = settings.magneticRadius || 3;
+                    document.getElementById('fc-compatibilityWeight').value = (settings.compatibilityWeight || 0.4) * 100;
+                    document.getElementById('fc-incompatiblePenalty').value = Math.abs(settings.penalizeIncompatible || -0.3) * 100;
+                    document.getElementById('fc-toleranceLevel').value = settings.toleranceLevel || 'orta';
+                    document.getElementById('fc-crossMealCompatibility').checked = settings.crossMealCompatibility || false;
+                    document.getElementById('fc-prioritizeMainDish').checked = settings.prioritizeMainDish !== false;
+                    updateFoodCompatibilityPreview();
+                }
+            });
+        }
+
+        function saveFoodCompatibilitySettings() {
+            const settings = {
+                enabled: document.getElementById('fc-magneticEnabled').checked,
+                magneticEffect: document.getElementById('fc-magneticEnabled').checked,
+                magneticStrength: document.getElementById('fc-magneticStrength').value,
+                magneticRadius: parseInt(document.getElementById('fc-magneticRadius').value),
+                compatibilityWeight: parseInt(document.getElementById('fc-compatibilityWeight').value) / 100,
+                penalizeIncompatible: -parseInt(document.getElementById('fc-incompatiblePenalty').value) / 100,
+                toleranceLevel: document.getElementById('fc-toleranceLevel').value,
+                crossMealCompatibility: document.getElementById('fc-crossMealCompatibility').checked,
+                prioritizeMainDish: document.getElementById('fc-prioritizeMainDish').checked,
+                lastUpdated: new Date().toISOString()
+            };
+
+            console.log('🧲 Yemek uyumluluğu ayarları kaydediliyor:', settings);
+            
+            // GitHub'a kaydet
+            saveCriteriaSettingToGitHub('food_compatibility', settings);
+            
+            // Modal'ı kapat
+            bootstrap.Modal.getInstance(document.getElementById('foodCompatibilityModal')).hide();
+            
+            showToast('Yemek uyumluluğu ayarları kaydedildi', 'success');
+        }
+
+        // 🚫 Tag Çakışması Kontrolü Ayar Modalı
+        function openTagConflictsSettings() {
+            const modalHtml = `
+                <div class="modal fade" id="tagConflictsModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-ban text-warning"></i> Tag Çakışması Kontrolü
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>Çakışma Önleme Sistemi:</strong> Aynı öğünde yer alan yemeklerin tag'larında 
+                                    aynı kelimelerin olmasını engeller. Örneğin bir yemeğin tag'larında "zeytin, mantar, peynir" 
+                                    varsa, aynı öğündeki başka bir yemeğin tag'larında da "zeytin" kelimesi varsa bu iki yemek 
+                                    birlikte planlanamaz.
+                                </div>
+
+                                <!-- Temel Çakışma Kontrolü -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-shield-alt"></i> Çakışma Kontrolü</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="tc-enabled" checked>
+                                            <label class="form-check-label" for="tc-enabled">
+                                                <strong>Tag çakışması kontrolünü etkinleştir</strong>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="tc-strictMode" checked>
+                                            <label class="form-check-label" for="tc-strictMode">
+                                                Katı mod (tek çakışmada bile engelle)
+                                            </label>
+                                        </div>
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Çakışma Cezası</label>
+                                                <input type="range" class="form-range" id="tc-conflictPenalty" 
+                                                       min="0" max="100" value="70">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>Ceza Yok</small>
+                                                    <span id="tc-conflictPenalty-value">-70%</span>
+                                                    <small>Tam Engel</small>
+                                                </div>
+                                                <small class="text-muted">Çakışan yemeklere verilecek puan cezası</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Tolerans Seviyesi</label>
+                                                <select class="form-select" id="tc-toleranceLevel">
+                                                    <option value="yok">🔴 Yok - Tek çakışma bile yasak</option>
+                                                    <option value="dusuk" selected>🟡 Düşük - %10 tolerans</option>
+                                                    <option value="orta">🟢 Orta - %30 tolerans</option>
+                                                    <option value="yuksek">🔵 Yüksek - %50 tolerans</option>
+                                                </select>
+                                                <small class="text-muted">Kaç çakışmaya tolerans gösterilecek</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Muaf Tutulacak Tag'lar -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-check-circle"></i> Muaf Tag'lar</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <label class="form-label">Çakışma kontrolünden muaf tutulacak tag'lar</label>
+                                        <textarea class="form-control" id="tc-exemptTags" rows="3" 
+                                                  placeholder="sağlıklı, organik, doğal, taze (virgülle ayırın)">sağlıklı, organik, doğal</textarea>
+                                        <small class="text-muted">Bu kelimeler çakışırsa sorun olmaz (genel, zararsız kelimeler)</small>
+                                        
+                                        <div class="mt-3">
+                                            <h6>Önerilen Muaf Tag'lar:</h6>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('sağlıklı')">sağlıklı</span>
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('organik')">organik</span>
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('doğal')">doğal</span>
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('taze')">taze</span>
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('ev_yapımı')">ev yapımı</span>
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('lezzetli')">lezzetli</span>
+                                                <span class="badge bg-success exemptTagSuggestion" onclick="addExemptTag('besleyici')">besleyici</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gelişmiş Ayarlar -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-cogs"></i> Gelişmiş Ayarlar</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="tc-checkAllTags" checked>
+                                            <label class="form-check-label" for="tc-checkAllTags">
+                                                Tüm tag'ları kontrol et
+                                            </label>
+                                        </div>
+                                        <small class="text-muted">Kapalıysa sadece ana tag'lar kontrol edilir</small>
+                                        
+                                        <div class="form-check form-switch mt-3 mb-2">
+                                            <input class="form-check-input" type="checkbox" id="tc-crossMealConflicts">
+                                            <label class="form-check-label" for="tc-crossMealConflicts">
+                                                Öğünler arası çakışma kontrolü
+                                            </label>
+                                        </div>
+                                        <small class="text-muted">Farklı öğünlerdeki yemeklerin tag'ları da çakışmasın</small>
+                                        
+                                        <div class="form-check form-switch mt-3 mb-2">
+                                            <input class="form-check-input" type="checkbox" id="tc-ignoreCaseSensitive" checked>
+                                            <label class="form-check-label" for="tc-ignoreCaseSensitive">
+                                                Büyük/küçük harf duyarsız
+                                            </label>
+                                        </div>
+                                        <small class="text-muted">"Zeytin" ile "zeytin" aynı sayılsın</small>
+                                    </div>
+                                </div>
+
+                                <!-- Önizleme -->
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6><i class="fas fa-eye"></i> Sistem Önizlemesi</h6>
+                                        <div id="tc-preview" class="small">
+                                            <div><strong>🚫 Çakışma Kontrolü:</strong> <span class="text-success">Aktif</span> - Katı mod çalışıyor</div>
+                                            <div><strong>⚖️ Ceza Sistemi:</strong> Çakışan yemekler -%70 puan cezası alacak</div>
+                                            <div><strong>🎯 Tolerans:</strong> Düşük seviye - %10 çakışmaya tolerans</div>
+                                            <div><strong>🛡️ Muaf Tag'lar:</strong> 3 adet muaf kelime tanımlı</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-warning" onclick="saveTagConflictsSettings()">
+                                    <i class="fas fa-ban"></i> Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Eğer modal zaten varsa kaldır
+            const existingModal = document.getElementById('tagConflictsModal');
+            if (existingModal) existingModal.remove();
+
+            // Modal'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('tagConflictsModal'));
+            modal.show();
+
+            // Form elemanlarını initialize et
+            initializeTagConflictsForm();
+        }
+
+        function initializeTagConflictsForm() {
+            // Slider değişikliklerini dinle
+            const conflictPenaltySlider = document.getElementById('tc-conflictPenalty');
+            const conflictPenaltyValue = document.getElementById('tc-conflictPenalty-value');
+
+            if (conflictPenaltySlider) {
+                conflictPenaltySlider.addEventListener('input', function() {
+                    conflictPenaltyValue.textContent = `-${this.value}%`;
+                    updateTagConflictsPreview();
+                });
+            }
+
+            // Diğer form elemanları için event listener'lar
+            ['tc-enabled', 'tc-strictMode', 'tc-toleranceLevel', 'tc-checkAllTags', 'tc-crossMealConflicts', 'tc-ignoreCaseSensitive'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', updateTagConflictsPreview);
+                }
+            });
+
+            // Exempt tags textarea değişikliklerini dinle
+            const exemptTagsTextarea = document.getElementById('tc-exemptTags');
+            if (exemptTagsTextarea) {
+                exemptTagsTextarea.addEventListener('input', updateTagConflictsPreview);
+            }
+
+            // Mevcut ayarları yükle
+            loadSavedTagConflictsSettings();
+            updateTagConflictsPreview();
+        }
+
+        function addExemptTag(tag) {
+            const textarea = document.getElementById('tc-exemptTags');
+            if (textarea) {
+                const currentTags = textarea.value.split(',').map(t => t.trim()).filter(Boolean);
+                if (!currentTags.includes(tag)) {
+                    currentTags.push(tag);
+                    textarea.value = currentTags.join(', ');
+                    updateTagConflictsPreview();
+                }
+            }
+        }
+
+        function updateTagConflictsPreview() {
+            const enabled = document.getElementById('tc-enabled')?.checked;
+            const strict = document.getElementById('tc-strictMode')?.checked;
+            const penalty = document.getElementById('tc-conflictPenalty')?.value;
+            const tolerance = document.getElementById('tc-toleranceLevel')?.value;
+            const exemptTags = document.getElementById('tc-exemptTags')?.value || '';
+            
+            const toleranceLabels = {
+                'yok': 'Tek çakışma bile yasak',
+                'dusuk': '%10 çakışmaya tolerans',
+                'orta': '%30 çakışmaya tolerans',
+                'yuksek': '%50 çakışmaya tolerans'
+            };
+
+            const exemptTagCount = exemptTags.split(',').map(t => t.trim()).filter(Boolean).length;
+
+            const previewElement = document.getElementById('tc-preview');
+            if (previewElement) {
+                const statusColor = enabled ? 'text-success' : 'text-danger';
+                const statusText = enabled ? (strict ? 'Aktif - Katı mod çalışıyor' : 'Aktif - Esnek mod') : 'Devre dışı';
+                
+                previewElement.innerHTML = `
+                    <div><strong>🚫 Çakışma Kontrolü:</strong> <span class="${statusColor}">${statusText}</span></div>
+                    <div><strong>⚖️ Ceza Sistemi:</strong> Çakışan yemekler -%${penalty} puan cezası alacak</div>
+                    <div><strong>🎯 Tolerans:</strong> ${toleranceLabels[tolerance] || 'Düşük seviye'}</div>
+                    <div><strong>🛡️ Muaf Tag'lar:</strong> ${exemptTagCount} adet muaf kelime tanımlı</div>
+                `;
+            }
+        }
+
+        function loadSavedTagConflictsSettings() {
+            // GitHub'dan ayarları yükle
+            fetchCriteriaSettingFromGitHub('tag_conflicts').then(settings => {
+                if (settings) {
+                    document.getElementById('tc-enabled').checked = settings.enabled !== false;
+                    document.getElementById('tc-strictMode').checked = settings.strictMode !== false;
+                    document.getElementById('tc-conflictPenalty').value = Math.abs(settings.conflictPenalty || -0.7) * 100;
+                    document.getElementById('tc-toleranceLevel').value = settings.toleranceLevel || 'dusuk';
+                    document.getElementById('tc-exemptTags').value = (settings.exemptTags || ['sağlıklı', 'organik', 'doğal']).join(', ');
+                    document.getElementById('tc-checkAllTags').checked = settings.checkAllTags !== false;
+                    document.getElementById('tc-crossMealConflicts').checked = settings.crossMealConflicts || false;
+                    document.getElementById('tc-ignoreCaseSensitive').checked = settings.ignoreCaseSensitive !== false;
+                    updateTagConflictsPreview();
+                }
+            });
+        }
+
+        function saveTagConflictsSettings() {
+            const exemptTagsText = document.getElementById('tc-exemptTags').value || '';
+            const exemptTags = exemptTagsText.split(',').map(t => t.trim()).filter(Boolean);
+            
+            const settings = {
+                enabled: document.getElementById('tc-enabled').checked,
+                strictMode: document.getElementById('tc-strictMode').checked,
+                conflictPenalty: -parseInt(document.getElementById('tc-conflictPenalty').value) / 100,
+                toleranceLevel: document.getElementById('tc-toleranceLevel').value,
+                exemptTags: exemptTags,
+                checkAllTags: document.getElementById('tc-checkAllTags').checked,
+                crossMealConflicts: document.getElementById('tc-crossMealConflicts').checked,
+                ignoreCaseSensitive: document.getElementById('tc-ignoreCaseSensitive').checked,
+                allowSameMealTags: false, // Ters mantık
+                toleranceLevels: {
+                    'yok': 0.0,
+                    'dusuk': 0.1,
+                    'orta': 0.3,
+                    'yuksek': 0.5
+                },
+                lastUpdated: new Date().toISOString()
+            };
+
+            console.log('🚫 Tag çakışması ayarları kaydediliyor:', settings);
+            
+            // GitHub'a kaydet
+            saveCriteriaSettingToGitHub('tag_conflicts', settings);
+            
+            // Modal'ı kapat
+            bootstrap.Modal.getInstance(document.getElementById('tagConflictsModal')).hide();
+            
+            showToast('Tag çakışması ayarları kaydedildi', 'success');
+        }
+
+        // 🧲 Yemek Uyumluluk Algoritmaları
+        function checkMealCompatibility(mainMeal, sideMeals) {
+            if (!mainMeal || !mainMeal.compatibilityTags || mainMeal.compatibilityTags.length === 0) {
+                return { score: 0, matches: [] };
+            }
+
+            let totalScore = 0;
+            const matches = [];
+
+            sideMeals.forEach(sideMeal => {
+                if (!sideMeal.tags) return;
+
+                const compatibilityMatches = mainMeal.compatibilityTags.filter(compTag => 
+                    sideMeal.tags.some(sideTag => 
+                        sideTag.toLowerCase().includes(compTag.toLowerCase()) ||
+                        compTag.toLowerCase().includes(sideTag.toLowerCase())
+                    )
+                );
+
+                if (compatibilityMatches.length > 0) {
+                    const matchScore = compatibilityMatches.length * 10; // Her eşleşme +10 puan
+                    totalScore += matchScore;
+                    
+                    matches.push({
+                        meal: sideMeal.name,
+                        matchedTags: compatibilityMatches,
+                        score: matchScore
+                    });
+                }
+            });
+
+            return { score: totalScore, matches };
+        }
+
+        function checkMealConflicts(mealsInSameMeal) {
+            if (!mealsInSameMeal || mealsInSameMeal.length < 2) {
+                return { conflicts: 0, conflictTags: [] };
+            }
+
+            const allTags = [];
+            const tagSources = new Map();
+
+            // Tüm tagları topla
+            mealsInSameMeal.forEach(meal => {
+                if (meal.tags && meal.tags.length > 0) {
+                    meal.tags.forEach(tag => {
+                        const normalizedTag = tag.toLowerCase().trim();
+                        if (!tagSources.has(normalizedTag)) {
+                            tagSources.set(normalizedTag, []);
+                        }
+                        tagSources.get(normalizedTag).push(meal.name);
+                        allTags.push(normalizedTag);
+                    });
+                }
+            });
+
+            // Çakışmaları bul
+            const conflictTags = [];
+            let conflictCount = 0;
+
+            tagSources.forEach((sources, tag) => {
+                if (sources.length > 1) {
+                    conflictTags.push({
+                        tag: tag,
+                        conflictingMeals: sources,
+                        penalty: sources.length * 5 // Her çakışma -5 puan
+                    });
+                    conflictCount += sources.length - 1; // İlk yemek ceza almaz
+                }
+            });
+
+            const totalPenalty = conflictTags.reduce((sum, conflict) => sum + conflict.penalty, 0);
+
+            return {
+                conflicts: conflictCount,
+                conflictTags,
+                totalPenalty: -totalPenalty // Negatif ceza
+            };
+        }
+
+        function calculateCompatibilityScore(mealPlan, settings) {
+            if (!settings.enabled) return 0;
+
+            let totalScore = 0;
+            const compatibilityDetails = [];
+
+            // Her öğün için uyumluluk kontrolü
+            Object.keys(mealPlan).forEach(mealTime => {
+                const meals = mealPlan[mealTime];
+                if (!meals || meals.length === 0) return;
+
+                // Ana yemek bul
+                const mainDish = meals.find(meal => meal.role === 'main_dish');
+                if (!mainDish) return;
+
+                // Diğer yemekler
+                const sideMeals = meals.filter(meal => meal.role !== 'main_dish');
+
+                // Uyumluluk kontrolü
+                const compatibility = checkMealCompatibility(mainDish, sideMeals);
+                const conflicts = checkMealConflicts(meals);
+
+                const mealScore = (compatibility.score * settings.compatibilityWeight) + 
+                               (conflicts.totalPenalty * Math.abs(settings.penalizeIncompatible));
+
+                totalScore += mealScore;
+
+                compatibilityDetails.push({
+                    mealTime,
+                    mainDish: mainDish.name,
+                    compatibilityScore: compatibility.score,
+                    conflictPenalty: conflicts.totalPenalty,
+                    finalScore: mealScore,
+                    details: {
+                        matches: compatibility.matches,
+                        conflicts: conflicts.conflictTags
+                    }
+                });
+            });
+
+            return {
+                totalScore,
+                details: compatibilityDetails
+            };
         }
 
         // Makro Hedefler kriter ayarları
@@ -12760,6 +13500,335 @@
             showToast('Makro hedef ayarları kaydedildi', 'success');
         }
 
+        // Aktif öğünleri kontrol eden yardımcı fonksiyon
+        function checkActiveMeals() {
+            const activeMeals = {
+                breakfast: false,
+                snack1: false,
+                lunch: false,
+                snack2: false,
+                dinner: false
+            };
+            
+            // Varsayılan kalori dağılım değerleri
+            const defaultDistribution = {
+                breakfast: 25,
+                snack1: 10,
+                lunch: 30,
+                snack2: 10,
+                dinner: 25
+            };
+            
+            // Her öğün için fixed değeri kontrol et
+            const mealTypes = ['breakfast', 'snack1', 'lunch', 'snack2', 'dinner'];
+            
+            mealTypes.forEach(mealType => {
+                const fixedInput = document.getElementById(`${mealType}-fixed`);
+                const macroInput = document.getElementById(`${mealType}-macro`);
+                
+                if (fixedInput) {
+                    const fixedValue = parseInt(fixedInput.value) || 0;
+                    const hasFixedValue = fixedInput.type === 'number' && fixedInput.value !== '';
+                    
+                    // Öğünün aktiflik durumunu belirle
+                    const wasActive = activeMeals[mealType];
+                    activeMeals[mealType] = !hasFixedValue || (hasFixedValue && fixedValue > 0);
+                    
+                    // Eğer öğün yeni aktif hale geldiyse ve makro değeri 0 ise varsayılan değeri yükle
+                    if (macroInput && activeMeals[mealType] && parseInt(macroInput.value) === 0) {
+                        macroInput.value = defaultDistribution[mealType];
+                        logToConsole(`🔄 ${mealType} öğünü aktif hale geldi, varsayılan değer yüklendi: ${defaultDistribution[mealType]}%`);
+                        
+                        // Makro toplamını güncelle
+                        if (typeof updateMealMacroTotal === 'function') {
+                            updateMealMacroTotal();
+                        }
+                    }
+                    
+                    logToConsole(`🎯 ${mealType} öğünü aktiflik durumu: ${activeMeals[mealType]} (Sabit değer: ${hasFixedValue ? fixedValue : 'yok'})`);
+                }
+            });
+            
+            return activeMeals;
+        }
+
+        // Kalori Dağılımı kriter ayarları
+        function openCalorieDistributionSettings() {
+            // Aktif öğünleri kontrol et
+            const activeMeals = checkActiveMeals();
+            
+            // Aktif öğünler için HTML bloklarını oluştur
+            const mealSections = [];
+            
+            if (activeMeals.breakfast) {
+                mealSections.push(`
+                    <!-- Kahvaltı -->
+                    <div class="col-md-6 mb-3" id="cd-breakfast-section">
+                        <label class="form-label">🍳 Kahvaltı</label>
+                        <div class="input-group">
+                            <input type="range" class="form-range me-2" id="cd-breakfast" 
+                                   min="10" max="40" value="25" 
+                                   oninput="updateCalorieDistributionPreview()">
+                            <div class="input-group-text">
+                                <span id="cd-breakfast-value">25</span>%
+                            </div>
+                        </div>
+                        <small class="text-muted">Günlük kaloriden alınacak pay</small>
+                    </div>
+                `);
+            }
+            
+            if (activeMeals.snack1) {
+                mealSections.push(`
+                    <!-- Ara Öğün 1 -->
+                    <div class="col-md-6 mb-3" id="cd-snack1-section">
+                        <label class="form-label">🥤 Ara Öğün (Sabah)</label>
+                        <div class="input-group">
+                            <input type="range" class="form-range me-2" id="cd-snack1" 
+                                   min="5" max="25" value="10" 
+                                   oninput="updateCalorieDistributionPreview()">
+                            <div class="input-group-text">
+                                <span id="cd-snack1-value">10</span>%
+                            </div>
+                        </div>
+                        <small class="text-muted">Günlük kaloriden alınacak pay</small>
+                    </div>
+                `);
+            }
+            
+            if (activeMeals.lunch) {
+                mealSections.push(`
+                    <!-- Öğle -->
+                    <div class="col-md-6 mb-3" id="cd-lunch-section">
+                        <label class="form-label">�️ Öğle</label>
+                        <div class="input-group">
+                            <input type="range" class="form-range me-2" id="cd-lunch" 
+                                   min="20" max="45" value="30" 
+                                   oninput="updateCalorieDistributionPreview()">
+                            <div class="input-group-text">
+                                <span id="cd-lunch-value">30</span>%
+                            </div>
+                        </div>
+                        <small class="text-muted">Günlük kaloriden alınacak pay</small>
+                    </div>
+                `);
+            }
+            
+            if (activeMeals.snack2) {
+                mealSections.push(`
+                    <!-- Ara Öğün 2 -->
+                    <div class="col-md-6 mb-3" id="cd-snack2-section">
+                        <label class="form-label">🍪 Ara Öğün (Akşam)</label>
+                        <div class="input-group">
+                            <input type="range" class="form-range me-2" id="cd-snack2" 
+                                   min="5" max="25" value="10" 
+                                   oninput="updateCalorieDistributionPreview()">
+                            <div class="input-group-text">
+                                <span id="cd-snack2-value">10</span>%
+                            </div>
+                        </div>
+                        <small class="text-muted">Günlük kaloriden alınacak pay</small>
+                    </div>
+                `);
+            }
+            
+            if (activeMeals.dinner) {
+                mealSections.push(`
+                    <!-- Akşam -->
+                    <div class="col-md-6 mb-3" id="cd-dinner-section">
+                        <label class="form-label">� Akşam</label>
+                        <div class="input-group">
+                            <input type="range" class="form-range me-2" id="cd-dinner" 
+                                   min="15" max="40" value="25" 
+                                   oninput="updateCalorieDistributionPreview()">
+                            <div class="input-group-text">
+                                <span id="cd-dinner-value">25</span>%
+                            </div>
+                        </div>
+                        <small class="text-muted">Günlük kaloriden alınacak pay</small>
+                    </div>
+                `);
+            }
+            
+            // Modal HTML'i oluştur
+            const modalHtml = `
+                <div class="modal fade" id="calorieDistributionModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-chart-pie"></i> Kalori Dağılımı Ayarları
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Öğünlerin günlük kaloriden alacağı yüzdelik dağılımını belirleyin. Bu ayarlar sistem ayarlarındaki öğün makro dağılımı ile eşzamanlı güncellenir.
+                                </div>
+                                
+                                <!-- Mevcut Sistem Dağılımı -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6 class="mb-0"><i class="fas fa-info-circle"></i> Mevcut Sistem Dağılımı</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="cd-current-distribution">
+                                            <!-- Dinamik olarak doldurulacak -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Kalori Dağılımı Ayarları -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0"><i class="fas fa-cog"></i> Öğün Dağılımı Ayarları</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            ${mealSections.join('')}
+                                        </div>
+                                        
+                                        <!-- Toplam Kontrol -->
+                                        <div class="mt-3 p-3 bg-light rounded">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <strong>Toplam Dağılım:</strong>
+                                                <span id="cd-total-distribution" class="fs-5 text-success">100%</span>
+                                            </div>
+                                            <div class="progress mt-2" style="height: 8px;">
+                                                <div id="cd-progress-bar" class="progress-bar bg-success" 
+                                                     role="progressbar" style="width: 100%"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Önizleme -->
+                                        <div class="mt-3 p-3 border rounded">
+                                            <strong><i class="fas fa-eye"></i> Önizleme:</strong>
+                                            <div id="cd-settings-preview" class="mt-2">
+                                                <!-- Dinamik önizleme -->
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Otomatik Eşitleme -->
+                                        <div class="mt-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="cd-auto-sync" checked>
+                                                <label class="form-check-label" for="cd-auto-sync">
+                                                    Sistem ayarları ile otomatik eşitle
+                                                </label>
+                                            </div>
+                                            <small class="text-muted">Bu ayarlar değiştiğinde sistem ayarlarındaki öğün makro dağılımı da güncellenir</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" onclick="saveCalorieDistributionSettings()">Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Eğer modal zaten varsa kaldır
+            const existingModal = document.getElementById('calorieDistributionModal');
+            if (existingModal) existingModal.remove();
+
+            // Modal'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('calorieDistributionModal'));
+            modal.show();
+
+            // Form elemanlarını initialize et
+            initializeCalorieDistributionForm();
+        }
+
+        function initializeCalorieDistributionForm() {
+            // Mevcut sistem dağılımını göster
+            displayCurrentDistribution();
+            
+            // Mevcut ayarları yükle (varsa)
+            loadSavedCalorieDistributionSettings();
+            
+            // Slider değişikliklerini dinle
+            setupCalorieDistributionSliders();
+            
+            // Önizleme güncelle
+            updateCalorieDistributionPreview();
+        }
+
+        function displayCurrentDistribution() {
+            // Aktif öğünleri kontrol et
+            const activeMeals = checkActiveMeals();
+            
+            // Sistem ayarlarından mevcut değerleri al
+            const mealData = [
+                {key: 'breakfast', id: 'breakfast-macro', value: 25, icon: '🍳', name: 'Kahvaltı', color: 'primary', active: activeMeals.breakfast},
+                {key: 'snack1', id: 'snack1-macro', value: 10, icon: '🥤', name: 'Ara Öğün (Sabah)', color: 'info', active: activeMeals.snack1},
+                {key: 'lunch', id: 'lunch-macro', value: 30, icon: '🍽️', name: 'Öğle', color: 'success', active: activeMeals.lunch},
+                {key: 'snack2', id: 'snack2-macro', value: 10, icon: '🍪', name: 'Ara Öğün (Akşam)', color: 'warning', active: activeMeals.snack2},
+                {key: 'dinner', id: 'dinner-macro', value: 25, icon: '🌙', name: 'Akşam', color: 'danger', active: activeMeals.dinner}
+            ];
+            
+            // Aktif öğünlerin değerlerini al
+            mealData.forEach(meal => {
+                if (meal.active) {
+                    meal.value = parseInt(document.getElementById(meal.id)?.value) || meal.value;
+                }
+            });
+            
+            const targetCalories = parseInt(document.getElementById('calculated-calories')?.textContent) || 1850;
+            
+            // Sadece aktif öğünleri göster
+            const activeMealCards = mealData
+                .filter(meal => meal.active)
+                .map(meal => `
+                    <div class="col">
+                        <div class="card border-${meal.color}">
+                            <div class="card-body py-2">
+                                <div class="text-${meal.color} fw-bold">${meal.value}%</div>
+                                <div class="small">${meal.icon} ${meal.name}</div>
+                                <div class="small text-muted">${Math.round(targetCalories * meal.value / 100)} kcal</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            
+            const container = document.getElementById('cd-current-distribution');
+            
+            if (activeMealCards) {
+                container.innerHTML = `
+                    <div class="row text-center">
+                        ${activeMealCards}
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Hiç aktif öğün bulunamadı. Lütfen önce öğün ayarlarını kontrol edin.
+                    </div>
+                `;
+            }
+            
+            // Modal slider'larını da mevcut değerlerle doldur (sadece aktif öğünler için)
+            const sliders = mealData
+                .filter(meal => meal.active)
+                .map(meal => ({id: `cd-${meal.key}`, value: meal.value}));
+            
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider.id);
+                const valueSpan = document.getElementById(slider.id + '-value');
+                if (element && valueSpan) {
+                    element.value = slider.value;
+                    valueSpan.textContent = slider.value;
+                }
+            });
+        }
+
         function refreshCriteriaPriorities() {
             const container = document.getElementById('default-criteria-hierarchy');
             [...container.querySelectorAll('.criteria-item')].forEach((el, idx) => {
@@ -13126,6 +14195,176 @@
                     
                     return `<div class="small">${macroDetails.join(' • ')}</div>`;
                     
+                case 'calorie_distribution':
+                    let distributionDetails = [];
+                    
+                    if (setting.distribution) {
+                        const d = setting.distribution;
+                        distributionDetails.push(`Dağılım: 🍳${d.breakfast || 25}% 🥤${d.snack1 || 10}% 🍽️${d.lunch || 30}% 🍪${d.snack2 || 10}% 🌙${d.dinner || 25}%`);
+                        
+                        const total = (d.breakfast || 25) + (d.snack1 || 10) + (d.lunch || 30) + (d.snack2 || 10) + (d.dinner || 25);
+                        distributionDetails.push(`Toplam: ${total}%`);
+                    }
+                    
+                    if (setting.targetCalories) {
+                        distributionDetails.push(`Hedef kalori: ${setting.targetCalories} kcal`);
+                    }
+                    
+                    if (setting.autoSync) {
+                        distributionDetails.push('Otomatik eşitleme aktif');
+                    }
+                    
+                    return `<div class="small">${distributionDetails.join(' • ')}</div>`;
+                    
+                case 'auto_planning_methods':
+                    let methodDetails = [];
+                    
+                    const selectedMethod = setting.selectedMethod || 'genetic_algorithm';
+                    const algorithmNames = {
+                        'greedy': 'Açgözlü Algoritma',
+                        'random_search': 'Rastgele Arama',
+                        'genetic_algorithm': 'Genetik Algoritma',
+                        'simulated_annealing': 'Benzetimli Tavlama',
+                        'hill_climbing': 'Tepe Tırmanma',
+                        'constraint_satisfaction': 'Kısıt Sağlama'
+                    };
+                    
+                    methodDetails.push(`Seçili: ${algorithmNames[selectedMethod] || 'Bilinmeyen'}`);
+                    
+                    if (setting.methods?.[selectedMethod]?.iterations) {
+                        methodDetails.push(`İterasyon: ${setting.methods[selectedMethod].iterations}`);
+                    }
+                    
+                    if (setting.methods?.[selectedMethod]?.speed) {
+                        methodDetails.push(`Hız: ${setting.methods[selectedMethod].speed}`);
+                    }
+                    
+                    if (setting.methods?.[selectedMethod]?.quality) {
+                        methodDetails.push(`Kalite: ${setting.methods[selectedMethod].quality}`);
+                    }
+                    
+                    return `<div class="small">${methodDetails.join(' • ')}</div>`;
+                    
+                case 'system_rules':
+                    let rulesDetails = [];
+                    
+                    if (setting.enableHierarchy) rulesDetails.push('Hiyerarşik öncelik aktif');
+                    if (setting.strictMode) rulesDetails.push('Katı mod aktif');
+                    if (setting.allowOverride) rulesDetails.push('Manuel geçersizleştirme izinli');
+                    if (setting.priorityBasedScoring) rulesDetails.push('Öncelik bazlı skorlama');
+                    
+                    return `<div class="small">${rulesDetails.join(' • ')}</div>`;
+                    
+                case 'food_compatibility':
+                    let compatibilityDetails = [];
+                    
+                    const strengthLabels = {
+                        'zayif': 'Zayıf (+20%)',
+                        'orta': 'Orta (+40%)', 
+                        'guclu': 'Güçlü (+80%)'
+                    };
+                    
+                    if (setting.magneticEffect) {
+                        compatibilityDetails.push(`🧲 Magnetik çekim: ${strengthLabels[setting.magneticStrength] || 'Orta'}`);
+                        compatibilityDetails.push(`📏 Çekim mesafesi: ${setting.magneticRadius || 3} öğün`);
+                    } else {
+                        compatibilityDetails.push('🧲 Magnetik çekim devre dışı');
+                    }
+                    
+                    if (setting.compatibilityWeight) {
+                        compatibilityDetails.push(`⚖️ Ağırlık: ${Math.round(setting.compatibilityWeight * 100)}%`);
+                    }
+                    
+                    if (setting.penalizeIncompatible) {
+                        compatibilityDetails.push(`❌ Ceza: ${Math.round(Math.abs(setting.penalizeIncompatible) * 100)}%`);
+                    }
+                    
+                    const compatibilityToleranceLabels = {
+                        'yok': 'Tam eşleşme',
+                        'dusuk': 'Düşük tolerans',
+                        'orta': 'Orta tolerans',
+                        'yuksek': 'Yüksek tolerans'
+                    };
+                    compatibilityDetails.push(`🎯 ${compatibilityToleranceLabels[setting.toleranceLevel] || 'Orta tolerans'}`);
+                    
+                    if (setting.prioritizeMainDish) compatibilityDetails.push('Ana yemek önceliği aktif');
+                    if (setting.crossMealCompatibility) compatibilityDetails.push('Öğünler arası uyumluluk aktif');
+                    
+                    return `<div class="small">${compatibilityDetails.join(' • ')}</div>`;
+                    
+                case 'tag_conflicts':
+                    let conflictsDetails = [];
+                    
+                    if (setting.enabled) {
+                        conflictsDetails.push('🚫 Çakışma kontrolü aktif');
+                        if (setting.strictMode) conflictsDetails.push('Katı mod');
+                    } else {
+                        conflictsDetails.push('🚫 Çakışma kontrolü devre dışı');
+                    }
+                    
+                    if (setting.conflictPenalty) {
+                        conflictsDetails.push(`⚖️ Ceza: ${Math.round(Math.abs(setting.conflictPenalty) * 100)}%`);
+                    }
+                    
+                    const conflictsToleranceLabels = {
+                        'yok': 'Tolerans yok',
+                        'dusuk': 'Düşük tolerans',
+                        'orta': 'Orta tolerans',
+                        'yuksek': 'Yüksek tolerans'
+                    };
+                    conflictsDetails.push(`🎯 ${conflictsToleranceLabels[setting.toleranceLevel] || 'Düşük tolerans'}`);
+                    
+                    if (setting.exemptTags?.length) {
+                        conflictsDetails.push(`🛡️ ${setting.exemptTags.length} muaf tag`);
+                    }
+                    
+                    if (setting.checkAllTags) conflictsDetails.push('Tüm tag\'lar kontrol ediliyor');
+                    if (setting.crossMealConflicts) conflictsDetails.push('Öğünler arası çakışma kontrolü');
+                    if (setting.ignoreCaseSensitive) conflictsDetails.push('Büyük/küçük harf duyarsız');
+                    
+                    return `<div class="small">${conflictsDetails.join(' • ')}</div>`;
+                    
+                case 'liked_foods':
+                    let likedDetails = [];
+                    
+                    if (setting.boostFrequency) likedDetails.push(`Sıklık artışı: ${Math.round(setting.boostFrequency * 100)}%`);
+                    if (setting.keywordMatching) likedDetails.push('Anahtar kelime eşleşme');
+                    if (setting.tagMatching) likedDetails.push('Etiket eşleşme');
+                    if (setting.preferenceWeight) likedDetails.push(`Tercih ağırlığı: ${Math.round(setting.preferenceWeight * 100)}%`);
+                    
+                    return `<div class="small">${likedDetails.join(' • ')}</div>`;
+                    
+                case 'allergies_dislikes':
+                    let allergyDetails = [];
+                    
+                    if (setting.checkAllergies) allergyDetails.push('Alerji kontrolü aktif');
+                    if (setting.checkDislikes) allergyDetails.push('Sevmediği kontrolü aktif');
+                    if (setting.strictMode) allergyDetails.push('Katı mod');
+                    if (setting.absoluteBlock) allergyDetails.push('Mutlak engelleme');
+                    if (setting.keywordMatching) allergyDetails.push('Anahtar kelime');
+                    if (setting.tagMatching) allergyDetails.push('Etiket eşleşme');
+                    
+                    return `<div class="small">${allergyDetails.join(' • ')}</div>`;
+                    
+                case 'filler_foods':
+                    let fillerDetails = [];
+                    
+                    if (setting.enabled) fillerDetails.push('Dolgu yemekler aktif');
+                    if (setting.maxFillersPerMeal) fillerDetails.push(`Max öğün başına: ${setting.maxFillersPerMeal}`);
+                    if (setting.prioritizeProtein) fillerDetails.push('Protein öncelikli');
+                    if (setting.minCalorieGap) fillerDetails.push(`Min kalori açığı: ${setting.minCalorieGap}`);
+                    if (setting.maxCalorieGap) fillerDetails.push(`Max kalori açığı: ${setting.maxCalorieGap}`);
+                    if (setting.fillerTypes?.length) fillerDetails.push(`Türler: ${setting.fillerTypes.slice(0, 3).join(', ')}${setting.fillerTypes.length > 3 ? '...' : ''}`);
+                    
+                    return `<div class="small">${fillerDetails.join(' • ')}</div>`;
+                    
+                    
+                    if (setting.updatedFrom === 'system_meal_macros') {
+                        distributionDetails.push('Sistem ayarlarından güncellendi');
+                    }
+                    
+                    return `<div class="small">${distributionDetails.join(' • ')}</div>`;
+                    
                 default:
                     return `<div class="small text-muted">Detaylar mevcut değil</div>`;
             }
@@ -13146,7 +14385,9 @@
                 'food_groups': 'Besin Grupları',
                 'cooking_methods': 'Pişirme Yöntemleri',
                 'budget_constraints': 'Bütçe Kısıtlamaları',
-                'preparation_time': 'Hazırlık Süresi'
+                'preparation_time': 'Hazırlık Süresi',
+                'food_compatibility': 'Yemek Uyumluluğu',
+                'tag_conflicts': 'Tag Çakışma Kontrolü'
             };
             return labels[criteriaId] || criteriaId;
         }
@@ -13168,6 +14409,32 @@
                 openMacroTargetsSettings();
                 
                 // Mevcut ayarları yüklemek için initialize fonksiyonunda zaten yapılıyor
+            } else if (criteriaId === 'calorie_distribution') {
+                // Kalori dağılımı modal'ını aç ve mevcut verileri yükle
+                openCalorieDistributionSettings();
+                
+                // Mevcut ayarları yüklemek için initialize fonksiyonunda zaten yapılıyor
+            } else if (criteriaId === 'auto_planning_methods') {
+                // Otomatik planlama yöntemleri modal'ını aç
+                openAutoPlanningMethodsSettings();
+            } else if (criteriaId === 'system_rules') {
+                // Sistem kuralları modal'ını aç
+                openSystemRulesSettings();
+            } else if (criteriaId === 'liked_foods') {
+                // Sevilen yemekler modal'ını aç
+                openLikedFoodsSettings();
+            } else if (criteriaId === 'allergies_dislikes') {
+                // Alerji ve sevmediği gıdalar modal'ını aç
+                openAllergiesDislikesSettings();
+            } else if (criteriaId === 'filler_foods') {
+                // Dolgu yemekler modal'ını aç
+                openFillerFoodsSettings();
+            } else if (criteriaId === 'food_compatibility') {
+                // Yemek uyumluluğu modal'ını aç
+                openFoodCompatibilitySettings();
+            } else if (criteriaId === 'tag_conflicts') {
+                // Tag çakışması modal'ını aç
+                openTagConflictsSettings();
             } else {
                 showToast(`${getCriteriaLabel(criteriaId)} düzenleme henüz mevcut değil`, 'info');
             }
@@ -18278,7 +19545,1006 @@ Desteklenen Dosyalar:
                     }
                 });
             }
+            
+            // Öğün fixed input'larına olay dinleyicileri ekle
+            const mealTypes = ['breakfast', 'snack1', 'lunch', 'snack2', 'dinner'];
+            mealTypes.forEach(mealType => {
+                const fixedInput = document.getElementById(`${mealType}-fixed`);
+                if (fixedInput) {
+                    fixedInput.addEventListener('input', function() {
+                        // Aktif öğünleri kontrol et ve gerekirse varsayılan değerleri yükle
+                        setTimeout(() => {
+                            checkActiveMeals();
+                        }, 100); // Kısa gecikme ile çalıştır
+                    });
+                    
+                    fixedInput.addEventListener('change', function() {
+                        // Aktif öğünleri kontrol et ve gerekirse varsayılan değerleri yükle
+                        setTimeout(() => {
+                            checkActiveMeals();
+                        }, 100); // Kısa gecikme ile çalıştır
+                    });
+                }
+            });
         });
+
+        // Kalori dağılımı fonksiyonları - devamı
+        function setupCalorieDistributionSliders() {
+            const sliders = ['cd-breakfast', 'cd-snack1', 'cd-lunch', 'cd-snack2', 'cd-dinner'];
+            
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueSpan = document.getElementById(sliderId + '-value');
+                
+                if (slider && valueSpan) {
+                    slider.addEventListener('input', function() {
+                        valueSpan.textContent = this.value;
+                        updateCalorieDistributionPreview();
+                        
+                        // Otomatik eşitleme açıksa sistem ayarlarını da güncelle
+                        if (document.getElementById('cd-auto-sync')?.checked) {
+                            syncToSystemMealMacros();
+                        }
+                    });
+                }
+            });
+        }
+
+        function updateCalorieDistributionPreview() {
+            // Aktif öğünleri kontrol et
+            const activeMeals = checkActiveMeals();
+            
+            // Aktif öğünlerin değerlerini al
+            const mealData = [];
+            let total = 0;
+            
+            if (activeMeals.breakfast) {
+                const breakfast = parseInt(document.getElementById('cd-breakfast')?.value) || 25;
+                mealData.push({key: 'breakfast', value: breakfast, icon: '🍳', name: 'Kahvaltı', color: 'primary'});
+                total += breakfast;
+                
+                // Value span'ı güncelle
+                const valueSpan = document.getElementById('cd-breakfast-value');
+                if (valueSpan) valueSpan.textContent = breakfast;
+            }
+            
+            if (activeMeals.snack1) {
+                const snack1 = parseInt(document.getElementById('cd-snack1')?.value) || 10;
+                mealData.push({key: 'snack1', value: snack1, icon: '🥤', name: 'Ara Öğün (Sabah)', color: 'info'});
+                total += snack1;
+                
+                // Value span'ı güncelle
+                const valueSpan = document.getElementById('cd-snack1-value');
+                if (valueSpan) valueSpan.textContent = snack1;
+            }
+            
+            if (activeMeals.lunch) {
+                const lunch = parseInt(document.getElementById('cd-lunch')?.value) || 30;
+                mealData.push({key: 'lunch', value: lunch, icon: '🍽️', name: 'Öğle', color: 'success'});
+                total += lunch;
+                
+                // Value span'ı güncelle
+                const valueSpan = document.getElementById('cd-lunch-value');
+                if (valueSpan) valueSpan.textContent = lunch;
+            }
+            
+            if (activeMeals.snack2) {
+                const snack2 = parseInt(document.getElementById('cd-snack2')?.value) || 10;
+                mealData.push({key: 'snack2', value: snack2, icon: '🍪', name: 'Ara Öğün (Akşam)', color: 'warning'});
+                total += snack2;
+                
+                // Value span'ı güncelle
+                const valueSpan = document.getElementById('cd-snack2-value');
+                if (valueSpan) valueSpan.textContent = snack2;
+            }
+            
+            if (activeMeals.dinner) {
+                const dinner = parseInt(document.getElementById('cd-dinner')?.value) || 25;
+                mealData.push({key: 'dinner', value: dinner, icon: '🌙', name: 'Akşam', color: 'danger'});
+                total += dinner;
+                
+                // Value span'ı güncelle
+                const valueSpan = document.getElementById('cd-dinner-value');
+                if (valueSpan) valueSpan.textContent = dinner;
+            }
+            
+            const targetCalories = parseInt(document.getElementById('calculated-calories')?.textContent) || 1850;
+            
+            // Toplam kontrolü güncelle
+            const totalElement = document.getElementById('cd-total-distribution');
+            const progressBar = document.getElementById('cd-progress-bar');
+            
+            if (totalElement && progressBar) {
+                if (total === 100) {
+                    totalElement.textContent = `${total}%`;
+                    totalElement.className = 'fs-5 text-success';
+                    progressBar.className = 'progress-bar bg-success';
+                    progressBar.style.width = '100%';
+                } else {
+                    const diff = total - 100;
+                    const sign = diff >= 0 ? '+' : '';
+                    totalElement.textContent = `${total}% (${sign}${diff})`;
+                    totalElement.className = 'fs-5 text-danger';
+                    progressBar.className = 'progress-bar bg-danger';
+                    progressBar.style.width = `${Math.min(total, 100)}%`;
+                }
+            }
+            
+            // Önizleme güncelle - sadece aktif öğünler
+            const previewElement = document.getElementById('cd-settings-preview');
+            if (previewElement) {
+                const previewCards = mealData.map(meal => `
+                    <div class="col">
+                        <div class="text-${meal.color} fw-bold">${meal.value}%</div>
+                        <div class="small">${meal.icon} ${meal.name}</div>
+                        <div class="small text-muted">${Math.round(targetCalories * meal.value / 100)} kcal</div>
+                    </div>
+                `).join('');
+                
+                previewElement.innerHTML = `
+                    <div class="row text-center">
+                        ${previewCards}
+                    </div>
+                `;
+            }
+        }
+
+        function syncToSystemMealMacros() {
+            // Aktif öğünleri kontrol et
+            const activeMeals = checkActiveMeals();
+            
+            // Modal'daki değerleri sistem ayarlarına uygula - sadece aktif öğünler için
+            const syncData = [];
+            
+            if (activeMeals.breakfast) {
+                const breakfast = parseInt(document.getElementById('cd-breakfast')?.value) || 25;
+                syncData.push({id: 'breakfast-macro', value: breakfast, name: 'Kahvaltı'});
+            }
+            
+            if (activeMeals.snack1) {
+                const snack1 = parseInt(document.getElementById('cd-snack1')?.value) || 10;
+                syncData.push({id: 'snack1-macro', value: snack1, name: 'Ara Öğün 1'});
+            }
+            
+            if (activeMeals.lunch) {
+                const lunch = parseInt(document.getElementById('cd-lunch')?.value) || 30;
+                syncData.push({id: 'lunch-macro', value: lunch, name: 'Öğle'});
+            }
+            
+            if (activeMeals.snack2) {
+                const snack2 = parseInt(document.getElementById('cd-snack2')?.value) || 10;
+                syncData.push({id: 'snack2-macro', value: snack2, name: 'Ara Öğün 2'});
+            }
+            
+            if (activeMeals.dinner) {
+                const dinner = parseInt(document.getElementById('cd-dinner')?.value) || 25;
+                syncData.push({id: 'dinner-macro', value: dinner, name: 'Akşam'});
+            }
+            
+            // Sistem ayarlarındaki input'ları güncelle
+            syncData.forEach(input => {
+                const element = document.getElementById(input.id);
+                if (element) {
+                    element.value = input.value;
+                    logToConsole(`🔄 ${input.name} makro değeri güncellendi: ${input.value}%`);
+                }
+            });
+            
+            // Sistem ayarlarındaki toplamı güncelle
+            if (typeof updateMealMacroTotal === 'function') {
+                updateMealMacroTotal();
+            }
+            
+            const activeMealNames = syncData.map(s => s.name).join(', ');
+            console.log(`🔄 Kalori dağılımı sistem ayarlarına eşitlendi - Aktif öğünler: ${activeMealNames}`);
+        }
+
+        function loadSavedCalorieDistributionSettings() {
+            // Kaydedilmiş ayarları yükle
+            const savedSettings = window.EMBEDDED_DATA?.criteriaSettings?.calorie_distribution;
+            if (savedSettings) {
+                console.log('📋 Kaydedilmiş kalori dağılım ayarları yükleniyor...', savedSettings);
+                
+                // Slider değerlerini yükle
+                const meals = ['breakfast', 'snack1', 'lunch', 'snack2', 'dinner'];
+                meals.forEach(meal => {
+                    if (savedSettings.distribution && savedSettings.distribution[meal]) {
+                        const slider = document.getElementById(`cd-${meal}`);
+                        const valueSpan = document.getElementById(`cd-${meal}-value`);
+                        
+                        if (slider && valueSpan) {
+                            slider.value = savedSettings.distribution[meal];
+                            valueSpan.textContent = savedSettings.distribution[meal];
+                        }
+                    }
+                });
+                
+                // Otomatik eşitleme ayarı
+                if (typeof savedSettings.autoSync === 'boolean') {
+                    const autoSyncCheckbox = document.getElementById('cd-auto-sync');
+                    if (autoSyncCheckbox) {
+                        autoSyncCheckbox.checked = savedSettings.autoSync;
+                    }
+                }
+                
+                // Önizleme güncelle
+                updateCalorieDistributionPreview();
+            }
+        }
+
+        function saveCalorieDistributionSettings() {
+            const settings = {
+                distribution: {
+                    breakfast: parseInt(document.getElementById('cd-breakfast')?.value) || 25,
+                    snack1: parseInt(document.getElementById('cd-snack1')?.value) || 10,
+                    lunch: parseInt(document.getElementById('cd-lunch')?.value) || 30,
+                    snack2: parseInt(document.getElementById('cd-snack2')?.value) || 10,
+                    dinner: parseInt(document.getElementById('cd-dinner')?.value) || 25
+                },
+                autoSync: document.getElementById('cd-auto-sync')?.checked || true,
+                targetCalories: parseInt(document.getElementById('calculated-calories')?.textContent) || 1850
+            };
+
+            console.log('🔧 Kalori dağılımı ayarları kaydediliyor:', settings);
+            
+            // Son kez sistem ayarlarını eşitle
+            if (settings.autoSync) {
+                syncToSystemMealMacros();
+            }
+            
+            // GitHub'a kaydet
+            saveCriteriaSettingToGitHub('calorie_distribution', settings);
+            
+            // Modal'ı kapat
+            bootstrap.Modal.getInstance(document.getElementById('calorieDistributionModal')).hide();
+            
+            showToast('Kalori dağılımı ayarları kaydedildi', 'success');
+        }
+
+        // Sistem ayarlarından kalori dağılımı kriterine senkronizasyon
+        function syncMealMacrosToCalorieDistribution() {
+            // Aktif öğünleri kontrol et
+            const activeMeals = checkActiveMeals();
+            
+            // Mevcut sistem ayarlarından değerleri al - sadece aktif öğünler için
+            const distribution = {};
+            const activeMealData = [];
+            
+            if (activeMeals.breakfast) {
+                const breakfast = parseInt(document.getElementById('breakfast-macro')?.value) || 25;
+                distribution.breakfast = breakfast;
+                activeMealData.push({name: 'Kahvaltı', value: breakfast});
+            }
+            
+            if (activeMeals.snack1) {
+                const snack1 = parseInt(document.getElementById('snack1-macro')?.value) || 10;
+                distribution.snack1 = snack1;
+                activeMealData.push({name: 'Ara Öğün 1', value: snack1});
+            }
+            
+            if (activeMeals.lunch) {
+                const lunch = parseInt(document.getElementById('lunch-macro')?.value) || 30;
+                distribution.lunch = lunch;
+                activeMealData.push({name: 'Öğle', value: lunch});
+            }
+            
+            if (activeMeals.snack2) {
+                const snack2 = parseInt(document.getElementById('snack2-macro')?.value) || 10;
+                distribution.snack2 = snack2;
+                activeMealData.push({name: 'Ara Öğün 2', value: snack2});
+            }
+            
+            if (activeMeals.dinner) {
+                const dinner = parseInt(document.getElementById('dinner-macro')?.value) || 25;
+                distribution.dinner = dinner;
+                activeMealData.push({name: 'Akşam', value: dinner});
+            }
+            
+            // Kalori dağılımı ayarlarını otomatik kaydet
+            const settings = {
+                distribution: distribution,
+                activeMeals: activeMeals,
+                autoSync: true,
+                targetCalories: parseInt(document.getElementById('calculated-calories')?.textContent) || 1850,
+                updatedFrom: 'system_meal_macros',
+                lastUpdated: new Date().toISOString()
+            };
+            
+            const activeMealNames = activeMealData.map(m => `${m.name}:${m.value}%`).join(', ');
+            console.log(`🔄 Sistem öğün makrolarından kalori dağılımı kriteri güncelleniyor - Aktif öğünler: ${activeMealNames}`);
+            
+            // Kalori dağılımı kriteri ayarlarını GitHub'a kaydet
+            saveCriteriaSettingToGitHub('calorie_distribution', settings);
+        }
+
+        // Otomatik Planlama Yöntemleri Ayar Modal'ı
+        function openAutoPlanningMethodsSettings() {
+            const modalHtml = `
+                <div class="modal fade" id="autoPlanningMethodsModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-robot"></i> Otomatik Planlama Yöntemleri
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Makro hedeflere ulaşmak için kullanılacak algoritma yöntemini ve iterasyon sayısını seçin. Her yöntemin kendine özgü avantaj ve dezavantajları vardır.
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="mb-0"><i class="fas fa-cogs"></i> Algoritma Yöntemleri</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="apm-method-options">
+                                                    <!-- Dinamik olarak doldurulacak -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Kriter Etkinleştirme Panel'i -->
+                                        <div class="card mt-3">
+                                            <div class="card-header">
+                                                <h6 class="mb-0"><i class="fas fa-toggles"></i> Otomatik Planlama Kriter Kontrolü</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="alert alert-info small">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    Otomatik planlamada hangi kriterlerin dikkate alınacağını seçin. Kapalı kriterler algoritma tarafından göz ardı edilir.
+                                                </div>
+                                                <div id="apm-criteria-toggles">
+                                                    <!-- Dinamik olarak doldurulacak -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Seçili Yöntem Detayları</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="apm-method-details">
+                                                    <!-- Seçili yöntem detayları -->
+                                                </div>
+                                                
+                                                <hr>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">İterasyon Sayısı:</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" id="apm-iterations" 
+                                                               min="50" max="2000" value="500">
+                                                        <span class="input-group-text">döngü</span>
+                                                    </div>
+                                                    <small class="text-muted">Algoritmanın deneme sayısı</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card mt-3">
+                                            <div class="card-header">
+                                                <h6 class="mb-0"><i class="fas fa-chart-line"></i> Performans Simülasyonu</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="apm-performance-preview">
+                                                    <!-- Performans önizlemesi -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" onclick="saveAutoPlanningMethodsSettings()">Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Eğer modal zaten varsa kaldır
+            const existingModal = document.getElementById('autoPlanningMethodsModal');
+            if (existingModal) existingModal.remove();
+
+            // Modal'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('autoPlanningMethodsModal'));
+            modal.show();
+
+            // Form elemanlarını initialize et
+            initializeAutoPlanningMethodsForm();
+            
+            // Kriter toggle'larını initialize et
+            initializeCriteriaToggles();
+        }
+
+        function initializeCriteriaToggles() {
+            // Mevcut kriter durumlarını al
+            const criteriaStates = window.EMBEDDED_DATA?.criteriaStates || {};
+            
+            // Tüm kriterlerin listesi ve açıklamaları
+            const allCriteria = [
+                {
+                    id: 'macro_targets',
+                    name: 'Makro Hedefler',
+                    description: 'Protein, karbonhidrat, yağ hedefleri',
+                    weight: 100,
+                    critical: true
+                },
+                {
+                    id: 'system_rules',
+                    name: 'Sistem Kuralları',
+                    description: 'Kullanıcı tanımlı özel kurallar',
+                    weight: 85,
+                    critical: false
+                },
+                {
+                    id: 'allergies_dislikes',
+                    name: 'Alerji & Sevmediği',
+                    description: 'Mutlak engellemeler ve kısıtlamalar',
+                    weight: 95,
+                    critical: true
+                },
+                {
+                    id: 'liked_foods',
+                    name: 'Sevilen Yemekler',
+                    description: 'Pozitif ayrımcılık yapılacak yemekler',
+                    weight: 70,
+                    critical: false
+                },
+                {
+                    id: 'filler_foods',
+                    name: 'Dolgu Yemekler',
+                    description: 'Makro hedeflere ulaşmak için ek yemekler',
+                    weight: 45,
+                    critical: false
+                },
+                {
+                    id: 'repetition_frequency',
+                    name: 'Tekrar Sıklığı',
+                    description: 'Yemeklerin tekrar sıklık kontrolü',
+                    weight: 60,
+                    critical: false
+                }
+            ];
+
+            const container = document.getElementById('apm-criteria-toggles');
+            let togglesHtml = '';
+
+            allCriteria.forEach(criteria => {
+                const isEnabled = criteriaStates[criteria.id] !== false;
+                const criticalBadge = criteria.critical ? '<span class="badge bg-danger ms-1">Kritik</span>' : '';
+                const weightBadge = `<span class="badge bg-secondary ms-1">Ağırlık: ${criteria.weight}</span>`;
+
+                togglesHtml += `
+                    <div class="row align-items-center mb-2 border-bottom pb-2">
+                        <div class="col-1">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" 
+                                       id="apm-criteria-${criteria.id}" 
+                                       ${isEnabled ? 'checked' : ''}
+                                       ${criteria.critical ? 'disabled title="Kritik kriterler devre dışı bırakılamaz"' : ''}
+                                       onchange="toggleCriteriaForPlanning('${criteria.id}', this.checked)">
+                            </div>
+                        </div>
+                        <div class="col-11">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>${criteria.name}</strong>
+                                    ${criticalBadge}
+                                    ${weightBadge}
+                                    <div class="small text-muted">${criteria.description}</div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge ${isEnabled ? 'bg-success' : 'bg-secondary'}">
+                                        ${isEnabled ? '✓ Aktif' : '✗ Pasif'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = togglesHtml;
+        }
+
+        function toggleCriteriaForPlanning(criteriaId, isEnabled) {
+            console.log(`🔄 Otomatik planlama için ${criteriaId} kriteri: ${isEnabled ? 'aktif' : 'pasif'}`);
+            
+            // Badge'i güncelle
+            const toggleRow = document.getElementById(`apm-criteria-${criteriaId}`)?.closest('.row');
+            if (toggleRow) {
+                const statusBadge = toggleRow.querySelector('.badge:last-child');
+                if (statusBadge) {
+                    statusBadge.className = `badge ${isEnabled ? 'bg-success' : 'bg-secondary'}`;
+                    statusBadge.textContent = isEnabled ? '✓ Aktif' : '✗ Pasif';
+                }
+            }
+            
+            // Seçili algoritmanın desteklediği kriterleri kontrol et
+            checkAlgorithmCriteriaCompatibility();
+        }
+
+        function checkAlgorithmCriteriaCompatibility() {
+            const selectedMethodInput = document.querySelector('input[name="apm-method"]:checked');
+            if (!selectedMethodInput) return;
+
+            const methodId = selectedMethodInput.value;
+            const planningData = window.EMBEDDED_DATA?.factorSettings?.auto_planning_methods;
+            const methodData = planningData?.methods?.[methodId];
+            const supportedCriteria = methodData?.supportedCriteria || [];
+
+            // Etkin kriterleri bul
+            const enabledCriteria = [];
+            document.querySelectorAll('#apm-criteria-toggles input[type="checkbox"]:checked').forEach(checkbox => {
+                const criteriaId = checkbox.id.replace('apm-criteria-', '');
+                enabledCriteria.push(criteriaId);
+            });
+
+            // Uyumluluk kontrolü
+            const compatibleCriteria = enabledCriteria.filter(criteria => supportedCriteria.includes(criteria));
+            const incompatibleCriteria = enabledCriteria.filter(criteria => !supportedCriteria.includes(criteria));
+
+            // Uyarı göster
+            if (incompatibleCriteria.length > 0) {
+                const warningDiv = document.getElementById('algorithm-compatibility-warning') || createCompatibilityWarning();
+                warningDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Uyumluluk Uyarısı:</strong> 
+                        Seçili algoritma (<strong>${methodData?.name}</strong>) şu kriterleri desteklemiyor:
+                        <br>
+                        ${incompatibleCriteria.map(c => `<span class="badge bg-warning text-dark me-1">${getCriteriaLabel(c)}</span>`).join('')}
+                        <br>
+                        <small class="text-muted">Bu kriterler otomatik planlama sırasında göz ardı edilecektir.</small>
+                    </div>
+                `;
+            } else {
+                const warningDiv = document.getElementById('algorithm-compatibility-warning');
+                if (warningDiv) warningDiv.innerHTML = '';
+            }
+        }
+
+        function createCompatibilityWarning() {
+            const warningDiv = document.createElement('div');
+            warningDiv.id = 'algorithm-compatibility-warning';
+            
+            const modalBody = document.querySelector('#autoPlanningMethodsModal .modal-body');
+            if (modalBody) {
+                modalBody.appendChild(warningDiv);
+            }
+            
+            return warningDiv;
+        }
+
+        function getCriteriaLabel(criteriaId) {
+            const labels = {
+                'macro_targets': 'Makro Hedefler',
+                'auto_planning_methods': 'Planlama Yöntemleri',
+                'system_rules': 'Sistem Kuralları',
+                'liked_foods': 'Sevilen Yemekler',
+                'allergies_dislikes': 'Alerji & Sevmediği',
+                'filler_foods': 'Dolgu Yemekler',
+                'repetition_frequency': 'Tekrar Sıklığı',
+                'calorie_distribution': 'Kalori Dağılımı'
+            };
+            return labels[criteriaId] || criteriaId;
+        }
+
+        function initializeAutoPlanningMethodsForm() {
+            // Planlama yöntemlerini yükle
+            const planningData = window.EMBEDDED_DATA?.factorSettings?.auto_planning_methods;
+            const methods = planningData?.methods || {};
+            const selectedMethod = planningData?.selectedMethod || 'genetic_algorithm';
+
+            const container = document.getElementById('apm-method-options');
+            let methodsHtml = '';
+
+            // Her yöntem için radio button oluştur
+            Object.entries(methods).forEach(([methodId, methodData]) => {
+                const isChecked = methodId === selectedMethod ? 'checked' : '';
+                const speedBadge = getSpeedBadge(methodData.speed);
+                const qualityBadge = getQualityBadge(methodData.quality);
+                const varietyBadge = getVarietyBadge(methodData.variety);
+                
+                // Desteklenen kriter sayısı
+                const supportedCount = methodData.supportedCriteria?.length || 0;
+                const criteriaProcessing = methodData.criteriaProcessing || 'sequential';
+                const processingBadge = getProcessingBadge(criteriaProcessing);
+
+                methodsHtml += `
+                    <div class="form-check mb-3 border rounded p-3 ${isChecked ? 'bg-light border-primary' : ''}">
+                        <input class="form-check-input" type="radio" name="apm-method" 
+                               id="apm-${methodId}" value="${methodId}" ${isChecked}
+                               onchange="updateAutoPlanningMethodDetails('${methodId}')">
+                        <label class="form-check-label d-block w-100" for="apm-${methodId}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <strong class="me-2">${methodData.name}</strong>
+                                        ${processingBadge}
+                                    </div>
+                                    <div class="small text-muted mb-2">${methodData.description}</div>
+                                    <div class="mb-2">
+                                        ${speedBadge} ${qualityBadge} ${varietyBadge}
+                                    </div>
+                                    <div class="small">
+                                        <span class="badge bg-info me-1">${supportedCount} Kriter</span>
+                                        <span class="text-muted">${methodData.iterations} iterasyon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = methodsHtml;
+
+            // Seçili yöntem detaylarını göster
+            updateAutoPlanningMethodDetails(selectedMethod);
+            
+            // Kriter uyumluluk tablosunu göster
+            displayCriteriaCompatibilityMatrix(methods);
+        }
+
+        function getProcessingBadge(processing) {
+            const badges = {
+                'sequential': '<span class="badge bg-secondary">📋 Sıralı</span>',
+                'parallel': '<span class="badge bg-primary">⚡ Paralel</span>',
+                'integrated': '<span class="badge bg-success">🔗 Entegre</span>',
+                'adaptive': '<span class="badge bg-warning">🎛️ Uyarlanır</span>',
+                'hierarchical': '<span class="badge bg-danger">🏗️ Hiyerarşik</span>'
+            };
+            return badges[processing] || '<span class="badge bg-secondary">❓</span>';
+        }
+
+        function displayCriteriaCompatibilityMatrix(methods) {
+            // Tüm kriterlerin listesi
+            const allCriteria = [
+                'macro_targets', 'auto_planning_methods', 'system_rules', 
+                'liked_foods', 'allergies_dislikes', 'filler_foods', 'repetition_frequency'
+            ];
+
+            // Kriter isimlerinin Türkçe karşılıkları
+            const criteriaLabels = {
+                'macro_targets': 'Makro Hedefler',
+                'auto_planning_methods': 'Planlama Yöntemleri',
+                'system_rules': 'Sistem Kuralları',
+                'liked_foods': 'Sevilen Yemekler',
+                'allergies_dislikes': 'Alerji & Sevmediği',
+                'filler_foods': 'Dolgu Yemekler',
+                'repetition_frequency': 'Tekrar Sıklığı'
+            };
+
+            let matrixHtml = `
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-table"></i> Algoritma-Kriter Uyumluluk Matrisi</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="text-center" style="width: 120px;">Algoritma</th>
+                                        ${allCriteria.map(c => `<th class="text-center small" style="writing-mode: vertical-lr; text-orientation: mixed;">${criteriaLabels[c] || c}</th>`).join('')}
+                                        <th class="text-center">Toplam</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+
+            Object.entries(methods).forEach(([methodId, methodData]) => {
+                const supportedCriteria = methodData.supportedCriteria || [];
+                const totalSupported = supportedCriteria.length;
+                
+                matrixHtml += `
+                    <tr>
+                        <td class="small"><strong>${methodData.name}</strong></td>
+                        ${allCriteria.map(criteria => {
+                            const isSupported = supportedCriteria.includes(criteria);
+                            const priority = supportedCriteria.indexOf(criteria) + 1;
+                            return `<td class="text-center">
+                                ${isSupported 
+                                    ? `<span class="badge bg-success" title="Öncelik: ${priority}">${priority}</span>` 
+                                    : '<span class="text-muted">-</span>'
+                                }
+                            </td>`;
+                        }).join('')}
+                        <td class="text-center"><strong class="text-primary">${totalSupported}</strong></td>
+                    </tr>
+                `;
+            });
+
+            matrixHtml += `
+                                </tbody>
+                            </table>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            Sayılar öncelik sıralamasını gösterir (1=en yüksek öncelik). 
+                            Her algoritma kriterleri kendi işleme sırasına göre değerlendirir.
+                        </small>
+                    </div>
+                </div>
+            `;
+
+            // Mevcut modal body'ye ekle
+            const modalBody = document.querySelector('#autoPlanningMethodsModal .modal-body');
+            if (modalBody) {
+                modalBody.insertAdjacentHTML('beforeend', matrixHtml);
+            }
+        }
+
+        function getSpeedBadge(speed) {
+            const badges = {
+                'çok_hızlı': '<span class="badge bg-success">⚡ Çok Hızlı</span>',
+                'hızlı': '<span class="badge bg-info">🚀 Hızlı</span>',
+                'orta': '<span class="badge bg-warning">⏱️ Orta</span>',
+                'yavaş': '<span class="badge bg-danger">🐌 Yavaş</span>'
+            };
+            return badges[speed] || '<span class="badge bg-secondary">❓</span>';
+        }
+
+        function getQualityBadge(quality) {
+            const badges = {
+                'çok_yüksek': '<span class="badge bg-success">💎 Mükemmel</span>',
+                'yüksek': '<span class="badge bg-info">⭐ Yüksek</span>',
+                'orta': '<span class="badge bg-warning">📊 Orta</span>',
+                'düşük': '<span class="badge bg-secondary">📉 Düşük</span>'
+            };
+            return badges[quality] || '<span class="badge bg-secondary">❓</span>';
+        }
+
+        function getVarietyBadge(variety) {
+            const badges = {
+                'çok_yüksek': '<span class="badge bg-success">🎨 Çok Çeşitli</span>',
+                'yüksek': '<span class="badge bg-info">🌈 Çeşitli</span>',
+                'orta': '<span class="badge bg-warning">🔄 Orta</span>',
+                'düşük': '<span class="badge bg-secondary">📦 Sınırlı</span>'
+            };
+            return badges[variety] || '<span class="badge bg-secondary">❓</span>';
+        }
+
+        function updateAutoPlanningMethodDetails(methodId) {
+            const planningData = window.EMBEDDED_DATA?.factorSettings?.auto_planning_methods;
+            const methodData = planningData?.methods?.[methodId];
+            
+            if (!methodData) return;
+
+            // İterasyon sayısını güncelle
+            const iterationInput = document.getElementById('apm-iterations');
+            if (iterationInput) {
+                iterationInput.value = methodData.iterations;
+            }
+
+            // Kriter isimlerinin Türkçe karşılıkları
+            const criteriaLabels = {
+                'macro_targets': 'Makro Hedefler',
+                'auto_planning_methods': 'Planlama Yöntemleri',
+                'system_rules': 'Sistem Kuralları',
+                'liked_foods': 'Sevilen Yemekler',
+                'allergies_dislikes': 'Alerji & Sevmediği',
+                'filler_foods': 'Dolgu Yemekler',
+                'repetition_frequency': 'Tekrar Sıklığı'
+            };
+
+            // Detay bölümünü güncelle
+            const detailsContainer = document.getElementById('apm-method-details');
+            if (detailsContainer) {
+                // Desteklenen kriterleri listele
+                const supportedCriteria = methodData.supportedCriteria || [];
+                const processingOrder = methodData.processingOrder || [];
+                
+                let criteriaListHtml = '';
+                if (supportedCriteria.length > 0) {
+                    criteriaListHtml = `
+                        <div class="mb-3">
+                            <strong>🎯 Desteklenen Kriterler (${supportedCriteria.length}):</strong>
+                            <div class="mt-1">
+                                ${supportedCriteria.map(criteria => 
+                                    `<span class="badge bg-primary me-1 mb-1">${criteriaLabels[criteria] || criteria}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let processingOrderHtml = '';
+                if (processingOrder.length > 0) {
+                    processingOrderHtml = `
+                        <div class="mb-3">
+                            <strong>📋 İşleme Sırası:</strong>
+                            <ol class="small mt-1 mb-0">
+                                ${processingOrder.map((criteria, index) => 
+                                    `<li><span class="badge bg-secondary me-1">${index + 1}</span>${criteriaLabels[criteria] || criteria}</li>`
+                                ).join('')}
+                            </ol>
+                        </div>
+                    `;
+                }
+
+                detailsContainer.innerHTML = `
+                    <h6 class="text-primary d-flex align-items-center">
+                        ${methodData.name}
+                        <span class="ms-2">${getProcessingBadge(methodData.criteriaProcessing)}</span>
+                    </h6>
+                    <p class="small">${methodData.description}</p>
+                    
+                    ${criteriaListHtml}
+                    ${processingOrderHtml}
+                    
+                    <div class="mb-3">
+                        <strong>✅ Avantajlar:</strong>
+                        <ul class="small mb-0">
+                            ${methodData.advantages.map(adv => `<li>${adv}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>❌ Dezavantajlar:</strong>
+                        <ul class="small mb-0">
+                            ${methodData.disadvantages.map(dis => `<li>${dis}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="small text-muted">Hız</div>
+                            <div>${getSpeedBadge(methodData.speed)}</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="small text-muted">Kalite</div>
+                            <div>${getQualityBadge(methodData.quality)}</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="small text-muted">Çeşitlilik</div>
+                            <div>${getVarietyBadge(methodData.variety)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Performans önizlemesini güncelle
+            updateAutoPlanningPerformancePreview(methodId);
+            
+            // Algoritma-kriter uyumluluğunu kontrol et
+            checkAlgorithmCriteriaCompatibility();
+        }
+
+        function updateAutoPlanningPerformancePreview(methodId) {
+            // Simülasyon performans verilerini göster
+            const performanceData = window.EMBEDDED_DATA?.algorithmSimulations?.performanceMetrics?.[methodId];
+            const previewContainer = document.getElementById('apm-performance-preview');
+            
+            if (!performanceData || !previewContainer) return;
+
+            previewContainer.innerHTML = `
+                <div class="small">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>⏱️ Ortalama Süre:</span>
+                        <span class="fw-bold">${performanceData.averageTime || 'N/A'}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>💾 Bellek Kullanımı:</span>
+                        <span class="fw-bold">${performanceData.memoryUsage || 'N/A'}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>✅ Başarı Oranı:</span>
+                        <span class="fw-bold text-success">${performanceData.successRate || 'N/A'}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>🎨 Çeşitlilik Skoru:</span>
+                        <span class="fw-bold">${performanceData.varietyScore || 'N/A'}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>🎯 Makro Doğruluk:</span>
+                        <span class="fw-bold text-info">${performanceData.macroAccuracy || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveAutoPlanningMethodsSettings() {
+            // Seçili yöntemi ve iterasyon sayısını al
+            const selectedMethodInput = document.querySelector('input[name="apm-method"]:checked');
+            const iterationInput = document.getElementById('apm-iterations');
+            
+            if (!selectedMethodInput || !iterationInput) {
+                showToast('Lütfen bir yöntem seçin ve iterasyon sayısını girin', 'warning');
+                return;
+            }
+
+            const selectedMethod = selectedMethodInput.value;
+            const iterations = parseInt(iterationInput.value);
+
+            // Etkin kriterleri topla
+            const enabledCriteria = [];
+            document.querySelectorAll('#apm-criteria-toggles input[type="checkbox"]:checked').forEach(checkbox => {
+                const criteriaId = checkbox.id.replace('apm-criteria-', '');
+                enabledCriteria.push(criteriaId);
+            });
+
+            // Algoritma-kriter uyumluluk analizi
+            const planningData = window.EMBEDDED_DATA?.factorSettings?.auto_planning_methods;
+            const methodData = planningData?.methods?.[selectedMethod];
+            const supportedCriteria = methodData?.supportedCriteria || [];
+            
+            const compatibleCriteria = enabledCriteria.filter(c => supportedCriteria.includes(c));
+            const incompatibleCriteria = enabledCriteria.filter(c => !supportedCriteria.includes(c));
+
+            // Ayarları hazırla
+            const settings = {
+                selectedMethod: selectedMethod,
+                customIterations: iterations,
+                enabledCriteria: enabledCriteria,
+                compatibleCriteria: compatibleCriteria,
+                incompatibleCriteria: incompatibleCriteria,
+                algorithmConfig: {
+                    speed: methodData?.speed,
+                    quality: methodData?.quality,
+                    variety: methodData?.variety,
+                    criteriaProcessing: methodData?.criteriaProcessing,
+                    processingOrder: methodData?.processingOrder || []
+                },
+                compatibility: {
+                    totalEnabled: enabledCriteria.length,
+                    compatible: compatibleCriteria.length,
+                    incompatible: incompatibleCriteria.length,
+                    compatibilityRate: Math.round((compatibleCriteria.length / enabledCriteria.length) * 100)
+                },
+                lastUpdated: new Date().toISOString(),
+                updatedBy: 'user_manual'
+            };
+
+            console.log('🤖 Otomatik planlama ayarları kaydediliyor:', settings);
+
+            // GitHub'a kaydet
+            saveCriteriaSettingToGitHub('auto_planning_methods', settings).then(() => {
+                const compatibilityRate = settings.compatibility.compatibilityRate;
+                const message = `Otomatik planlama ayarları kaydedildi (Uyumluluk: %${compatibilityRate})`;
+                
+                showToast(message, compatibilityRate >= 80 ? 'success' : 'warning');
+                
+                // Modal'ı kapat
+                const modal = bootstrap.Modal.getInstance(document.getElementById('autoPlanningMethodsModal'));
+                if (modal) modal.hide();
+            }).catch(error => {
+                console.error('Otomatik planlama ayarları kaydetme hatası:', error);
+                showToast('Ayarlar kaydedilemedi', 'error');
+            });
+        }
+
+        // Diğer kriter ayar fonksiyonları (temel placeholder'lar)
+        function openSystemRulesSettings() {
+            showToast('Sistem Kuralları ayar paneli yakında eklenecek', 'info');
+        }
+
+        function openLikedFoodsSettings() {
+            showToast('Sevilen Yemekler ayar paneli yakında eklenecek', 'info');
+        }
+
+        function openAllergiesDislikesSettings() {
+            showToast('Alerji & Sevmediği Gıdalar ayar paneli yakında eklenecek', 'info');
+        }
+
+        function openFillerFoodsSettings() {
+            showToast('Dolgu Yemekler ayar paneli yakında eklenecek', 'info');
+        }
     </script>
 </body>
 </html>
