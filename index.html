@@ -4727,9 +4727,12 @@
                 }
             });
             
-            // localStorage'a kaydet
+            // localStorage'a kaydet (backup)
             localStorage.setItem('defaultCriteriaOrder', JSON.stringify(newOrder));
             console.log('📊 Criteria sırası kaydedildi:', newOrder);
+            
+            // 🎯 YENİ: GitHub'a da kaydet - persistCriteriaOrderFromDOM kullanarak
+            persistCriteriaOrderFromDOM();
         }
         
         // Modal erişilebilirlik düzeltmeleri
@@ -5849,6 +5852,13 @@
                 }
             } else {
                 console.warn('❌ criteriaId bulunamadı:', checkbox);
+            }
+            
+            // 🎯 YENİ: Checkbox değişikliklerini GitHub'a kaydet (eğer hafta/template spesifik değilse)
+            if (!currentPatient && !getCurrentTemplateId()) {
+                console.log('💾 Sistem varsayılan kriter değişikliği GitHub\'a kaydediliyor...');
+                // Tüm checkbox durumlarını topla ve GitHub'a kaydet
+                persistCriteriaOrderFromDOM();
             }
         }
 
@@ -11599,35 +11609,62 @@
             try {
                 // 🔧 Embedded data kullan
                 const planningData = await getEmbeddedData('planning_factors.json');
-                // LocalStorage'da kayıtlı sıra varsa uygula
-                const saved = JSON.parse(localStorage.getItem('criteriaOrder') || 'null');
-                if (Array.isArray(saved) && saved.length) {
-                    const byId = new Map(planningData.factors.map(f=>[f.id,f]));
-                    planningData.factors = saved
-                        .map(id => byId.get(id))
-                        .filter(Boolean)
-                        .concat(planningData.factors.filter(f=>!saved.includes(f.id)));
-                    planningData.factors.forEach((f, i) => f.priority = i+1);
+                
+                // GitHub'dan kriter sıralaması ve durumlarını yükle
+                let savedOrder = null;
+                let savedStates = {};
+                
+                if (planningData.uiCriteriaOrder && Array.isArray(planningData.uiCriteriaOrder)) {
+                    savedOrder = planningData.uiCriteriaOrder;
+                    console.log('📊 GitHub\'dan kriter sırası yüklendi:', savedOrder);
+                }
+                
+                if (planningData.criteriaStates && typeof planningData.criteriaStates === 'object') {
+                    savedStates = planningData.criteriaStates;
+                    console.log('📊 GitHub\'dan kriter durumları yüklendi:', savedStates);
+                }
+                
+                // Fallback: LocalStorage'dan yükle (eğer GitHub'da yoksa)
+                if (!savedOrder) {
+                    const localOrder = localStorage.getItem('criteriaOrder') || localStorage.getItem('defaultCriteriaOrder');
+                    if (localOrder) {
+                        try {
+                            savedOrder = JSON.parse(localOrder);
+                            console.log('📊 localStorage\'dan kriter sırası yüklendi (fallback):', savedOrder);
+                        } catch(e) {
+                            console.warn('localStorage kriter sırası parse hatası:', e);
+                        }
+                    }
+                }
+                
+                if (!savedStates || Object.keys(savedStates).length === 0) {
+                    const localStates = localStorage.getItem('criteriaStates');
+                    if (localStates) {
+                        try {
+                            savedStates = JSON.parse(localStates);
+                            console.log('📊 localStorage\'dan kriter durumları yüklendi (fallback):', savedStates);
+                        } catch(e) {
+                            console.warn('localStorage kriter durumları parse hatası:', e);
+                        }
+                    }
                 }
                 
                 const container = document.getElementById('default-criteria-hierarchy');
                 let html = '';
                 
-                // Kaydedilmiş criteria sırasını kontrol et
+                // Kriter sıralamasını uygula
                 let sortedFactors = [...planningData.factors];
-                const savedOrder = localStorage.getItem('defaultCriteriaOrder');
                 
-                if (savedOrder) {
+                if (savedOrder && Array.isArray(savedOrder)) {
                     try {
-                        const orderIds = JSON.parse(savedOrder);
-                        console.log('📊 Kaydedilmiş criteria sırası bulundu:', orderIds);
+                        console.log('📊 Kriter sıralaması uygulanıyor:', savedOrder);
                         
                         // Kaydedilmiş sıraya göre factors'ları sırala
                         const factorsById = new Map(planningData.factors.map(f => [f.id, f]));
                         sortedFactors = [];
                         
                         // Önce kaydedilmiş sıradaki öğeleri ekle
-                        orderIds.forEach(id => {
+                        savedOrder.forEach(id => {
                             const factor = factorsById.get(id);
                             if (factor) {
                                 sortedFactors.push(factor);
@@ -11636,7 +11673,7 @@
                         
                         // Sonra kaydedilmiş sırada olmayan yeni öğeleri ekle
                         planningData.factors.forEach(factor => {
-                            if (!orderIds.includes(factor.id)) {
+                            if (!savedOrder.includes(factor.id)) {
                                 sortedFactors.push(factor);
                             }
                         });
@@ -11646,16 +11683,16 @@
                             factor.priority = index + 1;
                         });
                     } catch (error) {
-                        console.error('Kaydedilmiş criteria sırası parse hatası:', error);
+                        console.error('Kaydedilmiş criteria sırası uygulama hatası:', error);
                     }
                 }
                 
-                // Kaydedilmiş criteria settings'i bir kez yükle
+                // HTML generation - checkbox durumlarını GitHub'dan gelen verilerle ayarla
                 console.log('🔧 HTML generation başlıyor...');
                 
                 sortedFactors.forEach((factor, index) => {
-                    // HTML generation'da checkbox'ı varsayılan checked durumunda oluştur
-                    // Gerçek durum applyCriteriaVisualFeedback() ile ayarlanacak
+                    // GitHub'dan gelen checkbox durumunu kontrol et (varsayılan: true)
+                    const isChecked = savedStates[factor.id] !== false;
                     
                     html += `
                         <div class="criteria-item" data-criteria-id="${factor.id}">
@@ -11663,7 +11700,7 @@
                                 <input type="checkbox" class="form-check-input criteria-checkbox-input" 
                                        id="criteria-${factor.id}" 
                                        data-criteria-id="${factor.id}"
-                                       checked>
+                                       ${isChecked ? 'checked' : ''}>
                             </div>
                             <div class="criteria-handle">
                                 <i class="fas fa-grip-vertical"></i>
@@ -11686,13 +11723,12 @@
                 
                 container.innerHTML = html;
                 
-                // Visual feedback'i uygula (checkbox durumlarını ayarla)
-                applyCriteriaVisualFeedback();
+                // Artık applyCriteriaVisualFeedback çağırmaya gerek yok, checkbox'lar zaten doğru durumda
                 
-                // Visual feedback tamamlandıktan SONRA event listener'larını kur
+                // Event listener'larını kur
                 setTimeout(() => {
                     setupCriteriaCheckboxListeners();
-                    console.log('📋 Event listener\'lar visual feedback sonrası kuruldu');
+                    console.log('📋 Event listener\'lar kuruldu (GitHub verisiyle)');
                 }, 100);
                 
                 // Sortable.js için yeniden initialize et
@@ -12735,10 +12771,26 @@
         function persistCriteriaOrderFromDOM() {
             const container = document.getElementById('default-criteria-hierarchy');
             const order = [...container.querySelectorAll('.criteria-item')].map(el => el.getAttribute('data-criteria-id'));
+            
+            // Checkbox durumlarını da topla
+            const criteriaStates = {};
+            container.querySelectorAll('.criteria-item').forEach(item => {
+                const criteriaId = item.getAttribute('data-criteria-id');
+                const checkbox = item.querySelector('.criteria-checkbox-input');
+                if (criteriaId && checkbox) {
+                    criteriaStates[criteriaId] = checkbox.checked;
+                }
+            });
+            
+            // localStorage'a da kaydet (backup)
             localStorage.setItem('criteriaOrder', JSON.stringify(order));
-            logToConsole('💾 Kriter hiyerarşisi kaydedildi');
-            // JSON dosyasına da yaz (data/planning_factors.json)
-            saveCriteriaHierarchyToJSON(order);
+            localStorage.setItem('criteriaStates', JSON.stringify(criteriaStates));
+            
+            console.log('💾 Kriter hiyerarşisi DOM\'dan kaydediliyor:', {order, criteriaStates});
+            logToConsole('💾 Kriter hiyerarşisi ve durumları kaydedildi');
+            
+            // GitHub JSON dosyasına da yaz (data/planning_factors.json)
+            saveCriteriaHierarchyToJSON(order, criteriaStates);
         }
 
         // Criteria setting'i GitHub'a kaydet - AYRI JSON DOSYASINDA
@@ -13278,12 +13330,30 @@
         }
 
         // Kriter hiyerarşisini data/planning_factors.json'a kaydet
-        async function saveCriteriaHierarchyToJSON(orderIds) {
+        // Kriter hiyerarşisini ve checkbox durumlarını GitHub'a kaydet
+        async function saveCriteriaHierarchyToJSON(orderIds, criteriaStates = null) {
             try {
+                // Eğer criteriaStates verilmemişse DOM'dan al
+                if (!criteriaStates) {
+                    criteriaStates = {};
+                    document.querySelectorAll('.criteria-item').forEach(item => {
+                        const criteriaId = item.getAttribute('data-criteria-id');
+                        const checkbox = item.querySelector('.criteria-checkbox-input');
+                        if (criteriaId && checkbox) {
+                            criteriaStates[criteriaId] = checkbox.checked;
+                        }
+                    });
+                }
+                
+                console.log('📊 GitHub\'a kaydedilecek kriter durumları:', criteriaStates);
+                console.log('📊 GitHub\'a kaydedilecek kriter sırası:', orderIds);
+                
                 const ok = await updateJsonFile('/data/planning_factors.json', (json) => {
                     const out = { ...(json || {}) };
                     out.uiCriteriaOrder = Array.isArray(orderIds) ? [...orderIds] : [];
+                    out.criteriaStates = criteriaStates || {};
                     out.lastUpdated = new Date().toISOString();
+                    
                     if (Array.isArray(out.factorHierarchy)) {
                         const idxById = new Map(out.uiCriteriaOrder.map((id, i) => [id, i + 1]));
                         out.factorHierarchy = out.factorHierarchy
@@ -13293,12 +13363,17 @@
                                 const pb = idxById.get(b.id) || Number.MAX_SAFE_INTEGER;
                                 return pa - pb;
                             })
-                            .map((item, i) => ({ ...item, priority: i + 1 }));
+                            .map((item, i) => ({ 
+                                ...item, 
+                                priority: i + 1,
+                                enabled: criteriaStates[item.id] !== false // Checkbox durumunu da kaydet
+                            }));
                     }
                     return out;
                 });
+                
                 if (ok) {
-                    logToConsole('📄 data/planning_factors.json güncellendi (kriter sırası)');
+                    logToConsole('📄 data/planning_factors.json güncellendi (kriter sırası + durumları)');
                     
                     // GitHub'a da kaydet
                     try {
@@ -13306,13 +13381,17 @@
                         if (factorsData) {
                             await saveToGitHub('data/planning_factors.json', factorsData);
                             console.log('✅ [GITHUB] planning_factors.json GitHub\'a kaydedildi');
+                            return true;
                         }
                     } catch (githubError) {
                         console.warn('❌ [GITHUB] planning_factors.json GitHub\'a kaydedilemedi:', githubError);
+                        return false;
                     }
                 }
+                return ok;
             } catch (e) {
                 console.warn('Kriter hiyerarşisi JSON kaydı başarısız:', e);
+                return false;
             }
         }
 
@@ -13547,6 +13626,10 @@
                     
                     // Legacy uyum için ayrı kayıtlar
                     saveLegacyCompatibilityData(allFormData);
+                    
+                    // 🎯 YENİ: Kriter durumlarını GitHub'a kaydet
+                    console.log('💾 Kriter durumları GitHub\'a kaydediliyor...');
+                    persistCriteriaOrderFromDOM();
                     
                     showToast('success', 'Sistem ayarları başarıyla kaydedildi!');
                 } else {
