@@ -11725,6 +11725,12 @@
                 return;
             }
 
+            // Makro hedefler kriteri için özel panel
+            if (criteriaId === 'macro_targets') {
+                openMacroTargetsSettings();
+                return;
+            }
+
             // Diğer kriterler için genel ayar paneli (şimdilik alert)
             alert(`${criteria.name} ayar paneli henüz hazır değil`);
         }
@@ -12065,6 +12071,659 @@
             showToast('Tekrar sıklığı ayarları kaydedildi', 'success');
         }
 
+        // Makro Hedefler kriter ayarları
+        function openMacroTargetsSettings() {
+            // Modal HTML'i oluştur
+            const modalHtml = `
+                <div class="modal fade" id="macroTargetsModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-bullseye text-primary"></i> 
+                                    Hedef Makrolar Ayarları
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Mevcut Hesaplama Yöntemi Gösterimi -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="card bg-light">
+                                            <div class="card-header">
+                                                <h6 class="card-title mb-0">
+                                                    <i class="fas fa-calculator text-info"></i>
+                                                    Mevcut Kalori Hesaplama Yöntemi
+                                                </h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="mt-current-method-display">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                                        <span>Hesaplama yöntemi yükleniyor...</span>
+                                                    </div>
+                                                </div>
+                                                <div id="mt-current-macros-display" class="mt-3">
+                                                    <!-- Mevcut makro hedefleri burada gösterilecek -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tolerans Ayarları -->
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-sliders-h text-warning"></i>
+                                            Hedef Tolerans Ayarları
+                                        </h6>
+                                    </div>
+                                </div>
+
+                                <!-- Karbonhidrat Toleransı -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="card border-primary">
+                                            <div class="card-header bg-primary text-white">
+                                                <h6 class="mb-0">🍞 Karbonhidrat Toleransı</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">1. Hedef Sapma (Öncelikli)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-carbs-tolerance-1" 
+                                                                   min="0" max="20" step="1" value="5">
+                                                            <span class="badge bg-primary" id="mt-carbs-tolerance-1-value">5%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">2. Hedef Sapma (Yedek)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-carbs-tolerance-2" 
+                                                                   min="5" max="30" step="1" value="10">
+                                                            <span class="badge bg-secondary" id="mt-carbs-tolerance-2-value">10%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Protein Toleransı -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="card border-success">
+                                            <div class="card-header bg-success text-white">
+                                                <h6 class="mb-0">🥩 Protein Toleransı</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">1. Hedef Sapma (Öncelikli)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-protein-tolerance-1" 
+                                                                   min="0" max="20" step="1" value="5">
+                                                            <span class="badge bg-success" id="mt-protein-tolerance-1-value">5%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">2. Hedef Sapma (Yedek)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-protein-tolerance-2" 
+                                                                   min="5" max="30" step="1" value="10">
+                                                            <span class="badge bg-secondary" id="mt-protein-tolerance-2-value">10%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Yağ Toleransı -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="card border-warning">
+                                            <div class="card-header bg-warning text-dark">
+                                                <h6 class="mb-0">🥑 Yağ Toleransı</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">1. Hedef Sapma (Öncelikli)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-fat-tolerance-1" 
+                                                                   min="0" max="20" step="1" value="5">
+                                                            <span class="badge bg-warning text-dark" id="mt-fat-tolerance-1-value">5%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">2. Hedef Sapma (Yedek)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-fat-tolerance-2" 
+                                                                   min="5" max="30" step="1" value="10">
+                                                            <span class="badge bg-secondary" id="mt-fat-tolerance-2-value">10%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kalori Toleransı -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="card border-danger">
+                                            <div class="card-header bg-danger text-white">
+                                                <h6 class="mb-0">🔥 Kalori Toleransı</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">1. Hedef Sapma (Öncelikli)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-calorie-tolerance-1" 
+                                                                   min="0" max="20" step="1" value="5">
+                                                            <span class="badge bg-danger" id="mt-calorie-tolerance-1-value">5%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">2. Hedef Sapma (Yedek)</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">±</span>
+                                                            <input type="range" class="form-range me-2" id="mt-calorie-tolerance-2" 
+                                                                   min="5" max="30" step="1" value="10">
+                                                            <span class="badge bg-secondary" id="mt-calorie-tolerance-2-value">10%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Zaman Aralığı ve Öncelik Ayarları -->
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="card border-info">
+                                            <div class="card-header bg-info text-white">
+                                                <h6 class="mb-0">📅 Zaman Aralığı Seçenekleri</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="mt-timeframe" 
+                                                           id="mt-daily" value="daily" checked>
+                                                    <label class="form-check-label" for="mt-daily">
+                                                        <strong>Günlük Hedefler</strong>
+                                                        <div class="small text-muted">Her gün için ayrı ayrı tolerans uygula</div>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="mt-timeframe" 
+                                                           id="mt-weekly" value="weekly">
+                                                    <label class="form-check-label" for="mt-weekly">
+                                                        <strong>Haftalık Ortalama</strong>
+                                                        <div class="small text-muted">7 günün ortalaması için tolerans uygula</div>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="mt-timeframe" 
+                                                           id="mt-flexible" value="flexible">
+                                                    <label class="form-check-label" for="mt-flexible">
+                                                        <strong>Esnek (En Yakın)</strong>
+                                                        <div class="small text-muted">Hangisi daha yakınsa onu seç</div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-dark">
+                                            <div class="card-header bg-dark text-white">
+                                                <h6 class="mb-0">⚖️ Öncelik Sistemi</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Makro Öncelik Sırası</label>
+                                                    <select class="form-select" id="mt-macro-priority">
+                                                        <option value="protein-first">Protein → Yağ → Karbonhidrat</option>
+                                                        <option value="carb-first">Karbonhidrat → Protein → Yağ</option>
+                                                        <option value="fat-first">Yağ → Protein → Karbonhidrat</option>
+                                                        <option value="calorie-first">Kalori → Tüm Makrolar Eşit</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="mt-strict-mode">
+                                                    <label class="form-check-label" for="mt-strict-mode">
+                                                        <strong>Katı Mod</strong>
+                                                        <div class="small text-muted">1. hedef sapmaları aşarsa planlama dursin</div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Önizleme -->
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <div class="card bg-light border-success">
+                                            <div class="card-header">
+                                                <h6 class="mb-0">
+                                                    <i class="fas fa-eye text-success"></i>
+                                                    Ayar Önizlemesi
+                                                </h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="mt-settings-preview">
+                                                    <div class="text-muted">Ayarlar güncelleniyor...</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times"></i> İptal
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveMacroTargetsSettings()">
+                                    <i class="fas fa-save"></i> Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Eğer modal zaten varsa kaldır
+            const existingModal = document.getElementById('macroTargetsModal');
+            if (existingModal) existingModal.remove();
+
+            // Modal'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('macroTargetsModal'));
+            modal.show();
+
+            // Form elemanlarını initialize et
+            initializeMacroTargetsForm();
+        }
+
+        function initializeMacroTargetsForm() {
+            // Mevcut kalori hesaplama yöntemini göster
+            displayCurrentCalorieMethod();
+            
+            // Slider değişikliklerini dinle
+            setupMacroToleranceSliders();
+            
+            // Mevcut ayarları yükle (varsa)
+            loadSavedMacroTargetsSettings();
+            
+            // Önizleme güncelle
+            updateMacroTargetsPreview();
+        }
+
+        function displayCurrentCalorieMethod() {
+            // Mevcut seçili yöntemi bul
+            const selectedMethod = document.querySelector('input[name="defaultCalorieMethod"]:checked')?.value || 'custom';
+            const dietType = document.getElementById('system-default-diet')?.value || 'lowcarb';
+            
+            // 🎯 SİSTEM AYARLARINDAN HESAPLANAN DEĞERLERİ AL (YENİDEN HESAPLAMA YAPMA!)
+            const targetCalories = parseInt(document.getElementById('calculated-calories')?.textContent) || 1850;
+            const carbsGrams = parseInt(document.getElementById('calculated-carbs')?.textContent) || 50;
+            const proteinGrams = parseInt(document.getElementById('calculated-protein')?.textContent) || 100;
+            const fatGrams = parseInt(document.getElementById('calculated-fat')?.textContent) || 80;
+            
+            // Kalori değerlerini hesapla
+            const carbsCalories = Math.round(carbsGrams * 4);
+            const proteinCalories = Math.round(proteinGrams * 4);
+            const fatCalories = Math.round(fatGrams * 9);
+            
+            // Yöntem isimlerini al
+            let methodName = 'Bilinmeyen';
+            if (selectedMethod === 'harris') {
+                methodName = 'Harris-Benedict BMR Formülü';
+            } else if (selectedMethod === 'mifflin') {
+                methodName = 'Mifflin–St Jeor BMR Formülü';
+            } else if (selectedMethod === 'custom') {
+                methodName = 'Özel Formül (Makro x Katsayı x Aktivite)';
+            }
+            
+            // Debug: Sistem ayarlarından alınan değerleri logla
+            console.log('🔧 Modal Makro Hedefler - Sistem ayarlarından değerler:', {
+                method: selectedMethod,
+                dietType: dietType,
+                targetCalories: targetCalories,
+                carbs: carbsGrams,
+                protein: proteinGrams,
+                fat: fatGrams
+            });
+            
+            // Gösterimi güncelle
+            const methodDisplay = document.getElementById('mt-current-method-display');
+            const macrosDisplay = document.getElementById('mt-current-macros-display');
+            
+            methodDisplay.innerHTML = `
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="mb-1 text-primary">${methodName}</h6>
+                        <div class="small text-muted">Diyet Tipi: ${dietType.toUpperCase()}</div>
+                    </div>
+                    <div class="badge bg-primary fs-6">${targetCalories} kcal/gün</div>
+                </div>
+            `;
+            
+            macrosDisplay.innerHTML = `
+                <div class="row text-center">
+                    <div class="col-3">
+                        <div class="card border-primary">
+                            <div class="card-body py-2">
+                                <div class="text-primary fw-bold">${carbsGrams}g</div>
+                                <div class="small">Karbonhidrat</div>
+                                <div class="small text-muted">${carbsCalories} kcal</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card border-success">
+                            <div class="card-body py-2">
+                                <div class="text-success fw-bold">${proteinGrams}g</div>
+                                <div class="small">Protein</div>
+                                <div class="small text-muted">${proteinCalories} kcal</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card border-warning">
+                            <div class="card-body py-2">
+                                <div class="text-warning fw-bold">${fatGrams}g</div>
+                                <div class="small">Yağ</div>
+                                <div class="small text-muted">${fatCalories} kcal</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card border-danger">
+                            <div class="card-body py-2">
+                                <div class="text-danger fw-bold">${targetCalories}</div>
+                                <div class="small">Toplam Kalori</div>
+                                <div class="small text-muted">kcal/gün</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getMacroDistributionForDiet(dietType) {
+            const distributions = {
+                'lowcarb': { carbs: 20, protein: 30, fat: 50 },
+                'balanced': { carbs: 40, protein: 30, fat: 30 },
+                'highprotein': { carbs: 30, protein: 40, fat: 30 },
+                'lowfat': { carbs: 50, protein: 25, fat: 25 },
+                'keto': { carbs: 5, protein: 25, fat: 70 }
+            };
+            return distributions[dietType] || distributions['balanced'];
+        }
+
+        function setupMacroToleranceSliders() {
+            // Tüm slider'ları dinle
+            const sliders = [
+                'mt-carbs-tolerance-1', 'mt-carbs-tolerance-2',
+                'mt-protein-tolerance-1', 'mt-protein-tolerance-2', 
+                'mt-fat-tolerance-1', 'mt-fat-tolerance-2',
+                'mt-calorie-tolerance-1', 'mt-calorie-tolerance-2'
+            ];
+            
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueSpan = document.getElementById(sliderId + '-value');
+                
+                if (slider && valueSpan) {
+                    slider.addEventListener('input', function() {
+                        valueSpan.textContent = this.value + '%';
+                        
+                        // 2. tolerans her zaman 1. toleranstan büyük olmalı
+                        if (sliderId.includes('tolerance-2')) {
+                            const firstToleranceId = sliderId.replace('tolerance-2', 'tolerance-1');
+                            const firstSlider = document.getElementById(firstToleranceId);
+                            if (firstSlider && parseInt(this.value) <= parseInt(firstSlider.value)) {
+                                this.value = parseInt(firstSlider.value) + 1;
+                                valueSpan.textContent = this.value + '%';
+                            }
+                        }
+                        
+                        // 1. tolerans değiştiğinde 2. toleransın minimumunu ayarla
+                        if (sliderId.includes('tolerance-1')) {
+                            const secondToleranceId = sliderId.replace('tolerance-1', 'tolerance-2');
+                            const secondSlider = document.getElementById(secondToleranceId);
+                            if (secondSlider) {
+                                const newMin = parseInt(this.value) + 1;
+                                secondSlider.min = newMin;
+                                if (parseInt(secondSlider.value) < newMin) {
+                                    secondSlider.value = newMin;
+                                    document.getElementById(secondToleranceId + '-value').textContent = newMin + '%';
+                                }
+                            }
+                        }
+                        
+                        updateMacroTargetsPreview();
+                    });
+                }
+            });
+            
+            // Radio button değişikliklerini dinle
+            const radioButtons = document.querySelectorAll('input[name="mt-timeframe"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', updateMacroTargetsPreview);
+            });
+            
+            // Select ve checkbox değişikliklerini dinle
+            const prioritySelect = document.getElementById('mt-macro-priority');
+            const strictMode = document.getElementById('mt-strict-mode');
+            
+            if (prioritySelect) prioritySelect.addEventListener('change', updateMacroTargetsPreview);
+            if (strictMode) strictMode.addEventListener('change', updateMacroTargetsPreview);
+        }
+
+        function updateMacroTargetsPreview() {
+            // Mevcut ayarları topla
+            const settings = {
+                tolerances: {
+                    carbs: {
+                        primary: parseInt(document.getElementById('mt-carbs-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-carbs-tolerance-2')?.value) || 10
+                    },
+                    protein: {
+                        primary: parseInt(document.getElementById('mt-protein-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-protein-tolerance-2')?.value) || 10
+                    },
+                    fat: {
+                        primary: parseInt(document.getElementById('mt-fat-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-fat-tolerance-2')?.value) || 10
+                    },
+                    calorie: {
+                        primary: parseInt(document.getElementById('mt-calorie-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-calorie-tolerance-2')?.value) || 10
+                    }
+                },
+                timeframe: document.querySelector('input[name="mt-timeframe"]:checked')?.value || 'daily',
+                priority: document.getElementById('mt-macro-priority')?.value || 'protein-first',
+                strictMode: document.getElementById('mt-strict-mode')?.checked || false
+            };
+            
+            // Önizleme metnini oluştur
+            const timeframeText = {
+                'daily': 'Günlük hedefler',
+                'weekly': 'Haftalık ortalama',
+                'flexible': 'Esnek (en yakın)'
+            };
+            
+            const priorityText = {
+                'protein-first': 'Protein öncelikli',
+                'carb-first': 'Karbonhidrat öncelikli', 
+                'fat-first': 'Yağ öncelikli',
+                'calorie-first': 'Kalori öncelikli'
+            };
+            
+            let preview = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>📅 Zaman Aralığı:</strong> ${timeframeText[settings.timeframe]}<br>
+                        <strong>⚖️ Öncelik:</strong> ${priorityText[settings.priority]}<br>
+                        <strong>🔒 Mod:</strong> ${settings.strictMode ? 'Katı' : 'Esnek'}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>🎯 Tolerans Örnekleri:</strong><br>
+                        <small class="text-muted">
+                            • Karbonhidrat: ±${settings.tolerances.carbs.primary}% / ±${settings.tolerances.carbs.secondary}%<br>
+                            • Protein: ±${settings.tolerances.protein.primary}% / ±${settings.tolerances.protein.secondary}%<br>
+                            • Yağ: ±${settings.tolerances.fat.primary}% / ±${settings.tolerances.fat.secondary}%<br>
+                            • Kalori: ±${settings.tolerances.calorie.primary}% / ±${settings.tolerances.calorie.secondary}%
+                        </small>
+                    </div>
+                </div>
+            `;
+            
+            const previewEl = document.getElementById('mt-settings-preview');
+            if (previewEl) {
+                previewEl.innerHTML = preview;
+            }
+        }
+
+        function loadSavedMacroTargetsSettings() {
+            // Kaydedilmiş ayarları yükle
+            const savedSettings = window.EMBEDDED_DATA?.criteriaSettings?.macro_targets;
+            if (savedSettings) {
+                console.log('📋 Kaydedilmiş makro hedef ayarları yükleniyor...', savedSettings);
+                
+                // Tolerans değerlerini yükle
+                if (savedSettings.tolerances) {
+                    const tolerances = savedSettings.tolerances;
+                    
+                    // Karbonhidrat
+                    if (tolerances.carbs) {
+                        const carbsSlider1 = document.getElementById('mt-carbs-tolerance-1');
+                        const carbsSlider2 = document.getElementById('mt-carbs-tolerance-2');
+                        if (carbsSlider1) carbsSlider1.value = tolerances.carbs.primary || 5;
+                        if (carbsSlider2) carbsSlider2.value = tolerances.carbs.secondary || 10;
+                    }
+                    
+                    // Protein
+                    if (tolerances.protein) {
+                        const proteinSlider1 = document.getElementById('mt-protein-tolerance-1');
+                        const proteinSlider2 = document.getElementById('mt-protein-tolerance-2');
+                        if (proteinSlider1) proteinSlider1.value = tolerances.protein.primary || 5;
+                        if (proteinSlider2) proteinSlider2.value = tolerances.protein.secondary || 10;
+                    }
+                    
+                    // Yağ
+                    if (tolerances.fat) {
+                        const fatSlider1 = document.getElementById('mt-fat-tolerance-1');
+                        const fatSlider2 = document.getElementById('mt-fat-tolerance-2');
+                        if (fatSlider1) fatSlider1.value = tolerances.fat.primary || 5;
+                        if (fatSlider2) fatSlider2.value = tolerances.fat.secondary || 10;
+                    }
+                    
+                    // Kalori
+                    if (tolerances.calorie) {
+                        const calorieSlider1 = document.getElementById('mt-calorie-tolerance-1');
+                        const calorieSlider2 = document.getElementById('mt-calorie-tolerance-2');
+                        if (calorieSlider1) calorieSlider1.value = tolerances.calorie.primary || 5;
+                        if (calorieSlider2) calorieSlider2.value = tolerances.calorie.secondary || 10;
+                    }
+                }
+                
+                // Diğer ayarlar
+                if (savedSettings.timeframe) {
+                    const timeframeRadio = document.querySelector(`input[name="mt-timeframe"][value="${savedSettings.timeframe}"]`);
+                    if (timeframeRadio) timeframeRadio.checked = true;
+                }
+                
+                if (savedSettings.priority) {
+                    const prioritySelect = document.getElementById('mt-macro-priority');
+                    if (prioritySelect) prioritySelect.value = savedSettings.priority;
+                }
+                
+                if (typeof savedSettings.strictMode === 'boolean') {
+                    const strictModeCheckbox = document.getElementById('mt-strict-mode');
+                    if (strictModeCheckbox) strictModeCheckbox.checked = savedSettings.strictMode;
+                }
+                
+                // Slider değerlerini güncelle
+                updateMacroSliderValues();
+            }
+        }
+
+        function updateMacroSliderValues() {
+            const sliders = [
+                'mt-carbs-tolerance-1', 'mt-carbs-tolerance-2',
+                'mt-protein-tolerance-1', 'mt-protein-tolerance-2', 
+                'mt-fat-tolerance-1', 'mt-fat-tolerance-2',
+                'mt-calorie-tolerance-1', 'mt-calorie-tolerance-2'
+            ];
+            
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueSpan = document.getElementById(sliderId + '-value');
+                
+                if (slider && valueSpan) {
+                    valueSpan.textContent = slider.value + '%';
+                }
+            });
+        }
+
+        function saveMacroTargetsSettings() {
+            const settings = {
+                tolerances: {
+                    carbs: {
+                        primary: parseInt(document.getElementById('mt-carbs-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-carbs-tolerance-2')?.value) || 10
+                    },
+                    protein: {
+                        primary: parseInt(document.getElementById('mt-protein-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-protein-tolerance-2')?.value) || 10
+                    },
+                    fat: {
+                        primary: parseInt(document.getElementById('mt-fat-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-fat-tolerance-2')?.value) || 10
+                    },
+                    calorie: {
+                        primary: parseInt(document.getElementById('mt-calorie-tolerance-1')?.value) || 5,
+                        secondary: parseInt(document.getElementById('mt-calorie-tolerance-2')?.value) || 10
+                    }
+                },
+                timeframe: document.querySelector('input[name="mt-timeframe"]:checked')?.value || 'daily',
+                priority: document.getElementById('mt-macro-priority')?.value || 'protein-first',
+                strictMode: document.getElementById('mt-strict-mode')?.checked || false,
+                currentMethod: document.querySelector('input[name="defaultCalorieMethod"]:checked')?.value || 'custom',
+                dietType: document.getElementById('system-default-diet')?.value || 'lowcarb'
+            };
+
+            console.log('🔧 Makro hedef ayarları kaydediliyor:', settings);
+            
+            // GitHub'a kaydet
+            saveCriteriaSettingToGitHub('macro_targets', settings);
+            
+            // Modal'ı kapat
+            bootstrap.Modal.getInstance(document.getElementById('macroTargetsModal')).hide();
+            
+            showToast('Makro hedef ayarları kaydedildi', 'success');
+        }
+
         function refreshCriteriaPriorities() {
             const container = document.getElementById('default-criteria-hierarchy');
             [...container.querySelectorAll('.criteria-item')].forEach((el, idx) => {
@@ -12377,6 +13036,44 @@
                     if (setting.flexible) details.push('Esnek mod aktif');
                     return `<div class="small">${details.join(' • ')}</div>`;
                     
+                case 'macro_targets':
+                    let macroDetails = [];
+                    
+                    // Hesaplama yöntemi
+                    const methodNames = {
+                        'harris-benedict': 'Harris-Benedict',
+                        'mifflin': 'Mifflin-St Jeor',
+                        'custom': 'Özel Formül'
+                    };
+                    macroDetails.push(`Yöntem: ${methodNames[setting.currentMethod] || 'Bilinmeyen'}`);
+                    
+                    // Zaman aralığı
+                    const timeframeNames = {
+                        'daily': 'Günlük',
+                        'weekly': 'Haftalık',
+                        'flexible': 'Esnek'
+                    };
+                    macroDetails.push(`Aralık: ${timeframeNames[setting.timeframe] || 'Günlük'}`);
+                    
+                    // Öncelik
+                    const priorityNames = {
+                        'protein-first': 'Protein Öncelikli',
+                        'carb-first': 'Karbonhidrat Öncelikli',
+                        'fat-first': 'Yağ Öncelikli',
+                        'calorie-first': 'Kalori Öncelikli'
+                    };
+                    macroDetails.push(`Öncelik: ${priorityNames[setting.priority] || 'Protein'}`);
+                    
+                    // Toleranslar
+                    if (setting.tolerances) {
+                        const t = setting.tolerances;
+                        macroDetails.push(`Toleranslar: K(±${t.carbs?.primary || 5}%/±${t.carbs?.secondary || 10}%) P(±${t.protein?.primary || 5}%/±${t.protein?.secondary || 10}%) Y(±${t.fat?.primary || 5}%/±${t.fat?.secondary || 10}%)`);
+                    }
+                    
+                    if (setting.strictMode) macroDetails.push('Katı mod aktif');
+                    
+                    return `<div class="small">${macroDetails.join(' • ')}</div>`;
+                    
                 default:
                     return `<div class="small text-muted">Detaylar mevcut değil</div>`;
             }
@@ -12414,6 +13111,11 @@
                 if (setting) {
                     loadRepetitionFrequencySettings(setting);
                 }
+            } else if (criteriaId === 'macro_targets') {
+                // Makro hedefler modal'ını aç ve mevcut verileri yükle
+                openMacroTargetsSettings();
+                
+                // Mevcut ayarları yüklemek için initialize fonksiyonunda zaten yapılıyor
             } else {
                 showToast(`${getCriteriaLabel(criteriaId)} düzenleme henüz mevcut değil`, 'info');
             }
