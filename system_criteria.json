@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-08-27T06:36:03.654Z",
+  "criteriaSettings": {
+    "repetition_frequency": {
+      "categories": [],
+      "roles": [],
+      "keywords": [
+        "bürek"
+      ],
+      "scope": "week",
+      "minInterval": 1,
+      "maxCount": 3,
+      "flexible": false,
+      "id": "repetition_frequency",
+      "lastUpdated": "2025-08-27T06:36:03.654Z",
+      "version": "1.0"
+    }
+  }
+}
