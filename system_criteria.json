@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-08-27T16:18:55.253Z",
+  "lastUpdated": "2025-08-27T16:19:12.334Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -36,6 +36,20 @@
       "updatedFrom": "system_meal_macros",
       "lastUpdated": "2025-08-27T16:18:55.253Z",
       "id": "calorie_distribution",
+      "version": "1.0"
+    },
+    "food_compatibility": {
+      "enabled": true,
+      "magneticEffect": true,
+      "magneticStrength": "orta",
+      "magneticRadius": 3,
+      "compatibilityWeight": 0.4,
+      "penalizeIncompatible": -0.3,
+      "toleranceLevel": "orta",
+      "crossMealCompatibility": false,
+      "prioritizeMainDish": false,
+      "lastUpdated": "2025-08-27T16:19:12.334Z",
+      "id": "food_compatibility",
       "version": "1.0"
     }
   }
