@@ -1,0 +1,361 @@
+{
+  "version": "2.0",
+  "lastUpdated": "2025-08-27T13:45:00.000Z",
+  "factorHierarchy": [
+    {
+      "id": "macro_targets",
+      "name": "Hedef Makro Değerleri",
+      "description": "Protein, karbonhidrat, yağ hedefleri",
+      "priority": 1,
+      "weight": 75,
+      "type": "high",
+      "violationType": "warning",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "auto_planning_methods",
+      "name": "Oto Planlama Yöntemleri",
+      "description": "Makro hedeflere ulaşma algoritmaları ve iterasyon ayarları",
+      "priority": 2,
+      "weight": 80,
+      "type": "high",
+      "violationType": "configurable",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "system_rules",
+      "name": "Sistem Kuralları",
+      "description": "Kullanıcı tanımlı özel kurallar ve kısıtlamalar",
+      "priority": 3,
+      "weight": 85,
+      "type": "high",
+      "violationType": "configurable",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "food_compatibility",
+      "name": "Yemek Uyumluluğu",
+      "description": "Ana yemeklerin yan yemeklerle magnetik çekim uyumluluğu",
+      "priority": 4,
+      "weight": 70,
+      "type": "medium",
+      "violationType": "info",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "tag_conflicts",
+      "name": "Tag Çakışma Kontrolü",
+      "description": "Aynı öğünde aynı tag kelimelerinin çakışmasını önleme",
+      "priority": 5,
+      "weight": 65,
+      "type": "medium",
+      "violationType": "warning",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "liked_foods",
+      "name": "Sevilen Yemekler",
+      "description": "Hastanın sevdiği yemeklerin pozitif ayrımcılığı",
+      "priority": 6,
+      "weight": 65,
+      "type": "medium",
+      "violationType": "info",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "allergies_dislikes",
+      "name": "Alerji & Sevmediği Gıdalar",
+      "description": "Hasta alerjileri ve sevmediği gıdalar - mutlak öncelik",
+      "priority": 7,
+      "weight": 100,
+      "type": "critical",
+      "violationType": "forbidden",
+      "editable": false,
+      "enabled": true
+    },
+    {
+      "id": "filler_foods",
+      "name": "Dolgu Yemekler",
+      "description": "Makro hedeflere ulaşmak için ek/eksik kalori dolgu yemekleri",
+      "priority": 8,
+      "weight": 50,
+      "type": "low",
+      "violationType": "info",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "repetition_frequency",
+      "name": "Tekrar Sıklığı",
+      "description": "Aynı yemeğin ne sıklıkla tekrarlanabileceği",
+      "priority": 9,
+      "weight": 35,
+      "type": "low",
+      "violationType": "info",
+      "editable": true,
+      "enabled": true
+    },
+    {
+      "id": "food_compatibility",
+      "name": "Yemek Uyumluluğu",
+      "description": "Ana yemeğin uyumluluk taglarına göre yan yemeklerin magnetik çekimi ve uyumlu menü oluşumu",
+      "priority": 10,
+      "weight": 60,
+      "type": "medium",
+      "violationType": "warning",
+      "editable": true,
+      "enabled": true,
+      "magneticEffect": true,
+      "supportsCriteria": ["compatibilityTags", "magneticStrength", "crossMealCompatibility"]
+    },
+    {
+      "id": "tag_conflicts",
+      "name": "Tag Çakışması",
+      "description": "Aynı öğünde aynı tagları içeren yemeklerin çakışmasını önler ve menü çeşitliliğini artırır",
+      "priority": 11,
+      "weight": 45,
+      "type": "medium",
+      "violationType": "warning",
+      "editable": true,
+      "enabled": true,
+      "conflictPrevention": true,
+      "supportsCriteria": ["tags", "toleranceLevel", "exemptTags", "crossMealConflicts"]
+    }
+  ],
+  "factorSettings": {
+    "auto_planning_methods": {
+      "selectedMethod": "genetic_algorithm",
+      "enableWeightedScoring": true,
+      "priorityOverrideMode": true,
+      "conflictResolution": "hierarchy_based",
+      "methods": {
+        "greedy": {
+          "name": "Açgözlü Algoritma",
+          "description": "Her adımda en iyi seçimi yapar - hızlı sonuç",
+          "iterations": 100,
+          "speed": "çok_hızlı",
+          "quality": "orta",
+          "variety": "düşük",
+          "criteriaProcessing": "sequential",
+          "advantages": ["Çok hızlı", "Az bellek", "Basit hedefler için etkili"],
+          "disadvantages": ["Global optimum garantisiz", "Karmaşık hedeflerde yetersiz", "Düşük çeşitlilik"],
+          "supportedCriteria": ["macro_targets", "allergies_dislikes", "filler_foods", "food_compatibility", "tag_conflicts"],
+          "processingOrder": ["allergies_dislikes", "macro_targets", "food_compatibility", "tag_conflicts", "filler_foods"]
+        },
+        "random_search": {
+          "name": "Rastgele Arama",
+          "description": "Rastgele kombinasyonlar dener - yüksek çeşitlilik",
+          "iterations": 1000,
+          "speed": "yavaş",
+          "quality": "orta",
+          "variety": "çok_yüksek",
+          "criteriaProcessing": "parallel",
+          "advantages": ["Yüksek çeşitlilik", "Local minimum kaçınır", "Kolay implement"],
+          "disadvantages": ["Yavaş konverjans", "Düşük hedef hassaslığı", "Tutarsız sonuçlar"],
+          "supportedCriteria": ["macro_targets", "liked_foods", "repetition_frequency", "allergies_dislikes", "tag_conflicts", "food_compatibility"],
+          "processingOrder": ["allergies_dislikes", "tag_conflicts", "food_compatibility", "liked_foods", "macro_targets", "repetition_frequency"]
+        },
+        "genetic_algorithm": {
+          "name": "Genetik Algoritma",
+          "description": "En iyi çözümleri çaprazlar - mükemmel denge",
+          "iterations": 500,
+          "speed": "orta",
+          "quality": "yüksek",
+          "variety": "yüksek",
+          "criteriaProcessing": "integrated",
+          "advantages": ["Mükemmel çeşitlilik", "Kompleks hedef dengeleme", "Global optimuma yaklaşır"],
+          "disadvantages": ["Yavaş", "Karmaşık parametreler", "Yüksek bellek"],
+          "supportedCriteria": ["macro_targets", "auto_planning_methods", "system_rules", "food_compatibility", "tag_conflicts", "liked_foods", "allergies_dislikes", "filler_foods", "repetition_frequency"],
+          "processingOrder": ["allergies_dislikes", "system_rules", "macro_targets", "food_compatibility", "tag_conflicts", "liked_foods", "filler_foods", "repetition_frequency", "auto_planning_methods"]
+        },
+        "simulated_annealing": {
+          "name": "Benzetimli Tavlama",
+          "description": "Başta kötü seçimleri de kabul eder - kalite odaklı",
+          "iterations": 600,
+          "speed": "orta",
+          "quality": "yüksek",
+          "variety": "orta",
+          "criteriaProcessing": "adaptive",
+          "advantages": ["Local minimum kaçar", "Denge sağlar", "Kaliteli sonuç"],
+          "disadvantages": ["Sıcaklık ayarı kritik", "Orta hız", "Parametre hassasiyeti"],
+          "supportedCriteria": ["macro_targets", "liked_foods", "allergies_dislikes", "system_rules", "filler_foods", "food_compatibility", "tag_conflicts"],
+          "processingOrder": ["allergies_dislikes", "system_rules", "tag_conflicts", "macro_targets", "food_compatibility", "filler_foods", "liked_foods"]
+        },
+        "hill_climbing": {
+          "name": "Tepe Tırmanma",
+          "description": "Mevcut çözümü adım adım iyileştirir - hızlı iyileştirme",
+          "iterations": 300,
+          "speed": "hızlı",
+          "quality": "orta",
+          "variety": "düşük",
+          "criteriaProcessing": "sequential",
+          "advantages": ["Hızlı iyileşme", "Deterministik", "Basit kontrol"],
+          "disadvantages": ["Local maximum'da takılır", "Düşük çeşitlilik", "Başlangıç bağımlı"],
+          "supportedCriteria": ["macro_targets", "allergies_dislikes", "filler_foods", "food_compatibility", "tag_conflicts"],
+          "processingOrder": ["allergies_dislikes", "macro_targets", "food_compatibility", "tag_conflicts", "filler_foods"]
+        },
+        "constraint_satisfaction": {
+          "name": "Kısıt Sağlama",
+          "description": "Kuralları katı şekilde uygular - medikal gereksinimler",
+          "iterations": 200,
+          "speed": "yavaş",
+          "quality": "çok_yüksek",
+          "variety": "orta",
+          "criteriaProcessing": "hierarchical",
+          "advantages": ["Tüm kuralları garantiler", "Medikal ideal", "Alerji/diyet uyumu"],
+          "disadvantages": ["En yavaş", "Çözümsüz durumları reddeder", "Düşük esneklik"],
+          "supportedCriteria": ["allergies_dislikes", "system_rules", "macro_targets", "food_compatibility", "tag_conflicts", "liked_foods", "filler_foods", "repetition_frequency", "auto_planning_methods"],
+          "processingOrder": ["allergies_dislikes", "system_rules", "tag_conflicts", "macro_targets", "food_compatibility", "liked_foods", "repetition_frequency", "filler_foods", "auto_planning_methods"]
+        }
+      }
+    },
+    "system_rules": {
+      "enableHierarchy": true,
+      "strictMode": true,
+      "allowOverride": false,
+      "priorityBasedScoring": true
+    },
+    "liked_foods": {
+      "boostFrequency": 0.25,
+      "keywordMatching": true,
+      "tagMatching": true,
+      "preferenceWeight": 0.3
+    },
+    "allergies_dislikes": {
+      "checkAllergies": true,
+      "checkDislikes": true,
+      "strictMode": true,
+      "keywordMatching": true,
+      "tagMatching": true,
+      "absoluteBlock": true
+    },
+    "filler_foods": {
+      "enabled": true,
+      "maxFillersPerMeal": 2,
+      "prioritizeProtein": true,
+      "allowNegativeCalories": false,
+      "fillerTypes": ["protein_powder", "nuts", "olive_oil", "honey", "bread"],
+      "minCalorieGap": 50,
+      "maxCalorieGap": 300
+    },
+    "food_compatibility": {
+      "enabled": true,
+      "magneticEffect": true,
+      "compatibilityWeight": 0.4,
+      "magneticRadius": 3,
+      "boostCompatibleFoods": 0.6,
+      "penalizeIncompatible": -0.3,
+      "prioritizeMainDish": true,
+      "crossMealCompatibility": false,
+      "toleranceLevel": "orta",
+      "magneticStrength": {
+        "güçlü": 0.8,
+        "orta": 0.4,
+        "zayıf": 0.2
+      }
+    },
+    "tag_conflicts": {
+      "enabled": true,
+      "strictMode": true,
+      "allowSameMealTags": false,
+      "conflictPenalty": -0.7,
+      "toleranceLevel": "düşük",
+      "exemptTags": ["sağlıklı", "organik", "doğal"],
+      "checkAllTags": true,
+      "crossMealConflicts": false,
+      "ignoreCaseSensitive": true,
+      "toleranceLevels": {
+        "yok": 0.0,
+        "düşük": 0.1,
+        "orta": 0.3,
+        "yüksek": 0.5
+      }
+    },
+    "repetition_frequency": {
+      "dailyRepetition": false,
+      "weeklyLimit": 3,
+      "categoryLimit": 2,
+      "minimumDaysBetween": 1
+    },
+    "macro_targets": {
+      "tolerance": 0.15,
+      "prioritizeProtein": true,
+      "allowDeficit": 0.1,
+      "allowExcess": 0.2
+    }
+  },
+  "scoringWeights": {
+    "critical": 100,
+    "high": 75,
+    "medium": 50,
+    "low": 25
+  },
+  "uiCriteriaOrder": [
+    "macro_targets",
+    "auto_planning_methods",
+    "system_rules",
+    "liked_foods",
+    "allergies_dislikes",
+    "filler_foods",
+    "repetition_frequency",
+    "calorie_distribution"
+  ],
+  "criteriaStates": {
+    "macro_targets": true,
+    "auto_planning_methods": true,
+    "system_rules": true,
+    "liked_foods": true,
+    "allergies_dislikes": true,
+    "filler_foods": true,
+    "repetition_frequency": true,
+    "calorie_distribution": true
+  },
+  "algorithmSimulations": {
+    "testDatabase": {
+      "totalMeals": 450,
+      "categories": {
+        "ana_yemek": 120,
+        "corbalar": 45,
+        "salatalar": 65,
+        "tatlilar": 35,
+        "kahvalti": 85,
+        "atistirmalik": 100
+      },
+      "macroDistribution": {
+        "high_protein": 95,
+        "high_carb": 180,
+        "high_fat": 75,
+        "balanced": 100
+      }
+    },
+    "performanceMetrics": {
+      "genetic_algorithm": {
+        "averageTime": "8-12 saniye",
+        "memoryUsage": "orta",
+        "successRate": "92%",
+        "varietyScore": "9/10",
+        "macroAccuracy": "94%"
+      },
+      "greedy": {
+        "averageTime": "1-2 saniye", 
+        "memoryUsage": "düşük",
+        "successRate": "78%",
+        "varietyScore": "4/10",
+        "macroAccuracy": "71%"
+      },
+      "constraint_satisfaction": {
+        "averageTime": "15-25 saniye",
+        "memoryUsage": "yüksek", 
+        "successRate": "99%",
+        "varietyScore": "6/10",
+        "macroAccuracy": "99%"
+      }
+    }
+  }
+}
