@@ -174,6 +174,26 @@
         .criteria-handle:active {
             cursor: grabbing;
         }
+
+        .criteria-settings {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .criteria-item:hover .criteria-settings {
+            opacity: 1;
+        }
+
+        .criteria-settings button {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
         
         .criteria-priority {
             background: var(--primary-color);
@@ -1626,6 +1646,13 @@
                                         <!-- Dinamik olarak doldurulacak -->
                                     </div>
                                     
+                                    <!-- Criteria Settings Arşivi -->
+                                    <div class="mt-4">
+                                        <div id="criteriaSettingsArchive">
+                                            <div class="text-muted small">Henüz kaydedilmiş kriter ayarı yok</div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="mt-3 d-flex justify-content-between">
                                         <div>
                                             <button class="btn btn-primary-custom" onclick="saveRulesHierarchy()">
@@ -1807,12 +1834,15 @@
                                     <div class="col-md-4">
                                         <label class="form-label mb-1">Sıklık</label>
                                         <div class="input-group">
-                                            <select class="form-select" id="fr-count-type" style="max-width: 140px;">
+                                            <select class="form-select" id="fr-count-type" style="max-width: 140px;" onchange="updateCountInputs()">
                                                 <option value="max">En Çok</option>
                                                 <option value="min">En Az</option>
                                                 <option value="fixed">Sabit</option>
+                                                <option value="range">Aralık</option>
                                             </select>
                                             <input type="number" class="form-control" id="fr-count" min="0" step="1" placeholder="adet">
+                                            <span class="input-group-text" id="fr-range-separator" style="display: none;">-</span>
+                                            <input type="number" class="form-control" id="fr-count-max" min="0" step="1" placeholder="maks" style="display: none;">
                                         </div>
                                         <small class="text-muted" id="fr-count-help">Seçilen kapsama göre adet (örn: Öğün → belirttiğiniz öğünlerde)</small>
                                     </div>
@@ -9654,49 +9684,8 @@
             return demoFoods;
         }
 
-        // yemekler_plain.json'dan yemekleri otomatik yükle
-        async function loadMealsFromPlainJson() {
-            try {
-                console.log('🔄 yemekler_plain.json\'dan yemekler yükleniyor...');
-                // GitHub'dan doğrudan yükleme
-                const response = await fetch('https://raw.githubusercontent.com/mustafasacar35/lipo_program/main/yemekler_plain.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const mealsData = await response.json();
-                
-                if (Array.isArray(mealsData) && mealsData.length > 0) {
-                    window.nutritionMeals = mealsData;
-                    // localStorage'a da kaydet
-                    localStorage.setItem('nutritionMeals', JSON.stringify(mealsData));
-                    console.log('✅ yemekler_plain.json\'dan', mealsData.length, 'yemek başarıyla yüklendi ve localStorage\'a kaydedildi');
-                    
-                    return mealsData;
-                } else {
-                    console.log('⚠️ yemekler_plain.json boş veya geçersiz');
-                    return loadMealsFromStorage(); // fallback
-                }
-            } catch (error) {
-                console.error('❌ yemekler_plain.json yüklenirken hata:', error);
-                // localStorage'dan yüklemeye çalış
-                return loadMealsFromStorage();
-            }
-        }
-
-        // localStorage'dan yemek yükleme fallback fonksiyonu
-        function loadMealsFromStorage() {
-            try {
-                const stored = localStorage.getItem('nutritionMeals');
-                if (stored) {
-                    const parsed = JSON.parse(stored);
-                    console.log('🍽️ localStorage\'dan yemek veritabanı yüklendi:', parsed.length, 'yemek');
-                    return parsed;
-                }
-            } catch (e) {
-                console.warn('localStorage yemek veritabanı okuma hatası:', e);
-            }
-            
-            // Son fallback: demo veriler
+        // Demo yemek veritabanı
+        function getDemoFoods() {
             const demoFoods = [
                 { name: 'Kurşun Geçirmez Kahve', category: 'İçecek', calories: 5, carbs: 0, protein: 0, fat: 0, minQuantity: 1, maxQuantity: 3, step: 0.5 },
                 { name: 'Sade Omlet', category: 'Protein', calories: 180, carbs: 2, protein: 12, fat: 14, minQuantity: 1, maxQuantity: 2, step: 0.5 },
@@ -9709,9 +9698,68 @@
             ];
             
             console.log('🍽️ Demo yemek veritabanı kullanılıyor:', demoFoods.length, 'yemek');
+            window.nutritionMeals = demoFoods;
             return demoFoods;
         }
-        
+
+        // yemekler_plain.json'dan yemekleri GitHub'dan yükle
+        async function loadMealsFromPlainJson() {
+            try {
+                console.log('🔄 GitHub\'dan yemekler_plain.json yükleniyor...');
+                
+                // GitHub API Contents endpoint kullan (cache busting ile)
+                const timestamp = Date.now();
+                const apiUrl = `https://api.github.com/repos/mustafasacar35/lipo_program/contents/yemekler_plain.json?ref=main&t=${timestamp}`;
+                console.log('📄 Meals GitHub API URL:', apiUrl);
+                
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                        // Cache-Control header'ını kaldırdık - CORS hatası veriyordu
+                    }
+                });
+                
+                if (response.ok) {
+                    const apiResponse = await response.json();
+                    console.log('📄 Meals GitHub API Response SHA:', apiResponse.sha);
+                    
+                    // Base64 decode et (UTF-8 encoding ile)
+                    const base64Content = apiResponse.content.replace(/\s/g, '');
+                    let content;
+                    try {
+                        // UTF-8 TextDecoder ile decode
+                        const binaryString = atob(base64Content);
+                        const uint8Array = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            uint8Array[i] = binaryString.charCodeAt(i);
+                        }
+                        const textDecoder = new TextDecoder('utf-8');
+                        content = textDecoder.decode(uint8Array);
+                    } catch (utf8Error) {
+                        console.warn('Meals UTF-8 decode hatası:', utf8Error);
+                        content = decodeURIComponent(escape(atob(base64Content)));
+                    }
+                    
+                    const mealsData = JSON.parse(content);
+                    
+                    if (Array.isArray(mealsData) && mealsData.length > 0) {
+                        window.nutritionMeals = mealsData;
+                        console.log('✅ GitHub\'dan', mealsData.length, 'yemek başarıyla yüklendi (localStorage kullanılmıyor)');
+                        return mealsData;
+                    } else {
+                        console.log('⚠️ GitHub\'dan gelen yemek verisi boş veya geçersiz');
+                        return getDemoFoods(); // fallback
+                    }
+                } else {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ GitHub\'dan yemek yükleme hatası:', error);
+                // Demo foods fallback
+                return getDemoFoods();
+            }
+        }
+
         // Sabit yemek seç
         function selectFixedMeal(rowId, mealName, calories, carbs, protein, fat, minQuantity, maxQuantity, step) {
             const row = document.getElementById(rowId);
@@ -11625,6 +11673,13 @@
                                 <div class="criteria-title">${factor.name}</div>
                                 <div class="criteria-description">${factor.description}</div>
                             </div>
+                            <div class="criteria-settings">
+                                <button class="btn btn-outline-secondary btn-sm" 
+                                        onclick="openCriteriaSettings('${factor.id}')" 
+                                        title="Ayarlar">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                            </div>
                         </div>
                     `;
                 });
@@ -11653,6 +11708,363 @@
             }
         }
 
+        // Kriter ayar panelini aç
+        function openCriteriaSettings(criteriaId) {
+            console.log('🔧 Kriter ayarları açılıyor:', criteriaId);
+            
+            // Kriter bilgisini bul
+            const criteria = EMBEDDED_DATA?.planningFactors?.factors?.find(f => f.id === criteriaId);
+            if (!criteria) {
+                alert('Kriter bulunamadı');
+                return;
+            }
+
+            // Tekrar sıklığı kriteri için özel panel
+            if (criteriaId === 'repetition_frequency') {
+                openRepetitionFrequencySettings();
+                return;
+            }
+
+            // Diğer kriterler için genel ayar paneli (şimdilik alert)
+            alert(`${criteria.name} ayar paneli henüz hazır değil`);
+        }
+
+        // Tekrar Sıklığı kriter ayarları
+        function openRepetitionFrequencySettings() {
+            // Modal HTML'i oluştur
+            const modalHtml = `
+                <div class="modal fade" id="repetitionFrequencyModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-repeat"></i> Tekrar Sıklığı Ayarları
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Bu ayarlar otomatik planlama sırasında yemeklerin ne sıklıkla tekrarlanacağını belirler.
+                                </div>
+
+                                <!-- Filtre Kriterleri -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-filter"></i> Filtre Kriterleri</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Kategori</label>
+                                                <select class="form-select" id="rf-category" multiple>
+                                                    <!-- Kategoriler dinamik yüklenecek -->
+                                                </select>
+                                                <small class="text-muted">Seçili kategorilere uygulanacak</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Roller</label>
+                                                <select class="form-select" id="rf-roles" multiple>
+                                                    <!-- Roller dinamik yüklenecek -->
+                                                </select>
+                                                <small class="text-muted">Seçili rollere uygulanacak</small>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Anahtar Kelimeler/Tags</label>
+                                                <input type="text" class="form-control" id="rf-keywords" 
+                                                       placeholder="virgülle ayırın (örn: badem, kuruyemiş)">
+                                                <small class="text-muted">Yemek adı veya tag'inde bu kelimeler geçenler</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sıklık Ayarları -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-clock"></i> Sıklık Formülleri</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Kapsam</label>
+                                                <select class="form-select" id="rf-scope">
+                                                    <option value="day">Günlük</option>
+                                                    <option value="week" selected>Haftalık</option>
+                                                    <option value="month">Aylık</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Minimum Ara (gün)</label>
+                                                <input type="range" class="form-range" id="rf-min-interval" 
+                                                       min="0" max="30" value="1">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>0</small>
+                                                    <span id="rf-min-interval-value">1</span>
+                                                    <small>30</small>
+                                                </div>
+                                                <small class="text-muted">Aynı yemek arası minimum gün</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Maksimum Adet</label>
+                                                <input type="range" class="form-range" id="rf-max-count" 
+                                                       min="1" max="20" value="3">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>1</small>
+                                                    <span id="rf-max-count-value">3</span>
+                                                    <small>20+</small>
+                                                </div>
+                                                <small class="text-muted">Seçilen kapsam içinde max kaç kez</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="rf-flexible">
+                                                <label class="form-check-label" for="rf-flexible">
+                                                    Esnek Mod
+                                                </label>
+                                            </div>
+                                            <small class="text-muted">Makro hedeflerine ulaşmak için sıklık kurallarını esnetle</small>
+                                        </div>
+                                        
+                                        <!-- Önizleme -->
+                                        <div class="mt-3 p-3 bg-light rounded">
+                                            <strong>Önizleme:</strong> 
+                                            <span id="rf-preview">Haftada maksimum 3 kez, minimum 1 gün ara ile</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-primary" onclick="saveRepetitionFrequencySettings()">Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Eğer modal zaten varsa kaldır
+            const existingModal = document.getElementById('repetitionFrequencyModal');
+            if (existingModal) existingModal.remove();
+
+            // Modal'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('repetitionFrequencyModal'));
+            modal.show();
+
+            // Form elemanlarını initialize et
+            initializeRepetitionFrequencyForm();
+        }
+
+        function initializeRepetitionFrequencyForm() {
+            // Kategorileri yükle
+            loadCategoriesIntoSelect();
+            
+            // Rolleri yükle  
+            loadRolesIntoSelect();
+            
+            // Slider değişikliklerini dinle
+            setupRepetitionFrequencySliders();
+            
+            // Mevcut ayarları yükle (varsa)
+            loadSavedRepetitionSettings();
+        }
+
+        function loadCategoriesIntoSelect() {
+            // Yemek veritabanından kategorileri al
+            const categories = [...new Set(
+                (window.nutritionMeals || []).map(meal => meal.category).filter(Boolean)
+            )].sort();
+            
+            const select = document.getElementById('rf-category');
+            if (select) {
+                select.innerHTML = categories.map(cat => 
+                    `<option value="${cat}">${cat}</option>`
+                ).join('');
+            }
+        }
+
+        function loadRolesIntoSelect() {
+            // Yemek veritabanından rolleri al
+            const roles = [...new Set(
+                (window.nutritionMeals || [])
+                    .map(meal => meal.role)
+                    .filter(Boolean)
+            )].sort();
+            
+            const select = document.getElementById('rf-roles');
+            if (select) {
+                select.innerHTML = roles.map(role => 
+                    `<option value="${role}">${getFoodRoleLabel(role)}</option>`
+                ).join('');
+            }
+        }
+
+        function setupRepetitionFrequencySliders() {
+            // Min Interval slider
+            const minIntervalSlider = document.getElementById('rf-min-interval');
+            const minIntervalValue = document.getElementById('rf-min-interval-value');
+            const maxCountSlider = document.getElementById('rf-max-count');
+            const maxCountValue = document.getElementById('rf-max-count-value');
+            const scopeSelect = document.getElementById('rf-scope');
+
+            // Scope değiştiğinde slider limitlerini güncelle
+            function updateSliderLimits() {
+                const scope = scopeSelect.value;
+                const currentMinInterval = parseInt(minIntervalSlider.value);
+                
+                if (scope === 'week') {
+                    // Haftalık kapsam: max 7 gün ara
+                    minIntervalSlider.max = 7;
+                    minIntervalSlider.parentElement.querySelector('small:last-child').textContent = '7';
+                    
+                    // Matematiksel hesaplama: 7 gün / min ara = max adet
+                    const maxPossibleCount = Math.max(1, Math.floor(7 / Math.max(1, currentMinInterval)));
+                    maxCountSlider.max = maxPossibleCount;
+                    maxCountSlider.parentElement.querySelector('small:last-child').textContent = maxPossibleCount;
+                    
+                    // Eğer current value limit aştıysa ayarla
+                    if (parseInt(maxCountSlider.value) > maxPossibleCount) {
+                        maxCountSlider.value = maxPossibleCount;
+                        maxCountValue.textContent = maxPossibleCount;
+                    }
+                } else if (scope === 'month') {
+                    // Aylık kapsam: max 30 gün ara
+                    minIntervalSlider.max = 30;
+                    minIntervalSlider.parentElement.querySelector('small:last-child').textContent = '30';
+                    
+                    // Matematiksel hesaplama: 30 gün / min ara = max adet
+                    const maxPossibleCount = Math.max(1, Math.floor(30 / Math.max(1, currentMinInterval)));
+                    maxCountSlider.max = Math.min(30, maxPossibleCount); // Max 30 sınırı
+                    maxCountSlider.parentElement.querySelector('small:last-child').textContent = Math.min(30, maxPossibleCount);
+                    
+                    // Eğer current value limit aştıysa ayarla
+                    if (parseInt(maxCountSlider.value) > Math.min(30, maxPossibleCount)) {
+                        maxCountSlider.value = Math.min(30, maxPossibleCount);
+                        maxCountValue.textContent = Math.min(30, maxPossibleCount);
+                    }
+                } else {
+                    // Günlük kapsam: max 1 gün ara (saatlik hesap)
+                    minIntervalSlider.max = 1;
+                    minIntervalSlider.parentElement.querySelector('small:last-child').textContent = '1';
+                    maxCountSlider.max = 5; // Günde max 5 kez
+                    maxCountSlider.parentElement.querySelector('small:last-child').textContent = '5';
+                }
+                
+                // Min interval limit kontrolü
+                if (currentMinInterval > parseInt(minIntervalSlider.max)) {
+                    minIntervalSlider.value = minIntervalSlider.max;
+                    minIntervalValue.textContent = minIntervalSlider.max;
+                }
+            }
+
+            // Min interval değiştiğinde max count limitini güncelle
+            function updateMaxCountLimit() {
+                const scope = scopeSelect.value;
+                const currentMinInterval = parseInt(minIntervalSlider.value);
+                
+                if (scope === 'week') {
+                    const maxPossibleCount = Math.max(1, Math.floor(7 / Math.max(1, currentMinInterval)));
+                    maxCountSlider.max = maxPossibleCount;
+                    maxCountSlider.parentElement.querySelector('small:last-child').textContent = maxPossibleCount;
+                } else if (scope === 'month') {
+                    const maxPossibleCount = Math.max(1, Math.floor(30 / Math.max(1, currentMinInterval)));
+                    maxCountSlider.max = Math.min(30, maxPossibleCount);
+                    maxCountSlider.parentElement.querySelector('small:last-child').textContent = Math.min(30, maxPossibleCount);
+                }
+                
+                // Eğer current value limit aştıysa ayarla
+                if (parseInt(maxCountSlider.value) > parseInt(maxCountSlider.max)) {
+                    maxCountSlider.value = maxCountSlider.max;
+                    maxCountValue.textContent = maxCountSlider.max;
+                }
+            }
+
+            if (minIntervalSlider && minIntervalValue) {
+                minIntervalSlider.addEventListener('input', function() {
+                    minIntervalValue.textContent = this.value;
+                    updateMaxCountLimit();
+                    updateRepetitionPreview();
+                });
+            }
+
+            if (maxCountSlider && maxCountValue) {
+                maxCountSlider.addEventListener('input', function() {
+                    maxCountValue.textContent = this.value;
+                    updateRepetitionPreview();
+                });
+            }
+
+            // Scope değişikliği
+            if (scopeSelect) {
+                scopeSelect.addEventListener('change', () => {
+                    updateSliderLimits();
+                    updateRepetitionPreview();
+                });
+            }
+
+            // İlk kurulum
+            updateSliderLimits();
+            updateRepetitionPreview();
+        }
+
+        function updateRepetitionPreview() {
+            const scope = document.getElementById('rf-scope')?.value || 'week';
+            const minInterval = document.getElementById('rf-min-interval')?.value || '1';
+            const maxCount = document.getElementById('rf-max-count')?.value || '3';
+            const flexible = document.getElementById('rf-flexible')?.checked || false;
+
+            const scopeText = {
+                'day': 'Günde',
+                'week': 'Haftada', 
+                'month': 'Ayda'
+            };
+
+            let preview = `${scopeText[scope]} maksimum ${maxCount === '20' ? '20+' : maxCount} kez`;
+            if (parseInt(minInterval) > 0) {
+                preview += `, minimum ${minInterval} gün ara ile`;
+            }
+            if (flexible) {
+                preview += ' (esnek mod)';
+            }
+
+            const previewEl = document.getElementById('rf-preview');
+            if (previewEl) {
+                previewEl.textContent = preview;
+            }
+        }
+
+        function loadSavedRepetitionSettings() {
+            // TODO: Kaydedilmiş ayarları yükle
+            console.log('Kaydedilmiş tekrar sıklığı ayarları yükleniyor...');
+        }
+
+        function saveRepetitionFrequencySettings() {
+            const settings = {
+                categories: Array.from(document.getElementById('rf-category').selectedOptions).map(opt => opt.value),
+                roles: Array.from(document.getElementById('rf-roles').selectedOptions).map(opt => opt.value),
+                keywords: document.getElementById('rf-keywords').value.split(',').map(k => k.trim()).filter(Boolean),
+                scope: document.getElementById('rf-scope').value,
+                minInterval: parseInt(document.getElementById('rf-min-interval').value),
+                maxCount: parseInt(document.getElementById('rf-max-count').value),
+                flexible: document.getElementById('rf-flexible').checked
+            };
+
+            console.log('🔧 Tekrar sıklığı ayarları kaydediliyor:', settings);
+            
+            // GitHub'a kaydet
+            saveCriteriaSettingToGitHub('repetition_frequency', settings);
+            
+            // Modal'ı kapat
+            bootstrap.Modal.getInstance(document.getElementById('repetitionFrequencyModal')).hide();
+            
+            showToast('Tekrar sıklığı ayarları kaydedildi', 'success');
+        }
+
         function refreshCriteriaPriorities() {
             const container = document.getElementById('default-criteria-hierarchy');
             [...container.querySelectorAll('.criteria-item')].forEach((el, idx) => {
@@ -11668,6 +12080,499 @@
             logToConsole('💾 Kriter hiyerarşisi kaydedildi');
             // JSON dosyasına da yaz (data/planning_factors.json)
             saveCriteriaHierarchyToJSON(order);
+        }
+
+        // Criteria setting'i GitHub'a kaydet - AYRI JSON DOSYASINDA
+        async function saveCriteriaSettingToGitHub(criteriaType, settings) {
+            try {
+                const token = getGitHubToken();
+                if (!token) {
+                    console.error('❌ GitHub token bulunamadı');
+                    return false;
+                }
+
+                // Ayrı criteria JSON dosyasını al - system_criteria.json
+                let currentCriteriaData = null;
+                let currentSHA = null;
+                
+                try {
+                    const currentCriteriaResponse = await fetch(`https://api.github.com/repos/mustafasacar35/lipo_program/contents/system_criteria.json?ref=main&t=${Date.now()}`, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+
+                    if (currentCriteriaResponse.ok) {
+                        const responseData = await currentCriteriaResponse.json();
+                        currentSHA = responseData.sha;
+                        
+                        // Mevcut criteria içeriğini decode et
+                        const currentContent = new TextDecoder('utf-8').decode(
+                            new Uint8Array(atob(responseData.content.replace(/\n/g, '')).split('').map(c => c.charCodeAt(0)))
+                        );
+                        
+                        currentCriteriaData = JSON.parse(currentContent);
+                        console.log('🔍 Mevcut criteria data yüklendi:', Object.keys(currentCriteriaData.criteriaSettings || {}));
+                    } else {
+                        console.log('🆕 system_criteria.json bulunamadı, yeni dosya oluşturulacak');
+                    }
+                } catch (fetchError) {
+                    console.log('🆕 Criteria JSON fetch hatası, yeni dosya oluşturulacak:', fetchError.message);
+                }
+
+                // Varsayılan criteria yapısını oluştur
+                if (!currentCriteriaData || typeof currentCriteriaData !== 'object') {
+                    currentCriteriaData = {
+                        version: "1.0",
+                        lastUpdated: new Date().toISOString(),
+                        criteriaSettings: {}
+                    };
+                    console.log('🔧 Yeni criteria yapısı oluşturuldu');
+                }
+
+                // Criteria settings bölümünü kontrol et
+                if (!currentCriteriaData.criteriaSettings) {
+                    currentCriteriaData.criteriaSettings = {};
+                }
+                
+                console.log('🔍 Criteria data structure:', currentCriteriaData);
+                console.log('🔍 Mevcut kriterler:', Object.keys(currentCriteriaData.criteriaSettings));
+                
+                // Yeni kriter ayarını ekle - ESKİLERİ SİLMEDEN
+                const newSetting = {
+                    ...settings,
+                    id: criteriaType,
+                    lastUpdated: new Date().toISOString(),
+                    version: "1.0"
+                };
+                
+                currentCriteriaData.criteriaSettings[criteriaType] = newSetting;
+                currentCriteriaData.lastUpdated = new Date().toISOString();
+                
+                console.log('✅ Kriter eklendi:', criteriaType);
+                console.log('🔍 Toplam kriter sayısı:', Object.keys(currentCriteriaData.criteriaSettings).length);
+
+                // Criteria JSON'u encode et
+                const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentCriteriaData, null, 2))));
+
+                // GitHub'a kaydet - system_criteria.json
+                const updateResponse = await fetch(`https://api.github.com/repos/mustafasacar35/lipo_program/contents/system_criteria.json`, {
+                    method: currentSHA ? 'PUT' : 'PUT', // Her zaman PUT kullan
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: currentSHA ? 
+                            `Update criteria setting: ${criteriaType}` : 
+                            `Create criteria settings with: ${criteriaType}`,
+                        content: newContent,
+                        ...(currentSHA && { sha: currentSHA }), // SHA sadece update için
+                        branch: 'main'
+                    })
+                });
+
+                if (updateResponse.ok) {
+                    // Local cache'i güncelle
+                    if (!window.EMBEDDED_DATA) window.EMBEDDED_DATA = {};
+                    if (!window.EMBEDDED_DATA.criteriaSettings) window.EMBEDDED_DATA.criteriaSettings = {};
+                    window.EMBEDDED_DATA.criteriaSettings[criteriaType] = currentCriteriaData.criteriaSettings[criteriaType];
+                    
+                    // LocalStorage yedekleme de ekle (cache kaybolmasın diye)
+                    try {
+                        const localBackup = localStorage.getItem('criteriaSettings_backup') || '{}';
+                        const backupData = JSON.parse(localBackup);
+                        backupData[criteriaType] = currentCriteriaData.criteriaSettings[criteriaType];
+                        localStorage.setItem('criteriaSettings_backup', JSON.stringify(backupData));
+                        console.log('💾 Criteria settings localStorage\'a yedeklendi');
+                    } catch (backupError) {
+                        console.warn('⚠️ localStorage yedekleme hatası:', backupError);
+                    }
+                    
+                    console.log('✅ Criteria setting system_criteria.json\'a kaydedildi:', criteriaType);
+                    
+                    // Arşiv listesini güncelle
+                    renderCriteriaSettingsArchive();
+                    return true;
+                } else {
+                    console.error('❌ GitHub criteria güncellemesi başarısız:', updateResponse.status);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Criteria setting GitHub kaydetme hatası:', error);
+                return false;
+            }
+        }
+
+        // Tarih formatlama fonksiyonu
+        function formatDate(dateString) {
+            if (!dateString) return 'Bilinmeyen tarih';
+            
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return 'Geçersiz tarih';
+                
+                const now = new Date();
+                const diffMs = now - date;
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                
+                if (diffHours < 1) return 'Az önce';
+                if (diffHours < 24) return `${diffHours} saat önce`;
+                if (diffDays < 7) return `${diffDays} gün önce`;
+                
+                return date.toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (error) {
+                console.error('formatDate hatası:', error);
+                return 'Tarih hatası';
+            }
+        }
+
+        // GitHub token'ını al
+        function getGitHubToken() {
+            return localStorage.getItem('github_token') || localStorage.getItem('githubToken');
+        }
+
+        // Criteria settings arşivini render et
+        async function renderCriteriaSettingsArchive() {
+            console.log('🔧 renderCriteriaSettingsArchive çağrıldı');
+            const container = document.getElementById('criteriaSettingsArchive');
+            if (!container) {
+                console.log('❌ criteriaSettingsArchive container bulunamadı');
+                return;
+            }
+
+            // Önce cache'den kontrol et
+            let criteriaSettings = window.EMBEDDED_DATA?.criteriaSettings || {};
+            let hasExistingCache = Object.keys(criteriaSettings).length > 0;
+            
+            // Cache yoksa localStorage backup'ını kontrol et
+            if (!hasExistingCache) {
+                try {
+                    const localBackup = localStorage.getItem('criteriaSettings_backup');
+                    if (localBackup) {
+                        const backupData = JSON.parse(localBackup);
+                        criteriaSettings = { ...criteriaSettings, ...backupData };
+                        console.log('🔄 localStorage backup\'ından kriterler restore edildi:', Object.keys(criteriaSettings));
+                        
+                        // Cache'i güncelle
+                        if (!window.EMBEDDED_DATA) window.EMBEDDED_DATA = {};
+                        window.EMBEDDED_DATA.criteriaSettings = criteriaSettings;
+                        hasExistingCache = true;
+                    }
+                } catch (backupError) {
+                    console.warn('⚠️ localStorage backup okuma hatası:', backupError);
+                }
+            }
+            
+            console.log('🔍 Mevcut cache durumu:', hasExistingCache ? 'VAR' : 'YOK');
+            console.log('🔍 Cache\'deki kriterler:', Object.keys(criteriaSettings));
+            
+            // GitHub'dan system_criteria.json'u yükle - SADECE cache boşsa veya force refresh
+            try {
+                const token = getGitHubToken();
+                if (token) {
+                    const criteriaResponse = await fetch(`https://api.github.com/repos/mustafasacar35/lipo_program/contents/system_criteria.json?ref=main&t=${Date.now()}`, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+
+                    if (criteriaResponse.ok) {
+                        const criteriaData = await criteriaResponse.json();
+                        const criteriaContent = new TextDecoder('utf-8').decode(
+                            new Uint8Array(atob(criteriaData.content.replace(/\n/g, '')).split('').map(c => c.charCodeAt(0)))
+                        );
+                        
+                        const parsedCriteria = JSON.parse(criteriaContent);
+                        const githubCriteriaSettings = parsedCriteria.criteriaSettings || {};
+                        
+                        // GitHub'dan gelen ile mevcut cache'i birleştir
+                        criteriaSettings = { ...criteriaSettings, ...githubCriteriaSettings };
+                        
+                        // Cache'i güncelle
+                        if (!window.EMBEDDED_DATA) window.EMBEDDED_DATA = {};
+                        window.EMBEDDED_DATA.criteriaSettings = criteriaSettings;
+                        
+                        console.log('✅ Criteria settings GitHub\'dan yüklendi ve cache ile birleştirildi:', Object.keys(criteriaSettings));
+                    } else if (criteriaResponse.status === 404) {
+                        console.log('ℹ️ system_criteria.json dosyası henüz yok, cache korunuyor');
+                        // Cache'i KORU - 404 durumunda silme!
+                    } else {
+                        console.warn('⚠️ GitHub criteria yüklenirken beklenmeyen hata:', criteriaResponse.status);
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Criteria settings yüklenirken hata (cache korunuyor):', error);
+                // Hata durumunda da cache'i koru
+            }
+
+            console.log('🔍 Criteria settings data:', criteriaSettings);
+            const settingsKeys = Object.keys(criteriaSettings);
+            console.log('🔍 Settings keys:', settingsKeys);
+
+            if (settingsKeys.length === 0) {
+                container.innerHTML = '<div class="text-muted small">Henüz kaydedilmiş kriter ayarı yok</div>';
+                console.log('ℹ️ Criteria settings boş, placeholder gösteriliyor');
+                return;
+            }
+
+            let html = '<div class="criteria-settings-archive">';
+            html += '<h6 class="mb-3"><i class="fas fa-cogs"></i> Kaydedilmiş Kriter Ayarları</h6>';
+            
+            settingsKeys.forEach(settingKey => {
+                const setting = criteriaSettings[settingKey];
+                const criteriaLabel = getCriteriaLabel(settingKey);
+                
+                html += `
+                    <div class="criteria-setting-item border rounded p-3 mb-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">${criteriaLabel}</h6>
+                                <div class="small text-muted">
+                                    <i class="fas fa-clock"></i> ${formatDate(setting.lastUpdated)}
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" onclick="editCriteriaSetting('${settingKey}')" title="Düzenle">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteCriteriaSetting('${settingKey}')" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="criteria-setting-details mt-2">
+                            ${renderCriteriaSettingDetails(settingKey, setting)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+            console.log('✅ Criteria settings arşivi render edildi');
+        }
+
+        // Kriter ayar detaylarını render et
+        function renderCriteriaSettingDetails(settingKey, setting) {
+            switch(settingKey) {
+                case 'repetition_frequency':
+                    let details = [];
+                    if (setting.categories?.length) details.push(`Kategoriler: ${setting.categories.join(', ')}`);
+                    if (setting.roles?.length) details.push(`Roller: ${setting.roles.map(r => getFoodRoleLabel(r)).join(', ')}`);
+                    if (setting.keywords?.length) details.push(`Anahtar kelimeler: ${setting.keywords.join(', ')}`);
+                    details.push(`Kapsam: ${setting.scope === 'week' ? 'Haftalık' : 'Günlük'}`);
+                    details.push(`Min aralık: ${setting.minInterval} gün`);
+                    details.push(`Max sayı: ${setting.maxCount}`);
+                    if (setting.flexible) details.push('Esnek mod aktif');
+                    return `<div class="small">${details.join(' • ')}</div>`;
+                    
+                default:
+                    return `<div class="small text-muted">Detaylar mevcut değil</div>`;
+            }
+        }
+
+        // Kriter label'ını al
+        function getCriteriaLabel(criteriaId) {
+            const labels = {
+                'repetition_frequency': 'Tekrar Sıklığı',
+                'macro_targets': 'Makro Hedefler',
+                'seasonal_foods': 'Mevsimsel Yiyecekler',
+                'portion_sizes': 'Porsiyon Boyutları',
+                'liked_foods': 'Sevilen Yiyecekler',
+                'allergies': 'Alerjiler',
+                'medical_conditions': 'Tıbbi Durumlar',
+                'calorie_distribution': 'Kalori Dağılımı',
+                'meal_timing': 'Öğün Zamanlaması',
+                'food_groups': 'Besin Grupları',
+                'cooking_methods': 'Pişirme Yöntemleri',
+                'budget_constraints': 'Bütçe Kısıtlamaları',
+                'preparation_time': 'Hazırlık Süresi'
+            };
+            return labels[criteriaId] || criteriaId;
+        }
+
+        // Kriter ayarını düzenle
+        function editCriteriaSetting(criteriaId) {
+            if (criteriaId === 'repetition_frequency') {
+                // Tekrar sıklığı modal'ını aç ve mevcut verileri yükle
+                const modal = new bootstrap.Modal(document.getElementById('repetitionFrequencyModal'));
+                modal.show();
+                
+                // Mevcut ayarları modal'a yükle
+                const setting = window.EMBEDDED_DATA?.criteriaSettings?.[criteriaId];
+                if (setting) {
+                    loadRepetitionFrequencySettings(setting);
+                }
+            } else {
+                showToast(`${getCriteriaLabel(criteriaId)} düzenleme henüz mevcut değil`, 'info');
+            }
+        }
+
+        // Kriter ayarını sil - AYRI JSON'DAN
+        async function deleteCriteriaSetting(criteriaId) {
+            if (confirm(`${getCriteriaLabel(criteriaId)} ayarını silmek istediğinizden emin misiniz?`)) {
+                try {
+                    const token = getGitHubToken();
+                    if (!token) {
+                        console.error('❌ GitHub token bulunamadı');
+                        return false;
+                    }
+
+                    // system_criteria.json'u al
+                    const currentCriteriaResponse = await fetch(`https://api.github.com/repos/mustafasacar35/lipo_program/contents/system_criteria.json?ref=main&t=${Date.now()}`, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+
+                    if (!currentCriteriaResponse.ok) {
+                        console.error('❌ system_criteria.json bulunamadı');
+                        return false;
+                    }
+
+                    const currentData = await currentCriteriaResponse.json();
+                    
+                    // Mevcut criteria içeriğini decode et
+                    const currentContent = new TextDecoder('utf-8').decode(
+                        new Uint8Array(atob(currentData.content.replace(/\n/g, '')).split('').map(c => c.charCodeAt(0)))
+                    );
+                    
+                    const currentCriteria = JSON.parse(currentContent);
+                    
+                    // Criteria setting'i sil
+                    if (currentCriteria.criteriaSettings && currentCriteria.criteriaSettings[criteriaId]) {
+                        delete currentCriteria.criteriaSettings[criteriaId];
+                        currentCriteria.lastUpdated = new Date().toISOString();
+
+                        console.log('🗑️ Kriter silindi:', criteriaId);
+                        console.log('🔍 Kalan kriterler:', Object.keys(currentCriteria.criteriaSettings));
+
+                        // Yeni içeriği encode et
+                        const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentCriteria, null, 2))));
+
+                        // GitHub'a kaydet
+                        const updateResponse = await fetch(`https://api.github.com/repos/mustafasacar35/lipo_program/contents/system_criteria.json`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${token}`,
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: `Delete criteria setting: ${criteriaId}`,
+                                content: newContent,
+                                sha: currentData.sha,
+                                branch: 'main'
+                            })
+                        });
+
+                        if (updateResponse.ok) {
+                            // Local cache'den de sil
+                            if (window.EMBEDDED_DATA?.criteriaSettings?.[criteriaId]) {
+                                delete window.EMBEDDED_DATA.criteriaSettings[criteriaId];
+                            }
+                            
+                            console.log('✅ Criteria setting system_criteria.json\'dan silindi:', criteriaId);
+                            
+                            // Arşiv listesini güncelle
+                            renderCriteriaSettingsArchive();
+                            showToast(`${getCriteriaLabel(criteriaId)} ayarı silindi`, 'success');
+                            return true;
+                        } else {
+                            console.error('❌ GitHub criteria güncellemesi başarısız');
+                            showToast('Silme işlemi başarısız', 'error');
+                            return false;
+                        }
+                    } else {
+                        console.log('ℹ️ Silinecek kriter bulunamadı:', criteriaId);
+                        showToast('Kriter zaten mevcut değil', 'warning');
+                    }
+                } catch (error) {
+                    console.error('❌ Criteria setting silme hatası:', error);
+                    showToast('Silme işlemi başarısız', 'error');
+                    return false;
+                }
+            }
+        }
+
+        // Tekrar sıklığı ayarlarını modal'a yükle
+        function loadRepetitionFrequencySettings(setting) {
+            // Kategorileri seç
+            const categoriesSelect = document.getElementById('rf-categories');
+            if (categoriesSelect && setting.categories) {
+                Array.from(categoriesSelect.options).forEach(option => {
+                    option.selected = setting.categories.includes(option.value);
+                });
+            }
+
+            // Rolleri seç
+            const rolesSelect = document.getElementById('rf-roles');
+            if (rolesSelect && setting.roles) {
+                Array.from(rolesSelect.options).forEach(option => {
+                    option.selected = setting.roles.includes(option.value);
+                });
+            }
+
+            // Anahtar kelimeleri yükle
+            const keywordsInput = document.getElementById('rf-keywords');
+            if (keywordsInput && setting.keywords) {
+                keywordsInput.value = setting.keywords.join(', ');
+            }
+
+            // Kapsam seç
+            const scopeSelect = document.getElementById('rf-scope');
+            if (scopeSelect && setting.scope) {
+                scopeSelect.value = setting.scope;
+            }
+
+            // Slider değerlerini ayarla
+            const minIntervalSlider = document.getElementById('rf-min-interval');
+            if (minIntervalSlider && setting.minInterval) {
+                minIntervalSlider.value = setting.minInterval;
+            }
+
+            const maxCountSlider = document.getElementById('rf-max-count');
+            if (maxCountSlider && setting.maxCount) {
+                maxCountSlider.value = setting.maxCount;
+            }
+
+            // Esnek mod
+            const flexibleCheckbox = document.getElementById('rf-flexible');
+            if (flexibleCheckbox) {
+                flexibleCheckbox.checked = setting.flexible || false;
+            }
+
+            // Slider değerlerini güncelle
+            updateRepetitionSliderValues();
+            updateRepetitionPreview();
+        }
+
+        // Slider değerlerini güncelle (edit için)
+        function updateRepetitionSliderValues() {
+            const minIntervalSlider = document.getElementById('rf-min-interval');
+            const minIntervalValue = document.getElementById('rf-min-interval-value');
+            const maxCountSlider = document.getElementById('rf-max-count');
+            const maxCountValue = document.getElementById('rf-max-count-value');
+            
+            if (minIntervalSlider && minIntervalValue) {
+                minIntervalValue.textContent = minIntervalSlider.value;
+            }
+            
+            if (maxCountSlider && maxCountValue) {
+                maxCountValue.textContent = maxCountSlider.value;
+            }
         }
 
         // Kriter hiyerarşisini data/planning_factors.json'a kaydet
@@ -12347,6 +13252,17 @@
                 return `${depStr} → ${targetStr} (${r.ratio || 40}%)`;
             }
             
+            // Count değerini string olarak döndür (range desteği ile)
+            function getCountDisplayString(countType, count, countMax) {
+                switch (countType) {
+                    case 'min': return `En az ${count}`;
+                    case 'max': return `En çok ${count}`;
+                    case 'fixed': return `Sabit ${count}`;
+                    case 'range': return `${count}-${countMax || count} arası`;
+                    default: return `${count}`;
+                }
+            }
+            
             // Frequency rule ise
             const f = r.filters || {};
             const parts = [];
@@ -12355,7 +13271,7 @@
             if (f.categories?.length) parts.push(`Kat:[${f.categories.join(', ')}]`);
             if (f.roles?.length) parts.push(`Rol:[${(f.roles||[]).map(getFoodRoleLabel).join(', ')}]`);
             const scopeStr = r.scope === 'meal' ? `Öğün(${(r.meals||[]).length? (r.meals||[]).map(m=>({breakfast:'Kahvaltı',lunch:'Öğle',dinner:'Akşam',snack:'Ara Öğün'}[m]||m)).join(', '):'tümü'})` : (r.scope==='day'?'Gün':'Hafta');
-            const countStr = (r.countType==='min'?'En az':r.countType==='max'?'En çok':'Sabit')+` ${r.count}`;
+            const countStr = getCountDisplayString(r.countType, r.count, r.countMax);
             return `${scopeStr} • ${countStr} ${parts.length? '• '+parts.join(' | '):''}`;
         }
 
@@ -12372,6 +13288,8 @@
             const totalRules = frequencyRules.length + dependencyRules.length + lockRules.length;
             if (!totalRules) {
                 container.innerHTML = '<div class="text-muted">Henüz kural eklenmemiş. Aşağıdan kural ekleyin; burada sırasını belirleyin.</div>';
+                // Criteria settings arşivini de render et
+                renderCriteriaSettingsArchive();
                 return;
             }
             
@@ -12411,6 +13329,9 @@
                     </div>
                 </div>
             `).join('');
+            
+            // Criteria settings arşivini de render et
+            renderCriteriaSettingsArchive();
         }
 
         // Kural seç
@@ -12487,7 +13408,7 @@
                 f.roles?.length ? `Rol: ${(f.roles||[]).map(getFoodRoleLabel).join(', ')}` : null
             ].filter(Boolean).join(' | ');
             const scopeStr = r.scope === 'meal' ? `Öğün: ${(r.meals||[]).map(m=>({breakfast:'Kahvaltı',lunch:'Öğle',dinner:'Akşam',snack:'Ara Öğün'}[m]||m)).join(', ')}` : (r.scope==='day'?'Gün':'Hafta');
-            const countStr = (r.countType==='min'?'En az':r.countType==='max'?'En çok':'Sabit')+` ${r.count}`;
+            const countStr = getCountDisplayString(r.countType, r.count, r.countMax);
             const weeksStr = (r.weeks && r.weeks.length) ? r.weeks.join(', ') : 'Tümü';
             details.innerHTML = `
                 <div class="card-body">
@@ -12569,7 +13490,18 @@
                     try {
                         // Kurallar fallback
                         const sorted = Array.isArray(frequencyRules) ? [...frequencyRules].sort((a,b)=>(a.priority||9999)-(b.priority||9999)) : [];
-                        const compact = sorted.map(r => ({ id: r.id, title: r.title||undefined, filters: r.filters||{}, scope: r.scope, meals: r.meals||[], countType: r.countType, count: r.count, weeks: r.weeks||[], priority: r.priority }));
+                        const compact = sorted.map(r => ({ 
+                            id: r.id, 
+                            title: r.title||undefined, 
+                            filters: r.filters||{}, 
+                            scope: r.scope, 
+                            meals: r.meals||[], 
+                            countType: r.countType, 
+                            count: r.count, 
+                            countMax: r.countMax, 
+                            weeks: r.weeks||[], 
+                            priority: r.priority 
+                        }));
                         downloadJsonFallback('system_rules.json', { rulesArchive: { frequencyRules: compact, priorityPolicy: 'top-first' }, lastUpdated: new Date().toISOString() });
                         // Kriterler fallback
                         const order = container ? [...container.querySelectorAll('.criteria-item')].map(el => el.getAttribute('data-criteria-id')) : [];
@@ -15141,7 +16073,7 @@
         // ====== KURAL MOTORU: SİSTEM ARŞİVİ + SIKLIK KURALLARI ======
         // UI katmanı frequencyRules ve dependencyRules ile çalışır; kalıcı kayıt "systemRulesArchive" altında tutulur.
         // Archive şeması: { version, lastUpdated, rules: { frequency: Rule[], dependency: Rule[], lock: Rule[] } }
-        let frequencyRules = []; // {id, filters:{names, nameMode, tags, tagMode, categories[], roles[]}, scope:'meal|day|week', meals[], countType:'min|max|fixed', count:number, weeks:number[]}
+        let frequencyRules = []; // {id, filters:{names, nameMode, tags, tagMode, categories[], roles[]}, scope:'meal|day|week', meals[], countType:'min|max|fixed|range', count:number, countMax:number, weeks:number[]}
         let dependencyRules = []; // {id, dependent:{names, nameMode, tags, tagMode, categories[], roles[]}, target:{names, nameMode, tags, tagMode, categories[], roles[]}, ratio:number}
         let lockRules = []; // {id, categories[], roles[], scope:'days|weeks', duration:number, weeks:number[]}
         let systemRulesArchive = null;
@@ -15296,6 +16228,13 @@
                     lastUpdated: data.lastUpdated || new Date().toISOString()
                 };
                 
+                // Criteria settings'i de yükle
+                if (data.criteriaSettings) {
+                    if (!window.EMBEDDED_DATA) window.EMBEDDED_DATA = {};
+                    window.EMBEDDED_DATA.criteriaSettings = data.criteriaSettings;
+                    console.log('✅ GitHub\'dan criteria settings yüklendi:', Object.keys(data.criteriaSettings));
+                }
+                
                 console.log('✅ GitHub\'dan kullanıcı kuralları yüklendi:', {
                     frequency: systemRulesArchive.rules.frequency.length,
                     dependency: systemRulesArchive.rules.dependency.length,
@@ -15383,6 +16322,7 @@
                     meals: r.meals || [],
                     countType: r.countType,
                     count: r.count,
+                    countMax: r.countMax, // Range desteği için
                     weeks: r.weeks || [],
                     priority: r.priority
                 }));
@@ -15732,6 +16672,26 @@
             });
         }
 
+        // Count input alanlarını countType'a göre güncelle
+        function updateCountInputs() {
+            const countType = document.getElementById('fr-count-type').value;
+            const countInput = document.getElementById('fr-count');
+            const maxInput = document.getElementById('fr-count-max');
+            const separator = document.getElementById('fr-range-separator');
+            
+            if (countType === 'range') {
+                // Aralık modu: hem min hem max input göster
+                countInput.placeholder = 'min';
+                maxInput.style.display = 'block';
+                separator.style.display = 'block';
+            } else {
+                // Tek değer modu: sadece ana input
+                countInput.placeholder = 'adet';
+                maxInput.style.display = 'none';
+                separator.style.display = 'none';
+            }
+        }
+
     function saveFrequencyRuleFromForm() {
             const id = document.getElementById('fr-id').value || (Date.now().toString(36) + Math.random().toString(36).slice(2,6));
             const names = parseTerms(document.getElementById('fr-name-terms').value);
@@ -15745,15 +16705,23 @@
                 .map(id=>document.getElementById(id))
                 .filter(el=>el && el.checked)
                 .map(el=>el.value);
-            const countType = document.getElementById('fr-count-type').value; // min|max|fixed
+            const countType = document.getElementById('fr-count-type').value; // min|max|fixed|range
             const count = parseInt(document.getElementById('fr-count').value, 10);
+            const countMax = countType === 'range' ? parseInt(document.getElementById('fr-count-max').value, 10) : undefined;
             const weeks = parseWeeks(document.getElementById('fr-weeks').value);
 
             // basit validasyon
             if (isNaN(count)) { alert('Sıklık adetini girin'); return; }
+            if (countType === 'range') {
+                if (isNaN(countMax)) { alert('Maksimum adet değerini girin'); return; }
+                if (countMax < count) { alert('Maksimum değer minimum değerden büyük olmalı'); return; }
+            }
             if (scope === 'meal' && meals.length === 0) { alert('Öğün kapsamı için en az bir öğün seçin'); return; }
 
             const rule = { id, filters:{ names, nameMode, tags, tagMode, categories, roles }, scope, meals, countType, count, weeks };
+            if (countType === 'range') {
+                rule.countMax = countMax;
+            }
             const idx = frequencyRules.findIndex(r => r.id === id);
             if (idx >= 0) frequencyRules[idx] = rule; else frequencyRules.push(rule);
             persistFrequencyRules();
@@ -15786,7 +16754,7 @@
 
                 const scopeStr = r.scope === 'meal' ? `Öğün (${(r.meals||[]).map(m=>({breakfast:'Kahvaltı',lunch:'Öğle',dinner:'Akşam',snack:'Ara Öğün'}[m]||m)).join(', ')})`
                               : r.scope === 'day' ? 'Gün' : 'Hafta';
-                const countStr = (r.countType === 'min' ? 'En az' : r.countType === 'max' ? 'En çok' : 'Sabit') + ` ${r.count}`;
+                const countStr = getCountDisplayString(r.countType, r.count, r.countMax);
                 const weeksStr = (r.weeks && r.weeks.length) ? r.weeks.join(', ') : 'Tümü';
                 return `<tr>
                     <td><span class="badge bg-primary">Sıklık</span></td>
@@ -15834,6 +16802,8 @@
             // count
             document.getElementById('fr-count-type').value = r.countType || 'max';
             document.getElementById('fr-count').value = r.count || 0;
+            document.getElementById('fr-count-max').value = r.countMax || '';
+            updateCountInputs(); // Input alanlarını count type'a göre güncelle
             // weeks
             document.getElementById('fr-weeks').value = (r.weeks || []).join(', ');
         }
@@ -16400,6 +17370,7 @@ Desteklenen Dosyalar:
         document.addEventListener('DOMContentLoaded', function() {
             updateConnectionStatusDisplay();
             updateLastSyncTime();
+            updateCountInputs(); // Count input alanlarını initialize et
             
             // GitHub token kontrolü mevcut fonksiyona entegre ediyoruz
             setTimeout(() => {
