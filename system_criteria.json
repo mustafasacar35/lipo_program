@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-08-27T16:42:32.371Z",
+  "lastUpdated": "2025-08-27T20:20:55.187Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -41,14 +41,14 @@
     "food_compatibility": {
       "enabled": true,
       "magneticEffect": true,
-      "magneticStrength": "orta",
-      "magneticRadius": 3,
-      "compatibilityWeight": 0.4,
+      "magneticStrength": "guclu",
+      "magneticRadius": 1,
+      "compatibilityWeight": 1,
       "penalizeIncompatible": -0.3,
-      "toleranceLevel": "orta",
-      "crossMealCompatibility": false,
-      "prioritizeMainDish": false,
-      "lastUpdated": "2025-08-27T16:24:34.921Z",
+      "toleranceLevel": "yok",
+      "crossMealCompatibility": true,
+      "prioritizeMainDish": true,
+      "lastUpdated": "2025-08-27T20:20:55.187Z",
       "id": "food_compatibility",
       "version": "1.0"
     },
