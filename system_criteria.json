@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-08-27T16:40:38.049Z",
+  "lastUpdated": "2025-08-27T16:42:32.371Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -50,6 +50,22 @@
       "prioritizeMainDish": false,
       "lastUpdated": "2025-08-27T16:24:34.921Z",
       "id": "food_compatibility",
+      "version": "1.0"
+    },
+    "auto_planning_methods": {
+      "enabled": true,
+      "defaultAlgorithm": "greedy",
+      "maxAttempts": 20,
+      "qualityThreshold": 0.8,
+      "varietyFactor": 0.6,
+      "geneticParams": {
+        "populationSize": 50,
+        "generations": 20,
+        "mutationRate": 0.05,
+        "crossoverRate": 0.8
+      },
+      "lastUpdated": "2025-08-27T16:42:32.371Z",
+      "id": "auto_planning_methods",
       "version": "1.0"
     }
   }
