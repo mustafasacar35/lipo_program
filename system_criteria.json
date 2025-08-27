@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-08-27T13:26:04.164Z",
+  "lastUpdated": "2025-08-27T13:34:56.696Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -20,14 +20,21 @@
       "distribution": {
         "breakfast": 25,
         "snack1": 10,
-        "lunch": 20,
+        "lunch": 30,
         "snack2": 10,
-        "dinner": 40
+        "dinner": 25
+      },
+      "activeMeals": {
+        "breakfast": true,
+        "snack1": true,
+        "lunch": true,
+        "snack2": true,
+        "dinner": true
       },
       "autoSync": true,
       "targetCalories": 1022,
       "updatedFrom": "system_meal_macros",
-      "lastUpdated": "2025-08-27T13:26:04.164Z",
+      "lastUpdated": "2025-08-27T13:34:56.696Z",
       "id": "calorie_distribution",
       "version": "1.0"
     }
