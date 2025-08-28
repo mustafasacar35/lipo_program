@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-08-28T20:29:14.529Z",
+  "lastUpdated": "2025-08-28T20:29:55.932Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -54,17 +54,12 @@
     },
     "auto_planning_methods": {
       "enabled": true,
-      "defaultAlgorithm": "greedy",
-      "maxAttempts": 20,
-      "qualityThreshold": 0.8,
-      "varietyFactor": 0.6,
-      "geneticParams": {
-        "populationSize": 50,
-        "generations": 20,
-        "mutationRate": 0.05,
-        "crossoverRate": 0.8
-      },
-      "lastUpdated": "2025-08-27T16:42:32.371Z",
+      "defaultAlgorithm": "genetic_algorithm",
+      "selectedMethod": "genetic_algorithm",
+      "maxAttempts": 50,
+      "qualityThreshold": 0.65,
+      "varietyFactor": 0.7,
+      "lastUpdated": "2025-08-28T20:29:55.932Z",
       "id": "auto_planning_methods",
       "version": "1.0"
     }
