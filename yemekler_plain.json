@@ -1,33 +1,29 @@
 [
   {
     "name": "Kurşun Geçirmez Kahve",
+    "category": "KAHVALTI",
     "calories": 90,
     "protein": 0,
     "carbs": 0,
     "fat": 10,
-    "maxQuantity": 1,
     "minQuantity": 0.5,
+    "maxQuantity": 1,
     "step": 0.5,
-    "tags": [
-      "kahve",
-      "keto",
-      "kurşun geçirmez"
-    ],
+    "multiplier": 1,
+    "portionFixed": false,
     "role": "drink",
-    "mealType": [
-      "breakfast"
-    ],
     "keto": true,
     "lowcarb": true,
     "fillerLunch": false,
     "fillerDinner": false,
-    "category": "KAHVALTI",
-    "portionFixed": false,
-    "multiplier": 1,
     "seasonRange": "[1,12]",
     "isReversedSeason": false,
+    "tags": [],
     "compatibilityTags": null,
-    "incompatibilityTags": null
+    "incompatibilityTags": null,
+    "mealType": [
+      "breakfast"
+    ]
   },
   {
     "name": "1 tatlı kaşığı Tereyağı",
