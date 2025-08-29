@@ -40,7 +40,7 @@
     ],
     "role": "sideDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -69,7 +69,7 @@
     ],
     "role": "supplement",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -164,7 +164,7 @@
     ],
     "role": "mainDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -232,7 +232,7 @@
     ],
     "role": "mainDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -337,7 +337,7 @@
     ],
     "role": "mainDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -372,7 +372,7 @@
     ],
     "role": "mainDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -539,7 +539,7 @@
     ],
     "role": "mainDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -638,7 +638,7 @@
     ],
     "role": "mainDish",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "keto": true,
     "lowcarb": true,
@@ -1161,7 +1161,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -1351,7 +1351,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast",
+      "lunch",
       "lunch"
     ],
     "isReversedSeason": false,
@@ -9888,7 +9888,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -9918,7 +9918,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -9948,7 +9948,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -9979,7 +9979,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -10010,7 +10010,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -10041,7 +10041,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -10071,7 +10071,7 @@
     "multiplier": 1,
     "seasonRange": "[1,12]",
     "mealType": [
-      "breakfast"
+      "lunch"
     ],
     "isReversedSeason": false,
     "incompatibilityTags": null
@@ -12545,7 +12545,7 @@
       "meyve"
     ],
     "role": "fruit",
-    "mealType": "breakfast,dinner",
+    "mealType": "lunch,dinner",
     "keto": true,
     "lowcarb": true,
     "fillerLunch": false,
