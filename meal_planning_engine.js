@@ -370,8 +370,15 @@ class MealPlanningEngine {
         
         const advancedRules = params.advancedRules || {};
         const days = params.days || 7;
+    // 🎯 Hedef kalori / makro ve öğün kalori dağılımı alınır
+    const targetCalories = params.targetCalories || params.targetMacros?.calories || params.patientProfile?.nutritionPreferences?.targetCalories || null;
+    const targetMacros = params.targetMacros || params.patientProfile?.nutritionPreferences?.targetMacros || null; // {carbs, protein, fat, calories}
+    const mealCalorieDistribution = params.mealCalorieDistribution || params.patientProfile?.nutritionPreferences?.mealCalorieDistribution || null; // {breakfast:25, snack1:10,...}
+    if (targetCalories) console.log('🎯 Plan hedef kalorisi:', targetCalories);
+    if (targetMacros) console.log('� Plan hedef makroları:', targetMacros);
+    if (mealCalorieDistribution) console.log('🥧 Öğün kalori dağılımı uygulanacak:', mealCalorieDistribution);
         
-        // 🔧 DEFAULT mealRules ekle eğer yoksa
+        // �🔧 DEFAULT mealRules ekle eğer yoksa
         if (!advancedRules.mealRules) {
             advancedRules.mealRules = {
                 breakfast: { min: 2, max: 3 },
@@ -399,19 +406,33 @@ class MealPlanningEngine {
         
         // 5. YENİ: Anahtar kelime bazlı kuralları uygula
         this.applyKeywordBasedRules(weeklyPlan, advancedRules.keywordRules);
+
+        // 6. 🥧 Öğün kalori dağılımı uygula (varsa)
+        if (targetCalories && mealCalorieDistribution) {
+            try { this.applyCalorieDistribution(weeklyPlan, targetCalories, mealCalorieDistribution); }
+            catch(e){ console.warn('⚠️ Kalori dağılımı uygulanamadı:', e); }
+        }
+        // 7. Makro hedef uyumluluğu puanı (bilgi amaçlı)
+        let macroScore = null;
+        if (targetMacros && targetCalories) {
+            try { macroScore = this.evaluateMacroTargets(weeklyPlan, targetMacros, targetCalories); }
+            catch(e){ console.warn('⚠️ Makro hedef değerlendirmesi hata:', e); }
+        }
         
         // 3. Kural uyumluluğunu hesapla
         const compliance = this.calculateAdvancedCompliance(weeklyPlan, advancedRules);
         
         // 4. Plan özet oluştur
         const summary = this.generateAdvancedSummary(weeklyPlan, advancedRules);
+        if (macroScore) summary.macroScore = macroScore;
         
         const result = {
             success: true,  // 🔧 Eksik success field eklendi
             plan: weeklyPlan,
             compliance: compliance,
             rules: advancedRules,
-            summary: summary
+            summary: summary,
+            targets: { calories: targetCalories, macros: targetMacros, mealCalorieDistribution }
         };
         
         this.currentPlan = result;
@@ -426,7 +447,9 @@ class MealPlanningEngine {
         for (let i = 0; i < days; i++) {
             plan.push({
                 breakfast: [],
+                snack1: [],
                 lunch: [],
+                snack2: [],
                 dinner: []
             });
         }
@@ -886,12 +909,12 @@ class MealPlanningEngine {
             totalDays: weeklyPlan.length,
             totalMeals: 0,
             roleDistribution: {},
-            mealTypeDistribution: { breakfast: 0, lunch: 0, dinner: 0 },
+            mealTypeDistribution: { breakfast: 0, snack1: 0, lunch: 0, snack2: 0, dinner: 0 },
             averageMealsPerDay: 0
         };
         
         weeklyPlan.forEach(day => {
-            ['breakfast', 'lunch', 'dinner'].forEach(mealType => {
+            ['breakfast', 'snack1', 'lunch', 'snack2', 'dinner'].forEach(mealType => {
                 const meals = day[mealType] || [];
                 summary.totalMeals += meals.length;
                 summary.mealTypeDistribution[mealType] += meals.length;
@@ -1067,16 +1090,14 @@ class MealPlanningEngine {
         const planData = [];
         for (let day = 0; day < days; day++) {
             const breakfast = this.selectRandomMeals(2, 'breakfast');
+            const snack1 = this.selectRandomMeals(1, 'snack1');
             const lunch = this.selectRandomMeals(2, 'lunch');
+            const snack2 = this.selectRandomMeals(1, 'snack2');
             const dinner = this.selectRandomMeals(2, 'dinner');
-            
-            console.log(`🔍 Day ${day}: breakfast=${breakfast ? breakfast.length : 'null'}, lunch=${lunch ? lunch.length : 'null'}, dinner=${dinner ? dinner.length : 'null'}`);
-            
-            const dayPlan = {
-                breakfast: breakfast || [],
-                lunch: lunch || [],
-                dinner: dinner || []
-            };
+
+            console.log(`🔍 Day ${day}: brk=${breakfast?.length||0}, s1=${snack1?.length||0}, ln=${lunch?.length||0}, s2=${snack2?.length||0}, dn=${dinner?.length||0}`);
+
+            const dayPlan = { breakfast: breakfast||[], snack1: snack1||[], lunch: lunch||[], snack2: snack2||[], dinner: dinner||[] };
             planData.push(dayPlan);
         }
         
@@ -1086,7 +1107,7 @@ class MealPlanningEngine {
         let totalMeals = 0;
         try {
             totalMeals = planData.reduce((total, day) => {
-                const dayTotal = (day.breakfast?.length || 0) + (day.lunch?.length || 0) + (day.dinner?.length || 0);
+                const dayTotal = (day.breakfast?.length||0)+(day.snack1?.length||0)+(day.lunch?.length||0)+(day.snack2?.length||0)+(day.dinner?.length||0);
                 return total + dayTotal;
             }, 0);
             console.log('🔍 totalMeals calculated: ' + totalMeals);
@@ -1141,6 +1162,66 @@ class MealPlanningEngine {
     // Basit plan oluşturma (eski uyumluluk)
     async createSimplePlan(params = {}) {
         return this.createBasicPlan(params);
+    }
+
+    // 🥧 Öğün kalori dağılımını uygula: Her öğünün içinde yer alan öğe sayısını hedef kalori payına göre ölçekler (şimdilik placeholder)
+    applyCalorieDistribution(weeklyPlan, targetCalories, distribution) {
+        console.log('🥧 applyCalorieDistribution başlıyor...');
+        // Şu an için sadece her güne meta ekleyelim; ileride yemek porsiyon / seçimi ağırlıklandırılabilir
+        weeklyPlan.forEach((day, idx) => {
+            day._calorieTargets = {};
+            Object.entries(distribution).forEach(([mealType, percent]) => {
+                const mealCalories = Math.round(targetCalories * (percent / 100));
+                day._calorieTargets[mealType] = mealCalories;
+            });
+            // Geçici: Her öğünde yeterli öğe yoksa random ekleme (gözle görülür test için)
+            ['breakfast','snack1','lunch','snack2','dinner'].forEach(mealType => {
+                if (!day[mealType]) day[mealType] = [];
+                // Eğer tamamen boşsa en az 1 yemek eklemeye çalış
+                if (day[mealType].length === 0) {
+                    const candidate = this.selectRandomMeals(1, mealType === 'snack1' || mealType === 'snack2' ? 'snack' : mealType);
+                    if (candidate.length>0) day[mealType].push(...candidate);
+                }
+            });
+        });
+        console.log('🥧 applyCalorieDistribution tamamlandı');
+    }
+
+    // 💪 Makro hedeflere yaklaşım değerlendirmesi
+    evaluateMacroTargets(weeklyPlan, targetMacros, targetCalories) {
+        // Şu an yemek nesnelerinde makro alanları varsa topla
+        let total = { calories:0, carbs:0, protein:0, fat:0 };
+        weeklyPlan.forEach(day => {
+            ['breakfast','snack1','lunch','snack2','dinner'].forEach(mt => {
+                (day[mt]||[]).forEach(meal => {
+                    total.calories += meal.kalori || meal.calories || 0;
+                    total.carbs += meal.karbonhidrat || meal.carbs || 0;
+                    total.protein += meal.protein || 0;
+                    total.fat += meal.yag || meal.fat || 0;
+                });
+            });
+        });
+        const diff = {
+            calories: targetCalories ? total.calories - targetCalories*weeklyPlan.length : null,
+            carbs: targetMacros.carbs ? total.carbs - targetMacros.carbs*weeklyPlan.length : null,
+            protein: targetMacros.protein ? total.protein - targetMacros.protein*weeklyPlan.length : null,
+            fat: targetMacros.fat ? total.fat - targetMacros.fat*weeklyPlan.length : null
+        };
+        const scoreComponents = [];
+        ['calories','carbs','protein','fat'].forEach(k => {
+            if (diff[k] != null) {
+                const targetTotal = (k==='calories'? targetCalories: targetMacros[k]) * weeklyPlan.length;
+                if (targetTotal>0) {
+                    const deviationPct = Math.abs(diff[k]) / targetTotal; // 0 -> mükemmel
+                    const compScore = Math.max(0, 100 - deviationPct*100); // % sapma kadar puan düş
+                    scoreComponents.push(compScore);
+                }
+            }
+        });
+        const overall = scoreComponents.length>0 ? Math.round(scoreComponents.reduce((a,b)=>a+b,0)/scoreComponents.length) : null;
+        const macroScore = { totalIntake: total, diff, overallScore: overall };
+        console.log('💪 Makro hedef değerlendirmesi:', macroScore);
+        return macroScore;
     }
 
     // Getters
