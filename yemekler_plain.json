@@ -30,34 +30,6 @@
     "incompatibilityTags": null
   },
   {
-    "name": "abc",
-    "calories": 17,
-    "protein": 1,
-    "carbs": 1,
-    "fat": 1,
-    "maxQuantity": 1,
-    "minQuantity": 0.5,
-    "step": 0.5,
-    "tags": [],
-    "role": "mainDish",
-    "mealType": [],
-    "keto": true,
-    "lowcarb": true,
-    "fillerLunch": true,
-    "fillerDinner": true,
-    "seasonRange": "[1,12]",
-    "isReversedSeason": false,
-    "portionFixed": false,
-    "multiplier": 1,
-    "category": "KAHVALTI",
-    "compatibilityTags": [
-      "salata",
-      "kuruyemiş",
-      "sebze"
-    ],
-    "incompatibilityTags": null
-  },
-  {
     "name": "111",
     "category": "KAHVALTI",
     "role": "mainDish",
