@@ -3435,33 +3435,29 @@
   },
   {
     "name": "Nohut Yemeği (1 su bardağı nohut ile)",
+    "category": "AKSAM",
     "calories": 260,
     "protein": 14,
     "carbs": 33,
     "fat": 8,
-    "maxQuantity": 1,
     "minQuantity": 0.5,
+    "maxQuantity": 1,
     "step": 0.5,
-    "tags": [
-      "nohut"
-    ],
+    "multiplier": 1,
+    "portionFixed": false,
     "role": "mainDish",
-    "mealType": "dinner",
-    "keto": false,
-    "lowcarb": false,
+    "keto": true,
+    "lowcarb": true,
     "fillerLunch": false,
     "fillerDinner": false,
-    "category": "GENEL",
-    "portionFixed": false,
-    "multiplier": 1,
     "seasonRange": "[1,12]",
     "isReversedSeason": false,
-    "compatibilityTags": [
-      "salata",
-      "kuruyemiş",
-      "sebze"
-    ],
-    "incompatibilityTags": null
+    "tags": [],
+    "compatibilityTags": null,
+    "incompatibilityTags": null,
+    "mealType": [
+      "dinner"
+    ]
   },
   {
     "name": "Pırasa Yemeği (100 gr pırasa + 100 gr kıyma ile)",
