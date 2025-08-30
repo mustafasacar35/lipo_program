@@ -11543,29 +11543,29 @@
   },
   {
     "name": "Mercimek Çorbası",
+    "category": "CORBALAR",
     "calories": 150,
     "protein": 9,
     "carbs": 20,
     "fat": 3,
-    "maxQuantity": 1,
     "minQuantity": 0.5,
+    "maxQuantity": 1,
     "step": 0.5,
-    "tags": [
-      "çorba"
-    ],
+    "multiplier": 1,
+    "portionFixed": false,
     "role": "soup",
-    "mealType": "lunch,dinner",
     "keto": false,
-    "lowcarb": false,
+    "lowcarb": true,
     "fillerLunch": false,
     "fillerDinner": false,
-    "category": "GENEL",
-    "portionFixed": false,
-    "multiplier": 1,
     "seasonRange": "[1,12]",
     "isReversedSeason": false,
+    "tags": [],
     "compatibilityTags": null,
-    "incompatibilityTags": null
+    "incompatibilityTags": null,
+    "mealType": [
+      "dinner"
+    ]
   },
   {
     "name": "Brokoli Çorbası",
