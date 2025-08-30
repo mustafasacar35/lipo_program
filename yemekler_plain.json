@@ -27,32 +27,29 @@
   },
   {
     "name": "1 tatlı kaşığı Tereyağı",
+    "category": "DIGER",
     "calories": 90,
     "protein": 0,
     "carbs": 0,
     "fat": 10,
-    "maxQuantity": 1,
     "minQuantity": 1,
+    "maxQuantity": 1,
     "step": 1,
-    "tags": [
-      "tereyağı",
-      "keto"
-    ],
-    "role": "sideDish",
-    "mealType": [
-      "lunch"
-    ],
+    "multiplier": 1,
+    "portionFixed": false,
+    "role": "side",
     "keto": true,
     "lowcarb": true,
     "fillerLunch": true,
     "fillerDinner": false,
-    "category": "ÖĞLEN",
-    "portionFixed": false,
-    "multiplier": 1,
     "seasonRange": "[1,12]",
     "isReversedSeason": false,
+    "tags": [],
     "compatibilityTags": null,
-    "incompatibilityTags": null
+    "incompatibilityTags": null,
+    "mealType": [
+      "lunch"
+    ]
   },
   {
     "name": "1 tatlı kaşığı kaymak (10 gram)",
