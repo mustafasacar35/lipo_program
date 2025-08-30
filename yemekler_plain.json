@@ -48,6 +48,7 @@
     "compatibilityTags": null,
     "incompatibilityTags": null,
     "mealType": [
+      "lunch",
       "dinner"
     ]
   },
