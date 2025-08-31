@@ -1,1 +1,10 @@
-"{\n  \"version\": \"2.0\",\n  \"lastUpdated\": \"2025-08-27T06:32:30.799Z\",\n  \"rulesArchive\": {\n    \"frequencyRules\": [\n      {\n        \"id\": \"metllboj5ui6\",\n        \"filters\": {\n          \"names\": [\n            \"sucuk\"\n          ],\n          \"nameMode\": \"AND\",\n          \"tags\": [],\n          \"tagMode\": \"AND\",\n          \"categories\": [\n            \"OGLE\"\n          ],\n          \"roles\": []\n        },\n        \"scope\": \"week\",\n        \"meals\": [],\n        \"countType\": \"range\",\n        \"count\": 2,\n        \"countMax\": 4,\n        \"weeks\": []\n      }\n    ],\n    \"dependencyRules\": [],\n    \"lockRules\": [],\n    \"priorityPolicy\": \"top-first\"\n  }\n}"
+{
+  "version": "2.0",
+  "lastUpdated": "2025-08-31T16:31:48.832Z",
+  "rulesArchive": {
+    "frequencyRules": [],
+    "dependencyRules": [],
+    "lockRules": [],
+    "priorityPolicy": "top-first"
+  }
+}
