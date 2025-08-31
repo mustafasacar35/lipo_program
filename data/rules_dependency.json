@@ -8,20 +8,22 @@
         "köfte"
       ],
       "tagMode": "AND",
-      "categories": [],
+      "categories": [
+        "AKSAM"
+      ],
       "roles": []
     },
     "target": {
       "names": [],
       "nameMode": "AND",
       "tags": [
-        "yumurta"
+        "mayonez"
       ],
       "tagMode": "AND",
       "categories": [],
       "roles": []
     },
-    "ratio": 40,
-    "priority": 3
+    "ratio": 90,
+    "priority": 6
   }
 ]
