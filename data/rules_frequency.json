@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "mezww2p6yw1w",
+    "filters": {
+      "names": [],
+      "nameMode": "AND",
+      "tags": [],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": [
+        "mainDish"
+      ]
+    },
+    "scope": "meal",
+    "meals": [
+      "breakfast",
+      "dinner"
+    ],
+    "countType": "fixed",
+    "count": 1,
+    "weeks": [],
+    "priority": 1
+  }
+]
