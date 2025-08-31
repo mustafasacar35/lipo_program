@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-31T16:37:36.010Z",
+  "timestamp": "2025-08-31T16:38:03.489Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -38,6 +38,7 @@
       },
       "scope": "meal",
       "meals": [
+        "breakfast",
         "lunch",
         "dinner"
       ],
@@ -151,7 +152,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-08-31T16:36:54.959Z",
+    "lastUpdated": "2025-08-31T16:37:43.321Z",
     "version": "2.1.0"
   },
   "foodsData": [
