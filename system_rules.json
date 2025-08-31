@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2025-08-31T16:37:41.201Z",
+  "lastUpdated": "2025-08-31T16:39:23.969Z",
   "rulesArchive": {
     "frequencyRules": [
       {
@@ -50,7 +50,33 @@
         "priority": 2
       }
     ],
-    "dependencyRules": [],
+    "dependencyRules": [
+      {
+        "id": "mezx0rp88cl6",
+        "dependent": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "target": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "mayonez"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "ratio": 40,
+        "priority": 3
+      }
+    ],
     "lockRules": [],
     "priorityPolicy": "top-first"
   }
