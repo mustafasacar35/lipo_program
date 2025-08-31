@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2025-08-31T19:34:00.522Z",
+  "lastUpdated": "2025-08-31T19:41:10.295Z",
   "rulesArchive": {
     "frequencyRules": [
       {
@@ -109,21 +109,23 @@
             "köfte"
           ],
           "tagMode": "AND",
-          "categories": [],
+          "categories": [
+            "AKSAM"
+          ],
           "roles": []
         },
         "target": {
           "names": [],
           "nameMode": "AND",
           "tags": [
-            "yumurta"
+            "mayonez"
           ],
           "tagMode": "AND",
           "categories": [],
           "roles": []
         },
-        "ratio": 40,
-        "priority": 3
+        "ratio": 90,
+        "priority": 6
       }
     ],
     "lockRules": [
