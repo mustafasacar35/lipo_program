@@ -1,8 +1,31 @@
 {
   "version": "2.0",
-  "lastUpdated": "2025-08-31T16:31:48.832Z",
+  "lastUpdated": "2025-08-31T16:35:38.316Z",
   "rulesArchive": {
-    "frequencyRules": [],
+    "frequencyRules": [
+      {
+        "id": "mezww2p6yw1w",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "mainDish"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "breakfast",
+          "dinner"
+        ],
+        "countType": "fixed",
+        "count": 1,
+        "weeks": [],
+        "priority": 1
+      }
+    ],
     "dependencyRules": [],
     "lockRules": [],
     "priorityPolicy": "top-first"
