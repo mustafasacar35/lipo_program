@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "lock_1756658401380",
+    "name": "ekmek kilidi",
+    "category": "EKMEKLER",
+    "role": "",
+    "period": "weekly",
+    "scope": "week",
+    "description": "Bu kural Ekmek kategorisindeki tüm yemekler için haftalık kilitleme uygular.\n\n🎯 HEDEF: Ekmek kategorisindeki tüm yemekler\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\n\n📋 NASIL ÇALIŞIR:\n• Hafta başında ilk sefer ekmek kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\n• Yeni haftada farklı bir yemek seçilebilir",
+    "active": true,
+    "priority": 1
+  }
+]
