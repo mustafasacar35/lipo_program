@@ -36,14 +36,13 @@
     },
     "scope": "meal",
     "meals": [
-      "breakfast",
       "lunch",
       "dinner"
     ],
     "countType": "range",
     "count": 1,
-    "weeks": [],
     "countMax": 2,
+    "weeks": [],
     "priority": 2
   }
 ]
