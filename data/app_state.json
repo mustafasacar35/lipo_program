@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-31T16:38:03.489Z",
+  "timestamp": "2025-08-31T16:39:18.901Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -38,18 +38,43 @@
       },
       "scope": "meal",
       "meals": [
-        "breakfast",
         "lunch",
         "dinner"
       ],
       "countType": "range",
       "count": 1,
-      "weeks": [],
       "countMax": 2,
+      "weeks": [],
       "priority": 2
     }
   ],
-  "dependencyRules": [],
+  "dependencyRules": [
+    {
+      "id": "mezx0rp88cl6",
+      "dependent": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [
+          "yumurta"
+        ],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": []
+      },
+      "target": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [
+          "mayonez"
+        ],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": []
+      },
+      "ratio": 40,
+      "priority": 3
+    }
+  ],
   "lockRules": [],
   "systemSettings": {
     "systemDefaults": {
@@ -152,7 +177,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-08-31T16:37:43.321Z",
+    "lastUpdated": "2025-08-31T16:38:32.358Z",
     "version": "2.1.0"
   },
   "foodsData": [
