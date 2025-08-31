@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-31T16:40:07.599Z",
+  "timestamp": "2025-08-31T19:33:55.711Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -46,6 +46,55 @@
       "countMax": 2,
       "weeks": [],
       "priority": 2
+    },
+    {
+      "id": "mf038ucpno4d",
+      "filters": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [
+          "et"
+        ],
+        "tagMode": "AND",
+        "categories": [
+          "AKSAM"
+        ],
+        "roles": [
+          "mainDish"
+        ]
+      },
+      "scope": "week",
+      "meals": [
+        "dinner"
+      ],
+      "countType": "range",
+      "count": 4,
+      "weeks": [],
+      "countMax": 7,
+      "priority": 4
+    },
+    {
+      "id": "mf039jvotukm",
+      "filters": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [
+          "EKMEKLER"
+        ],
+        "roles": []
+      },
+      "scope": "week",
+      "meals": [
+        "lunch",
+        "dinner"
+      ],
+      "countType": "range",
+      "count": 5,
+      "weeks": [],
+      "countMax": 12,
+      "priority": 5
     }
   ],
   "dependencyRules": [
@@ -55,7 +104,7 @@
         "names": [],
         "nameMode": "AND",
         "tags": [
-          "yumurta"
+          "köfte"
         ],
         "tagMode": "AND",
         "categories": [],
@@ -65,7 +114,7 @@
         "names": [],
         "nameMode": "AND",
         "tags": [
-          "mayonez"
+          "yumurta"
         ],
         "tagMode": "AND",
         "categories": [],
@@ -83,7 +132,7 @@
       "role": "",
       "period": "weekly",
       "scope": "week",
-      "description": "Bu kural Ekmek kategorisindeki tüm yemekler için haftalık kilitleme uygular.\n\n🎯 HEDEF: Ekmek kategorisindeki tüm yemekler\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\n\n📋 NASIL ÇALIŞIR:\n• Hafta başında ilk sefer ekmek kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\n• Yeni haftada farklı bir yemek seçilebilir",
+      "description": "Bu kural Ekmek kategorisindeki tÃ¼m yemekler iÃ§in haftalÄ±k kilitleme uygular.\n\nð¯ HEDEF: Ekmek kategorisindeki tÃ¼m yemekler\nð PERÄ°YOT: HaftalÄ±k (hafta boyunca aynÄ± yemek)\nðï¸ KAPSAM: HaftanÄ±n tÃ¼m Ã¶ÄÃ¼nlerinde\n\nð NASIL ÃALIÅIR:\nâ¢ Hafta baÅÄ±nda ilk sefer ekmek kategorisindeki tÃ¼m yemekler seÃ§ildiÄinde, o hafta haftanÄ±n tÃ¼m Ã¶ÄÃ¼nlerinde sadece o yemek verilebilir\nâ¢ Yeni haftada farklÄ± bir yemek seÃ§ilebilir",
       "active": true,
       "priority": 1
     }
