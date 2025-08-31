@@ -36,6 +36,7 @@
     },
     "scope": "meal",
     "meals": [
+      "breakfast",
       "lunch",
       "dinner"
     ],
