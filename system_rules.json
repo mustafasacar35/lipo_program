@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2025-08-31T16:36:52.855Z",
+  "lastUpdated": "2025-08-31T16:37:41.201Z",
   "rulesArchive": {
     "frequencyRules": [
       {
@@ -25,6 +25,29 @@
         "count": 1,
         "weeks": [],
         "priority": 1
+      },
+      {
+        "id": "mezwyso1j582",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "side"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "lunch",
+          "dinner"
+        ],
+        "countType": "range",
+        "count": 1,
+        "countMax": 2,
+        "weeks": [],
+        "priority": 2
       }
     ],
     "dependencyRules": [],
