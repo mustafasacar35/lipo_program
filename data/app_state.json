@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-31T19:34:42.676Z",
+  "timestamp": "2025-08-31T19:41:05.407Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -107,21 +107,23 @@
           "köfte"
         ],
         "tagMode": "AND",
-        "categories": [],
+        "categories": [
+          "AKSAM"
+        ],
         "roles": []
       },
       "target": {
         "names": [],
         "nameMode": "AND",
         "tags": [
-          "yumurta"
+          "mayonez"
         ],
         "tagMode": "AND",
         "categories": [],
         "roles": []
       },
-      "ratio": 40,
-      "priority": 3
+      "ratio": 90,
+      "priority": 6
     }
   ],
   "lockRules": [
@@ -132,7 +134,7 @@
       "role": "",
       "period": "weekly",
       "scope": "week",
-      "description": "Bu kural Ekmek kategorisindeki tÃ¼m yemekler iÃ§in haftalÄ±k kilitleme uygular.\n\nð¯ HEDEF: Ekmek kategorisindeki tÃ¼m yemekler\nð PERÄ°YOT: HaftalÄ±k (hafta boyunca aynÄ± yemek)\nðï¸ KAPSAM: HaftanÄ±n tÃ¼m Ã¶ÄÃ¼nlerinde\n\nð NASIL ÃALIÅIR:\nâ¢ Hafta baÅÄ±nda ilk sefer ekmek kategorisindeki tÃ¼m yemekler seÃ§ildiÄinde, o hafta haftanÄ±n tÃ¼m Ã¶ÄÃ¼nlerinde sadece o yemek verilebilir\nâ¢ Yeni haftada farklÄ± bir yemek seÃ§ilebilir",
+      "description": "Bu kural Ekmek kategorisindeki tÃÂ¼m yemekler iÃÂ§in haftalÃÂ±k kilitleme uygular.\n\nÃ°ÂÂÂ¯ HEDEF: Ekmek kategorisindeki tÃÂ¼m yemekler\nÃ°ÂÂÂ PERÃÂ°YOT: HaftalÃÂ±k (hafta boyunca aynÃÂ± yemek)\nÃ°ÂÂÂÃ¯Â¸Â KAPSAM: HaftanÃÂ±n tÃÂ¼m ÃÂ¶ÃÂÃÂ¼nlerinde\n\nÃ°ÂÂÂ NASIL ÃÂALIÃÂIR:\nÃ¢ÂÂ¢ Hafta baÃÂÃÂ±nda ilk sefer ekmek kategorisindeki tÃÂ¼m yemekler seÃÂ§ildiÃÂinde, o hafta haftanÃÂ±n tÃÂ¼m ÃÂ¶ÃÂÃÂ¼nlerinde sadece o yemek verilebilir\nÃ¢ÂÂ¢ Yeni haftada farklÃÂ± bir yemek seÃÂ§ilebilir",
       "active": true,
       "priority": 1
     }
