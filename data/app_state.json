@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-31T16:36:48.083Z",
+  "timestamp": "2025-08-31T16:37:36.010Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -23,6 +23,29 @@
       "count": 1,
       "weeks": [],
       "priority": 1
+    },
+    {
+      "id": "mezwyso1j582",
+      "filters": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": [
+          "side"
+        ]
+      },
+      "scope": "meal",
+      "meals": [
+        "lunch",
+        "dinner"
+      ],
+      "countType": "range",
+      "count": 1,
+      "weeks": [],
+      "countMax": 2,
+      "priority": 2
     }
   ],
   "dependencyRules": [],
@@ -128,7 +151,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-08-31T16:36:35.201Z",
+    "lastUpdated": "2025-08-31T16:36:54.959Z",
     "version": "2.1.0"
   },
   "foodsData": [
