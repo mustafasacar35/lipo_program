@@ -10,6 +10,7 @@
     "frequencyRules": [
       {
         "id": "mezww2p6yw1w",
+        "name": "Ana Yemek Zorunluluğu",
         "filters": {
           "names": [],
           "nameMode": "AND",
@@ -33,6 +34,7 @@
       },
       {
         "id": "mezwyso1j582",
+        "name": "Yan Yemek Sınırı",
         "filters": {
           "names": [],
           "nameMode": "AND",
@@ -56,6 +58,7 @@
       },
       {
         "id": "freq_egg_breakfast",
+        "name": "Kahvaltı Yumurta Sınırı",
         "filters": {
           "names": [],
           "nameMode": "AND",
@@ -78,6 +81,7 @@
       },
       {
         "id": "freq_debug_side",
+        "name": "Debug Yan Yemek",
         "filters": {
           "names": [],
           "nameMode": "AND",
@@ -101,6 +105,7 @@
       },
       {
         "id": "freq_soup_week",
+        "name": "Haftalık Çorba Sıklığı",
         "filters": {
           "names": [],
           "nameMode": "AND",
@@ -121,6 +126,7 @@
       },
       {
         "id": "freq_dessert_week",
+        "name": "Haftalık Tatlı Sıklığı",
         "filters": {
           "names": [],
           "nameMode": "AND",
@@ -143,6 +149,9 @@
     "dependencyRules": [
       {
         "id": "mezx0rp88cl6",
+        "name": "Yumurta-Mayonez Bağımlılığı",
+        "parentTag": "yumurta",
+        "childTag": "mayonez",
         "dependent": {
           "names": [],
           "nameMode": "AND",
@@ -164,10 +173,15 @@
           "roles": []
         },
         "ratio": 40,
+        "minRatio": 30,
+        "maxRatio": 50,
         "priority": 3
       },
       {
         "id": "dep_egg_mayo",
+        "name": "Yumurta-Mayonez Bağımlılığı v2",
+        "parentTag": "yumurta",
+        "childTag": "mayonez",
         "dependent": {
           "names": [],
           "nameMode": "AND",
@@ -189,6 +203,8 @@
           "roles": []
         },
         "ratio": 50,
+        "minRatio": 40,
+        "maxRatio": 60,
         "priority": 9
       }
     ],
