@@ -1,1 +1,429 @@
-"{\"rules\":{\"frequency\":[{\"id\":\"mehd6tdyz82h\",\"filters\":{\"names\":[],\"nameMode\":\"AND\",\"tags\":[\"salata\"],\"tagMode\":\"AND\",\"categories\":[\"SALATALAR\"],\"roles\":[]},\"scope\":\"day\",\"meals\":[],\"countType\":\"fixed\",\"count\":1,\"weeks\":[],\"priority\":3},{\"id\":\"mehd3nyt4uds\",\"filters\":{\"names\":[\"köfte\"],\"nameMode\":\"AND\",\"tags\":[\"et\"],\"tagMode\":\"AND\",\"categories\":[\"AKSAM\"],\"roles\":[\"mainDish\"]},\"scope\":\"week\",\"meals\":[\"dinner\"],\"countType\":\"fixed\",\"count\":3,\"weeks\":[],\"priority\":4}],\"dependency\":[{\"id\":\"mehlq9azqctq\",\"dependent\":{\"names\":[\"mayonez\"],\"nameMode\":\"AND\",\"tags\":[],\"tagMode\":\"AND\",\"categories\":[],\"roles\":[]},\"target\":{\"names\":[\"köfte\",\"sucuk\"],\"nameMode\":\"OR\",\"tags\":[],\"tagMode\":\"AND\",\"categories\":[],\"roles\":[]},\"ratio\":40,\"priority\":1}],\"lock\":[{\"id\":\"lock_1756240236399\",\"name\":\"e\",\"category\":\"EKMEKLER\",\"role\":\"\",\"period\":\"weekly\",\"scope\":\"week\",\"description\":\"Bu kural Ekmek kategorisindeki tüm yemekler için haftalık kilitleme uygular.\\n\\n🎯 HEDEF: Ekmek kategorisindeki tüm yemekler\\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\\n\\n📋 NASIL ÇALIŞIR:\\n• Hafta başında ilk sefer ekmek kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\\n• Yeni haftada farklı bir yemek seçilebilir\",\"active\":true,\"priority\":1}]},\"lastUpdated\":\"2025-08-26T20:30:36.400Z\"}"
+{
+  "version": "2.0",
+  "lastUpdated": "2025-09-01T20:11:27.294Z",
+  "metadata": {
+    "description": "Sistem geneli planlama kuralları",
+    "priority": "high",
+    "modifiable": false
+  },
+  "rulesArchive": {
+    "frequencyRules": [
+      {
+        "id": "mezww2p6yw1w",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "mainDish"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "breakfast",
+          "lunch",
+          "dinner"
+        ],
+        "countType": "fixed",
+        "count": 1,
+        "weeks": [],
+        "priority": 1
+      },
+      {
+        "id": "mezwyso1j582",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "side"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "lunch",
+          "dinner"
+        ],
+        "countType": "range",
+        "count": 1,
+        "countMax": 2,
+        "weeks": [],
+        "priority": 2
+      },
+      {
+        "id": "freq_egg_breakfast",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "scope": "meal",
+        "meals": [
+          "breakfast"
+        ],
+        "countType": "range",
+        "count": 1,
+        "countMax": 1,
+        "weeks": [],
+        "priority": 5
+      },
+      {
+        "id": "freq_debug_side",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "side"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "lunch",
+          "dinner"
+        ],
+        "countType": "range",
+        "count": 1,
+        "countMax": 2,
+        "weeks": [],
+        "priority": 6
+      },
+      {
+        "id": "freq_soup_week",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "soup"
+          ]
+        },
+        "scope": "week",
+        "meals": [],
+        "countType": "range",
+        "count": 2,
+        "countMax": 4,
+        "weeks": [],
+        "priority": 7
+      },
+      {
+        "id": "freq_dessert_week",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "dessert"
+          ]
+        },
+        "scope": "week",
+        "meals": [],
+        "countType": "range",
+        "count": 1,
+        "countMax": 3,
+        "weeks": [],
+        "priority": 8
+      }
+    ],
+    "dependencyRules": [
+      {
+        "id": "mezx0rp88cl6",
+        "dependent": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "target": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "mayonez"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "ratio": 40,
+        "priority": 3
+      },
+      {
+        "id": "dep_egg_mayo",
+        "dependent": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "target": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "mayonez"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "ratio": 50,
+        "priority": 9
+      }
+    ],
+    "lockRules": [
+      {
+        "id": "lock_soup_category",
+        "name": "Çorba Kategori Kilidi",
+        "filterType": "category",
+        "filterText": "ÇORBA",
+        "scope": "weekly",
+        "priority": 2
+      },
+      {
+        "id": "lock_bread_tag",
+        "name": "Ekmek Tag Kilidi",
+        "filterType": "tag",
+        "filterText": "ekmek",
+        "scope": "weekly",
+        "priority": 10
+      }
+    ],
+    "priorityPolicy": "top-first"
+  },
+  "structure": {
+    "breakfast": {
+      "required": true,
+      "items": {
+        "drink": {
+          "min": 1,
+          "max": 1,
+          "priority": "required"
+        }
+      },
+      "defaultItems": [
+        {
+          "name": "Kurşun Geçirmez Kahve",
+          "quantity": 1,
+          "fixed": true
+        }
+      ]
+    },
+    "lunch": {
+      "required": true,
+      "items": {
+        "mainDish": {
+          "min": 1,
+          "max": 1,
+          "priority": "required"
+        },
+        "sideDish": {
+          "min": 1,
+          "max": 3,
+          "priority": "recommended"
+        },
+        "soup": {
+          "min": 0,
+          "max": 1,
+          "priority": "optional"
+        },
+        "dessert": {
+          "min": 0,
+          "max": 1,
+          "priority": "optional"
+        }
+      }
+    },
+    "dinner": {
+      "required": true,
+      "items": {
+        "mainDish": {
+          "min": 1,
+          "max": 1,
+          "priority": "required"
+        },
+        "sideDish": {
+          "min": 1,
+          "max": 3,
+          "priority": "recommended"
+        },
+        "soup": {
+          "min": 0,
+          "max": 1,
+          "priority": "optional"
+        },
+        "dessert": {
+          "min": 0,
+          "max": 1,
+          "priority": "optional"
+        }
+      }
+    }
+  },
+  "frequency": {
+    "weekly": {
+      "soup": {
+        "target": 3,
+        "min": 2,
+        "max": 4,
+        "type": "flexible"
+      },
+      "dessert": {
+        "target": 2,
+        "min": 0,
+        "max": 3,
+        "type": "flexible"
+      },
+      "breadTypes": {
+        "target": 1,
+        "min": 1,
+        "max": 1,
+        "type": "strict"
+      }
+    },
+    "daily": {
+      "soup": {
+        "max": 1
+      },
+      "dessert": {
+        "max": 1
+      },
+      "mainDish": {
+        "min": 2,
+        "max": 2
+      }
+    }
+  },
+  "diversity": {
+    "intraWeek": {
+      "enabled": true,
+      "rules": {
+        "noRepeatMainDish": true,
+        "noRepeatCategoryPerDay": true,
+        "noRepeatBaseIngredient": true
+      }
+    },
+    "interWeek": {
+      "enabled": true,
+      "windowWeeks": 4,
+      "penalties": {
+        "mainDish": 0.6,
+        "category": 0.3,
+        "baseIngredient": 0.4
+      }
+    }
+  },
+  "constraints": {
+    "breadLock": {
+      "enabled": true,
+      "scope": "weekly",
+      "description": "Haftada sadece bir ekmek türü"
+    },
+    "tagConflicts": {
+      "enabled": true,
+      "excludedFromConflict": [
+        "keto",
+        "lowcarb",
+        "zeytinyağı"
+      ],
+      "sameTagInMeal": false
+    },
+    "portionLimits": {
+      "maxCaloriesPerMeal": 1000,
+      "maxItemsPerMeal": 5,
+      "minItemsPerMeal": 1
+    }
+  },
+  "macroTargets": {
+    "tolerances": {
+      "daily": {
+        "calories": 0.2,
+        "protein": 0.2,
+        "carbs": 0.2,
+        "fat": 0.2
+      },
+      "weekly": {
+        "calories": 0.1,
+        "protein": 0.15,
+        "carbs": 0.15,
+        "fat": 0.15
+      }
+    },
+    "mealDistribution": {
+      "breakfast": {
+        "calories": 0.3,
+        "protein": 0.2,
+        "carbs": 0.2,
+        "fat": 0.35
+      },
+      "lunch": {
+        "calories": 0.4,
+        "protein": 0.4,
+        "carbs": 0.4,
+        "fat": 0.35
+      },
+      "dinner": {
+        "calories": 0.3,
+        "protein": 0.4,
+        "carbs": 0.4,
+        "fat": 0.3
+      }
+    }
+  },
+  "seasonality": {
+    "enabled": false,
+    "strictMode": false,
+    "warningMode": true
+  },
+  "fallback": {
+    "enabled": true,
+    "steps": [
+      {
+        "id": "portion_adjust",
+        "description": "Porsiyon ±%10-20 ayarı",
+        "priority": 1
+      },
+      {
+        "id": "side_dish_flex",
+        "description": "Yan yemek sayısı ±1",
+        "priority": 2
+      },
+      {
+        "id": "frequency_relax",
+        "description": "Haftalık frekans hedefleri gevşet",
+        "priority": 3
+      },
+      {
+        "id": "diversity_reduce",
+        "description": "Çeşitlilik cezasını azalt",
+        "priority": 4
+      },
+      {
+        "id": "macro_tolerance_increase",
+        "description": "Makro toleransı %25'e çıkar",
+        "priority": 5
+      }
+    ]
+  }
+}
