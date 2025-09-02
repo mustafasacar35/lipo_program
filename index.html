@@ -466,6 +466,55 @@
             background: #f8f9fa;
         }
         
+        /* 🎯 Dependency Rule Renklendirmesi */
+        .dependency-rule-applied {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+            border-left: 4px solid #2196f3 !important;
+            position: relative;
+        }
+        
+        .dependency-rule-applied::before {
+            content: "🔗";
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+        
+        /* 📊 Frequency Rule Renklendirmesi */
+        .frequency-rule-applied {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%) !important;
+            border-left: 4px solid #9c27b0 !important;
+            position: relative;
+        }
+        
+        .frequency-rule-applied::before {
+            content: "📊";
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+        
+        /* 🔒 Lock Rule Renklendirmesi */
+        .lock-rule-applied {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 30%, #ff9800 100%) !important;
+            border-left: 4px solid #ff9800 !important;
+            position: relative;
+        }
+        
+        .lock-rule-applied::before {
+            content: "🔒";
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #e65100;
+        }
+        
         .change-meal-btn {
             background: none;
             border: none;
@@ -1917,7 +1966,10 @@
                                             <th style="width: 7%; cursor: pointer;" onclick="sortFoodsBy('calories')" aria-sort="none">
                                                 Kalori <i id="sortIcon-calories" class="fas fa-sort ms-1"></i>
                                             </th>
-                                            <th style="width: 7%; cursor: pointer;" onclick="sortFoodsBy('protein')" aria-sort="none">
+                                            // Yemek veritabanını GitHub'dan otomatik yükle
+                                            if (typeof loadMealsFromPlainJson === 'function') {
+                                                try { await loadMealsFromPlainJson(); } catch(e){ console.warn('Yemek otomatik yükleme hatası:', e); }
+                                            }
                                                 Protein <i id="sortIcon-protein" class="fas fa-sort ms-1"></i>
                                             </th>
                                             <th style="width: 7%; cursor: pointer;" onclick="sortFoodsBy('carbs')" aria-sort="none">
@@ -3507,47 +3559,177 @@
         async function syncLoadAll(){
             try {
                 showToast?.('Buluttan yükleniyor...','info');
-                const stateFile = await loadRepoFile('data/app_state.json');
-                if (stateFile.json){
-                    window.frequencyRules = stateFile.json.frequencyRules||[];
-                    window.dependencyRules = stateFile.json.dependencyRules||[];
-                    window.lockRules = stateFile.json.lockRules||[];
-                    console.log('🔄 syncLoadAll(app_state.json) lengths', window.frequencyRules.length, window.dependencyRules.length, window.lockRules.length);
+                
+                // 🎯 RADIKAL ÇÖZÜM: SADECE GitHub system_rules.json (mustafasacar35/lipo_program)
+                console.log('🔄 GitHub mustafasacar35/lipo_program/system_rules.json tek kaynak...');
+                
+                const githubApiBase = 'https://api.github.com/repos/mustafasacar35/lipo_program/contents';
+                
+                try {
+                    // Ana dizindeki system_rules.json'ı dene
+                    console.log('🔍 GitHub API: Ana dizin system_rules.json...');
+                    const mainUrl = `${githubApiBase}/system_rules.json?ref=main&t=${Date.now()}`;
+                    console.log('📡 Request URL:', mainUrl);
+                    const mainResponse = await fetch(mainUrl);
+                    console.log('📊 Main response:', {status: mainResponse.status, ok: mainResponse.ok});
+                    
+                    if (mainResponse.ok) {
+                        const mainData = await mainResponse.json();
+                        console.log('📊 Main response type:', mainData.type, 'size:', mainData.size);
+                        const systemRulesContent = atob(mainData.content);
+                        console.log('📊 Decoded content preview:', systemRulesContent.substring(0, 200));
+                        const archive = JSON.parse(systemRulesContent);
+                        
+                        // rulesArchive format yükle
+                        window.currentLocalRules = loadRulesFromArchive(archive);
+                        window.frequencyRules = [...(archive.frequencyRules || [])];
+                        window.dependencyRules = [...(archive.dependencyRules || [])];
+                        window.lockRules = [...(archive.lockRules || [])];
+                        
+                        console.log('✅ GitHub system_rules.json\'dan yüklendi (MAIN):', 
+                            `Frekans:${window.frequencyRules.length}, Bağımlılık:${window.dependencyRules.length}, Kilit:${window.lockRules.length}, Toplam:${window.frequencyRules.length + window.dependencyRules.length + window.lockRules.length}`);
+                        
+                        // Lokal değişkenleri de senkronize et
+                        frequencyRules = window.frequencyRules;
+                        dependencyRules = window.dependencyRules;
+                        lockRules = window.lockRules;
+                        return; // Başarılı, çık
+                    }
+                    
+                    console.warn('⚠️ Ana dizinde bulunamadı, data/system_rules.json deneniyor...');
+                    // Data dizini denemesi 
+                    console.log('🔍 GitHub API: data/ dizin system_rules.json...');
+                    const dataUrl = `${githubApiBase}/data/system_rules.json?ref=main&t=${Date.now()}`;
+                    console.log('📡 Request URL:', dataUrl);
+                    const dataResponse = await fetch(dataUrl);
+                    console.log('📊 Data response:', {status: dataResponse.status, ok: dataResponse.ok});
+                    
+                    if (dataResponse.ok) {
+                        const dataData = await dataResponse.json();
+                        console.log('📊 Data response type:', dataData.type, 'size:', dataData.size);
+                        const systemRulesContent = atob(dataData.content);
+                        console.log('� Decoded content preview:', systemRulesContent.substring(0, 200));
+                        const archive = JSON.parse(systemRulesContent);
+                        
+                        // rulesArchive format yükle
+                        window.currentLocalRules = loadRulesFromArchive(archive);
+                        window.frequencyRules = [...(archive.frequencyRules || [])];
+                        window.dependencyRules = [...(archive.dependencyRules || [])];
+                        window.lockRules = [...(archive.lockRules || [])];
+                        
+                        console.log('✅ GitHub system_rules.json\'dan yüklendi (DATA):', 
+                            `Frekans:${window.frequencyRules.length}, Bağımlılık:${window.dependencyRules.length}, Kilit:${window.lockRules.length}, Toplam:${window.frequencyRules.length + window.dependencyRules.length + window.lockRules.length}`);
+                        
+                        // Lokal değişkenleri de senkronize et
+                        frequencyRules = window.frequencyRules;
+                        dependencyRules = window.dependencyRules;
+                        lockRules = window.lockRules;
+                        return; // Başarılı, çık
+                    }
+                    
+                    throw new Error('GitHub API: Her iki konumda da system_rules.json bulunamadı');
+                } catch (sysError) {
+                    console.error('⚠️ GitHub system_rules.json yüklenemedi:', sysError);
+                    console.log('🔄 Embedded fallback kuralları yükleniyor...');
+                    
+                    // Local sistem_rules.json varsa GitHub formatında yükle
+                    try {
+                        console.log('🔍 Local sistem rules aranıyor (GitHub formatında)...');
+                        const localResponse = await fetch('../system_rules.json?t=' + Date.now());
+                        if (localResponse.ok) {
+                            const localData = await localResponse.json();
+                            console.log('✅ Local system_rules.json bulundu, GitHub format olarak yükleniyor...');
+                            
+                            window.currentLocalRules = loadRulesFromArchive(localData);
+                            window.frequencyRules = [...(localData.frequencyRules || [])];
+                            window.dependencyRules = [...(localData.dependencyRules || [])];
+                            window.lockRules = [...(localData.lockRules || [])];
+                            
+                            console.log('✅ Local system_rules.json\'dan yüklendi (GitHub formatında):', 
+                                `Frekans:${window.frequencyRules.length}, Bağımlılık:${window.dependencyRules.length}, Kilit:${window.lockRules.length}, Toplam:${window.frequencyRules.length + window.dependencyRules.length + window.lockRules.length}`);
+                            
+                            // Lokal değişkenleri de senkronize et
+                            frequencyRules = window.frequencyRules;
+                            dependencyRules = window.dependencyRules;
+                            lockRules = window.lockRules;
+                            return; // Başarılı, çık
+                        }
+                    } catch (localError) {
+                        console.warn('⚠️ Local system_rules.json yüklenemedi:', localError);
+                    }
+                    
+                    // Son çare: Embedded rules
+                    console.log('🔄 Son çare embedded kuralları yükleniyor...');
+                    await loadRulesFromArchive({
+                        frequencyRules: [
+                            { id: "mezww2p6yw1w", name: "Ana Yemek Zorunluluğu", filters: { roles: ["mainDish"] }, scope: "meal", meals: ["breakfast", "lunch", "dinner"], countType: "fixed", count: 1, priority: 1 },
+                            { id: "mezwyso1j582", name: "Yan Yemek Sınırı", filters: { roles: ["side"] }, scope: "meal", meals: ["lunch", "dinner"], countType: "range", count: 1, countMax: 2, priority: 2 },
+                            { id: "freq_egg_breakfast", name: "Kahvaltı Yumurta Sınırı", filters: { tags: ["yumurta"] }, scope: "meal", meals: ["breakfast"], countType: "range", count: 1, countMax: 1, priority: 5 },
+                            { id: "freq_soup_week", name: "Haftalık Çorba Sıklığı", filters: { roles: ["soup"] }, scope: "week", countType: "range", count: 2, countMax: 4, priority: 7 },
+                            { id: "freq_dessert_week", name: "Haftalık Tatlı Sıklığı", filters: { roles: ["dessert"] }, scope: "week", countType: "range", count: 1, countMax: 3, priority: 8 }
+                        ],
+                        dependencyRules: [
+                            { id: "mezx0rp88cl6", name: "Yumurta-Mayonez Bağımlılığı", parentTag: "yumurta", childTag: "mayonez", ratio: 40, priority: 3 }
+                        ],
+                        lockRules: [
+                            { id: "lock_soup_category", name: "Çorba Kategori Kilidi", filterType: "category", filterText: "ÇORBALAR", scope: "weekly", priority: 2 },
+                            { id: "lock_bread_tag", name: "Ekmek Tag Kilidi", filterType: "tag", filterText: "ekmek", scope: "weekly", priority: 10 }
+                        ]
+                    });
+                }
+                
+                // Helper function
+                async function loadRulesFromArchive(archive) {
+                    console.log('🔍 loadRulesFromArchive çağrıldı, archive type:', typeof archive);
+                    
+                    // JSON string ise parse et
+                    let parsedArchive = archive;
+                    if (typeof archive === 'string') {
+                        try {
+                            parsedArchive = JSON.parse(archive);
+                            console.log('✅ JSON string parse edildi');
+                        } catch (e) {
+                            console.error('❌ JSON parse hatası:', e);
+                            return;
+                        }
+                    }
+                    
+                    console.log('🔍 parsedArchive keys:', Object.keys(parsedArchive || {}));
+                    console.log('🔍 parsedArchive.rulesArchive exists?', parsedArchive && 'rulesArchive' in parsedArchive);
+                    
+                    // Doğrudan rulesArchive property'sine eriş
+                    let finalRulesData = null;
+                    if (parsedArchive && parsedArchive.rulesArchive) {
+                        finalRulesData = parsedArchive.rulesArchive;
+                        console.log('✅ parsedArchive.rulesArchive kullanıldı');
+                    } else {
+                        finalRulesData = parsedArchive;
+                        console.log('⚠️ parsedArchive kendisi kullanıldı');
+                    }
+                    
+                    console.log('🔍 finalRulesData keys:', Object.keys(finalRulesData || {}));
+                    console.log('🔍 finalRulesData.frequencyRules:', finalRulesData?.frequencyRules?.length);
+                    console.log('🔍 finalRulesData.dependencyRules:', finalRulesData?.dependencyRules?.length);
+                    console.log('🔍 finalRulesData.lockRules:', finalRulesData?.lockRules?.length);
+                    
+                    window.frequencyRules = [...(finalRulesData?.frequencyRules || [])];
+                    window.dependencyRules = [...(finalRulesData?.dependencyRules || [])];
+                    window.lockRules = [...(finalRulesData?.lockRules || [])];
+                    
+                    console.log('✅ GitHub system_rules.json\'dan yüklendi:', 
+                        `Frekans:${window.frequencyRules.length}, Bağımlılık:${window.dependencyRules.length}, Kilit:${window.lockRules.length}, Toplam:${window.frequencyRules.length + window.dependencyRules.length + window.lockRules.length}`);
+                    
                     // Lokal değişkenleri de senkronize et
                     frequencyRules = window.frequencyRules;
                     dependencyRules = window.dependencyRules;
                     lockRules = window.lockRules;
-                    if (stateFile.json.systemSettings) localStorage.setItem('systemSettings_v2', JSON.stringify(stateFile.json.systemSettings));
-                    if (stateFile.json.criteriaSettings) localStorage.setItem('criteriaSettings', JSON.stringify(stateFile.json.criteriaSettings));
-                    if (stateFile.json.criteriaHierarchy) localStorage.setItem('criteriaHierarchy', JSON.stringify(stateFile.json.criteriaHierarchy));
-                    if (stateFile.json.foodsData) window.foodsData = stateFile.json.foodsData;
-                    // system_rules.json da ayrıca kontrol et (güncel olabilir)
-                    const sysFile = await loadRepoFile('system_rules.json');
-                    if (sysFile.json?.rulesArchive){
-                        // Eğer orada daha fazla kural varsa onları da kullan
-                        if ((sysFile.json.rulesArchive.frequencyRules||[]).length > window.frequencyRules.length){
-                            window.frequencyRules = [...sysFile.json.rulesArchive.frequencyRules];
-                            console.log('🔄 system_rules.json override frequencyRules', window.frequencyRules.length);
-                        }
-                        if ((sysFile.json.rulesArchive.dependencyRules||[]).length > window.dependencyRules.length){
-                            window.dependencyRules = [...sysFile.json.rulesArchive.dependencyRules];
-                            console.log('🔄 system_rules.json override dependencyRules', window.dependencyRules.length);
-                        }
-                        if ((sysFile.json.rulesArchive.lockRules||[]).length > window.lockRules.length){
-                            window.lockRules = [...sysFile.json.rulesArchive.lockRules];
-                            console.log('🔄 system_rules.json override lockRules', window.lockRules.length);
-                        }
-                        // Override sonrası lokal kopyaları güncelle
-                        frequencyRules = window.frequencyRules;
-                        dependencyRules = window.dependencyRules;
-                        lockRules = window.lockRules;
-                    }
-                    // Arayüz güncellemeleri biraz geciktirilmiş (fonksiyonlar henüz tanımlı değilse)
-                    setTimeout(()=>{ renderRulesHierarchyList?.(); renderFrequencyRulesTable?.(); }, 50);
-                    showToast?.(`Buluttan yüklendi • Frekans:${window.frequencyRules.length} • Bağımlılık:${window.dependencyRules.length} • Kilit:${window.lockRules.length}`,'success');
-                } else {
-                    showToast?.('Bulut durum dosyası yok','warning');
+                    
+                    return { frequencyRules, dependencyRules, lockRules };
                 }
+                
+                // Arayüz güncellemeleri
+                setTimeout(()=>{ renderRulesHierarchyList?.(); renderFrequencyRulesTable?.(); }, 50);
+                showToast?.(`Buluttan yüklendi • Frekans:${window.frequencyRules.length} • Bağımlılık:${window.dependencyRules.length} • Kilit:${window.lockRules.length}`,'success');
             } catch(e){
                 console.error(e); showToast?.('Buluttan yükleme hata: '+e.message,'danger');
             }
@@ -3823,6 +4005,10 @@
             window._rulesLoaded = false;
             let rulesResolver;
             window.rulesLoadedPromise = new Promise(res=> rulesResolver = res);
+            // Yemek yükleme promiseleri
+            let foodsResolver; let foodsReject;
+            window._foodsLoaded = false;
+            window.foodsLoadedPromise = new Promise((res,rej)=>{ foodsResolver=res; foodsReject=rej; });
 
             // GitHub token'ı kontrol et, varsa otomatik cloud senkronizasyonu başlat
             const hasToken = checkGitHubToken();
@@ -3851,7 +4037,16 @@
             // Kurallar loadSystemRulesArchive / syncLoadAll içinde global dizilere yazıldı; burada hazır olduklarını işaretle
             window._rulesLoaded = true;
             rulesResolver && rulesResolver();
+            
+            // 🎯 currentLocalRules'u güncelle (visual highlighting için)
+            window.currentLocalRules = {
+                frequencyRules: window.frequencyRules || [],
+                dependencyRules: window.dependencyRules || [],
+                lockRules: window.lockRules || []
+            };
+            
             console.log('✅ Kurallar hazır (frequency:', (window.frequencyRules||[]).length, 'dependency:', (window.dependencyRules||[]).length, 'lock:', (window.lockRules||[]).length, ')');
+            console.log('🎯 currentLocalRules güncellendi:', window.currentLocalRules);
             
             // 🤖 Otomatik planlama varsayılan ayarlarını yükle
             initializeAutoPlanningDefaults();
@@ -3867,13 +4062,19 @@
                     if (!window.foodsData) window.foodsData = meals;
                     if (!window.filteredFoodsData) window.filteredFoodsData = [...meals];
                 }
+                window._foodsLoaded = true; foodsResolver && foodsResolver();
             } catch (error) {
                 console.log('⚠️ Sistem başlatılırken yemek yükleme hatası:', error.message);
+                foodsReject && foodsReject(error);
             }
             
-            // Kural arayüzlerini güncelle
-            renderRulesHierarchyList();
-            renderFrequencyRulesTable();
+            // 🔄 Kural arayüzlerini güncelle - async işlemlerden sonra
+            console.log('🔄 Kurallar yüklendi, UI güncelleniyor...');
+            setTimeout(() => {
+                renderRulesHierarchyList();
+                renderFrequencyRulesTable();
+                console.log('🔄 Kural UI güncellemesi tamamlandı');
+            }, 100);
         });
 
         // 🤖 Otomatik planlama varsayılan ayarları initialize et
@@ -4026,7 +4227,10 @@
             renderRulesHierarchyList();
             enableRulesDragAndDrop();
             clearDependencyRuleForm();
-            try { showToast('Bağımlılık kuralı kaydedildi', 'success'); } catch(_){ /* no-op */ }
+            // Bulut (GitHub) kaydı persistDependencyRules -> persistSystemRulesArchive zinciri ile tetiklendi.
+            // İkinci bir güvenlik için tekrar tetikleyebiliriz (idempotent):
+            try { persistSystemRulesArchive(); } catch(_){ }
+            try { showToast('🔗 Bağımlılık kuralı kaydedildi ve buluta aktarıldı', 'success'); } catch(_){ /* no-op */ }
         }
 
         // Clear dependency rule form
@@ -4982,10 +5186,17 @@
             }
         };
 
-        // GitHub API ve JSON Server'dan veri yükleme - EMBEDDED_DATA sadece fallback
+    // Global erişim için EMBEDDED_DATA'yı window'a ata (fallback kullanımını kolaylaştırır)
+    try { window.EMBEDDED_DATA = EMBEDDED_DATA; } catch(_){}
+
+    // Opsiyonel: JSON Server denemesini tamamen kapatmak için bu bayrağı false yapabilirsiniz
+    window.ALLOW_REMOTE_JSON_FETCH = (typeof window.ALLOW_REMOTE_JSON_FETCH === 'boolean') ? window.ALLOW_REMOTE_JSON_FETCH : true;
+
+    // GitHub API ve JSON Server'dan veri yükleme - EMBEDDED_DATA sadece fallback
         async function getEmbeddedData(path) {
             // 🔥 Önce GitHub API'den veya JSON Server'dan yüklemeyi dene
             try {
+        if (!window.ALLOW_REMOTE_JSON_FETCH) throw new Error('Remote fetch devre dışı (ALLOW_REMOTE_JSON_FETCH=false)');
                 if (path.includes('patients_list.json') || path.includes('patients.json')) {
                     // Hasta verilerini önce JSON Server'dan dene
                     try {
@@ -9090,10 +9301,10 @@
                                 <th>Yemek</th>
                                 <th>Rol/Kategori</th>
                                 <th>Porsiyon</th>
-                                <th>Kalori</th>
-                                <th>Karb.</th>
-                                <th>Protein</th>
-                                <th>Yağ</th>
+                                <th>Kal</th>
+                                <th>K</th>
+                                <th>P</th>
+                                <th>Y</th>
                                 <th>İşlem</th>
                             </tr>
                         </thead>
@@ -9139,8 +9350,104 @@
                     } else {
                         // Yemekleri listele
                         mealFoods.forEach((food, foodIndex) => {
+                            // 🎯 KAPSAMLI KURAL KONTROLÜ (Tüm rule tipleri)
+                            let ruleClasses = [];
+                            let ruleTooltips = [];
+                            
+                            // 🔗 Dependency Rule Kontrolü
+                            if (window.currentLocalRules?.dependencyRules) {
+                                for (const depRule of window.currentLocalRules.dependencyRules) {
+                                    // Debug mayonez
+                                    if (food.name?.toLowerCase().includes('mayonez')) {
+                                        console.log('🔍 MAYONEZ DEBUG:', {
+                                            foodName: food.name,
+                                            foodTags: food.tags,
+                                            depRuleName: depRule.name,
+                                            depRuleChildTag: depRule.childTag,
+                                            depRuleTargetTags: depRule.target?.tags,
+                                            hasChildTag: food.tags?.includes(depRule.childTag),
+                                            hasTargetTag: depRule.target?.tags?.some(tag => food.tags?.includes(tag))
+                                        });
+                                    }
+                                    
+                                    // parentTag/childTag kontrolü (yumurta→mayonez)
+                                    if (depRule.childTag && food.tags?.includes(depRule.childTag)) {
+                                        ruleClasses.push('dependency-rule-applied');
+                                        ruleTooltips.push(`🔗 ${depRule.name}: ${depRule.parentTag} → ${depRule.childTag} (Otomatik eklendi)`);
+                                        console.log('✅ Dependency rule uygulandı:', food.name, '→', depRule.name);
+                                        break;
+                                    }
+                                    // target.tags kontrolü
+                                    else if (depRule.target?.tags && food.tags) {
+                                        const hasTargetTag = depRule.target.tags.some(tag => food.tags.includes(tag));
+                                        if (hasTargetTag) {
+                                            ruleClasses.push('dependency-rule-applied');
+                                            ruleTooltips.push(`🔗 ${depRule.name}: ${depRule.dependent?.tags?.[0]} → ${depRule.target?.tags?.[0]} (Otomatik eklendi)`);
+                                            console.log('✅ Dependency rule uygulandı (target):', food.name, '→', depRule.name);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // 📊 Frequency Rule Kontrolü
+                            if (window.currentLocalRules?.frequencyRules) {
+                                for (const freqRule of window.currentLocalRules.frequencyRules) {
+                                    let isMatched = false;
+                                    
+                                    // Name filter kontrolü
+                                    if (freqRule.filters?.names && freqRule.filters.names.length > 0) {
+                                        if (freqRule.filters.nameMode === 'OR') {
+                                            isMatched = freqRule.filters.names.some(name => 
+                                                food.name?.toLowerCase().includes(name.toLowerCase()));
+                                        } else { // AND
+                                            isMatched = freqRule.filters.names.every(name => 
+                                                food.name?.toLowerCase().includes(name.toLowerCase()));
+                                        }
+                                    }
+                                    
+                                    // Role filter kontrolü
+                                    else if (freqRule.filters?.roles && freqRule.filters.roles.length > 0) {
+                                        isMatched = freqRule.filters.roles.includes(food.role);
+                                    }
+                                    
+                                    // Category filter kontrolü 
+                                    else if (freqRule.filters?.categories && freqRule.filters.categories.length > 0) {
+                                        isMatched = freqRule.filters.categories.includes(food.category);
+                                    }
+                                    
+                                    if (isMatched) {
+                                        ruleClasses.push('frequency-rule-applied');
+                                        ruleTooltips.push(`📊 ${freqRule.name}: ${freqRule.scope} ${freqRule.countType} ${freqRule.count} adet`);
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // 🔒 Lock Rule Kontrolü
+                            if (window.currentLocalRules?.lockRules) {
+                                for (const lockRule of window.currentLocalRules.lockRules) {
+                                    let isMatched = false;
+                                    
+                                    if (lockRule.filterType === 'category' && lockRule.filterText === food.category) {
+                                        isMatched = true;
+                                    } else if (lockRule.filterType === 'tag' && food.tags?.includes(lockRule.filterText)) {
+                                        isMatched = true;
+                                    }
+                                    
+                                    if (isMatched) {
+                                        ruleClasses.push('lock-rule-applied');
+                                        ruleTooltips.push(`🔒 ${lockRule.name}: ${lockRule.filterType} "${lockRule.filterText}" haftalık kilit`);
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // 📊 Frequency Rule + 🔒 Lock Rule Ekleme
+                            // TODO: Frequency ve Lock rule kontrollerini ekle
+                            
                             html += `
-                                <tr class="meal-row" onclick="editMeal('${day}', '${meal}', ${foodIndex})">
+                                <tr class="meal-row ${ruleClasses.join(' ')}" ${ruleTooltips.length > 0 ? `title="${ruleTooltips.join(' | ')}"` : ''} onclick="editMeal('${day}', '${meal}', ${foodIndex})">
                                     <td>${dayIndex === 0 && mealIndex === 0 && foodIndex === 0 ? dayNames[dayIndex] : ''}</td>
                                     <td>${foodIndex === 0 ? mealNames[mealIndex] : ''}</td>
                                     <td>${food.name || food.isim || 'Bilinmeyen Yemek'}</td>
@@ -9386,21 +9693,32 @@
                 lockType: typeof lockRules
             });
             
+            console.log('🔍 Dependency rules içeriği:', dependency);
+            console.log('🔍 Lock rules içeriği:', lock);
+            
+            // Ek debug: ham dependency rule ID'leri
+            try { console.log('🐞 Debug dependencyRules IDs:', dependency.map(r=>r.id)); } catch(_){ }
             // Aktif kuralları filtrele ve dönüştür
             const activeForms = [];
             
             // Frekans kurallarını kriterler formatına dönüştür
             frequency.forEach(rule => {
-                if (rule && rule.filters && rule.filters.names && rule.filters.names.length > 0) {
-                    activeForms.push({
-                        type: 'frequency',
-                        title: `Frekans: ${rule.filters.names.join(', ')} - ${rule.count}-${rule.countMax || rule.count}/${rule.scope}`,
-                        description: `${rule.filters.names.join(', ')} yemeği ${rule.scope} başına ${rule.count}-${rule.countMax || rule.count} kez`,
-                        source: 'system_rules',
-                        priority: 1,
-                        originalRule: rule
-                    });
-                }
+                if (!rule || !rule.filters) return;
+                const f = rule.filters;
+                const hasAnyFilter = (f.names && f.names.length) || (f.tags && f.tags.length) || (f.categories && f.categories.length) || (f.roles && f.roles.length);
+                if (!hasAnyFilter) return;
+                const label = (f.names && f.names.length ? f.names.join(', ') :
+                               f.roles && f.roles.length ? f.roles.join(', ') :
+                               f.categories && f.categories.length ? f.categories.join(', ') :
+                               f.tags && f.tags.length ? f.tags.join(', ') : 'Frekans Kuralı');
+                activeForms.push({
+                    type: 'frequency',
+                    title: `Frekans: ${label} (${rule.count}${rule.countMax?'-'+rule.countMax:''}/${rule.scope})`,
+                    description: `${label} için hedef: ${rule.count}${rule.countMax?'-'+rule.countMax:''} (${rule.scope})`,
+                    source: 'system_rules',
+                    priority: 1,
+                    originalRule: rule
+                });
             });
             
             // Bağımlılık kurallarını dönüştür
@@ -9668,8 +9986,54 @@
             return plan;
         }
         
-        // 🍽️ Global MealType Uygunluk Kontrolü
-        function eligibleForMeal(food, mealTime){
+        // 🔒 Global Lock Memory Sistemi
+        window.weeklyLockMemory = new Map(); // category/tag -> locked food name
+        
+        function initializeLockMemory() {
+            window.weeklyLockMemory.clear();
+            console.log('🔒 Lock memory sistemi sıfırlandı');
+        }
+        
+        function applyLockMemory(food, lockRule) {
+            const lockKey = `${lockRule.filterType}:${lockRule.filterText}`;
+            const lockedFood = window.weeklyLockMemory.get(lockKey);
+            
+            if (!lockedFood) {
+                // İlk seçim - bu yemeği kilitle
+                window.weeklyLockMemory.set(lockKey, food.name);
+                console.log(`🔒 Lock kaydedildi: ${lockKey} → "${food.name}"`);
+                return true;
+            } else if (lockedFood === food.name) {
+                // Aynı yemek - kabul et
+                return true;
+            } else {
+                // Farklı yemek - reddet
+                console.log(`🚫 Lock reddetti: "${food.name}" → ${lockKey} zaten "${lockedFood}" ile kilitli`);
+                return false;
+            }
+        }
+
+        // 🍽️ Global MealType Uygunluk Kontrolü + Kategori Kilidi
+        function eligibleForMeal(food, mealTime, currentWeekPlan){
+            // 🔒 GLOBAL LOCK MEMORY KONTROLÜ (Öncelikli)
+            if (currentWeekPlan && window.currentLocalRules?.lockRules) {
+                for (const lockRule of window.currentLocalRules.lockRules) {
+                    let shouldCheck = false;
+                    
+                    if (lockRule.filterType === 'category' && lockRule.filterText === food.category) {
+                        shouldCheck = true;
+                    } else if (lockRule.filterType === 'tag' && food.tags?.includes(lockRule.filterText)) {
+                        shouldCheck = true;
+                    }
+                    
+                    if (shouldCheck) {
+                        if (!applyLockMemory(food, lockRule)) {
+                            return false; // Global lock memory tarafından reddedildi
+                        }
+                    }
+                }
+            }
+            
             // mealType bazı kayıtlar için string, array veya hiç tanımlı olmayabilir.
             let types = food.mealType;
             
@@ -9755,7 +10119,10 @@
         async function generateGeneticPlan(foods, criteria, context) {
             logToConsole('🧬 Genetik algoritma başlatılıyor...');
             
-            // 📋 Sistem kurallarını entegre et
+            // � Global Lock Memory Sıfırlama (Her planlama başlangıcında)
+            initializeLockMemory();
+            
+            // �📋 Sistem kurallarını entegre et
             const systemRules = getSystemRulesForPlanning();
             console.log('📋 Genetik algoritma sistem kuralları:', {
                 frekansKuralları: systemRules.frequency.length,
@@ -9763,6 +10130,14 @@
                 kilitKuralları: systemRules.lock.length,
                 toplamKural: systemRules.totalRules
             });
+            
+            // Kuralları ayrı değişkenlere ata - getSystemRulesForPlanning formatından
+            const frequencies = systemRules?.frequency || [];
+            const dependencies = systemRules?.dependency || [];
+            const locks = systemRules?.lock || [];
+            
+            console.log(`🔒 ${locks.length} lock kuralı hazırlanıyor:`, locks.map(r => `${r.filterType}:${r.filterText}`));
+            console.log(`🔗 ${dependencies.length} dependency kuralı hazırlanıyor:`, dependencies.map(r => `${r.parentTag || r.dependent?.tags?.[0]}→${r.childTag || r.target?.tags?.[0]}`));
             
             // Context'den dönem bilgisini al
             const period = context?.period || 'weekly';
@@ -9853,7 +10228,7 @@
                     // Azsa: rastgele uygun ekle (aynı havuzdan) - burada dayPlan._pool[meal] yok, basitçe foods'dan filtrele
                     let safety=0;
                     while (arr.length < minC && safety<20){
-                        const pool = foods.filter(f=>eligibleForMeal(f, meal));
+                        const pool = foods.filter(f=>eligibleForMeal(f, meal, weeklyPlan));
                         
                         // 🔥 DEBUG: Pool boyutunu ve filtrelemeyi kontrol et
                         if (safety === 0) { // Sadece ilk iterasyonda log
@@ -9861,7 +10236,8 @@
                                 toplamYemek: foods.length,
                                 filtrelenmiş: pool.length,
                                 mealType: meal,
-                                ilkUygunYemekler: pool.slice(0, 3).map(f => ({ name: f.name, mealType: f.mealType }))
+                                lockKuralları: (window.lockRules || []).length,
+                                ilkUygunYemekler: pool.slice(0, 3).map(f => ({ name: f.name, mealType: f.mealType, category: f.category }))
                             });
                         }
                         
@@ -9969,7 +10345,7 @@
                     const meal = meals[Math.floor(Math.random()*meals.length)];
                     const arr = dayPlan[meal]; if (!arr.length) continue;
                     const victim = arr[Math.floor(Math.random()*arr.length)];
-                    const pool = foods.filter(f=>eligibleForMeal(f, meal));
+                    const pool = foods.filter(f=>eligibleForMeal(f, meal, weeklyPlan));
                     const replacement = pickReplacement(pool, victim, deficitKey);
                     if (!replacement) continue;
                     const idx = arr.indexOf(victim);
@@ -10096,17 +10472,69 @@
                 }));
             }
 
+            // 🔒 Kategori kilidi için hafıza sistemi
+            const categoryLocks = new Map(); // category -> locked food name
+            const tagLocks = new Map(); // tag -> locked food name
+            
+            // Lock kurallarını hazırla
+            const lockRules = locks || [];
+            console.log(`🔒 ${lockRules.length} lock kuralı hazırlanıyor:`, lockRules.map(r => `${r.filterType}:${r.filterText}`));
+
             // Her gün için plan oluştur
             for (let day = 0; day < dayCount; day++) {
                 const dayKey = `day_${day + 1}`;
                 
                 const dayPlan = { breakfast: [], snack1: [], lunch: [], snack2: [], dinner: [] };
                 
-                // Her öğün için kalori hedefine göre seçim
+                // Her öğün için kalori hedefine göre seçim + lock kontrol
                 Object.keys(dayPlan).forEach(mealTime => {
                     const pct = normDistribution[mealTime] || 0;
                     const mealTarget = Math.round(targetCalories * (pct / 100));
-                    const pool = foods.filter(f => eligibleForMeal(f, mealTime));
+                    let pool = foods.filter(f => eligibleForMeal(f, mealTime, weeklyPlan));
+                    
+                    // 🔒 KATEGORİ/TAG KİLİT KONTROLÜ
+                    const originalPoolSize = pool.length;
+                    pool = pool.filter(food => {
+                        let allowed = true;
+                        
+                        // Kategori kilidi kontrolü
+                        lockRules.forEach(lockRule => {
+                            if (lockRule.filterType === 'category' && lockRule.scope === 'weekly') {
+                                if (food.category === lockRule.filterText) {
+                                    const lockedFood = categoryLocks.get(lockRule.filterText);
+                                    if (lockedFood && food.name !== lockedFood) {
+                                        console.log(`🚫 Kategori kilit reddi: "${food.name}" (${food.category}) - Kilitli: "${lockedFood}"`);
+                                        allowed = false;
+                                    } else if (lockedFood) {
+                                        console.log(`✅ Kategori kilit izni: "${food.name}" (kilitli yemekle aynı)`);
+                                    } else if (!lockedFood) {
+                                        console.log(`🔍 İlk kategori yemeği: "${food.name}" (${food.category}) - henüz kilit yok`);
+                                    }
+                                } else if (food.category && (food.category.includes('ÇORBA') || food.category.includes('çorba'))) {
+                                    console.log(`🔍 Çorba kategorisi farklı: "${food.name}" category:"${food.category}" vs expected:"${lockRule.filterText}"`);
+                                } else if (food.tags && food.tags.includes('çorba')) {
+                                    console.log(`� Çorba etiketi bulundu: "${food.name}" tags:${JSON.stringify(food.tags)} vs category expected:"${lockRule.filterText}"`);
+                                }
+                            }
+                            
+                            // Tag kilidi kontrolü  
+                            if (lockRule.filterType === 'tag' && lockRule.scope === 'weekly') {
+                                if (Array.isArray(food.tags) && food.tags.some(t => t.toLowerCase() === lockRule.filterText.toLowerCase())) {
+                                    const lockedFood = tagLocks.get(lockRule.filterText);
+                                    if (lockedFood && food.name !== lockedFood) {
+                                        console.log(`� Tag kilit reddi: "${food.name}" (${lockRule.filterText}) - Kilitli: "${lockedFood}"`);
+                                        allowed = false;
+                                    }
+                                }
+                            }
+                        });
+                        
+                        return allowed;
+                    });
+                    
+                    if (originalPoolSize !== pool.length) {
+                        console.log(`🔒 ${mealTime} havuzu kilit filtresi ile ${originalPoolSize} → ${pool.length} yemeğe düştü`);
+                    }
                     
                     // 🔥 DEBUG: Her öğün için pool kontrolü
                     console.log(`🎯 ${dayKey} ${mealTime} pool kontrolü:`, {
@@ -10118,11 +10546,35 @@
                     
                     if (pool.length === 0) return;
                     const filled = approximateFill(mealTime, mealTarget, pool);
-                    dayPlan[mealTime] = filled.map(item => ({
+                    const selectedFoods = filled.map(item => ({
                         ...item,
                         selectedForDay: day + 1,
                         selectedForMeal: mealTime
                     }));
+                    
+                    // 🔒 SEÇİLEN YEMEKLERİ KİLİT HAFİZASINA KAYDET
+                    selectedFoods.forEach(food => {
+                        lockRules.forEach(lockRule => {
+                            if (lockRule.scope === 'weekly') {
+                                if (lockRule.filterType === 'category' && food.category === lockRule.filterText) {
+                                    if (!categoryLocks.has(lockRule.filterText)) {
+                                        categoryLocks.set(lockRule.filterText, food.name);
+                                        console.log(`🔐 Kategori kilidi oluşturuldu: "${lockRule.filterText}" → "${food.name}"`);
+                                    }
+                                }
+                                
+                                if (lockRule.filterType === 'tag' && Array.isArray(food.tags) && 
+                                    food.tags.some(t => t.toLowerCase() === lockRule.filterText.toLowerCase())) {
+                                    if (!tagLocks.has(lockRule.filterText)) {
+                                        tagLocks.set(lockRule.filterText, food.name);
+                                        console.log(`🔐 Tag kilidi oluşturuldu: "${lockRule.filterText}" → "${food.name}"`);
+                                    }
+                                }
+                            }
+                        });
+                    });
+                    
+                    dayPlan[mealTime] = selectedFoods;
                 });
                 // Öğün başına min/max yemek sayısı uygula
                 enforceMealItemRange(dayPlan);
@@ -10172,9 +10624,111 @@
                 console.log(`✅ ${dayKey} planı oluşturuldu:`, Object.keys(dayPlan).map(meal => `${meal}:${dayPlan[meal].length}`), '≈', dayCalories, 'kcal', 'ΔMeals:', mealDeviations, 'Macros:', dayPlan._macroDiagnostics);
             }
 
+            // 🧱 YAPI ZORLAMA (meal structure min/max) - frequency öncesi temel iskelet
+            (function enforceMealStructure(){
+                const structure = systemRules.structure || {};
+                const roleNorm = r=> (r||'').toLowerCase()==='sidedish'? 'side': (r||'').toLowerCase();
+                const standardMeals = ['breakfast','lunch','dinner','snack1','snack2'];
+                const allDays = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
+                // Hızlı erişim için global havuz
+                let pool = (window.foodsData || window.allFoodsData || window.CACHED_FOODS || []);
+                if ((!pool || !pool.length) && typeof EMBEDDED_DATA !== 'undefined' && Array.isArray(EMBEDDED_DATA.foods)) pool = EMBEDDED_DATA.foods;
+                function candidatesForRole(role, meal){
+                    const rn = roleNorm(role);
+                    return pool.filter(f=> roleNorm(f.role)===rn && (()=>{ // meal uyumu
+                        const slots=[];
+                        if (Array.isArray(f.mealTypes)) slots.push(...f.mealTypes);
+                        if (Array.isArray(f.allowedMeals)) slots.push(...f.allowedMeals);
+                        if (typeof f.mealType==='string') slots.push(f.mealType);
+                        if (!slots.length) return true; // sınırsız
+                        return slots.map(s=>s.toLowerCase()).includes(meal);
+                    })());
+                }
+                allDays.forEach(dKey=>{
+                    standardMeals.forEach(meal=>{
+                        if (!weeklyPlan[dKey][meal]) return; // oluşturulmamış
+                        const mealStruct = structure[meal];
+                        if (!mealStruct || !mealStruct.items) return;
+                        Object.entries(mealStruct.items).forEach(([role,limits])=>{
+                            const min = limits.min ?? 0; const max = limits.max ?? Infinity;
+                            const arr = weeklyPlan[dKey][meal];
+                            const currentFoods = arr.filter(f=> roleNorm(f.role)===roleNorm(role));
+                            // Fazlaları kırp
+                            if (currentFoods.length > max){
+                                // Fazla olanları (en düşük protein yoğunluğu) sil
+                                const sorted = [...currentFoods].sort((a,b)=> ((a.protein||0)/(a.calories||1)) - ((b.protein||0)/(b.calories||1)));
+                                const removeCount = currentFoods.length - max;
+                                let removed=0;
+                                for (const food of sorted){
+                                    if (removed>=removeCount) break;
+                                    const idx = arr.indexOf(food);
+                                    if (idx>-1){ arr.splice(idx,1); removed++; }
+                                }
+                            }
+                            // Eksikleri tamamla
+                            if (currentFoods.length < min){
+                                let need = min - currentFoods.length;
+                                const cands = candidatesForRole(role, meal);
+                                // Basit sıralama (protein yoğunluğu yüksek öncelikli)
+                                cands.sort((a,b)=> ((b.protein||0)/(b.calories||1)) - ((a.protein||0)/(a.calories||1)));
+                                let ci=0; let safety=0;
+                                while (need>0 && ci<cands.length && safety<100){
+                                    safety++;
+                                    const food = cands[ci++];
+                                    if (arr.some(f=> f.name===food.name)) continue; // aynı isim
+                                    arr.push({...food,_addedByStructure:true});
+                                    need--;
+                                }
+                            }
+                        });
+                    });
+                });
+            })();
+
+            // 🥚 MAKRO / BOŞ ÖĞÜN SEEDING (basit): Boş veya çok düşük kalorili ana öğünlere 1 ana yemek ekle
+            ;(function macroSeeding(){
+                const allDays = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
+                let pool = (window.foodsData || window.allFoodsData || window.CACHED_FOODS || []);
+                if ((!pool || !pool.length) && typeof EMBEDDED_DATA !== 'undefined' && Array.isArray(EMBEDDED_DATA.foods)) pool = EMBEDDED_DATA.foods;
+                if (!pool || !pool.length) return;
+                function caloriesOf(arr){ return (arr||[]).reduce((a,f)=> a + (f.calories||0),0); }
+                function allowedForMeal(food, meal){
+                    let slots=[]; if (Array.isArray(food.mealTypes)) slots=slots.concat(food.mealTypes); if (Array.isArray(food.allowedMeals)) slots=slots.concat(food.allowedMeals); if (typeof food.mealType==='string') slots.push(food.mealType);
+                    if (!slots.length) return true; return slots.map(s=>s.toLowerCase()).includes(meal);
+                }
+                function pickMainDish(meal){
+                    const cands = pool.filter(f=> ((f.role||'').toLowerCase()==='maindish') && allowedForMeal(f, meal));
+                    if (!cands.length) return null;
+                    // orta kalori + yüksek protein yoğunluğu skoru
+                    cands.sort((a,b)=>{
+                        const score = f=>{ const cal=f.calories||1; const protein=f.protein||0; const calDiff=Math.abs(cal-300); return (protein/(cal)) - (calDiff/1000); };
+                        return score(b)-score(a);
+                    });
+                    return cands[0];
+                }
+                allDays.forEach(dKey=>{
+                    ['breakfast','lunch','dinner'].forEach(meal=>{
+                        if (!weeklyPlan[dKey] || !Array.isArray(weeklyPlan[dKey][meal])) return;
+                        const arr = weeklyPlan[dKey][meal];
+                        const cal = caloriesOf(arr);
+                        // eşik: hiç öğe yoksa veya <120 kcal ise seeding
+                        if (arr.length===0 || cal < 120){
+                            const main = pickMainDish(meal);
+                            if (main && !arr.some(f=> f.name===main.name)){
+                                arr.push({...main,_addedBySeeding:true});
+                            }
+                        }
+                    });
+                });
+            })();
+
             // 🔧 FREKANS KURALI ZORLAYICI (post-processing)
             // Amaç: range/min/exact tanımlı kuralların minimum gereklerini karşılamak; aşım varsa kırpmak.
             (function enforceFrequencyRules(){
+                if (!window._foodsLoaded || !Array.isArray(window.foodsData) || window.foodsData.length===0){
+                    console.warn('⏳ Frequency enforcement ertelendi: foods henüz hazır değil');
+                    return; // erken çık – aksi halde tüm kurallar NO_CANDIDATE olur
+                }
                 if (!systemRules.frequency || systemRules.frequency.length === 0) return;
                 const diagnostics = [];
                 const allDays = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
@@ -10195,20 +10749,23 @@
                     if (!food || !filters) return false;
                     const nameMode = (filters.nameMode||'OR').toUpperCase();
                     const tagMode = (filters.tagMode||'OR').toUpperCase();
+                    const stripAcc = s=> (s||'').toString().normalize('NFD').replace(/\p{Diacritic}/gu,'');
+                    const normCat = s=> stripAcc(s).toUpperCase().trim();
                     // Names
-                    const names = (filters.names||[]).map(n=> n.toLowerCase());
+                    const names = (filters.names||[]).map(n=> (n||'').toLowerCase());
                     const fname = (food.name||'').toLowerCase();
-                    let nameOk = !names.length || (nameMode==='AND'? names.every(n=> fname.includes(n)) : names.some(n=> fname.includes(n)));
-                    // Tags
-                    const fTags = Array.isArray(food.tags)? food.tags.map(t=> t.toLowerCase()): [];
-                    const ruleTags = (filters.tags||[]).map(t=> t.toLowerCase());
-                    let tagOk = !ruleTags.length || (tagMode==='AND'? ruleTags.every(t=> fTags.includes(t)) : ruleTags.some(t=> fTags.includes(t)));
-                    // Categories
-                    const cats = (filters.categories||[]);
-                    let catOk = !cats.length || cats.includes(food.category);
-                    // Roles
-                    const roles = (filters.roles||[]).map(r=> r.toLowerCase());
-                    let roleOk = !roles.length || roles.includes((food.role||'').toLowerCase());
+                    const nameOk = !names.length || (nameMode==='AND'? names.every(n=> fname.includes(n)) : names.some(n=> fname.includes(n)));
+                    // Tags (AND/OR)
+                    const fTags = Array.isArray(food.tags)? food.tags.map(t=> (t||'').toLowerCase()): [];
+                    const ruleTags = (filters.tags||[]).map(t=> (t||'').toLowerCase());
+                    const tagOk = !ruleTags.length || (tagMode==='AND'? ruleTags.every(t=> fTags.includes(t)) : ruleTags.some(t=> fTags.includes(t)));
+                    // Categories (accent & case insensitive)
+                    const ruleCats = (filters.categories||[]).map(normCat);
+                    const catOk = !ruleCats.length || ruleCats.includes(normCat(food.category||''));
+                    // Roles (normalize sideDish->side)
+                    const ruleRoles = (filters.roles||[]).map(r=> (r||'').toLowerCase()==='sidedish'? 'side': (r||'').toLowerCase());
+                    const foodRole = ((food.role||'').toLowerCase()==='sidedish'? 'side': (food.role||'').toLowerCase());
+                    const roleOk = !ruleRoles.length || ruleRoles.includes(foodRole);
                     return nameOk && tagOk && catOk && roleOk;
                 }
                 function countMatches(rule){
@@ -10217,8 +10774,11 @@
                 }
                 // Aday yemekleri bul (full filter)
                 function findCandidates(rule, alreadyUsedIds){
-                    const pool = (window.foodsData || window.allFoodsData || window.CACHED_FOODS || []);
-                    return pool.filter(f=>{
+                    let pool = (window.foodsData || window.allFoodsData || window.CACHED_FOODS || []);
+                    if ((!pool || !pool.length) && typeof EMBEDDED_DATA !== 'undefined' && Array.isArray(EMBEDDED_DATA.foods)) {
+                        pool = EMBEDDED_DATA.foods;
+                    }
+                    return (pool||[]).filter(f=>{
                         if (!f || !f.name) return false;
                         if (alreadyUsedIds && alreadyUsedIds.has(f.id)) return false;
                         return matchFoodByFilters(rule.filters, f);
@@ -10261,9 +10821,187 @@
                 }
                 systemRules.frequency.forEach(rule=>{
                     const d = { id: rule.id, names: (rule.filters?.names)||[], status: 'unchecked', before:0, after:0, added:[], removed:[], message:'', reasonCode:null };
-                    const countInfo = countMatches(rule);
+                    // Haftalık kapsam
+                    if (rule.scope==='week'){
+                        // normalize type
+                        let rawType = (rule.countType||'').toLowerCase();
+                        if (rawType==='fixed') rawType='exact';
+                        if (rawType==='atleast') rawType='min';
+                        if (!rawType) rawType = (rule.countMax!=null? 'range':'min');
+                        const type = rawType;
+                        const min = rule.count || 0;
+                        const max = (type==='range'||type==='exact') ? (rule.countMax!=null? rule.countMax : rule.count) : (rule.countMax!=null? rule.countMax : Number.POSITIVE_INFINITY);
+                        const allDays = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
+                        const planRowsAll = [];
+                        allDays.forEach(dKey=>{
+                            ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{
+                                const arr = weeklyPlan[dKey][meal];
+                                if (!Array.isArray(arr)) return;
+                                arr.forEach(f=> planRowsAll.push({dayKey:dKey, meal, food:f}));
+                            });
+                        });
+                        const matchedRows = planRowsAll.filter(r=> matchFoodByFilters(rule.filters, r.food));
+                        d.before = matchedRows.length;
+                        // Fazla ise kırp
+                        if (matchedRows.length > max){
+                            let needRemove = matchedRows.length - max;
+                            // Kırpılacak adayları kalori yoğunluğuna göre (yüksek önce kırp?) veya düşük protein yoğunluğu önce; burada düşük protein yoğunluğu önce
+                            const sorted = [...matchedRows].sort((a,b)=> ((a.food.protein||0)/(a.food.calories||1)) - ((b.food.protein||0)/(b.food.calories||1)) );
+                            for (const row of sorted){
+                                if (needRemove<=0) break;
+                                const arr = weeklyPlan[row.dayKey][row.meal];
+                                const idx = arr.indexOf(row.food);
+                                if (idx>-1){ arr.splice(idx,1); d.removed.push({day:row.dayKey, meal:row.meal, food:row.food.name}); needRemove--; }
+                            }
+                        }
+                        // Eksik ise ekle
+                        function candidatePool(){
+                            let pool = (window.foodsData || window.allFoodsData || window.CACHED_FOODS || []);
+                            if ((!pool || !pool.length) && typeof EMBEDDED_DATA !== 'undefined' && Array.isArray(EMBEDDED_DATA.foods)) pool = EMBEDDED_DATA.foods;
+                            return (pool||[]).filter(f=> matchFoodByFilters(rule.filters,f));
+                        }
+                        let currentCount = (function(){
+                            const rows=[];
+                            allDays.forEach(dKey=>{
+                                ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{
+                                    const arr=weeklyPlan[dKey][meal];
+                                    if (Array.isArray(arr)) arr.forEach(f=> rows.push({dayKey:dKey, meal, food:f}));
+                                });
+                            });
+                            return rows.filter(r=> matchFoodByFilters(rule.filters,r.food)).length;
+                        })();
+                        if (currentCount < min){
+                            let need = min - currentCount;
+                            const cands = candidatePool();
+                            // Çeşitlilik: gün+öğün kombinasyonlarına dengeli dağıt
+                            while (need>0 && cands.length){
+                                // sıradaki aday
+                                const food = cands.shift();
+                                // günleri mevcut eşleşme sayısına göre sırala
+                                const dayScores = allDays.map(dKey=>{
+                                    let dayCount=0; ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{ const arr=weeklyPlan[dKey][meal]; if (Array.isArray(arr)) dayCount += arr.filter(f=> matchFoodByFilters(rule.filters,f)).length; });
+                                    return {dKey, dayCount};
+                                }).sort((a,b)=> a.dayCount - b.dayCount);
+                                let placed=false;
+                                for (const ds of dayScores){
+                                    const dKey = ds.dKey;
+                                    const allowedSlots = (function(){
+                                        const slots=[]; if (Array.isArray(food.mealTypes)) slots.push(...food.mealTypes); if (Array.isArray(food.allowedMeals)) slots.push(...food.allowedMeals); if (typeof food.mealType==='string') slots.push(food.mealType);
+                                        const valid=['breakfast','snack1','lunch','snack2','dinner'];
+                                        const norm= slots.map(s=> s.toLowerCase()).filter(s=> valid.includes(s));
+                                        if (rule.meals && rule.meals.length){ return norm.filter(s=> rule.meals.includes(s)) || rule.meals; }
+                                        return norm.length? norm : (rule.meals && rule.meals.length? rule.meals : ['lunch','dinner','breakfast']);
+                                    })();
+                                    // slot seç – mevcutta en az eşleşme olan
+                                    const slotScores = allowedSlots.map(m=>{
+                                        const arr=weeklyPlan[dKey][m];
+                                        let c=0; if (Array.isArray(arr)) c = arr.filter(f=> matchFoodByFilters(rule.filters,f)).length;
+                                        return {m,c};
+                                    }).sort((a,b)=> a.c - b.c);
+                                    for (const sl of slotScores){
+                                        const arr = weeklyPlan[dKey][sl.m];
+                                        if (!Array.isArray(arr)) continue;
+                                        if (arr.some(f=> f.name===food.name)) continue; // aynısı var
+                                        arr.push({...food,_addedByRule:rule.id,_ruleType:'frequency', _scope:'week'});
+                                        d.added.push({day:dKey, meal:sl.m, food:food.name});
+                                        placed=true; need--; break;
+                                    }
+                                    if (placed) break;
+                                }
+                                if (!placed) break; // aday yerleşmedi – muhtemelen slot kısıtı
+                            }
+                        }
+                        // Final sayım
+                        const finalRows=[]; allDays.forEach(dKey=>{ ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{ const arr=weeklyPlan[dKey][meal]; if (Array.isArray(arr)) arr.forEach(f=> finalRows.push({dayKey:dKey, meal, food:f})); }); });
+                        const finalCount = finalRows.filter(r=> matchFoodByFilters(rule.filters,r.food)).length;
+                        d.after = finalCount;
+                        if (finalCount < min){ d.status='failed'; d.reasonCode='PARTIAL'; d.message=`Eksik ${finalCount}/${min}`; }
+                        else if (finalCount > max){ d.status='trimmed'; d.reasonCode='OVER_LIMIT'; d.message=`Kırpıldı ${finalCount}>${max}`; }
+                        else { d.status='ok'; d.message=`Tamamlandı ${finalCount}/${min}`; }
+                        diagnostics.push(d); return;
+                    }
+                    // scope=meal ise özel per-meal işleme
+                    if (rule.scope==='meal'){
+                        const targetMeals = (rule.meals && rule.meals.length)? rule.meals : ['breakfast','lunch','dinner','snack1','snack2'];
+                        const allDays = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
+                        let globalBefore=0; let globalAfter=0; let totalInstances=0; let overTrim=0; let failedAdd=false; let noCandidate=false;
+                        // countType normalize
+                        let rawType = (rule.countType||'').toLowerCase();
+                        if (rawType==='fixed') rawType='exact';
+                        if (rawType==='atleast') rawType='min';
+                        if (!rawType) rawType = (rule.countMax!=null? 'range':'min');
+                        const type = rawType;
+                        const minBase = rule.count || 0;
+                        const maxBase = (type==='range'||type==='exact') ? (rule.countMax!=null? rule.countMax : rule.count) : (rule.countMax!=null? rule.countMax : Number.POSITIVE_INFINITY);
+                        allDays.forEach(dKey=>{
+                            targetMeals.forEach(meal=>{
+                                if (!weeklyPlan[dKey] || !Array.isArray(weeklyPlan[dKey][meal])) return;
+                                totalInstances++;
+                                const arr = weeklyPlan[dKey][meal];
+                                const matchesIdx = [];
+                                arr.forEach((f,i)=>{ if (matchFoodByFilters(rule.filters, f)) matchesIdx.push(i); });
+                                const before = matchesIdx.length; globalBefore += before;
+                                const min = minBase; const max = maxBase;
+                                // Fazla ise kırp
+                                if (before > max){
+                                    const removeCount = before - max;
+                                    // Basit: sondan sil (veya düşük protein yoğunluğu). Şimdilik sondan.
+                                    let removed=0;
+                                    for (let ri = matchesIdx.length-1; ri>=0 && removed<removeCount; ri--){
+                                        const idx = matchesIdx[ri];
+                                        const food = arr[idx];
+                                        arr.splice(idx,1);
+                                        d.removed.push({day:dKey, meal, food: food.name});
+                                        removed++; overTrim++;
+                                    }
+                                }
+                                // Eksik ise ekle
+                                function candidatePool(){
+                                    let pool = (window.foodsData || window.allFoodsData || window.CACHED_FOODS || []);
+                                    if ((!pool || !pool.length) && typeof EMBEDDED_DATA !== 'undefined' && Array.isArray(EMBEDDED_DATA.foods)) pool = EMBEDDED_DATA.foods;
+                                    return (pool||[]).filter(f=> matchFoodByFilters(rule.filters,f));
+                                }
+                                let afterTrimCount = arr.filter(f=> matchFoodByFilters(rule.filters,f)).length;
+                                if (afterTrimCount < min){
+                                    let need = min - afterTrimCount;
+                                    const cands = candidatePool();
+                                    if (!cands.length){ noCandidate=true; failedAdd=true; }
+                                    // Sırala
+                                    cands.sort((a,b)=> ((b.protein||0)/(b.calories||1)) - ((a.protein||0)/(a.calories||1)) );
+                                    let ci=0; let safety=0;
+                                    while (need>0 && ci<cands.length && safety<100){
+                                        safety++;
+                                        const food = cands[ci++];
+                                        if (arr.some(f=> f.name===food.name)) continue;
+                                        // meal slot uyum kontrolü
+                                        const allowedSlots = getAllowedMealSlotsForFood(food);
+                                        if (!allowedSlots.includes(meal)) continue;
+                                        arr.push({...food,_addedByRule:rule.id,_ruleType:'frequency'});
+                                        d.added.push({day:dKey, meal, food:food.name});
+                                        need--;
+                                    }
+                                    if (need>0) failedAdd=true;
+                                }
+                                const finalCount = arr.filter(f=> matchFoodByFilters(rule.filters,f)).length;
+                                globalAfter += finalCount;
+                            });
+                        });
+                        d.before = globalBefore; d.after = globalAfter;
+                        const expectedMin = minBase * totalInstances;
+                        const expectedMax = maxBase * totalInstances;
+                        if (globalAfter < expectedMin){ d.status= failedAdd? 'failed':'partial'; d.reasonCode = noCandidate? 'NO_CANDIDATE':'PARTIAL'; d.message = `Eksik: ${globalAfter}/${expectedMin}`; }
+                        else if (globalAfter > expectedMax){ d.status='trimmed'; d.reasonCode='OVER_LIMIT'; d.message=`Kırpıldı (>${expectedMax})`; }
+                        else { d.status='ok'; d.message=`Tamamlandı ${globalAfter}/${expectedMin}`; }
+                        diagnostics.push(d); return; // global (week) logic atlanır
+                    }
+                    const countInfo = countMatches(rule); // week/day scope olmayan varsayılan
                     d.before = countInfo.total;
-                    const type = rule.countType || (rule.countMax!=null? 'range':'min');
+                    // Tür normalizasyonu: fixed => exact, min/atLeast => min
+                    let rawType = (rule.countType||'').toLowerCase();
+                    if (rawType === 'fixed') rawType = 'exact';
+                    if (rawType === 'atleast') rawType = 'min';
+                    if (!rawType) rawType = (rule.countMax!=null? 'range':'min');
+                    const type = rawType;
                     const min = rule.count || 0;
                     const max = (type==='range'||type==='exact') ? (rule.countMax!=null? rule.countMax : rule.count) : (rule.countMax!=null? rule.countMax : Number.POSITIVE_INFINITY);
                     // Eksikse ekleme
@@ -10352,6 +11090,21 @@
                         d.reasonCode='NO_MATCH';
                         d.message='Kural isimleri planda hiç eşleşmedi ve ekleme gerekmedi (min=0).';
                     }
+                    // Halen 'unchecked' ise ve aralık içinde ise statüyü netleştir
+                    if (d.status==='unchecked'){
+                        const val = d.before;
+                        if (type==='exact'){
+                            d.status = (val===min)? 'ok':'mismatch';
+                            if (d.status==='mismatch') d.reasonCode = val<min? 'BELOW_MIN':'OVER_LIMIT';
+                        } else if (type==='range'){
+                            d.status = (val>=min && val<=max)? 'ok' : (val<min? 'below-min':'above-max');
+                            if (d.status!=='ok') d.reasonCode = (val<min? 'BELOW_MIN':'OVER_LIMIT');
+                        } else { // min
+                            d.status = (val>=min)? 'ok':'below-min';
+                            if (d.status!=='ok') d.reasonCode='BELOW_MIN';
+                        }
+                        if (!d.message) d.message = (d.status==='ok')? 'Hedef zaten karşılandı.' : (d.message||'');
+                    }
                     if (!d.after) d.after = countMatches(rule).total;
                     diagnostics.push(d);
                 });
@@ -10359,170 +11112,6 @@
                 console.log('🛠️ Frekans kuralı uygulama özeti:', diagnostics);
             })();
 
-            // 🧩 Bağımlılık ve Kilit Kuralları Uygulama
-            (function applyDependencyAndLockRules(){
-                const depDiagnostics = [];
-                const lockDiagnostics = [];
-                try {
-                    const deps = (systemRules.dependency)||[];
-                    const locks = (systemRules.lock)||[];
-                    // allDays burada tanımlı değildi (ReferenceError). Weekly plan anahtarlarından üret.
-                    const days = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
-                    if (!days.length){
-                        console.warn('⚠️ applyDependencyAndLockRules: Gün listesi boş, bağımlılık/kilit kuralları atlandı.');
-                    }
-
-                    // Yardımcı: filtre eşleşme
-                    function foodMatchesFilter(food, filter){
-                        if (!food) return false;
-                        const nameOk = !filter.names?.length || filter.names.some(n=> food.name && food.name.toLowerCase().includes(n.toLowerCase()));
-                        const catOk = !filter.categories?.length || filter.categories.includes(food.category);
-                        const roleList = Array.isArray(filter.roles)? filter.roles.map(r=> r.toLowerCase()): [];
-                        const roleOk = !roleList.length || roleList.includes((food.role||'').toLowerCase());
-                        // tag desteği (food.tags array varsayımı)
-                        const tags = Array.isArray(food.tags)? food.tags.map(t=> t.toLowerCase()): [];
-                        const tagOk = !filter.tags?.length || filter.tags.some(t=> tags.includes(t.toLowerCase()));
-                        return nameOk && catOk && roleOk && tagOk;
-                    }
-                    function enumerateMeals(){
-                        const items=[];
-                        days.forEach(day=>{
-                            ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{
-                                const arr = weeklyPlan[day][meal];
-                                if (Array.isArray(arr)) arr.forEach(food=> items.push({day,meal,food}));
-                            });
-                        });
-                        return items;
-                    }
-
-                    // 🔗 Dependency Rules
-                    deps.forEach(rule=>{
-                        const d = { id: rule.id, type:'dependency', status:'unchecked', triggerCount:0, targetCount:0, enforced:0, added:[], message:'', reasonCode:null };
-                        const items = enumerateMeals();
-                        const depFilter = rule.dependent || rule.trigger || {};
-                        const targetFilter = rule.target || rule.dependentTarget || {};
-                        const triggers = items.filter(it=> foodMatchesFilter(it.food, depFilter));
-                        const targets = items.filter(it=> foodMatchesFilter(it.food, targetFilter));
-                        d.triggerCount = triggers.length;
-                        d.targetCount = targets.length;
-                        if (d.triggerCount===0){
-                            d.status='ignored';
-                            d.reasonCode='NO_TRIGGER';
-                            d.message='Tetikleyici yok';
-                            depDiagnostics.push(d); return;
-                        }
-                        // Gereken hedef sayısı = ceil(triggerCount * ratio/100)
-                        const required = Math.ceil(d.triggerCount * (rule.ratio||rule.dependencyRatio||0)/100);
-                        if (d.targetCount >= required){
-                            d.status='satisfied';
-                            d.message=`Hedef sağlandı (${d.targetCount}/${required}).`;
-                            depDiagnostics.push(d); return;
-                        }
-                        // Eksik hedefleri ekleme denemesi
-                        let need = required - d.targetCount;
-                        // Aday havuz: global foods (varsayım: window.allFoods ya da meals listesinden)
-                        const candidatePool = (window.allFoods|| window.allFoodsData || window.foodsData || []).filter(f=> foodMatchesFilter(f, targetFilter));
-                        if (!candidatePool.length){
-                            d.status='failed'; d.reasonCode='NO_CANDIDATE'; d.message=`Hedef eksik ve uygun aday yok (${d.targetCount}/${required}).`; depDiagnostics.push(d); return;
-                        }
-                        let safety=0;
-                        for (const trig of triggers){
-                            if (need<=0) break;
-                            safety++; if (safety>200) break;
-                            // Aynı gün mümkünse ekle (trig.day öncelik)
-                            const food = candidatePool[(safety-1)%candidatePool.length];
-                            const allowedSlots = getAllowedMealSlotsForFood(food);
-                            let placed=false;
-                            for (const slot of allowedSlots){
-                                if (!weeklyPlan[trig.day] || !Array.isArray(weeklyPlan[trig.day][slot])) continue;
-                                const arr = weeklyPlan[trig.day][slot];
-                                if (arr.some(x=> x.name===food.name)) continue;
-                                arr.push({...food,_addedByRule:rule.id,_ruleType:'dependency'});
-                                d.added.push({day:trig.day, meal:slot, food:food.name});
-                                need--; placed=true; d.enforced++; break;
-                            }
-                            if (!placed){
-                                // Farklı gün fallback
-                                for (const day of days){
-                                    if (placed||need<=0) break;
-                                    for (const slot of allowedSlots){
-                                        if (!weeklyPlan[day] || !Array.isArray(weeklyPlan[day][slot])) continue;
-                                        const arr = weeklyPlan[day][slot];
-                                        if (arr.some(x=> x.name===food.name)) continue;
-                                        arr.push({...food,_addedByRule:rule.id,_ruleType:'dependency'});
-                                        d.added.push({day, meal:slot, food:food.name});
-                                        need--; placed=true; d.enforced++; break;
-                                    }
-                                }
-                            }
-                        }
-                        d.targetCount = enumerateMeals().filter(it=> foodMatchesFilter(it.food, targetFilter)).length;
-                        if (d.targetCount >= required){
-                            d.status='enforced';
-                            d.message=`Eksik hedef tamamlandı (${d.targetCount}/${required}).`;
-                        } else if (d.added.length){
-                            d.status='partial'; d.reasonCode='PARTIAL'; d.message=`Kısmi: ${d.targetCount}/${required}.`;
-                        } else {
-                            d.status='failed'; d.reasonCode='NO_SLOT'; d.message=`Yerleştirilemedi (${d.targetCount}/${required}).`;
-                        }
-                        depDiagnostics.push(d);
-                    });
-
-                    // 🔒 Lock Rules (sadece rapor - enforcement minimal: kilitli öğe mevcut değilse eklemeye çalış)
-                    locks.forEach(rule=>{
-                        const d = { id: rule.id, type:'lock', status:'unchecked', present:0, added:false, message:'', reasonCode:null };
-                        const items = enumerateMeals();
-                        const lockName = rule.name || rule.foodName || '';
-                        const matches = lockName
-                            ? items.filter(it=> it.food.name && it.food.name.toLowerCase().includes(lockName.toLowerCase()))
-                            : items.filter(it=>{
-                                // kategori/rol bazlı kilit
-                                const catOk = !rule.categories?.length || rule.categories.includes(it.food.category);
-                                const roleOk = !rule.roles?.length || rule.roles.map(r=>r.toLowerCase()).includes((it.food.role||'').toLowerCase());
-                                return catOk && roleOk;
-                            });
-                        d.present = matches.length;
-                        if (d.present>0){
-                            d.status='present';
-                            d.message=`Kilitleme öğesi mevcut (${d.present}).`;
-                            lockDiagnostics.push(d); return;
-                        }
-                        // Ekleme denemesi (basit): global pool'da aynı isimli yiyecek bul
-                        const pool = (window.allFoods|| window.allFoodsData || window.foodsData || []).filter(f=>{
-                            if (lockName) return f.name && f.name.toLowerCase().includes(lockName.toLowerCase());
-                            const catOk = !rule.categories?.length || rule.categories.includes(f.category);
-                            const roleOk = !rule.roles?.length || rule.roles.map(r=>r.toLowerCase()).includes((f.role||'').toLowerCase());
-                            return catOk && roleOk;
-                        });
-                        if (!pool.length){ d.status='missing'; d.reasonCode='NO_CANDIDATE'; d.message='Kilitli öğe bulunamadı'; lockDiagnostics.push(d); return; }
-                        const food = pool[0];
-                        let placed=false;
-                        for (const day of days){
-                            if (placed) break;
-                            const allowedSlots = getAllowedMealSlotsForFood(food);
-                            for (const slot of allowedSlots){
-                                if (!weeklyPlan[day] || !Array.isArray(weeklyPlan[day][slot])) continue;
-                                weeklyPlan[day][slot].push({...food,_addedByRule:rule.id,_ruleType:'lock'});
-                                d.added=true; placed=true; d.present=1; break;
-                            }
-                        }
-                        if (placed){
-                            d.status='enforced'; d.message='Kilitli öğe eklendi.';
-                        } else {
-                            d.status='failed'; d.reasonCode='NO_SLOT'; d.message='Kilitli öğe için yer bulunamadı';
-                        }
-                        lockDiagnostics.push(d);
-                    });
-
-                    weeklyPlan._dependencyDiagnostics = depDiagnostics;
-                    weeklyPlan._lockDiagnostics = lockDiagnostics;
-                    console.log('🔗 Bağımlılık kuralı diagnostikleri:', depDiagnostics);
-                    console.log('🔒 Kilit kuralı diagnostikleri:', lockDiagnostics);
-                } catch(err){
-                    console.warn('⚠️ Dependency/Lock rule application error', err);
-                }
-            })();
-            
             // F: Frequency rule raporlama
             try {
                 const freqRules = (window.rulesArchive?.frequencyRules) || (window.gitHubUserRules?.rulesArchive?.frequencyRules) || [];
@@ -10547,6 +11136,258 @@
                     console.log('🧮 Frequency rules değerlendirme:', freqResults);
                 }
             } catch(e){ console.warn('Frequency evaluation error', e); }
+
+            // 🧩 Bağımlılık ve Kilit Kuralları Uygulama - RETURN ÖNCESİ ÇALIŞMALI
+            (function applyDependencyAndLockRules(){
+                console.log('🔍 applyDependencyAndLockRules BAŞLADI');
+                
+                // Debug: farklı kaynaklardan kural sayıları
+                console.log('🔍 Global değişkenler:', {
+                    'dependencies (global)': dependencies.length,
+                    'locks (global)': locks.length,
+                    'window.dependencyRules': window.dependencyRules?.length || 0,
+                    'window.lockRules': window.lockRules?.length || 0
+                });
+                
+                // Yukarıda tanımlanan kural değişkenlerini kullan
+                console.log('🔍 dependencies kuralları:', dependencies);
+                console.log('🔍 locks kuralları:', locks);
+                console.log('🔍 Dependency/Lock kuralları yüklendi:', dependencies.length, locks.length);
+                
+                // Yardımcı fonksiyonları tanımla
+                function matchFoodByFilters(filters, food){
+                    if (!food || !filters) return false;
+                    const nameMode = (filters.nameMode||'OR').toUpperCase();
+                    const tagMode = (filters.tagMode||'OR').toUpperCase();
+                    const stripAcc = s=> (s||'').toString().normalize('NFD').replace(/\p{Diacritic}/gu,'');
+                    const normCat = s=> stripAcc(s).toUpperCase().trim();
+                    // Names
+                    const names = (filters.names||[]).map(n=> (n||'').toLowerCase());
+                    const fname = (food.name||'').toLowerCase();
+                    const nameOk = !names.length || (nameMode==='AND'? names.every(n=> fname.includes(n)) : names.some(n=> fname.includes(n)));
+                    // Tags (AND/OR)
+                    const fTags = Array.isArray(food.tags)? food.tags.map(t=> (t||'').toLowerCase()): [];
+                    const ruleTags = (filters.tags||[]).map(t=> (t||'').toLowerCase());
+                    const tagOk = !ruleTags.length || (tagMode==='AND'? ruleTags.every(t=> fTags.includes(t)) : ruleTags.some(t=> fTags.includes(t)));
+                    // Categories (accent & case insensitive)
+                    const ruleCats = (filters.categories||[]).map(normCat);
+                    const catOk = !ruleCats.length || ruleCats.includes(normCat(food.category||''));
+                    // Roles (normalize sideDish->side)
+                    const ruleRoles = (filters.roles||[]).map(r=> (r||'').toLowerCase()==='sidedish'? 'side': (r||'').toLowerCase());
+                    const foodRole = ((food.role||'').toLowerCase()==='sidedish'? 'side': (food.role||'').toLowerCase());
+                    const roleOk = !ruleRoles.length || ruleRoles.includes(foodRole);
+                    return nameOk && tagOk && catOk && roleOk;
+                }
+                
+                const depDiagnostics = [];
+                const lockDiagnostics = [];
+                try {
+                    // Güvenli slot fonksiyonu alias'ı (frekans IIFE dışına taşınmadıysa burada kopya oluştur)
+                    const getAllowedMealSlotsForFoodLocal = (typeof getAllowedMealSlotsForFood === 'function')
+                        ? getAllowedMealSlotsForFood
+                        : function(food){
+                            if (!food) return ['breakfast','snack1','lunch','snack2','dinner'];
+                            let slots = [];
+                            if (Array.isArray(food.mealTypes)) slots = food.mealTypes.slice();
+                            else if (Array.isArray(food.allowedMeals)) slots = food.allowedMeals.slice();
+                            else if (typeof food.mealType === 'string') slots = [food.mealType];
+                            slots = slots.map(s=> (s||'').toLowerCase().trim());
+                            const valid = ['breakfast','snack1','lunch','snack2','dinner'];
+                            slots = slots.filter(s=> valid.includes(s));
+                            return slots.length? slots : valid;
+                        };
+                    
+                    // Yukarıda tanımlanan dependencies ve locks değişkenlerini kullan
+                    console.log('🔍 Dependency/Lock kuralları (from context):', dependencies.length, locks.length);
+                    // allDays burada tanımlı değildi (ReferenceError). Weekly plan anahtarlarından üret.
+                    const days = Object.keys(weeklyPlan).filter(k=>k.startsWith('day_'));
+                    if (!days.length){
+                        console.warn('⚠️ applyDependencyAndLockRules: Gün listesi boş, bağımlılık/kilit kuralları atlandı.');
+                        return;
+                    }
+
+                    // Yardımcı: filtre eşleşme
+                    function foodMatchesFilter(food, filter){
+                        if (!food) return false;
+                        const nameOk = !filter.names?.length || filter.names.some(n=> food.name && food.name.toLowerCase().includes(n.toLowerCase()));
+                        const catOk = !filter.categories?.length || filter.categories.includes(food.category);
+                        const roleList = Array.isArray(filter.roles)? filter.roles.map(r=> r.toLowerCase()): [];
+                        const roleOk = !roleList.length || roleList.includes((food.role||'').toLowerCase());
+                        // tag desteği (food.tags array varsayımı)
+                        const tags = Array.isArray(food.tags)? food.tags.map(t=> t.toLowerCase()): [];
+                        const tagOk = !filter.tags?.length || filter.tags.some(t=> tags.includes(t.toLowerCase()));
+                        return nameOk && catOk && roleOk && tagOk;
+                    }
+
+                    // 🔗 DEPENDENCY RULES
+                    dependencies.forEach(rule=>{
+                        const d = { id:rule.id, status:'ignored', triggerCount:0, targetCount:0, added:[], removed:[], message:'', reasonCode:'', rule };
+                        
+                        // Parent (trigger) yemekleri bul - hem yeni (parentTag) hem eski (dependent.tags) format desteği
+                        let parentFilter = {};
+                        if (rule.parentTag) {
+                            // Yeni format
+                            parentFilter = { tags: [rule.parentTag] };
+                        } else if (rule.dependent?.tags?.length) {
+                            // Eski format
+                            parentFilter = rule.dependent;
+                        } else {
+                            console.log(`⚠️ Dependency rule ${rule.id} has no valid parent filter`);
+                            depDiagnostics.push(d);
+                            return;
+                        }
+                        
+                        const dependentFoods = [];
+                        days.forEach(day=>{
+                            ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{
+                                const mealFoods = weeklyPlan[day]?.[meal] || [];
+                                mealFoods.forEach(food=>{
+                                    if (foodMatchesFilter(food, parentFilter)){
+                                        dependentFoods.push({food, day, meal});
+                                    }
+                                });
+                            });
+                        });
+                        d.triggerCount = dependentFoods.length;
+                        
+                        if (dependentFoods.length > 0){
+                            // Child (target) yemeklerin mevcut sayısını say - hem yeni (childTag) hem eski (target.tags) format desteği
+                            let childFilter = {};
+                            if (rule.childTag) {
+                                // Yeni format
+                                childFilter = { tags: [rule.childTag] };
+                            } else if (rule.target?.tags?.length) {
+                                // Eski format
+                                childFilter = rule.target;
+                            } else {
+                                console.log(`⚠️ Dependency rule ${rule.id} has no valid target filter`);
+                                d.status = 'error';
+                                d.message = 'Geçersiz hedef filtresi';
+                                depDiagnostics.push(d);
+                                return;
+                            }
+                            
+                            let targetFoods = 0;
+                            days.forEach(day=>{
+                                ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{
+                                    const mealFoods = weeklyPlan[day]?.[meal] || [];
+                                    mealFoods.forEach(food=>{
+                                        if (foodMatchesFilter(food, childFilter)) targetFoods++;
+                                    });
+                                });
+                            });
+                            d.targetCount = targetFoods;
+                            
+                            // Ratio'yu kontrol et ve gerekirse target ekle
+                            const expectedMin = Math.floor(dependentFoods.length * (rule.minRatio||rule.ratio||50) / 100);
+                            const expectedMax = Math.ceil(dependentFoods.length * (rule.maxRatio||rule.ratio||50) / 100);
+                            
+                            if (targetFoods < expectedMin){
+                                // Target yemek eksik, ekle
+                                const need = expectedMin - targetFoods;
+                                d.message = `${need} adet ${rule.childTag||'target'} eklenmeli`;
+                                
+                                // 🔧 OTOMATIK EKLEME: Eksik target yemekleri ekle
+                                let added = 0;
+                                const availableTargetFoods = (window.foodsData || []).filter(food => 
+                                    foodMatchesFilter(food, childFilter));
+                                
+                                if (availableTargetFoods.length > 0) {
+                                    for (let i = 0; i < need && added < need; i++) {
+                                        // En uygun gün ve öğünü bul
+                                        for (const day of days) {
+                                            for (const meal of ['lunch', 'dinner']) { // Mayonez genelde öğle/akşam
+                                                const mealFoods = weeklyPlan[day]?.[meal] || [];
+                                                if (mealFoods.length < 4) { // Öğün kapasitesi kontrolü
+                                                    const targetFood = availableTargetFoods[added % availableTargetFoods.length];
+                                                    weeklyPlan[day][meal].push({...targetFood, addedBy: 'dependency-rule'});
+                                                    d.added.push(`${targetFood.name} (${day}-${meal})`);
+                                                    added++;
+                                                    if (added >= need) break;
+                                                }
+                                            }
+                                            if (added >= need) break;
+                                        }
+                                    }
+                                    d.status = added >= need ? 'enforced' : 'partial';
+                                    d.message = `${added}/${need} adet ${rule.childTag||'target'} eklendi`;
+                                } else {
+                                    d.status = 'partial';
+                                    d.message = `${need} adet ${rule.childTag||'target'} eklenmeli (uygun yemek bulunamadı)`;
+                                }
+                            } else if (targetFoods > expectedMax){
+                                d.message = `${targetFoods - expectedMax} adet ${rule.childTag||'target'} fazla`;
+                                d.status = 'over';
+                            } else {
+                                d.status = 'ok';
+                                d.message = 'Bağımlılık kuralı karşılandı';
+                            }
+                        }
+                        depDiagnostics.push(d);
+                    });
+
+                    // 🔒 LOCK RULES - Aktif kilit sistemi ile diagnostik
+                    locks.forEach(rule=>{
+                        const d = { id:rule.id, status:'ignored', lockedItems:[], conflictItems:[], message:'', reasonCode:'', rule, present: 0, added: false };
+                        
+                        // Kilit kuralına uyan yemekleri bul ve analiz et
+                        const matchingFoods = new Map(); // food.name -> count
+                        
+                        days.forEach(day=>{
+                            ['breakfast','snack1','lunch','snack2','dinner'].forEach(meal=>{
+                                const mealFoods = weeklyPlan[day]?.[meal] || [];
+                                mealFoods.forEach((food, index) => {
+                                    let matches = false;
+                                    if (rule.filterType === 'tag' && Array.isArray(food.tags) && food.tags.some(t=> t.toLowerCase() === (rule.filterText||'').toLowerCase())){
+                                        matches = true;
+                                    } else if (rule.filterType === 'category' && food.category === rule.filterText){
+                                        matches = true;
+                                    } else if (rule.filterType === 'role' && food.role === rule.filterText){
+                                        matches = true;
+                                    }
+                                    
+                                    if (matches) {
+                                        matchingFoods.set(food.name, (matchingFoods.get(food.name) || 0) + 1);
+                                    }
+                                });
+                            });
+                        });
+                        
+                        d.present = Array.from(matchingFoods.keys()).length;
+                        d.lockedItems = Array.from(matchingFoods.keys());
+                        
+                        // Sonuç analizi ve durum belirleme
+                        if (matchingFoods.size === 0) {
+                            d.status = 'none';
+                            d.message = `"${rule.filterText}" ${rule.filterType}inde hiç yemek yok`;
+                        } else if (matchingFoods.size === 1) {
+                            const lockedFood = Array.from(matchingFoods.keys())[0];
+                            const count = matchingFoods.get(lockedFood);
+                            d.status = 'enforced';
+                            d.message = `"${lockedFood}" ${rule.scope} boyunca sabitlendi (${count} kez kullanıldı)`;
+                            d.reasonCode = 'LOCKED';
+                        } else {
+                            // Birden fazla yemek var - bu kilit kuralına aykırı
+                            d.status = 'conflict';
+                            const foodList = Array.from(matchingFoods.entries())
+                                .map(([name, count]) => `${name}(${count}x)`)
+                                .join(', ');
+                            d.message = `⚠️ Kilit ihlali: ${matchingFoods.size} farklı yemek → ${foodList}`;
+                            d.reasonCode = 'MULTIPLE_FOODS';
+                            d.conflictItems = Array.from(matchingFoods.keys());
+                        }
+                        
+                        lockDiagnostics.push(d);
+                    });
+
+                    weeklyPlan._dependencyDiagnostics = depDiagnostics;
+                    weeklyPlan._lockDiagnostics = lockDiagnostics;
+                    console.log('🔗 Bağımlılık kuralı diagnostikleri:', depDiagnostics);
+                    console.log('🔒 Kilit kuralı diagnostikleri:', lockDiagnostics);
+                } catch(err){
+                    console.warn('⚠️ Dependency/Lock rule application error', err);
+                }
+            })();
 
             console.log(`🎯 Toplam ${dayCount} günlük plan oluşturuldu:`, Object.keys(weeklyPlan));
             return weeklyPlan;
@@ -11209,8 +12050,68 @@
         
         // Sistem kurallarını al - YENİ SİSTEM: Sadece kurallar sekmesinden
         function getSystemRules() {
-            // Bu eski sistem kaldırıldı. Artık sadece window.systemRules (kurallar sekmesi) kullanılıyor
-            return [];
+            try {
+                // 1. Önce window.systemRules'ı kontrol et (GitHub formatı)
+                if (window.systemRules && window.systemRules.rulesArchive) {
+                    return window.systemRules;
+                }
+                
+                // 2. systemRulesArchive global değişkenini kontrol et (GitHub formatı)
+                if (typeof systemRulesArchive !== 'undefined' && systemRulesArchive && systemRulesArchive.rulesArchive) {
+                    return systemRulesArchive;
+                }
+                
+                // 3. Eski format desteği (eski format varsa)
+                if (typeof systemRulesArchive !== 'undefined' && systemRulesArchive && systemRulesArchive.rules) {
+                    return {
+                        rulesArchive: systemRulesArchive.rules
+                    };
+                }
+                
+                // 4. localStorage'dan yüklemeye çalış
+                const storedRules = localStorage.getItem('systemRulesArchive');
+                if (storedRules) {
+                    const parsedRules = JSON.parse(storedRules);
+                    if (parsedRules && parsedRules.rulesArchive) {
+                        return parsedRules;
+                    }
+                    if (parsedRules && parsedRules.rules) {
+                        return {
+                            rulesArchive: parsedRules.rules
+                        };
+                    }
+                }
+                
+                // 5. Global dizi değişkenlerini kontrol et
+                if (typeof frequencyRules !== 'undefined' || typeof dependencyRules !== 'undefined' || typeof lockRules !== 'undefined') {
+                    return {
+                        rulesArchive: {
+                            frequencyRules: window.frequencyRules || [],
+                            dependencyRules: window.dependencyRules || [],
+                            lockRules: window.lockRules || []
+                        }
+                    };
+                }
+                
+                // 6. Son çare olarak boş dizi döndür
+                console.warn('getSystemRules: Hiçbir kural kaynağı bulunamadı, boş döndürülüyor');
+                return {
+                    rulesArchive: {
+                        frequencyRules: [],
+                        dependencyRules: [],
+                        lockRules: []
+                    }
+                };
+            } catch (error) {
+                console.error('getSystemRules hatası:', error);
+                return {
+                    rulesArchive: {
+                        frequencyRules: [],
+                        dependencyRules: [],
+                        lockRules: []
+                    }
+                };
+            }
         }
         
         // İlk hafta planı oluştur
@@ -11261,6 +12162,9 @@
         
         // Haftalık öğün planı oluştur
         function generateWeeklyMealPlan(patientData) {
+            // 🔒 Lock memory sistemini başlat (haftalık kategori/tag kilitleri için)
+            initializeLockMemory();
+            
             const days = [];
             const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
             
@@ -12026,7 +12930,7 @@
                     try {
                         const timestamp = Date.now();
                         const apiUrl = `https://api.github.com/repos/mustafasacar35/lipo_program/contents/yemekler_plain.json?ref=main&t=${timestamp}`;
-                        console.log('📄 GitHub\'dan yüklenmeye çalışılıyor...');
+                        console.log('📄 GitHub\'dan yüklenmeye çalışılıyor...', apiUrl);
                         
                         const response = await fetch(apiUrl, {
                             headers: {
@@ -12038,6 +12942,7 @@
                         if (response.ok) {
                             const apiResponse = await response.json();
                             githubSha = apiResponse.sha;
+                            console.log('📊 GitHub response:', {status: response.status, contentLength: apiResponse.content?.length, sha: githubSha});
                             
                             // Base64 decode et
                             const base64Content = apiResponse.content.replace(/\s/g, '');
@@ -12049,7 +12954,9 @@
                             const textDecoder = new TextDecoder('utf-8');
                             const content = textDecoder.decode(uint8Array);
                             githubMeals = JSON.parse(content);
-                            console.log('✅ GitHub\'dan', githubMeals.length, 'yemek yüklendi (SHA:', githubSha, ')');
+                            console.log('✅ GitHub\'dan', githubMeals?.length || 0, 'yemek yüklendi (SHA:', githubSha, ')');
+                        } else {
+                            console.warn('⚠️ GitHub API error:', response.status, response.statusText);
                         }
                     } catch (githubError) {
                         console.warn('⚠️ GitHub\'dan yükleme hatası:', githubError.message);
@@ -12086,7 +12993,21 @@
                     console.log('🎯 Demo foods kullanılıyor (hiç veri yok)');
                 }
                 
-                // 4. Global değişkenlere ata
+                // 4. Role / alan normalizasyonu (sideDish -> side vb.) + mealType virgül ayrışması
+                const normalizeFood = (f)=>{
+                    if (!f || typeof f!=='object') return f;
+                    if (f.role && f.role.toLowerCase() === 'sidedish') f.role = 'side';
+                    if (Array.isArray(f.roles)) f.roles = f.roles.map(r=> r && r.toLowerCase()==='sidedish' ? 'side' : r);
+                    if (typeof f.mealType === 'string') {
+                        const parts = f.mealType.split(',').map(s=>s.trim()).filter(Boolean);
+                        f.mealTypes = parts.length? parts : [f.mealType];
+                    }
+                    if (Array.isArray(f.mealType)) { f.mealTypes = f.mealType; delete f.mealType; }
+                    return f;
+                };
+                finalMeals = finalMeals.map(normalizeFood);
+
+                // 5. Global değişkenlere ata
                 window.foodsData = finalMeals;
                 window.nutritionMeals = finalMeals;
                 window.CACHED_FOODS = finalMeals;
@@ -21675,33 +22596,227 @@
         function getNowISO() { try { return new Date().toISOString(); } catch { return null; } }
 
         function initEmptySystemRulesArchive() {
-            return {
+            const emptyArchive = {
                 version: '2.0',
                 lastUpdated: getNowISO(),
                 rules: { frequency: [], dependency: [], lock: [] }
             };
+            
+            // window.systemRules'ı da set et
+            window.systemRules = {
+                rulesArchive: emptyArchive.rules
+            };
+            
+            return emptyArchive;
         }
 
         async function loadSystemRulesArchive() {
-            // 1) GitHub'dan kuralları yüklemeyi dene
+            // 🎯 YENİ: GitHub'ı tek kaynak olarak kullan
+            console.log('🔄 Sistem kuralları yükleniyor...');
+            console.log('🎯 GitHub mustafasacar35/lipo_program repository\'si tek kaynak olarak kullanılıyor');
+            
+            // 1) Önce GitHub'a güncel kuralları push et
+            const currentLocalRules = {
+                version: "2.0",
+                lastUpdated: new Date().toISOString(),
+                metadata: {
+                    description: "Sistem geneli planlama kuralları",
+                    priority: "high",
+                    modifiable: false
+                },
+                rulesArchive: {
+                    frequencyRules: [
+                        {
+                            id: "mezww2p6yw1w", name: "Ana Yemek Zorunluluğu",
+                            filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["mainDish"] },
+                            scope: "meal", meals: ["breakfast", "lunch", "dinner"], countType: "fixed", count: 1, weeks: [], priority: 1
+                        },
+                        {
+                            id: "mezwyso1j582", name: "Yan Yemek Sınırı",
+                            filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["side"] },
+                            scope: "meal", meals: ["lunch", "dinner"], countType: "range", count: 1, countMax: 2, weeks: [], priority: 2
+                        },
+                        {
+                            id: "freq_egg_breakfast", name: "Kahvaltı Yumurta Sınırı",
+                            filters: { names: [], nameMode: "AND", tags: ["yumurta"], tagMode: "AND", categories: [], roles: [] },
+                            scope: "meal", meals: ["breakfast"], countType: "range", count: 1, countMax: 1, weeks: [], priority: 5
+                        },
+                        {
+                            id: "freq_soup_week", name: "Haftalık Çorba Sıklığı",
+                            filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["soup"] },
+                            scope: "week", meals: [], countType: "range", count: 2, countMax: 4, weeks: [], priority: 7
+                        },
+                        {
+                            id: "freq_dessert_week", name: "Haftalık Tatlı Sıklığı",
+                            filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["dessert"] },
+                            scope: "week", meals: [], countType: "range", count: 1, countMax: 3, weeks: [], priority: 8
+                        }
+                    ],
+                    dependencyRules: [
+                        {
+                            id: "mezx0rp88cl6", name: "Yumurta-Mayonez Bağımlılığı",
+                            parentTag: "yumurta", childTag: "mayonez",
+                            dependent: { names: [], nameMode: "AND", tags: ["yumurta"], tagMode: "AND", categories: [], roles: [] },
+                            target: { names: [], nameMode: "AND", tags: ["mayonez"], tagMode: "AND", categories: [], roles: [] },
+                            ratio: 40, minRatio: 30, maxRatio: 50, priority: 3
+                        }
+                    ],
+                    lockRules: [
+                        {
+                            id: "lock_soup_category", name: "Çorba Kategori Kilidi",
+                            filterType: "category", filterText: "ÇORBALAR", scope: "weekly", priority: 2
+                        },
+                        {
+                            id: "lock_bread_tag", name: "Ekmek Tag Kilidi",
+                            filterType: "tag", filterText: "ekmek", scope: "weekly", priority: 10
+                        }
+                    ],
+                    priorityPolicy: "top-first"
+                }
+            };
+            
+            // 2) GitHub'a güncel kuralları push et
+            try {
+                console.log('📤 GitHub\'a güncel kurallar push ediliyor...');
+                await saveToGitHub('system_rules.json', JSON.stringify(currentLocalRules, null, 2));
+                console.log('✅ GitHub\'a güncel kurallar push edildi');
+            } catch (pushError) {
+                console.warn('⚠️ GitHub push hatası:', pushError);
+            }
+            
+            // 3) GitHub'dan kuralları yükle (artık güncel olmalı)
             const githubLoaded = await tryLoadRulesFromGitHub();
             
             if (!githubLoaded) {
-                // GitHub yüklenemezse boş kurallarla başla
-                console.log('⚠️ GitHub\'dan yükleme başarısız, boş kurallarla başlanıyor');
-                systemRulesArchive = initEmptySystemRulesArchive();
+                // GitHub yüklenemezse local system_rules.json'dan yüklemeyi dene
+                console.log('⚠️ GitHub\'dan yükleme başarısız, local sistem kuralları yükleniyor...');
+                
+                try {
+                    const response = await fetch('./data/system_rules.json');
+                    if (response.ok) {
+                        const localRules = await response.json();
+                        console.log('📄 Local system_rules.json yüklendi:', localRules);
+                        if (localRules && localRules.rulesArchive) {
+                            systemRulesArchive = {
+                                version: '2.0',
+                                lastUpdated: getNowISO(),
+                                rules: {
+                                    frequency: localRules.rulesArchive.frequencyRules || [],
+                                    dependency: localRules.rulesArchive.dependencyRules || [],
+                                    lock: localRules.rulesArchive.lockRules || []
+                                }
+                            };
+                            console.log('✅ Local sistem kuralları yüklendi:', {
+                                frequency: systemRulesArchive.rules.frequency.length,
+                                dependency: systemRulesArchive.rules.dependency.length,
+                                lock: systemRulesArchive.rules.lock.length
+                            });
+                        } else {
+                            console.log('⚠️ Local sistem kuralları format hatası, boş başlanıyor');
+                            systemRulesArchive = initEmptySystemRulesArchive();
+                        }
+                    } else {
+                        console.log('⚠️ Local sistem kuralları dosyası yüklenemedi, boş başlanıyor');
+                        systemRulesArchive = initEmptySystemRulesArchive();
+                    }
+                } catch (error) {
+                    console.log('⚠️ Local sistem kuralları yükleme hatası:', error, '- embedded fallback kullanılıyor');
+                    // CORS hatası nedeniyle embedded fallback kullan
+                    console.log('🔄 Embedded fallback kuralları yükleniyor...');
+                    systemRulesArchive = {
+                        version: '2.0',
+                        lastUpdated: getNowISO(),
+                        rulesArchive: {
+                            frequencyRules: [
+                                {
+                                    id: "mezww2p6yw1w",
+                                    name: "Ana Yemek Zorunluluğu",
+                                    filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["mainDish"] },
+                                    scope: "meal", meals: ["breakfast", "lunch", "dinner"], countType: "fixed", count: 1, weeks: [], priority: 1
+                                },
+                                {
+                                    id: "mezwyso1j582",
+                                    name: "Yan Yemek Sınırı",
+                                    filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["side"] },
+                                    scope: "meal", meals: ["lunch", "dinner"], countType: "range", count: 1, countMax: 2, weeks: [], priority: 2
+                                },
+                                {
+                                    id: "freq_egg_breakfast",
+                                    name: "Kahvaltı Yumurta Sınırı",
+                                    filters: { names: [], nameMode: "AND", tags: ["yumurta"], tagMode: "AND", categories: [], roles: [] },
+                                    scope: "meal", meals: ["breakfast"], countType: "range", count: 1, countMax: 1, weeks: [], priority: 5
+                                },
+                                {
+                                    id: "freq_soup_week",
+                                    name: "Haftalık Çorba Sıklığı",
+                                    filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["soup"] },
+                                    scope: "week", meals: [], countType: "range", count: 2, countMax: 4, weeks: [], priority: 7
+                                },
+                                {
+                                    id: "freq_dessert_week",
+                                    name: "Haftalık Tatlı Sıklığı",
+                                    filters: { names: [], nameMode: "AND", tags: [], tagMode: "AND", categories: [], roles: ["dessert"] },
+                                    scope: "week", meals: [], countType: "range", count: 1, countMax: 3, weeks: [], priority: 8
+                                }
+                            ],
+                            dependencyRules: [
+                                {
+                                    id: "mezx0rp88cl6",
+                                    name: "Yumurta-Mayonez Bağımlılığı",
+                                    parentTag: "yumurta",
+                                    childTag: "mayonez",
+                                    dependent: { names: [], nameMode: "AND", tags: ["yumurta"], tagMode: "AND", categories: [], roles: [] },
+                                    target: { names: [], nameMode: "AND", tags: ["mayonez"], tagMode: "AND", categories: [], roles: [] },
+                                    ratio: 40, minRatio: 30, maxRatio: 50, priority: 3
+                                }
+                            ],
+                            lockRules: [
+                                {
+                                    id: "lock_soup_category",
+                                    name: "Çorba Kategori Kilidi",
+                                    filterType: "category",
+                                    filterText: "ÇORBALAR",
+                                    scope: "weekly",
+                                    priority: 2
+                                },
+                                {
+                                    id: "lock_bread_tag",
+                                    name: "Ekmek Tag Kilidi",
+                                    filterType: "tag",
+                                    filterText: "ekmek",
+                                    scope: "weekly",
+                                    priority: 10
+                                }
+                            ]
+                        }
+                    };
+                    console.log('✅ Embedded fallback kuralları yüklendi:', {
+                        frequency: systemRulesArchive.rulesArchive.frequencyRules.length,
+                        dependency: systemRulesArchive.rulesArchive.dependencyRules.length,
+                        lock: systemRulesArchive.rulesArchive.lockRules.length
+                    });
+                }
             }
 
-            // 2) UI state'i senkronize et
-            const archivedFreq = systemRulesArchive?.rules?.frequency;
-            const archivedDep = systemRulesArchive?.rules?.dependency;
-            const archivedLock = systemRulesArchive?.rules?.lock;
+            // 2) UI state'i senkronize et - YENİ FORMAT
+            const archivedFreq = systemRulesArchive?.rulesArchive?.frequencyRules;
+            const archivedDep = systemRulesArchive?.rulesArchive?.dependencyRules;
+            const archivedLock = systemRulesArchive?.rulesArchive?.lockRules;
             frequencyRules = Array.isArray(archivedFreq) ? [...archivedFreq] : [];
             dependencyRules = Array.isArray(archivedDep) ? [...archivedDep] : [];
             lockRules = Array.isArray(archivedLock) ? [...archivedLock] : [];
             window.frequencyRules = frequencyRules;
             window.dependencyRules = dependencyRules;
             window.lockRules = lockRules;
+            
+            // window.systemRules'ı da set et getSystemRules için
+            window.systemRules = {
+                rulesArchive: {
+                    frequencyRules: frequencyRules,
+                    dependencyRules: dependencyRules,
+                    lockRules: lockRules
+                }
+            };
             
             console.log('📋 Kurallar yüklendi:', {
                 frequency: frequencyRules.length,
@@ -21723,7 +22838,7 @@
                     return false;
                 }
                 
-                // GitHub API ile en güncel dosyayı al (raw URL yerine)
+                // GitHub API ile en güncel dosyayı al
                 const apiUrl = `${GITHUB_CONFIG.apiBase}/contents/system_rules.json?ref=main&t=${Date.now()}`;
                 console.log('📄 GitHub API URL:', apiUrl);
                 
@@ -21740,9 +22855,9 @@
                     const apiResponse = await response.json();
                     console.log('📄 GitHub API Response SHA:', apiResponse.sha);
                     
-                    // Base64 decode et (UTF-8 encoding ile)
+                    // Base64 decode et (Modern TextDecoder ile)
                     const base64Content = apiResponse.content.replace(/\s/g, '');
-                    let content;
+                    let contentUtf8;
                     try {
                         // Modern TextDecoder ile UTF-8 decode
                         const binaryString = atob(base64Content);
@@ -21751,35 +22866,24 @@
                             bytes[i] = binaryString.charCodeAt(i);
                         }
                         const decoder = new TextDecoder('utf-8');
-                        content = decoder.decode(bytes);
-                        console.log('📄 UTF-8 decoded content preview:', content.substring(0, 200));
+                        contentUtf8 = decoder.decode(bytes);
+                        console.log('📄 Modern UTF-8 decoded content preview:', contentUtf8.substring(0, 200) + '...');
                     } catch (utf8Error) {
                         console.warn('UTF-8 decode hatası, standart decode deneniyor:', utf8Error);
                         // Fallback: eski yöntem
                         const decodedBytes = atob(base64Content);
-                        content = decodeURIComponent(escape(decodedBytes));
+                        contentUtf8 = decodedBytes; // escape/decodeURIComponent kullanma
                     }
                     
-                    const data = JSON.parse(content);
-                    console.log('📄 GitHub API\'dan parse edilen data (typeof):', typeof data);
-                    console.log('📄 GitHub API\'dan parse edilen data:', data);
-                    
-                    const processResult = await processGitHubRulesData(data);
-                    console.log('🔍 processGitHubRulesData sonucu:', processResult);
-                    
-                    return processResult;
+                    return processGitHubRulesData(contentUtf8);
                 } else {
-                    console.log(`❌ GitHub API fetch hatası: ${response.status} ${response.statusText}`);
+                    console.log('⚠️ GitHub API hatası:', response.status, await response.text());
+                    return false;
                 }
-            } catch (e) {
-                console.warn('❌ GitHub\'dan kural yükleme hatası:', e);
-                if (e.message.includes('CORS')) {
-                    console.warn('⚠️ CORS hatası - GitHub Pages CORS kısıtlaması');
-                }
+            } catch (error) {
+                console.log('⚠️ GitHub kuralları yükleme hatası:', error);
+                return false;
             }
-            
-            console.log('📡 GitHub\'dan yükleme başarısız');
-            return false;
         }
         
         async function processGitHubRulesData(data) {
@@ -21815,14 +22919,11 @@
             if (data && archive) {
                 console.log('✅ rulesArchive bulundu:', archive);
                 
+                // GitHub formatını direkt olarak sakla
                 systemRulesArchive = {
-                    version: "1.0",
-                    rules: {
-                        frequency: Array.isArray(archive.frequencyRules) ? archive.frequencyRules : [],
-                        dependency: Array.isArray(archive.dependencyRules) ? archive.dependencyRules : [],
-                        lock: Array.isArray(archive.lockRules) ? archive.lockRules : []
-                    },
-                    lastUpdated: data.lastUpdated || new Date().toISOString()
+                    version: data.version || "2.0",
+                    lastUpdated: data.lastUpdated || new Date().toISOString(),
+                    rulesArchive: archive
                 };
                 
                 // Criteria settings'i de yükle
@@ -21833,10 +22934,15 @@
                 }
                 
                 console.log('✅ GitHub\'dan kullanıcı kuralları yüklendi:', {
-                    frequency: systemRulesArchive.rules.frequency.length,
-                    dependency: systemRulesArchive.rules.dependency.length,
-                    lock: systemRulesArchive.rules.lock.length
+                    frequency: archive.frequencyRules?.length || 0,
+                    dependency: archive.dependencyRules?.length || 0,
+                    lock: archive.lockRules?.length || 0
                 });
+                
+                // window.systemRules'ı da set et getSystemRules için
+                window.systemRules = {
+                    rulesArchive: archive
+                };
                 
                 return true;
             } else {
@@ -22973,11 +24079,14 @@ Desteklenen Dosyalar:
         document.addEventListener('DOMContentLoaded', function() {
             updateConnectionStatusDisplay();
             updateLastSyncTime();
-            updateCountInputs(); // Count input alanlarını initialize et
             
             // GitHub token kontrolü mevcut fonksiyona entegre ediyoruz
             setTimeout(() => {
                 updateConnectionStatusDisplay();
+                // Count input alanlarını initialize et (fonksiyon hazır olduktan sonra)
+                if (typeof updateCountInputs === 'function') {
+                    updateCountInputs();
+                }
             }, 1000);
         });
 
@@ -24403,6 +25512,370 @@ Desteklenen Dosyalar:
             loadArchivedRulesForSettings();
         }
 
+        // Kural düzenleme modalını aç
+        function openRuleEditModal(ruleType, ruleId) {
+            const modalHtml = `
+                <!-- Kural Düzenleme Modalı -->
+                <div class="modal fade" id="ruleEditModal" tabindex="-1" aria-labelledby="ruleEditModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ruleEditModalLabel">
+                                    <i class="fas fa-edit"></i> Kural Düzenle
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="ruleEditForm">
+                                    <input type="hidden" id="editRuleType" name="ruleType" value="${ruleType}">
+                                    <input type="hidden" id="editRuleId" name="ruleId" value="${ruleId}">
+                                    
+                                    <!-- Kural Bilgileri -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="editRuleName" class="form-label">Kural Adı</label>
+                                            <input type="text" class="form-control" id="editRuleName" name="ruleName" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="editRuleDescription" class="form-label">Açıklama</label>
+                                            <input type="text" class="form-control" id="editRuleDescription" name="ruleDescription">
+                                        </div>
+                                    </div>
+
+                                    <!-- Frekans Kuralı Alanları -->
+                                    <div id="frequencyRuleFields" style="display: ${ruleType === 'frequency' ? 'block' : 'none'};">
+                                        <h6 class="text-primary"><i class="fas fa-clock"></i> Frekans Kuralı Ayarları</h6>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="editFreqFilterType" class="form-label">Filtre Tipi</label>
+                                                <select class="form-select" id="editFreqFilterType" name="filterType">
+                                                    <option value="tag">Etiket</option>
+                                                    <option value="category">Kategori</option>
+                                                    <option value="role">Rol</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="editFreqFilterText" class="form-label">Filtre Değeri</label>
+                                                <input type="text" class="form-control" id="editFreqFilterText" name="filterText">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="editFreqScope" class="form-label">Kapsam</label>
+                                                <select class="form-select" id="editFreqScope" name="scope">
+                                                    <option value="daily">Günlük</option>
+                                                    <option value="weekly">Haftalık</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="editFreqMealType" class="form-label">Öğün</label>
+                                                <select class="form-select" id="editFreqMealType" name="mealType">
+                                                    <option value="">Tümü</option>
+                                                    <option value="breakfast">Kahvaltı</option>
+                                                    <option value="lunch">Öğle</option>
+                                                    <option value="dinner">Akşam</option>
+                                                    <option value="snack">Ara öğün</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="editFreqMinCount" class="form-label">Minimum Sayı</label>
+                                                <input type="number" class="form-control" id="editFreqMinCount" name="minCount" min="0">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="editFreqMaxCount" class="form-label">Maksimum Sayı</label>
+                                                <input type="number" class="form-control" id="editFreqMaxCount" name="maxCount" min="0">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bağımlılık Kuralı Alanları -->
+                                    <div id="dependencyRuleFields" style="display: ${ruleType === 'dependency' ? 'block' : 'none'};">
+                                        <h6 class="text-success"><i class="fas fa-link"></i> Bağımlılık Kuralı Ayarları</h6>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="editDepParentTag" class="form-label">Ana Etiket</label>
+                                                <input type="text" class="form-control" id="editDepParentTag" name="parentTag" placeholder="örn: yumurta">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editDepChildTag" class="form-label">Bağımlı Etiket</label>
+                                                <input type="text" class="form-control" id="editDepChildTag" name="childTag" placeholder="örn: mayonez">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="editDepMinRatio" class="form-label">Minimum Oran (%)</label>
+                                                <input type="number" class="form-control" id="editDepMinRatio" name="minRatio" min="0" max="100" placeholder="40">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editDepMaxRatio" class="form-label">Maksimum Oran (%)</label>
+                                                <input type="number" class="form-control" id="editDepMaxRatio" name="maxRatio" min="0" max="100" placeholder="50">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Kilit Kuralı Alanları -->
+                                    <div id="lockRuleFields" style="display: ${ruleType === 'lock' ? 'block' : 'none'};">
+                                        <h6 class="text-warning"><i class="fas fa-lock"></i> Kilit Kuralı Ayarları</h6>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="editLockFilterType" class="form-label">Filtre Tipi</label>
+                                                <select class="form-select" id="editLockFilterType" name="filterType">
+                                                    <option value="tag">Etiket</option>
+                                                    <option value="category">Kategori</option>
+                                                    <option value="role">Rol</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editLockFilterText" class="form-label">Filtre Değeri</label>
+                                                <input type="text" class="form-control" id="editLockFilterText" name="filterText">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                                <label for="editLockScope" class="form-label">Kapsam</label>
+                                                <select class="form-select" id="editLockScope" name="scope">
+                                                    <option value="daily">Günlük</option>
+                                                    <option value="weekly">Haftalık</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Kural Durumu -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="editRuleEnabled" name="enabled" checked>
+                                                <label class="form-check-label" for="editRuleEnabled">
+                                                    Kuralı etkinleştir
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="editRulePriority" class="form-label">Öncelik</label>
+                                            <select class="form-select" id="editRulePriority" name="priority">
+                                                <option value="1">1 - En Yüksek</option>
+                                                <option value="2">2 - Yüksek</option>
+                                                <option value="3" selected>3 - Orta</option>
+                                                <option value="4">4 - Düşük</option>
+                                                <option value="5">5 - En Düşük</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="button" class="btn btn-danger" id="deleteRuleBtn" onclick="deleteRule()">
+                                    <i class="fas fa-trash"></i> Sil
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveEditedRule()">
+                                    <i class="fas fa-save"></i> Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Modal'ı DOM'a ekle
+            const existingEditModal = document.getElementById('ruleEditModal');
+            if (existingEditModal) {
+                existingEditModal.remove();
+            }
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            // Modal'ı göster
+            const modal = new bootstrap.Modal(document.getElementById('ruleEditModal'));
+            modal.show();
+            
+            // Kural verilerini yükle
+            loadRuleForEditing(ruleType, ruleId);
+        }
+
+        // Düzenleme için kural verilerini yükle
+        async function loadRuleForEditing(ruleType, ruleId) {
+            try {
+                if (!systemRules) {
+                    await loadSystemRules();
+                }
+
+                let rule = null;
+                let ruleArray = null;
+
+                // Kural tipine göre doğru array'i bul
+                if (ruleType === 'frequency') {
+                    ruleArray = systemRules.rulesArchive?.frequencyRules || [];
+                } else if (ruleType === 'dependency') {
+                    ruleArray = systemRules.rulesArchive?.dependencyRules || [];
+                } else if (ruleType === 'lock') {
+                    ruleArray = systemRules.rulesArchive?.lockRules || [];
+                }
+
+                // Kuralı ID ile bul
+                rule = ruleArray?.find(r => r.id === ruleId);
+
+                if (!rule) {
+                    showNotification('Kural bulunamadı!', 'error');
+                    return;
+                }
+
+                // Form alanlarını doldur
+                document.getElementById('editRuleName').value = rule.name || '';
+                document.getElementById('editRuleDescription').value = rule.description || '';
+                document.getElementById('editRuleEnabled').checked = rule.enabled !== false;
+                document.getElementById('editRulePriority').value = rule.priority || 3;
+
+                // Kural tipine göre özel alanları doldur
+                if (ruleType === 'frequency') {
+                    document.getElementById('editFreqFilterType').value = rule.filterType || 'tag';
+                    document.getElementById('editFreqFilterText').value = rule.filterText || '';
+                    document.getElementById('editFreqScope').value = rule.scope || 'daily';
+                    document.getElementById('editFreqMealType').value = rule.mealType || '';
+                    document.getElementById('editFreqMinCount').value = rule.minCount || '';
+                    document.getElementById('editFreqMaxCount').value = rule.maxCount || '';
+                } else if (ruleType === 'dependency') {
+                    document.getElementById('editDepParentTag').value = rule.parentTag || '';
+                    document.getElementById('editDepChildTag').value = rule.childTag || '';
+                    document.getElementById('editDepMinRatio').value = rule.minRatio || '';
+                    document.getElementById('editDepMaxRatio').value = rule.maxRatio || '';
+                } else if (ruleType === 'lock') {
+                    document.getElementById('editLockFilterType').value = rule.filterType || 'tag';
+                    document.getElementById('editLockFilterText').value = rule.filterText || '';
+                    document.getElementById('editLockScope').value = rule.scope || 'daily';
+                }
+
+            } catch (error) {
+                console.error('Kural yükleme hatası:', error);
+                showNotification('Kural yüklenirken hata oluştu!', 'error');
+            }
+        }
+
+        // Düzenlenmiş kuralı kaydet
+        async function saveEditedRule() {
+            try {
+                const form = document.getElementById('ruleEditForm');
+                const formData = new FormData(form);
+                const ruleType = formData.get('ruleType');
+                const ruleId = formData.get('ruleId');
+
+                // Kural nesnesini oluştur
+                const updatedRule = {
+                    id: ruleId,
+                    name: formData.get('ruleName'),
+                    description: formData.get('ruleDescription'),
+                    enabled: document.getElementById('editRuleEnabled').checked,
+                    priority: parseInt(formData.get('priority')) || 3
+                };
+
+                // Kural tipine göre ek alanları ekle
+                if (ruleType === 'frequency') {
+                    updatedRule.filterType = formData.get('filterType');
+                    updatedRule.filterText = formData.get('filterText');
+                    updatedRule.scope = formData.get('scope');
+                    updatedRule.mealType = formData.get('mealType') || null;
+                    updatedRule.minCount = parseInt(formData.get('minCount')) || null;
+                    updatedRule.maxCount = parseInt(formData.get('maxCount')) || null;
+                } else if (ruleType === 'dependency') {
+                    updatedRule.parentTag = formData.get('parentTag');
+                    updatedRule.childTag = formData.get('childTag');
+                    updatedRule.minRatio = parseInt(formData.get('minRatio')) || null;
+                    updatedRule.maxRatio = parseInt(formData.get('maxRatio')) || null;
+                } else if (ruleType === 'lock') {
+                    updatedRule.filterType = formData.get('filterType');
+                    updatedRule.filterText = formData.get('filterText');
+                    updatedRule.scope = formData.get('scope');
+                }
+
+                // systemRules'da kuralı güncelle
+                let ruleArray = null;
+                if (ruleType === 'frequency') {
+                    ruleArray = systemRules.rulesArchive.frequencyRules;
+                } else if (ruleType === 'dependency') {
+                    ruleArray = systemRules.rulesArchive.dependencyRules;
+                } else if (ruleType === 'lock') {
+                    ruleArray = systemRules.rulesArchive.lockRules;
+                }
+
+                if (ruleArray) {
+                    const ruleIndex = ruleArray.findIndex(r => r.id === ruleId);
+                    if (ruleIndex !== -1) {
+                        ruleArray[ruleIndex] = updatedRule;
+                    }
+                }
+
+                // GitHub'a kaydet
+                const saved = await saveToGitHub('system_rules.json', systemRules, 'Kural güncellendi: ' + updatedRule.name);
+                
+                if (saved) {
+                    showNotification('Kural başarıyla güncellendi!', 'success');
+                    
+                    // Modal'ı kapat
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('ruleEditModal'));
+                    modal.hide();
+                    
+                    // Kural raporunu yenile
+                    generateFrequencyDiagnosticsReport();
+                } else {
+                    showNotification('Kural kaydedilemedi!', 'error');
+                }
+
+            } catch (error) {
+                console.error('Kural kaydetme hatası:', error);
+                showNotification('Kural kaydedilirken hata oluştu!', 'error');
+            }
+        }
+
+        // Kuralı sil
+        async function deleteRule() {
+            const ruleType = document.getElementById('editRuleType').value;
+            const ruleId = document.getElementById('editRuleId').value;
+            const ruleName = document.getElementById('editRuleName').value;
+
+            if (!confirm(`"${ruleName}" kuralını silmek istediğinizden emin misiniz?`)) {
+                return;
+            }
+
+            try {
+                // systemRules'da kuralı sil
+                let ruleArray = null;
+                if (ruleType === 'frequency') {
+                    ruleArray = systemRules.rulesArchive.frequencyRules;
+                } else if (ruleType === 'dependency') {
+                    ruleArray = systemRules.rulesArchive.dependencyRules;
+                } else if (ruleType === 'lock') {
+                    ruleArray = systemRules.rulesArchive.lockRules;
+                }
+
+                if (ruleArray) {
+                    const ruleIndex = ruleArray.findIndex(r => r.id === ruleId);
+                    if (ruleIndex !== -1) {
+                        ruleArray.splice(ruleIndex, 1);
+                    }
+                }
+
+                // GitHub'a kaydet
+                const saved = await saveToGitHub('system_rules.json', systemRules, 'Kural silindi: ' + ruleName);
+                
+                if (saved) {
+                    showNotification('Kural başarıyla silindi!', 'success');
+                    
+                    // Modal'ı kapat
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('ruleEditModal'));
+                    modal.hide();
+                    
+                    // Kural raporunu yenile
+                    generateFrequencyDiagnosticsReport();
+                } else {
+                    showNotification('Kural silinemedi!', 'error');
+                }
+
+            } catch (error) {
+                console.error('Kural silme hatası:', error);
+                showNotification('Kural silinirken hata oluştu!', 'error');
+            }
+        }
+
         // Arşivlenmiş kuralları yükle
         async function loadArchivedRulesForSettings() {
             const archivedList = document.getElementById('archivedRulesList');
@@ -24863,21 +26336,31 @@ Desteklenen Dosyalar:
                     try {
                         const sysPack = getSystemRulesForPlanning();
                         if (sysPack && sysPack.totalRules > 0) {
-                            const transformed = (sysPack.criteria || []).map((c, idx) => ({
-                                id: c.originalRule?.id || `sys_${c.type}_${idx}`,
-                                name: c.title || c.type?.toUpperCase() || `Sistem Kuralı ${idx+1}`,
-                                description: c.description || '',
-                                type: c.type || 'system',
+                            // Tüm kural türlerini birleştir
+                            const allSystemRules = [
+                                ...(sysPack.frequency || []),
+                                ...(sysPack.dependency || []),
+                                ...(sysPack.lock || [])
+                            ];
+                            
+                            const transformed = allSystemRules.map((rule, idx) => ({
+                                id: rule.id || `sys_rule_${idx}`,
+                                name: rule.name || rule.title || `Sistem Kuralı ${idx+1}`,
+                                description: rule.description || '',
+                                type: rule.type || 'system',
                                 status: 'active',
-                                priority: c.originalRule?.priority || (rules.length + idx + 1),
-                                weight: c.originalRule?.weight || 1,
+                                priority: rule.priority || (rules.length + idx + 1),
+                                weight: rule.weight || 1,
                                 _source: 'system_rules_robot'
                             }));
+                            
                             transformed.forEach(tr => {
                                 if (!rules.some(r => r.id === tr.id || r.name === tr.name)) {
                                     rules.push(tr);
                                 }
                             });
+                            
+                            console.log(`🔄 Sistem kuralları eklendi: ${transformed.length} kural (${sysPack.frequency?.length || 0} frekans + ${sysPack.dependency?.length || 0} bağımlılık + ${sysPack.lock?.length || 0} kilit)`);
                         }
                     } catch (e) {
                         console.log('⚠️ Sistem kural paketi eklenemedi:', e.message);
@@ -24940,6 +26423,15 @@ Desteklenen Dosyalar:
 
         // Otomatik planlama başlat
         async function startAutomaticPlanning() {
+            // Önce sistem kurallarını yükle
+            console.log('🔄 Sistem kuralları yükleniyor...');
+            try {
+                await loadSystemRulesArchive();
+                console.log('✅ Sistem kuralları yüklendi');
+            } catch (error) {
+                console.warn('⚠️ Sistem kuralları yükleme hatası:', error);
+            }
+            
             // Kuralların yüklenmesini bekle (ilk sayfa açılışında asenkron gelebilir)
             try {
                 if (window.rulesLoadedPromise && !window._rulesLoaded) {
@@ -25031,9 +26523,29 @@ Desteklenen Dosyalar:
                 }
                 const freqDiag = result?._frequencyDiagnostics || result.plan?._frequencyDiagnostics;
                 if (Array.isArray(freqDiag) && freqDiag.length){
-                    const summary = freqDiag.map(d=>`${d.names.join(', ')}: ${d.after}/${(d.rule?.countMax!=null? (d.rule.count + '-' + d.rule.countMax) : d.rule?.count || '')} [${d.status}]`).join(' | ');
+                    const summary = freqDiag.map(d=>{
+                        const r = d.rule||{}; let type = (r.countType||'').toLowerCase(); if(type==='fixed') type='exact'; if(!type) type = r.countMax!=null? 'range':'min';
+                        let targetStr = '';
+                        if (type==='range') targetStr = `${r.count}-${r.countMax}`; else targetStr = `${r.count}`;
+                        return `${d.names.length? d.names.join(', '): d.id}: ${d.after}/${targetStr} [${d.status}]`;
+                    }).join(' | ');
                     showToast(`📌 Frekans kuralı sonuçları: ${summary.slice(0,300)}`, 'info');
                 }
+
+                // Yeni: Tüm kuralların özetini tek satır halinde ver
+                try {
+                    const depDiag = (result.plan && result.plan._dependencyDiagnostics) || [];
+                    const lockDiag = (result.plan && result.plan._lockDiagnostics) || [];
+                    const freqCounts = (freqDiag||[]).reduce((acc,d)=>{ acc[d.status]=(acc[d.status]||0)+1; return acc; },{});
+                    const depCounts = depDiag.reduce((acc,d)=>{ acc[d.status]=(acc[d.status]||0)+1; return acc; },{});
+                    const lockCounts = lockDiag.reduce((acc,d)=>{ acc[d.status]=(acc[d.status]||0)+1; return acc; },{});
+                    const fmt = (obj)=> Object.entries(obj).map(([k,v])=>`${k}:${v}`).join(', ');
+                    const overall = [];
+                    if ((freqDiag||[]).length) overall.push(`F[${fmt(freqCounts)}]`);
+                    if (depDiag.length) overall.push(`D[${fmt(depCounts)}]`);
+                    if (lockDiag.length) overall.push(`L[${fmt(lockCounts)}]`);
+                    if (overall.length) showToast(`🧮 Kural Özeti: ${overall.join(' | ')}`,'info');
+                } catch(_){ /* ignore */ }
                 
                 showToast(`✅ ${period === 'daily' ? 'Günlük' : period === 'weekly' ? 'Haftalık' : 'Aylık'} plan başarıyla oluşturuldu!`, 'success');
                 
@@ -25204,6 +26716,9 @@ Desteklenen Dosyalar:
             
             if (!resultsCard || !resultsContent) return;
             
+            // Sistem kurallarını yükle
+            const systemRules = getSystemRules();
+            
             // Plan foods cache'ini temizle
             window.planFoodsCache = [];
             
@@ -25258,10 +26773,25 @@ Desteklenen Dosyalar:
                 const freqArr = Array.isArray(result._frequencyDiagnostics)? result._frequencyDiagnostics : (result.plan?._frequencyDiagnostics||[]);
                 const freqCount = freqArr.length;
                 html += `\n<div class="row mt-4" id="ruleDiagnosticsWrapper">\n  <div class="col-md-12">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-ruler-horizontal"></i> Frekans Kuralı Raporu</h6>\n        <span class="text-muted small">${freqCount} kural</span>\n      </div>\n      <div class="card-body p-0">\n        ${freqCount? generateFrequencyDiagnosticsReport(freqArr) : '<div class="p-3 small text-muted">Aktif frekans kuralı yok veya system_rules kriteri pasif. Kural kriterini etkinleştirip yeniden planlayın.</div>'}\n      </div>\n    </div>\n  </div>\n</div>`;
-                // Dependency & Lock report cards
-                const depArr = Array.isArray(result.plan?._dependencyDiagnostics)? result.plan._dependencyDiagnostics : (result._dependencyDiagnostics||[]);
-                const lockArr = Array.isArray(result.plan?._lockDiagnostics)? result.plan._lockDiagnostics : (result._lockDiagnostics||[]);
-                html += `\n<div class="row mt-3">\n  <div class="col-md-6">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-link"></i> Bağımlılık Kuralları</h6>\n        <span class="text-muted small">${depArr.length} kural</span>\n      </div>\n      <div class="card-body p-0">${depArr.length? generateDependencyDiagnosticsReport(depArr): '<div class="p-3 small text-muted">Bağımlılık kuralı yok</div>'}</div>\n    </div>\n  </div>\n  <div class="col-md-6">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-lock"></i> Kilit Kuralları</h6>\n        <span class="text-muted small">${lockArr.length} kural</span>\n      </div>\n      <div class="card-body p-0">${lockArr.length? generateLockDiagnosticsReport(lockArr): '<div class="p-3 small text-muted">Kilit kuralı yok</div>'}</div>\n    </div>\n  </div>\n</div>`;
+                
+                // Dependency & Lock report cards - Doğru veri yollarını kullan
+                const depArr = result._dependencyDiagnostics || result.plan?._dependencyDiagnostics || [];
+                const lockArr = result._lockDiagnostics || result.plan?._lockDiagnostics || [];
+                
+                console.log('🔍 Rapor verisi kontrolü:', {
+                    depArrLength: depArr.length,
+                    lockArrLength: lockArr.length,
+                    resultKeys: Object.keys(result),
+                    resultPlanKeys: result.plan ? Object.keys(result.plan) : 'plan yok'
+                });
+                
+                // Sistem kurallarından gerçek sayıları al - her zaman göster
+                const systemDepRules = systemRules?.rulesArchive?.dependencyRules || systemRules?.dependencyRules || [];
+                const systemLockRules = systemRules?.rulesArchive?.lockRules || systemRules?.lockRules || [];
+                const actualDepCount = systemDepRules.length; // Sistem kurallarından
+                const actualLockCount = systemLockRules.length; // Sistem kurallarından
+                
+                html += `\n<div class="row mt-3">\n  <div class="col-md-6">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-link"></i> Bağımlılık Kuralları</h6>\n        <span class="text-muted small">${actualDepCount} kural</span>\n      </div>\n      <div class="card-body p-0">${generateDependencyDiagnosticsReport(depArr)}</div>\n    </div>\n  </div>\n  <div class="col-md-6">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-lock"></i> Kilit Kuralları</h6>\n        <span class="text-muted small">${actualLockCount} kural</span>\n      </div>\n      <div class="card-body p-0">${generateLockDiagnosticsReport(lockArr)}</div>\n    </div>\n  </div>\n</div>`;
             } else {
                 html = `
                     <div class="text-center text-muted py-5">
@@ -25278,6 +26808,10 @@ Desteklenen Dosyalar:
 
         // Frekans kural diagnostik tablo üretimi
         function generateFrequencyDiagnosticsReport(diags){
+            // Sistem kurallarını yükle tooltip için
+            const systemRules = getSystemRules();
+            const frequencyRules = systemRules?.rulesArchive?.frequencyRules || [];
+            
             const statusMap = {
                 enforced: {label:'Tamamlandı', cls:'success'},
                 trimmed: {label:'Aşımdan Kısıldı', cls:'warning'},
@@ -25298,8 +26832,66 @@ Desteklenen Dosyalar:
                 const target = d.rule?.countType==='range' ? `${d.rule.count}-${d.rule.countMax}` : (d.rule?.countMax!=null && d.rule?.count!=null && d.rule.count!==d.rule.countMax ? `${d.rule.count}-${d.rule.countMax}` : (d.rule?.count ?? '')); 
                 const addedShort = d.added.slice(0,3).map(a=>`${a.food}(${a.day}/${a.meal})`).join(', ')+(d.added.length>3?'…':'');
                 const removedShort = d.removed.slice(0,3).map(a=>`${a.food}`).join(', ')+(d.removed.length>3?'…':'');
+                
+                // Sistem kuralından gerçek kural açıklaması oluştur
+                let ruleDescription = '';
+                const systemRule = frequencyRules.find(rule => rule.id === d.id);
+                if (systemRule) {
+                    // Filter belirleme
+                    let filterText = '';
+                    if (systemRule.filters?.tags?.length) {
+                        filterText = systemRule.filters.tags.join(', ');
+                    } else if (systemRule.filters?.roles?.length) {
+                        filterText = systemRule.filters.roles.join(', ');
+                    } else if (systemRule.filters?.categories?.length) {
+                        filterText = systemRule.filters.categories.join(', ');
+                    } else if (systemRule.filters?.names?.length) {
+                        filterText = systemRule.filters.names.join(', ');
+                    } else {
+                        filterText = 'tüm yemekler';
+                    }
+                    
+                    // Filter type belirleme
+                    let filterTypeText = '';
+                    if (systemRule.filters?.tags?.length) {
+                        filterTypeText = 'etiketli';
+                    } else if (systemRule.filters?.roles?.length) {
+                        filterTypeText = 'rolündeki';
+                    } else if (systemRule.filters?.categories?.length) {
+                        filterTypeText = 'kategorisindeki';
+                    } else {
+                        filterTypeText = 'isimli';
+                    }
+                    
+                    // Scope belirleme
+                    const scopeText = systemRule.scope === 'week' ? 'haftada' : 
+                                     systemRule.scope === 'meal' ? 'öğün başına' : 'günde';
+                    
+                    // Count belirleme
+                    let countText = '';
+                    if (systemRule.countType === 'range') {
+                        if (systemRule.count === systemRule.countMax) {
+                            countText = `tam ${systemRule.count} kez`;
+                        } else {
+                            countText = `${systemRule.count}-${systemRule.countMax} kez`;
+                        }
+                    } else if (systemRule.countType === 'fixed') {
+                        countText = `tam ${systemRule.count} kez`;
+                    } else {
+                        countText = `${systemRule.count} kez`;
+                    }
+                    
+                    // Meal belirleme
+                    const mealText = systemRule.meals?.length ? 
+                        ` ${systemRule.meals.join('/')} öğününde` : ' tüm öğünlerde';
+                    
+                    ruleDescription = `"${filterText}" ${filterTypeText} yemekler ${scopeText} ${countText}${mealText} verilmelidir`;
+                } else {
+                    ruleDescription = `Kural ID: ${d.id} - Sistem kurallarında bulunamadı`;
+                }
+                
                 return `<tr>
-                    <td><strong>${d.names.join(', ')||'-'}</strong><br><small class="text-muted">${d.id||''}</small></td>
+                    <td><strong style="cursor: pointer;" title="${ruleDescription}" onclick="openRuleEditModal('frequency', '${d.id}')">${systemRule?.name || d.names?.join(', ') || d.id}</strong><br><small class="text-muted">ID: ${d.id||''}</small></td>
                     <td class="text-center">${d.before}</td>
                     <td class="text-center">${target||'-'}</td>
                     <td class="text-center fw-bold">${d.after}</td>
@@ -25317,38 +26909,171 @@ Desteklenen Dosyalar:
         }
 
         function generateDependencyDiagnosticsReport(diags){
-            if (!diags.length) return '<div class="p-2 text-muted small">Veri yok</div>';
+            console.log('🔍 generateDependencyDiagnosticsReport çağrıldı, diags:', diags);
+            
+            // Önce diagnostik verilerini kontrol et
+            if (diags && diags.length > 0) {
+                console.log(`📊 ${diags.length} bağımlılık diagnostic verisi işleniyor`);
+                const rows = diags.map(d=>{
+                    // Kural ismi için anlaşılır açıklama
+                    let ruleName = d.rule?.name || d.id;
+                    let ruleDescription = '';
+                    if (d.rule) {
+                        ruleDescription = `"${d.rule.parentTag}" olan yemekler varsa "${d.rule.childTag}" olan yemekler %${d.rule.minRatio || 0}-${d.rule.maxRatio || 100} oranında olmalıdır`;
+                        
+                        // Anlaşılır kural ismi oluştur
+                        if (d.rule.parentTag && d.rule.childTag) {
+                            ruleName = `${d.rule.parentTag.toUpperCase()} → ${d.rule.childTag.toUpperCase()} Bağımlılığı`;
+                        }
+                    }
+                    
+                    // Durum mesajını anlaşılır hale getir
+                    let statusMessage = d.message || '';
+                    if (d.status === 'over' && d.triggerCount && d.targetCount) {
+                        statusMessage = `${d.rule?.parentTag || 'tetik'}: ${d.triggerCount} adet, ${d.rule?.childTag || 'hedef'}: ${d.targetCount} adet - Fazla hedef var`;
+                    }
+                    
+                    return `<tr>
+                        <td><strong style="cursor: pointer;" title="${ruleDescription}" onclick="openRuleEditModal('dependency', '${d.id}')">${ruleName}</strong><br><small class="text-muted">ID: ${d.id}</small></td>
+                        <td class="text-center">${d.triggerCount || 0}</td>
+                        <td class="text-center">${d.targetCount || 0}</td>
+                        <td class="text-center">${d.added?.length || 0}</td>
+                        <td><span class="badge bg-${d.status === 'ok' ? 'success' : d.status === 'over' ? 'warning' : 'secondary'}">${d.status}</span></td>
+                        <td>${d.reasonCode||''}</td>
+                        <td><small>${statusMessage}</small></td>
+                    </tr>`;
+                }).join('');
+                return `<div class="table-responsive"><table class="table table-sm table-striped mb-0">
+                <thead class="table-light"><tr><th>Kural</th><th>Tetik</th><th>Hedef</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
+                <tbody>${rows}</tbody></table></div>`;
+            }
+            
+            // Diags yoksa sistem kurallarından bağımlılık kurallarını göster
+            const systemRules = getSystemRules();
+            const dependencyRules = systemRules?.dependencyRules || [];
+            if (dependencyRules.length > 0) {
+                const rows = dependencyRules.map(rule => {
+                    const ruleName = rule.parentTag && rule.childTag ? 
+                        `${rule.parentTag.toUpperCase()} → ${rule.childTag.toUpperCase()} Bağımlılığı` : 
+                        (rule.name || rule.id);
+                    const ruleDescription = `"${rule.parentTag}" olan yemekler varsa "${rule.childTag}" olan yemekler %${rule.minRatio || 0}-${rule.maxRatio || 100} oranında olmalıdır`;
+                    return `<tr>
+                        <td><strong style="cursor: pointer;" title="${ruleDescription}" onclick="openRuleEditModal('dependency', '${rule.id}')">${ruleName}</strong><br><small class="text-muted">ID: ${rule.id}</small></td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td><span class="badge bg-secondary">Henüz uygulanmadı</span></td>
+                        <td>-</td>
+                        <td><small>Plan oluşturulmadı veya kural tetiklenmedi</small></td>
+                    </tr>`;
+                }).join('');
+                return `<div class="table-responsive"><table class="table table-sm table-striped mb-0">
+                <thead class="table-light"><tr><th>Kural</th><th>Tetik</th><th>Hedef</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
+                <tbody>${rows}</tbody></table></div>`;
+            }
+            
+            // Eğer diagnostik verisi varsa onu işle
             const rows = diags.map(d=>{
+                // Kural ismi için anlaşılır açıklama
+                let ruleName = d.rule?.name || d.id;
+                let ruleDescription = '';
+                if (d.rule) {
+                    ruleDescription = `"${d.rule.parentTag}" olan yemekler varsa "${d.rule.childTag}" olan yemekler %${d.rule.minRatio || 0}-${d.rule.maxRatio || 100} oranında olmalıdır`;
+                    
+                    // Anlaşılır kural ismi oluştur
+                    if (d.rule.parentTag && d.rule.childTag) {
+                        ruleName = `${d.rule.parentTag.toUpperCase()} → ${d.rule.childTag.toUpperCase()} Bağımlılığı`;
+                    }
+                }
+                
+                // Durum mesajını anlaşılır hale getir
+                let statusMessage = d.message || '';
+                if (d.status === 'over' && d.triggerCount && d.targetCount) {
+                    statusMessage = `${d.rule?.parentTag || 'tetik'}: ${d.triggerCount} adet, ${d.rule?.childTag || 'hedef'}: ${d.targetCount} adet - Hedef fazla`;
+                }
+                
                 return `<tr>
-                    <td>${d.id||''}</td>
-                    <td class="text-center">${d.triggerCount}</td>
-                    <td class="text-center">${d.targetCount}</td>
-                    <td class="text-center">${d.added.length? '+'+d.added.length:''}</td>
-                    <td>${d.status}</td>
+                    <td><strong style="cursor: pointer;" title="${ruleDescription}" onclick="openRuleEditModal('dependency', '${d.id}')">${ruleName}</strong><br><small class="text-muted">ID: ${d.id}</small></td>
+                    <td class="text-center">${d.triggerCount || 0}</td>
+                    <td class="text-center">${d.targetCount || 0}</td>
+                    <td class="text-center">${d.added?.length || 0}</td>
+                    <td><span class="badge bg-${d.status === 'ok' ? 'success' : d.status === 'over' ? 'warning' : 'secondary'}">${d.status}</span></td>
                     <td>${d.reasonCode||''}</td>
-                    <td><small>${d.message||''}</small></td>
+                    <td><small>${statusMessage}</small></td>
                 </tr>`;
             }).join('');
-            return `<div class="table-responsive"><table class="table table-sm table-bordered mb-0">
-            <thead class="table-light"><tr><th>ID</th><th>Tetik</th><th>Hedef</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
+            return `<div class="table-responsive"><table class="table table-sm table-striped mb-0">
+            <thead class="table-light"><tr><th>Kural</th><th>Tetik</th><th>Hedef</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
             <tbody>${rows}</tbody></table></div>`;
         }
 
         function generateLockDiagnosticsReport(diags){
-            if (!diags.length) return '<div class="p-2 text-muted small">Veri yok</div>';
-            const rows = diags.map(d=>{
-                return `<tr>
-                    <td>${d.id||''}</td>
-                    <td class="text-center">${d.present}</td>
-                    <td class="text-center">${d.added? '✔':''}</td>
-                    <td>${d.status}</td>
-                    <td>${d.reasonCode||''}</td>
-                    <td><small>${d.message||''}</small></td>
-                </tr>`;
-            }).join('');
-            return `<div class="table-responsive"><table class="table table-sm table-bordered mb-0">
-            <thead class="table-light"><tr><th>ID</th><th>Mevcut</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
-            <tbody>${rows}</tbody></table></div>`;
+            console.log('🔍 generateLockDiagnosticsReport çağrıldı, diags:', diags);
+            
+            // Sistem kurallarını yükle
+            const systemRules = getSystemRules();
+            
+            // Önce diagnostik verilerini kontrol et  
+            if (diags && diags.length > 0) {
+                console.log(`📊 ${diags.length} kilit diagnostic verisi işleniyor`);
+                const rows = diags.map(d=>{
+                    // Kural ismi için anlaşılır açıklama
+                    let ruleName = d.rule?.name || d.id;
+                    let ruleDescription = '';
+                    if (d.rule) {
+                        const scopeText = d.rule.scope === 'weekly' ? 'hafta boyunca' : 'her gün';
+                        const filterType = d.rule.filterType === 'tag' ? 'etiketli' : d.rule.filterType === 'category' ? 'kategorisindeki' : 'rolündeki';
+                        ruleDescription = `"${d.rule.filterText}" ${filterType} yemekler ${scopeText} aynı yemek olarak sabitlenmelidir`;
+                        
+                        // Anlaşılır kural ismi oluştur
+                        if (d.rule.filterText) {
+                            ruleName = `${d.rule.filterText.toUpperCase()} Kilidi (${scopeText})`;
+                        }
+                    }
+                    
+                    // Durum mesajını anlaşılır hale getir
+                    let statusMessage = d.message || '';
+                    if (d.status === 'enforced') {
+                        statusMessage = `${d.rule?.filterText || 'belirtilen'} yemek hafta boyunca aynı kalacak şekilde ayarlandı`;
+                    }
+                    
+                    return `<tr>
+                        <td><strong style="cursor: pointer;" title="${ruleDescription}" onclick="openRuleEditModal('lock', '${d.id}')">${ruleName}</strong><br><small class="text-muted">ID: ${d.id}</small></td>
+                        <td class="text-center">${d.present || '-'}</td>
+                        <td class="text-center">${d.added? '✔':'-'}</td>
+                        <td><span class="badge bg-${d.status === 'ok' ? 'success' : d.status === 'enforced' ? 'info' : 'secondary'}">${d.status}</span></td>
+                        <td>${d.reasonCode||''}</td>
+                        <td><small>${statusMessage}</small></td>
+                    </tr>`;
+                }).join('');
+                return `<div class="table-responsive"><table class="table table-sm table-striped mb-0">
+                <thead class="table-light"><tr><th>Kural</th><th>Mevcut</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
+                <tbody>${rows}</tbody></table></div>`;
+            }
+            
+            // Diags yoksa sistem kurallarından kilit kurallarını göster
+            const lockRules = systemRules?.lockRules || [];
+            if (lockRules.length > 0) {
+                const rows = lockRules.map(rule => {
+                    const scopeText = rule.scope === 'weekly' ? 'hafta boyunca' : 'her gün';
+                    const filterType = rule.filterType === 'tag' ? 'etiketli' : rule.filterType === 'category' ? 'kategorisindeki' : 'rolündeki';
+                    const ruleName = rule.filterText ? `${rule.filterText.toUpperCase()} Kilidi (${scopeText})` : (rule.name || rule.id);
+                    const ruleDescription = `"${rule.filterText}" ${filterType} yemekler ${scopeText} aynı yemek olarak sabitlenmelidir`;
+                    return `<tr>
+                        <td><strong style="cursor: pointer;" title="${ruleDescription}" onclick="openRuleEditModal('lock', '${rule.id}')">${ruleName}</strong><br><small class="text-muted">ID: ${rule.id}</small></td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td><span class="badge bg-secondary">Henüz uygulanmadı</span></td>
+                        <td>-</td>
+                        <td><small>Plan oluşturulmadı veya kural tetiklenmedi</small></td>
+                    </tr>`;
+                }).join('');
+                return `<div class="table-responsive"><table class="table table-sm table-striped mb-0">
+                <thead class="table-light"><tr><th>Kural</th><th>Mevcut</th><th>Eklendi</th><th>Durum</th><th>Sebep</th><th>Mesaj</th></tr></thead>
+                <tbody>${rows}</tbody></table></div>`;
+            } else {
+                return '<div class="p-3 text-muted small">Tanımlı kilit kuralı yok</div>';
+            }
         }
         
         // Detaylı plan görünümü oluştur
@@ -25504,10 +27229,10 @@ Desteklenen Dosyalar:
                                 <thead class="table-light">
                                     <tr>
                                         <th>Yemek</th>
-                                        <th class="text-center">Kalori</th>
-                                        <th class="text-center">Karbonhidrat</th>
-                                        <th class="text-center">Protein</th>
-                                        <th class="text-center">Yağ</th>
+                                        <th class="text-center">Kal</th>
+                                        <th class="text-center">K</th>
+                                        <th class="text-center">P</th>
+                                        <th class="text-center">Y</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -25542,26 +27267,120 @@ Desteklenen Dosyalar:
             
             return mealFoods.map((food, index) => {
                 const foodName = food.name || food.foodName || 'İsimsiz yemek';
-                const calories = food.calories || 0;
-                const carbs = food.carbs || food.carbohydrate || 0;
-                const protein = food.protein || 0;
-                const fat = food.fat || 0;
                 
-                // Food'u cache'e ekle ve index'ini al
+                // GitHub'dan yüklenen tam yemek verisini bul ve birleştir
+                let enrichedFood = { ...food };
+                if (window.foodsData && window.foodsData.length > 0) {
+                    const fullFoodData = window.foodsData.find(f => 
+                        f.name === foodName || 
+                        f.name?.toLowerCase() === foodName.toLowerCase() ||
+                        (f.aliases && f.aliases.includes(foodName))
+                    );
+                    
+                    if (fullFoodData) {
+                        // Tam veriyi birleştir, plan verisinin üzerine yazma
+                        enrichedFood = {
+                            ...fullFoodData, // GitHub'dan tam veri
+                            ...food, // Plan'dan gelen veri (quantity, _addedByRule vs.)
+                            // Nutritional data için planı öncelikle al, yoksa GitHub'dan al
+                            calories: food.calories || fullFoodData.calories || 0,
+                            carbs: food.carbs || food.carbohydrate || fullFoodData.carbs || fullFoodData.carbohydrate || 0,
+                            protein: food.protein || fullFoodData.protein || 0,
+                            fat: food.fat || fullFoodData.fat || 0
+                        };
+                        console.log(`🔗 "${foodName}" için tam veri birleştirildi:`, {
+                            category: enrichedFood.category,
+                            role: enrichedFood.role,
+                            mealTypes: enrichedFood.mealTypes
+                        });
+                    } else {
+                        console.warn(`⚠️ "${foodName}" için GitHub'da tam veri bulunamadı`);
+                    }
+                }
+                
+                const calories = enrichedFood.calories || 0;
+                const carbs = enrichedFood.carbs || enrichedFood.carbohydrate || 0;
+                const protein = enrichedFood.protein || 0;
+                const fat = enrichedFood.fat || 0;
+                
+                // Enriched food'u cache'e ekle
                 const cacheIndex = window.planFoodsCache.length;
-                window.planFoodsCache.push(food);
+                window.planFoodsCache.push(enrichedFood);
                 
                 // Sadece index kullanarak modalı çağır
                 const clickHandler = `editFoodFromPlanByIndex(${cacheIndex})`;
                 
-                const ruleTitle = food._addedByRule ? `Bu yemek '${food._ruleType||'kural'}' (${food._ruleReason||food._addedByRule}) nedeniyle otomatik eklendi.` : '';
-                const addedBadge = food._addedByRule ? `<span class=\"badge bg-warning text-dark ms-2\" title=\"${ruleTitle}\"><i class=\"fas fa-magic\"></i> Kural</span>` : '';
-                const rowClass = food._addedByRule ? 'table-warning' : '';
+                const ruleInfo = enrichedFood._addedByRule ? (() => {
+                    const type = enrichedFood._ruleType || 'kural';
+                    const id = enrichedFood._addedByRule;
+                    const trigger = enrichedFood._triggerFood ? ` (tetikleyici: ${enrichedFood._triggerFood})` : '';
+                    let description = '';
+                    // Detaylı kural açıklaması
+                    if (type === 'frequency') {
+                        // Frequency rule için detay bul
+                        const rule = (window.systemRules?.rulesArchive?.frequencyRules||[]).find(r=> r.id === id);
+                        if (rule) {
+                            const scope = rule.scope || 'meal';
+                            const meals = rule.meals?.join(', ') || 'tüm öğünler';
+                            const count = rule.count || 0;
+                            const max = rule.countMax || count;
+                            const roleDesc = rule.filters?.roles?.join(' veya ') || '';
+                            const tagDesc = rule.filters?.tags?.join(' + ') || '';
+                            const nameDesc = rule.filters?.names?.join(' + ') || '';
+                            let filterDesc = [roleDesc, tagDesc, nameDesc].filter(Boolean).join(', ') || 'genel';
+                            description = `Sıklık kuralı: ${filterDesc} ${scope==='week'?'haftalık':'öğün başına'} ${count}${max!==count?'-'+max:''} kez, ${meals} öğünlerinde`;
+                        } else {
+                            description = 'Bu yemek minimum sıklık kuralı gereği eklendi';
+                        }
+                    }
+                    else if (type === 'dependency') {
+                        description = `Bağımlılık kuralı: ${enrichedFood._triggerFood || 'tetikleyici'} olduğu için eklendi${trigger}`;
+                    }
+                    else if (type === 'lock') {
+                        description = 'Kilit kuralı: bu kategori/rol için tek seçenek olarak sabitlendi';
+                    }
+                    else description = `${type} kuralı gereği eklendi`;
+                    return { type, id, description, trigger };
+                })() : null;
+                const ruleTitle = ruleInfo ? `${ruleInfo.description}. Kural ID: ${ruleInfo.id}` : '';
+                
+                // Kural badge'i için anlamlı kısaltma oluştur
+                let ruleBadgeText = '';
+                if (ruleInfo) {
+                    if (ruleInfo.type === 'frequency') {
+                        // Frequency rule için system_rules'dan gerçek ismi al
+                        const systemRules = getSystemRules();
+                        const rule = systemRules?.rulesArchive?.frequencyRules?.find(r => r.id === ruleInfo.id);
+                        if (rule?.name) {
+                            ruleBadgeText = rule.name;
+                        } else {
+                            ruleBadgeText = 'Sıklık Kuralı';
+                        }
+                    } else if (ruleInfo.type === 'dependency') {
+                        ruleBadgeText = 'Bağımlılık';
+                    } else if (ruleInfo.type === 'lock') {
+                        ruleBadgeText = 'Kilit';
+                    } else {
+                        ruleBadgeText = ruleInfo.type;
+                    }
+                }
+                const addedBadge = ruleInfo ? `<span class="badge bg-warning text-dark ms-2" title="${ruleTitle}"><i class="fas fa-magic"></i> ${ruleBadgeText}</span>` : '';
+                const rowClass = enrichedFood._addedByRule ? 'table-warning' : '';
                 return `
-                    <tr class="clickable-food-row ${rowClass}" onclick="${clickHandler}" style="cursor: pointer;" title="Düzenlemek için tıklayın (ID: ${food.id||''})">
+                    <tr class="clickable-food-row ${rowClass}" onclick="${clickHandler}" style="cursor: pointer;" title="Düzenlemek için tıklayın (ID: ${enrichedFood.id||''})">
                         <td>
                             <i class="fas fa-edit text-primary me-2"></i>
                             ${foodName} ${addedBadge}
+                            <span class="food-meta ms-2">
+                                ${enrichedFood.category ? `<span class="badge bg-light text-dark me-1" style="font-size: 0.7em; padding: 0.15em 0.4em;">${enrichedFood.category}</span>` : ''}
+                                ${enrichedFood.role ? `<span class="badge bg-secondary me-1" style="font-size: 0.7em; padding: 0.15em 0.4em;">${enrichedFood.role}</span>` : ''}
+                                ${Array.isArray(enrichedFood.mealTypes) && enrichedFood.mealTypes.length ? 
+                                    `<span class="badge bg-info me-1" style="font-size: 0.7em; padding: 0.15em 0.4em;">${enrichedFood.mealTypes.join(',')}</span>` : 
+                                    (enrichedFood.mealType ? `<span class="badge bg-info me-1" style="font-size: 0.7em; padding: 0.15em 0.4em;">${enrichedFood.mealType}</span>` : '')
+                                }
+                                ${enrichedFood.keto ? '<span class="badge bg-success me-1" style="font-size: 0.7em; padding: 0.15em 0.4em;">K</span>' : ''}
+                                ${enrichedFood.lowcarb ? '<span class="badge bg-primary me-1" style="font-size: 0.7em; padding: 0.15em 0.4em;">LC</span>' : ''}
+                            </span>
                         </td>
                         <td class="text-center">${calories}</td>
                         <td class="text-center">${carbs}g</td>
@@ -25985,7 +27804,6 @@ Desteklenen Dosyalar:
 
         // Global scope'a test fonksiyonunu ekle
         window.testMealTypeFiltering = testMealTypeFiltering;
-        window.eligibleForMeal = eligibleForMeal; // Global scope'a taşı
 
         // Sayfa değişikliklerini dinle ve planlama sayfası için inizialize et
         document.addEventListener('DOMContentLoaded', function() {
