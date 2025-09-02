@@ -19005,19 +19005,31 @@
                 
                 // system_rules.json'dan yükle - success loading ile aynı yöntemi kullan
                 try {
-                    const response = await fetch('./system_rules.json');
+                    let response = await fetch('./system_rules.json');
                     if (!response.ok) {
                         // Ana dizinde yoksa data dizinini dene
-                        const dataResponse = await fetch('./data/system_rules.json');
-                        if (dataResponse.ok) {
-                            const systemRulesData = await dataResponse.json();
-                            await processSystemRulesData(systemRulesData);
-                        } else {
+                        response = await fetch('./data/system_rules.json');
+                        if (!response.ok) {
                             console.warn('⚠️ system_rules.json dosyası bulunamadı (ana dizin ve data dizininde)');
+                            return;
                         }
-                    } else {
-                        const systemRulesData = await response.json();
+                    }
+                    
+                    const systemRulesText = await response.text();
+                    
+                    let systemRulesData;
+                    try {
+                        systemRulesData = JSON.parse(systemRulesText);
+                        
+                        // Eğer hala string ise (double-encoded JSON), bir kez daha parse etmeyi dene
+                        if (typeof systemRulesData === 'string') {
+                            console.log('🔍 Double-encoded JSON detected, attempting second parse...');
+                            systemRulesData = JSON.parse(systemRulesData);
+                        }
+                        
                         await processSystemRulesData(systemRulesData);
+                    } catch (parseError) {
+                        console.error('❌ JSON parse hatası:', parseError);
                     }
                 } catch (error) {
                     console.error('❌ system_rules.json yükleme hatası:', error);
@@ -19032,17 +19044,9 @@
         // System rules data'yı işleme fonksiyonu
         async function processSystemRulesData(systemRulesData) {
             console.log('📊 system_rules.json yüklendi, kurallar işleniyor...');
-            console.log('🔍 Received data type:', typeof systemRulesData);
-            console.log('🔍 Received data keys:', Object.keys(systemRulesData || {}));
-            console.log('🔍 Has rulesArchive?:', systemRulesData && 'rulesArchive' in systemRulesData);
-            console.log('🔍 rulesArchive type:', typeof (systemRulesData && systemRulesData.rulesArchive));
             
             if (systemRulesData && systemRulesData.rulesArchive) {
                 const rulesArchive = systemRulesData.rulesArchive;
-                console.log('🔍 rulesArchive keys:', Object.keys(rulesArchive));
-                console.log('🔍 frequencyRules length:', rulesArchive.frequencyRules?.length || 0);
-                console.log('🔍 dependencyRules length:', rulesArchive.dependencyRules?.length || 0);
-                console.log('🔍 lockRules length:', rulesArchive.lockRules?.length || 0);
                 
                 // Global değişkenleri güncelle
                 window.frequencyRules = [...(rulesArchive.frequencyRules || [])];
@@ -19080,7 +19084,6 @@
                 return true;
             } else {
                 console.warn('⚠️ system_rules.json format hatası veya rulesArchive eksik');
-                console.log('🔍 Debug: systemRulesData:', systemRulesData);
                 return false;
             }
         }
