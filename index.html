@@ -5607,6 +5607,14 @@
             // JSON verilerini yükle
             await loadSystemData();
             
+            // Sistem kurallarını otomatik yükle
+            try {
+                await ensureSystemRulesLoaded();
+                logToConsole('✅ Sistem kuralları yüklendi');
+            } catch (error) {
+                logToConsole('⚠️ Sistem kuralları yükleme hatası: ' + error.message);
+            }
+            
             // Yemek veritabanını yükle
             await loadMealsFromPlainJson();
             
@@ -18972,8 +18980,116 @@
         // 🆕 KURAL YÖNETİCİSİ FONKSİYONLARI
         
         // Kurallar sayfası lifecycle
+        // Sistem kurallarını otomatik yükleme fonksiyonu
+        async function ensureSystemRulesLoaded() {
+            try {
+                console.log('🔍 Sistem kuralları kontrol ediliyor...');
+                
+                // Mevcut kuralları kontrol et
+                const currentFreq = window.frequencyRules || (typeof frequencyRules !== 'undefined' ? frequencyRules : []);
+                const currentDep = window.dependencyRules || (typeof dependencyRules !== 'undefined' ? dependencyRules : []);
+                const currentLock = window.lockRules || (typeof lockRules !== 'undefined' ? lockRules : []);
+                const totalCurrentRules = currentFreq.length + currentDep.length + currentLock.length;
+                
+                if (totalCurrentRules > 0) {
+                    console.log('✅ Sistem kuralları zaten yüklenmiş:', {
+                        frequency: currentFreq.length,
+                        dependency: currentDep.length,
+                        lock: currentLock.length,
+                        total: totalCurrentRules
+                    });
+                    return;
+                }
+                
+                console.log('📥 Sistem kuralları yüklü değil, system_rules.json\'dan yükleniyor...');
+                
+                // system_rules.json'dan yükle - success loading ile aynı yöntemi kullan
+                try {
+                    const response = await fetch('./system_rules.json');
+                    if (!response.ok) {
+                        // Ana dizinde yoksa data dizinini dene
+                        const dataResponse = await fetch('./data/system_rules.json');
+                        if (dataResponse.ok) {
+                            const systemRulesData = await dataResponse.json();
+                            await processSystemRulesData(systemRulesData);
+                        } else {
+                            console.warn('⚠️ system_rules.json dosyası bulunamadı (ana dizin ve data dizininde)');
+                        }
+                    } else {
+                        const systemRulesData = await response.json();
+                        await processSystemRulesData(systemRulesData);
+                    }
+                } catch (error) {
+                    console.error('❌ system_rules.json yükleme hatası:', error);
+                }
+                
+            } catch (error) {
+                console.error('❌ Sistem kuralları yükleme hatası:', error);
+                // Hata durumunda da devam et, boş kurallarla çalış
+            }
+        }
+        
+        // System rules data'yı işleme fonksiyonu
+        async function processSystemRulesData(systemRulesData) {
+            console.log('📊 system_rules.json yüklendi, kurallar işleniyor...');
+            console.log('🔍 Received data type:', typeof systemRulesData);
+            console.log('🔍 Received data keys:', Object.keys(systemRulesData || {}));
+            console.log('🔍 Has rulesArchive?:', systemRulesData && 'rulesArchive' in systemRulesData);
+            console.log('🔍 rulesArchive type:', typeof (systemRulesData && systemRulesData.rulesArchive));
+            
+            if (systemRulesData && systemRulesData.rulesArchive) {
+                const rulesArchive = systemRulesData.rulesArchive;
+                console.log('🔍 rulesArchive keys:', Object.keys(rulesArchive));
+                console.log('🔍 frequencyRules length:', rulesArchive.frequencyRules?.length || 0);
+                console.log('🔍 dependencyRules length:', rulesArchive.dependencyRules?.length || 0);
+                console.log('🔍 lockRules length:', rulesArchive.lockRules?.length || 0);
+                
+                // Global değişkenleri güncelle
+                window.frequencyRules = [...(rulesArchive.frequencyRules || [])];
+                window.dependencyRules = [...(rulesArchive.dependencyRules || [])];
+                window.lockRules = [...(rulesArchive.lockRules || [])];
+                
+                // Lokal değişkenleri de senkronize et
+                if (typeof frequencyRules !== 'undefined') {
+                    frequencyRules = window.frequencyRules;
+                }
+                if (typeof dependencyRules !== 'undefined') {
+                    dependencyRules = window.dependencyRules;
+                }
+                if (typeof lockRules !== 'undefined') {
+                    lockRules = window.lockRules;
+                }
+                
+                // systemRules objesini de güncelle
+                window.systemRules = systemRulesData;
+                
+                const loadedTotal = window.frequencyRules.length + window.dependencyRules.length + window.lockRules.length;
+                
+                console.log('✅ Sistem kuralları başarıyla yüklendi:', {
+                    frequency: window.frequencyRules.length,
+                    dependency: window.dependencyRules.length,
+                    lock: window.lockRules.length,
+                    total: loadedTotal
+                });
+                
+                // Kullanıcıya bilgi ver
+                if (typeof showToast === 'function') {
+                    showToast(`🎯 ${loadedTotal} sistem kuralı otomatik yüklendi`, 'success');
+                }
+                
+                return true;
+            } else {
+                console.warn('⚠️ system_rules.json format hatası veya rulesArchive eksik');
+                console.log('🔍 Debug: systemRulesData:', systemRulesData);
+                return false;
+            }
+        }
+
         async function loadRulesPage() {
             try {
+                // Sistem kurallarını otomatik yükle (eğer yüklenmemişse)
+                await ensureSystemRulesLoaded();
+                
                 // Kurallar hiyerarşisini doldur (frequency + diğer türler)
                 renderRulesHierarchyList();
                 // DnD etkinleştir
