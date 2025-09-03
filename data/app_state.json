@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-03T12:26:22.633Z",
+  "timestamp": "2025-09-03T12:40:47.538Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -85,9 +85,7 @@
         "roles": []
       },
       "scope": "week",
-      "meals": [
-        "dinner"
-      ],
+      "meals": [],
       "countType": "range",
       "count": 2,
       "weeks": [],
@@ -150,10 +148,10 @@
   ],
   "lockRules": [
     {
-      "id": "lock_soup_role",
-      "name": "Ãorba Rol Kilidi",
-      "filterType": "role",
-      "filterText": "soup",
+      "id": "lock_soup_category",
+      "name": "Ãorba Kategori Kilidi",
+      "filterType": "category",
+      "filterText": "ÃORBALAR",
       "scope": "weekly",
       "priority": 2
     },
@@ -267,7 +265,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T12:25:13.783Z",
+    "lastUpdated": "2025-09-03T12:40:20.675Z",
     "version": "2.1.0"
   },
   "foodsData": [
