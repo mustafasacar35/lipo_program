@@ -83,8 +83,8 @@
     "meals": [],
     "countType": "range",
     "count": 2,
-    "weeks": [],
     "countMax": 4,
+    "weeks": [],
     "priority": 11
   },
   {
