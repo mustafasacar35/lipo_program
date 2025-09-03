@@ -1,20 +1,18 @@
 [
   {
-    "id": "lock_1756887795322",
-    "name": "corba kilid",
-    "filterType": "categories",
-    "filterText": "ÇORBALAR",
+    "id": "lock_soup_category",
+    "name": "Ãorba Kategori Kilidi",
+    "filterType": "category",
+    "filterText": "ÃORBALAR",
     "scope": "weekly",
-    "active": true,
-    "description": "Bu kural ÇORBALAR kategorisindeki tüm yemekler için haftalık kilitleme uygular.\n\n🎯 HEDEF: ÇORBALAR kategorisindeki tüm yemekler\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\n\n📋 NASIL ÇALIŞIR:\n• Hafta başında ilk sefer çorbalar kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\n• Yeni haftada farklı bir yemek seçilebilir",
     "priority": 2
   },
   {
     "id": "lock_bread_tag",
     "name": "Ekmek Tag Kilidi",
-    "categories": [],
-    "lockType": "weekly",
-    "maxCount": 0,
+    "filterType": "tag",
+    "filterText": "ekmek",
+    "scope": "weekly",
     "priority": 10
   }
 ]
