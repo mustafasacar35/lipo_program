@@ -1,6 +1,7 @@
 [
   {
     "id": "mezww2p6yw1w",
+    "name": "Ana Yemek ZorunluluÄu",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -24,6 +25,7 @@
   },
   {
     "id": "mezwyso1j582",
+    "name": "Yan Yemek SÄ±nÄ±rÄ±",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -46,52 +48,67 @@
     "priority": 2
   },
   {
-    "id": "mf038ucpno4d",
+    "id": "freq_egg_breakfast",
+    "name": "KahvaltÄ± Yumurta SÄ±nÄ±rÄ±",
     "filters": {
       "names": [],
       "nameMode": "AND",
       "tags": [
-        "et"
+        "yumurta"
       ],
       "tagMode": "AND",
-      "categories": [
-        "AKSAM"
-      ],
-      "roles": [
-        "mainDish"
-      ]
+      "categories": [],
+      "roles": []
     },
-    "scope": "week",
+    "scope": "meal",
     "meals": [
-      "dinner"
+      "breakfast"
     ],
     "countType": "range",
-    "count": 4,
+    "count": 1,
+    "countMax": 1,
     "weeks": [],
-    "countMax": 7,
-    "priority": 4
+    "priority": 5
   },
   {
-    "id": "mf039jvotukm",
+    "id": "freq_soup_week",
     "filters": {
       "names": [],
       "nameMode": "AND",
       "tags": [],
       "tagMode": "AND",
       "categories": [
-        "EKMEKLER"
+        "CORBALAR"
       ],
       "roles": []
     },
     "scope": "week",
-    "meals": [
-      "lunch",
-      "dinner"
-    ],
+    "meals": [],
     "countType": "range",
-    "count": 5,
+    "count": 2,
     "weeks": [],
-    "countMax": 12,
-    "priority": 5
+    "countMax": 4,
+    "priority": 11
+  },
+  {
+    "id": "freq_dessert_week",
+    "name": "HaftalÄ±k TatlÄ± SÄ±klÄ±ÄÄ±",
+    "filters": {
+      "names": [],
+      "nameMode": "AND",
+      "tags": [],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": [
+        "dessert"
+      ]
+    },
+    "scope": "week",
+    "meals": [],
+    "countType": "range",
+    "count": 1,
+    "countMax": 3,
+    "weeks": [],
+    "priority": 8
   }
 ]
