@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-03T08:55:54.153Z",
+  "timestamp": "2025-09-03T08:58:25.735Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -147,8 +147,8 @@
       "priority": 10
     },
     {
-      "id": "lock_1756889744950",
-      "name": "corba 2 kilid",
+      "id": "lock_1756889900891",
+      "name": "corba 3",
       "filterType": "categories",
       "filterText": "ÇORBALAR",
       "scope": "weekly",
@@ -258,7 +258,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T08:55:23.135Z",
+    "lastUpdated": "2025-09-03T08:58:01.628Z",
     "version": "2.1.0"
   },
   "foodsData": [
