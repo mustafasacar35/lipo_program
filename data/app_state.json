@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-03T08:15:29.856Z",
+  "timestamp": "2025-09-03T08:16:25.307Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -85,8 +85,8 @@
       "meals": [],
       "countType": "range",
       "count": 2,
-      "weeks": [],
       "countMax": 4,
+      "weeks": [],
       "priority": 11
     },
     {
@@ -140,7 +140,7 @@
   "lockRules": [
     {
       "id": "lock_soup_category",
-      "name": "Ãorba Kategori Kilidi",
+      "name": "ÃÂorba Kategori Kilidi",
       "categories": [],
       "lockType": "weekly",
       "maxCount": 0,
@@ -256,7 +256,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T08:14:55.534Z",
+    "lastUpdated": "2025-09-03T08:15:53.254Z",
     "version": "2.1.0"
   },
   "foodsData": [
