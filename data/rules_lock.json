@@ -1,13 +1,18 @@
 [
   {
-    "id": "lock_1756658401380",
-    "name": "ekmek kilidi",
-    "category": "EKMEKLER",
-    "role": "",
-    "period": "weekly",
-    "scope": "week",
-    "description": "Bu kural Ekmek kategorisindeki tÃÂ¼m yemekler iÃÂ§in haftalÃÂ±k kilitleme uygular.\n\nÃ°ÂÂÂ¯ HEDEF: Ekmek kategorisindeki tÃÂ¼m yemekler\nÃ°ÂÂÂ PERÃÂ°YOT: HaftalÃÂ±k (hafta boyunca aynÃÂ± yemek)\nÃ°ÂÂÂÃ¯Â¸Â KAPSAM: HaftanÃÂ±n tÃÂ¼m ÃÂ¶ÃÂÃÂ¼nlerinde\n\nÃ°ÂÂÂ NASIL ÃÂALIÃÂIR:\nÃ¢ÂÂ¢ Hafta baÃÂÃÂ±nda ilk sefer ekmek kategorisindeki tÃÂ¼m yemekler seÃÂ§ildiÃÂinde, o hafta haftanÃÂ±n tÃÂ¼m ÃÂ¶ÃÂÃÂ¼nlerinde sadece o yemek verilebilir\nÃ¢ÂÂ¢ Yeni haftada farklÃÂ± bir yemek seÃÂ§ilebilir",
-    "active": true,
-    "priority": 1
+    "id": "lock_soup_category",
+    "name": "Ãorba Kategori Kilidi",
+    "filterType": "category",
+    "filterText": "ÃORBALAR",
+    "scope": "weekly",
+    "priority": 2
+  },
+  {
+    "id": "lock_bread_tag",
+    "name": "Ekmek Tag Kilidi",
+    "filterType": "tag",
+    "filterText": "ekmek",
+    "scope": "weekly",
+    "priority": 10
   }
 ]
