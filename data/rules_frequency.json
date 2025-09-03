@@ -1,7 +1,7 @@
 [
   {
     "id": "mezww2p6yw1w",
-    "name": "Ana Yemek Zorunluluğu",
+    "name": "Ana Yemek ZorunluluÄu",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -25,7 +25,7 @@
   },
   {
     "id": "mezwyso1j582",
-    "name": "Yan Yemek Sınırı",
+    "name": "Yan Yemek SÄ±nÄ±rÄ±",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -49,7 +49,7 @@
   },
   {
     "id": "freq_egg_breakfast",
-    "name": "Kahvaltı Yumurta Sınırı",
+    "name": "KahvaltÄ± Yumurta SÄ±nÄ±rÄ±",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -94,7 +94,7 @@
   },
   {
     "id": "freq_dessert_week",
-    "name": "Haftalık Tatlı Sıklığı",
+    "name": "HaftalÄ±k TatlÄ± SÄ±klÄ±ÄÄ±",
     "filters": {
       "names": [],
       "nameMode": "AND",
