@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-03T08:16:25.307Z",
+  "timestamp": "2025-09-03T08:17:06.275Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -70,26 +70,6 @@
       "priority": 5
     },
     {
-      "id": "freq_soup_week",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [
-          "CORBALAR"
-        ],
-        "roles": []
-      },
-      "scope": "week",
-      "meals": [],
-      "countType": "range",
-      "count": 2,
-      "countMax": 4,
-      "weeks": [],
-      "priority": 11
-    },
-    {
       "id": "freq_dessert_week",
       "filters": {
         "names": [],
@@ -108,6 +88,26 @@
       "countMax": 3,
       "weeks": [],
       "priority": 8
+    },
+    {
+      "id": "freq_soup_week",
+      "filters": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [
+          "CORBALAR"
+        ],
+        "roles": []
+      },
+      "scope": "week",
+      "meals": [],
+      "countType": "range",
+      "count": 2,
+      "countMax": 4,
+      "weeks": [],
+      "priority": 11
     }
   ],
   "dependencyRules": [
@@ -139,20 +139,23 @@
   ],
   "lockRules": [
     {
-      "id": "lock_soup_category",
-      "name": "ÃÂorba Kategori Kilidi",
-      "categories": [],
-      "lockType": "weekly",
-      "maxCount": 0,
-      "priority": 2
-    },
-    {
       "id": "lock_bread_tag",
       "name": "Ekmek Tag Kilidi",
       "categories": [],
       "lockType": "weekly",
       "maxCount": 0,
       "priority": 10
+    },
+    {
+      "id": "lock_1756887414515",
+      "name": "corba kilid",
+      "category": "CORBALAR",
+      "role": "",
+      "period": "weekly",
+      "scope": "week",
+      "description": "Bu kural Çorba kategorisindeki tüm yemekler için haftalık kilitleme uygular.\n\n🎯 HEDEF: Çorba kategorisindeki tüm yemekler\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\n\n📋 NASIL ÇALIŞIR:\n• Hafta başında ilk sefer çorba kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\n• Yeni haftada farklı bir yemek seçilebilir",
+      "active": true,
+      "priority": 2
     }
   ],
   "systemSettings": {
@@ -256,7 +259,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T08:15:53.254Z",
+    "lastUpdated": "2025-09-03T08:16:30.183Z",
     "version": "2.1.0"
   },
   "foodsData": [
