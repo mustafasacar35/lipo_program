@@ -1,8 +1,9 @@
 {
-  "timestamp": "2025-09-03T08:58:25.735Z",
+  "timestamp": "2025-09-03T10:40:25.056Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
+      "name": "Ana Yemek Zorunluluğu",
       "filters": {
         "names": [],
         "nameMode": "AND",
@@ -26,6 +27,7 @@
     },
     {
       "id": "mezwyso1j582",
+      "name": "Yan Yemek Sınırı",
       "filters": {
         "names": [],
         "nameMode": "AND",
@@ -49,6 +51,7 @@
     },
     {
       "id": "freq_egg_breakfast",
+      "name": "Kahvaltı Yumurta Sınırı",
       "filters": {
         "names": [],
         "nameMode": "AND",
@@ -70,7 +73,30 @@
       "priority": 5
     },
     {
+      "id": "freq_soup_week",
+      "filters": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [
+          "CORBALAR"
+        ],
+        "roles": []
+      },
+      "scope": "week",
+      "meals": [
+        "dinner"
+      ],
+      "countType": "range",
+      "count": 2,
+      "weeks": [],
+      "countMax": 4,
+      "priority": 11
+    },
+    {
       "id": "freq_dessert_week",
+      "name": "Haftalık Tatlı Sıklığı",
       "filters": {
         "names": [],
         "nameMode": "AND",
@@ -88,31 +114,14 @@
       "countMax": 3,
       "weeks": [],
       "priority": 8
-    },
-    {
-      "id": "freq_soup_week",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [
-          "CORBALAR"
-        ],
-        "roles": []
-      },
-      "scope": "week",
-      "meals": [],
-      "countType": "range",
-      "count": 2,
-      "countMax": 4,
-      "weeks": [],
-      "priority": 11
     }
   ],
   "dependencyRules": [
     {
       "id": "mezx0rp88cl6",
+      "name": "Yumurta-Mayonez Bağımlılığı",
+      "parentTag": "yumurta",
+      "childTag": "mayonez",
       "dependent": {
         "names": [],
         "nameMode": "AND",
@@ -134,27 +143,27 @@
         "roles": []
       },
       "ratio": 40,
+      "minRatio": 30,
+      "maxRatio": 50,
       "priority": 3
     }
   ],
   "lockRules": [
     {
-      "id": "lock_bread_tag",
-      "name": "Ekmek Tag Kilidi",
-      "categories": [],
-      "lockType": "weekly",
-      "maxCount": 0,
-      "priority": 10
-    },
-    {
-      "id": "lock_1756889900891",
-      "name": "corba 3",
-      "filterType": "categories",
+      "id": "lock_soup_category",
+      "name": "Çorba Kategori Kilidi",
+      "filterType": "category",
       "filterText": "ÇORBALAR",
       "scope": "weekly",
-      "active": true,
-      "description": "Bu kural ÇORBALAR kategorisindeki tüm yemekler için haftalık kilitleme uygular.\n\n🎯 HEDEF: ÇORBALAR kategorisindeki tüm yemekler\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\n\n📋 NASIL ÇALIŞIR:\n• Hafta başında ilk sefer çorbalar kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\n• Yeni haftada farklı bir yemek seçilebilir",
       "priority": 2
+    },
+    {
+      "id": "lock_bread_tag",
+      "name": "Ekmek Tag Kilidi",
+      "filterType": "tag",
+      "filterText": "ekmek",
+      "scope": "weekly",
+      "priority": 10
     }
   ],
   "systemSettings": {
@@ -258,7 +267,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T08:58:01.628Z",
+    "lastUpdated": "2025-09-03T10:38:43.905Z",
     "version": "2.1.0"
   },
   "foodsData": [
