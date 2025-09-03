@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-03T08:22:33.843Z",
+  "timestamp": "2025-09-03T08:23:30.945Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -139,7 +139,15 @@
   ],
   "lockRules": [
     {
-      "id": "lock_1756887414515",
+      "id": "lock_bread_tag",
+      "name": "Ekmek Tag Kilidi",
+      "categories": [],
+      "lockType": "weekly",
+      "maxCount": 0,
+      "priority": 10
+    },
+    {
+      "id": "lock_1756887795322",
       "name": "corba kilid",
       "filterType": "category",
       "filterText": "ÇORBALAR",
@@ -147,14 +155,6 @@
       "active": true,
       "description": "Bu kural ÇORBALAR kategorisindeki tüm yemekler için haftalık kilitleme uygular.\n\n🎯 HEDEF: ÇORBALAR kategorisindeki tüm yemekler\n📅 PERİYOT: Haftalık (hafta boyunca aynı yemek)\n🎚️ KAPSAM: Haftanın tüm öğünlerinde\n\n📋 NASIL ÇALIŞIR:\n• Hafta başında ilk sefer çorbalar kategorisindeki tüm yemekler seçildiğinde, o hafta haftanın tüm öğünlerinde sadece o yemek verilebilir\n• Yeni haftada farklı bir yemek seçilebilir",
       "priority": 2
-    },
-    {
-      "id": "lock_bread_tag",
-      "name": "Ekmek Tag Kilidi",
-      "categories": [],
-      "lockType": "weekly",
-      "maxCount": 0,
-      "priority": 10
     }
   ],
   "systemSettings": {
@@ -258,7 +258,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T08:22:15.505Z",
+    "lastUpdated": "2025-09-03T08:22:50.844Z",
     "version": "2.1.0"
   },
   "foodsData": [
