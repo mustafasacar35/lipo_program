@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-09-03T08:14:56.571Z",
+  "lastUpdated": "2025-09-03T08:15:35.036Z",
   "criteriaSettings": {
     "repetition_frequency": {
       "categories": [],
@@ -34,7 +34,7 @@
       "autoSync": true,
       "targetCalories": 1850,
       "updatedFrom": "system_meal_macros",
-      "lastUpdated": "2025-09-03T08:14:56.571Z",
+      "lastUpdated": "2025-09-03T08:15:35.036Z",
       "id": "calorie_distribution",
       "version": "1.0"
     },
