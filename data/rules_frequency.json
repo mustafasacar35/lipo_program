@@ -83,7 +83,9 @@
       "roles": []
     },
     "scope": "week",
-    "meals": [],
+    "meals": [
+      "dinner"
+    ],
     "countType": "range",
     "count": 2,
     "weeks": [],
