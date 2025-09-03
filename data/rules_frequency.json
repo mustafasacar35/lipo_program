@@ -1,6 +1,7 @@
 [
   {
     "id": "mezww2p6yw1w",
+    "name": "Ana Yemek Zorunluluğu",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -24,6 +25,7 @@
   },
   {
     "id": "mezwyso1j582",
+    "name": "Yan Yemek Sınırı",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -47,6 +49,7 @@
   },
   {
     "id": "freq_egg_breakfast",
+    "name": "Kahvaltı Yumurta Sınırı",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -68,7 +71,29 @@
     "priority": 5
   },
   {
+    "id": "freq_soup_week",
+    "name": "Haftalık Çorba Sıklığı",
+    "filters": {
+      "names": [],
+      "nameMode": "AND",
+      "tags": [],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": [
+        "soup"
+      ]
+    },
+    "scope": "week",
+    "meals": [],
+    "countType": "range",
+    "count": 2,
+    "countMax": 4,
+    "weeks": [],
+    "priority": 7
+  },
+  {
     "id": "freq_dessert_week",
+    "name": "Haftalık Tatlı Sıklığı",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -86,25 +111,5 @@
     "countMax": 3,
     "weeks": [],
     "priority": 8
-  },
-  {
-    "id": "freq_soup_week",
-    "filters": {
-      "names": [],
-      "nameMode": "AND",
-      "tags": [],
-      "tagMode": "AND",
-      "categories": [
-        "CORBALAR"
-      ],
-      "roles": []
-    },
-    "scope": "week",
-    "meals": [],
-    "countType": "range",
-    "count": 2,
-    "countMax": 4,
-    "weeks": [],
-    "priority": 11
   }
 ]
