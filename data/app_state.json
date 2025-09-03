@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-03T08:15:25.466Z",
+  "timestamp": "2025-09-03T08:15:29.856Z",
   "frequencyRules": [
     {
       "id": "mezww2p6yw1w",
@@ -76,18 +76,18 @@
         "nameMode": "AND",
         "tags": [],
         "tagMode": "AND",
-        "categories": [],
-        "roles": [
-          "soup"
-        ]
+        "categories": [
+          "CORBALAR"
+        ],
+        "roles": []
       },
       "scope": "week",
       "meals": [],
       "countType": "range",
       "count": 2,
-      "countMax": 4,
       "weeks": [],
-      "priority": 7
+      "countMax": 4,
+      "priority": 11
     },
     {
       "id": "freq_dessert_week",
