@@ -1,6 +1,9 @@
 [
   {
     "id": "mezx0rp88cl6",
+    "name": "Yumurta-Mayonez Bağımlılığı",
+    "parentTag": "yumurta",
+    "childTag": "mayonez",
     "dependent": {
       "names": [],
       "nameMode": "AND",
@@ -22,6 +25,8 @@
       "roles": []
     },
     "ratio": 40,
+    "minRatio": 30,
+    "maxRatio": 50,
     "priority": 3
   }
 ]
