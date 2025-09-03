@@ -1,7 +1,7 @@
 [
   {
     "id": "lock_soup_category",
-    "name": "CORBA Kategori Kilidi",
+    "name": "Çorba Kategori Kilidi",
     "category": "CORBALAR",
     "role": "",
     "period": "weekly",
@@ -13,9 +13,9 @@
   {
     "id": "lock_bread_tag",
     "name": "Ekmek Tag Kilidi",
-    "categories": [],
-    "lockType": "weekly",
-    "maxCount": 0,
+    "filterType": "tag",
+    "filterText": "ekmek",
+    "scope": "weekly",
     "priority": 10
   }
 ]
