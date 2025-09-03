@@ -1,1 +1,161 @@
-"{\n  \"version\": \"2.0\",\n  \"lastUpdated\": \"2025-09-03T10:18:52.814Z\",\n  \"metadata\": {\n    \"description\": \"Sistem geneli planlama kuralları\",\n    \"priority\": \"high\",\n    \"modifiable\": false\n  },\n  \"rulesArchive\": {\n    \"frequencyRules\": [\n      {\n        \"id\": \"mezww2p6yw1w\",\n        \"name\": \"Ana Yemek Zorunluluğu\",\n        \"filters\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": [\n            \"mainDish\"\n          ]\n        },\n        \"scope\": \"meal\",\n        \"meals\": [\n          \"breakfast\",\n          \"lunch\",\n          \"dinner\"\n        ],\n        \"countType\": \"fixed\",\n        \"count\": 1,\n        \"weeks\": [],\n        \"priority\": 1\n      },\n      {\n        \"id\": \"mezwyso1j582\",\n        \"name\": \"Yan Yemek Sınırı\",\n        \"filters\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": [\n            \"side\"\n          ]\n        },\n        \"scope\": \"meal\",\n        \"meals\": [\n          \"lunch\",\n          \"dinner\"\n        ],\n        \"countType\": \"range\",\n        \"count\": 1,\n        \"countMax\": 2,\n        \"weeks\": [],\n        \"priority\": 2\n      },\n      {\n        \"id\": \"freq_egg_breakfast\",\n        \"name\": \"Kahvaltı Yumurta Sınırı\",\n        \"filters\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [\n            \"yumurta\"\n          ],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": []\n        },\n        \"scope\": \"meal\",\n        \"meals\": [\n          \"breakfast\"\n        ],\n        \"countType\": \"range\",\n        \"count\": 1,\n        \"countMax\": 1,\n        \"weeks\": [],\n        \"priority\": 5\n      },\n      {\n        \"id\": \"freq_soup_week\",\n        \"name\": \"Haftalık Çorba Sıklığı\",\n        \"filters\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": [\n            \"soup\"\n          ]\n        },\n        \"scope\": \"week\",\n        \"meals\": [],\n        \"countType\": \"range\",\n        \"count\": 2,\n        \"countMax\": 4,\n        \"weeks\": [],\n        \"priority\": 7\n      },\n      {\n        \"id\": \"freq_dessert_week\",\n        \"name\": \"Haftalık Tatlı Sıklığı\",\n        \"filters\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": [\n            \"dessert\"\n          ]\n        },\n        \"scope\": \"week\",\n        \"meals\": [],\n        \"countType\": \"range\",\n        \"count\": 1,\n        \"countMax\": 3,\n        \"weeks\": [],\n        \"priority\": 8\n      }\n    ],\n    \"dependencyRules\": [\n      {\n        \"id\": \"mezx0rp88cl6\",\n        \"name\": \"Yumurta-Mayonez Bağımlılığı\",\n        \"parentTag\": \"yumurta\",\n        \"childTag\": \"mayonez\",\n        \"dependent\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [\n            \"yumurta\"\n          ],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": []\n        },\n        \"target\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [\n            \"mayonez\"\n          ],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": []\n        },\n        \"ratio\": 40,\n        \"minRatio\": 30,\n        \"maxRatio\": 50,\n        \"priority\": 3\n      }\n    ],\n    \"lockRules\": [\n      {\n        \"id\": \"lock_soup_category\",\n        \"name\": \"Çorba Kategori Kilidi\",\n        \"filterType\": \"category\",\n        \"filterText\": \"ÇORBALAR\",\n        \"scope\": \"weekly\",\n        \"priority\": 2\n      },\n      {\n        \"id\": \"lock_bread_tag\",\n        \"name\": \"Ekmek Tag Kilidi\",\n        \"filterType\": \"tag\",\n        \"filterText\": \"ekmek\",\n        \"scope\": \"weekly\",\n        \"priority\": 10\n      }\n    ],\n    \"priorityPolicy\": \"top-first\"\n  }\n}"
+{
+  "rulesArchive": {
+    "frequencyRules": [
+      {
+        "id": "mezww2p6yw1w",
+        "name": "Ana Yemek Zorunluluğu",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "mainDish"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "breakfast",
+          "lunch",
+          "dinner"
+        ],
+        "countType": "fixed",
+        "count": 1,
+        "weeks": [],
+        "priority": 1
+      },
+      {
+        "id": "mezwyso1j582",
+        "name": "Yan Yemek Sınırı",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "side"
+          ]
+        },
+        "scope": "meal",
+        "meals": [
+          "lunch",
+          "dinner"
+        ],
+        "countType": "range",
+        "count": 1,
+        "countMax": 2,
+        "weeks": [],
+        "priority": 2
+      },
+      {
+        "id": "freq_egg_breakfast",
+        "name": "Kahvaltı Yumurta Sınırı",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "scope": "meal",
+        "meals": [
+          "breakfast"
+        ],
+        "countType": "range",
+        "count": 1,
+        "countMax": 1,
+        "weeks": [],
+        "priority": 5
+      },
+      {
+        "id": "freq_soup_week",
+        "name": "Haftalık Çorba Sıklığı",
+        "description": "",
+        "enabled": true,
+        "priority": 3,
+        "filterType": "category",
+        "filterText": "",
+        "scope": "daily",
+        "mealType": null,
+        "minCount": null,
+        "maxCount": null
+      },
+      {
+        "id": "freq_dessert_week",
+        "name": "Haftalık Tatlı Sıklığı",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": [
+            "dessert"
+          ]
+        },
+        "scope": "week",
+        "meals": [],
+        "countType": "range",
+        "count": 1,
+        "countMax": 3,
+        "weeks": [],
+        "priority": 8
+      }
+    ],
+    "dependencyRules": [
+      {
+        "id": "mezx0rp88cl6",
+        "name": "Yumurta-Mayonez Bağımlılığı",
+        "parentTag": "yumurta",
+        "childTag": "mayonez",
+        "dependent": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "target": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "mayonez"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "ratio": 40,
+        "minRatio": 30,
+        "maxRatio": 50,
+        "priority": 3
+      }
+    ],
+    "lockRules": [
+      {
+        "id": "lock_soup_category",
+        "name": "Çorba Kategori Kilidi",
+        "filterType": "category",
+        "filterText": "ÇORBALAR",
+        "scope": "weekly",
+        "priority": 2
+      },
+      {
+        "id": "lock_bread_tag",
+        "name": "Ekmek Tag Kilidi",
+        "filterType": "tag",
+        "filterText": "ekmek",
+        "scope": "weekly",
+        "priority": 10
+      }
+    ]
+  }
+}
