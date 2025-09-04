@@ -28,7 +28,7 @@ class MealPlanningEngine {
             console.log('🔄 MealPlanningEngine v4.0 başlatılıyor...', params);
             
             // 🎯 YENİ: Gelişmiş faktör sistemini başlat
-            if (window.AdvancedPlanningFactors) {
+            if (typeof window !== 'undefined' && window.AdvancedPlanningFactors) {
                 this.planningFactors = new window.AdvancedPlanningFactors();
                 console.log('✅ Gelişmiş planlama faktörleri sistemi aktif');
             } else {
@@ -447,9 +447,9 @@ class MealPlanningEngine {
 
     // Haftalık plan yapısını başlat
     initializeWeeklyPlan(days) {
-        const plan = [];
+        const daysArray = [];
         for (let i = 0; i < days; i++) {
-            plan.push({
+            daysArray.push({
                 breakfast: [],
                 snack1: [],
                 lunch: [],
@@ -457,14 +457,18 @@ class MealPlanningEngine {
                 dinner: []
             });
         }
-        return plan;
+        return {
+            days: daysArray,
+            totalDays: days,
+            version: 'v4.0'
+        };
     }
 
     // Öğün sayı kurallarını uygula
     applyMealCountRules(weeklyPlan, mealRules) {
         console.log('🍽️ applyMealCountRules çağrıldı:', {
             mealRulesExist: !!mealRules,
-            planDays: weeklyPlan.length
+            planDays: weeklyPlan.days ? weeklyPlan.days.length : weeklyPlan.length
         });
         
         if (!mealRules) {
@@ -472,7 +476,10 @@ class MealPlanningEngine {
             return;
         }
 
-        weeklyPlan.forEach((day, dayIndex) => {
+        // Support both old and new plan formats
+        const daysArray = weeklyPlan.days || weeklyPlan;
+        
+        daysArray.forEach((day, dayIndex) => {
             console.log(`📅 Gün ${dayIndex + 1} işleniyor...`);
             
             ['breakfast', 'lunch', 'dinner'].forEach(mealType => {
