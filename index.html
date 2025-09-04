@@ -27356,6 +27356,60 @@ Desteklenen Dosyalar:
                             if (systemRules && systemRules.rules) {
                                 rules = systemRules.rules;
                             }
+                            // 🔧 FIX: rulesArchive yapısından kuralları yükle
+                            else if (systemRules && systemRules.rulesArchive) {
+                                const archive = systemRules.rulesArchive;
+                                rules = [];
+                                
+                                // Frequency rules ekle
+                                if (Array.isArray(archive.frequencyRules)) {
+                                    archive.frequencyRules.forEach(rule => {
+                                        rules.push({
+                                            id: rule.id,
+                                            name: rule.name,
+                                            description: `Sıklık kuralı: ${rule.name}`,
+                                            type: 'frequency',
+                                            status: 'active',
+                                            priority: rule.priority || 1,
+                                            scope: rule.scope,
+                                            details: rule
+                                        });
+                                    });
+                                }
+                                
+                                // Dependency rules ekle
+                                if (Array.isArray(archive.dependencyRules)) {
+                                    archive.dependencyRules.forEach(rule => {
+                                        rules.push({
+                                            id: rule.id,
+                                            name: rule.name,
+                                            description: `Bağımlılık kuralı: ${rule.name}`,
+                                            type: 'dependency',
+                                            status: 'active',
+                                            priority: rule.priority || 1,
+                                            details: rule
+                                        });
+                                    });
+                                }
+                                
+                                // Lock rules ekle
+                                if (Array.isArray(archive.lockRules)) {
+                                    archive.lockRules.forEach(rule => {
+                                        rules.push({
+                                            id: rule.id,
+                                            name: rule.name,
+                                            description: `Kilit kuralı: ${rule.name} (${rule.filterType}: ${rule.filterText})`,
+                                            type: 'lock',
+                                            status: 'active',
+                                            priority: rule.priority || 1,
+                                            scope: rule.scope,
+                                            details: rule
+                                        });
+                                    });
+                                }
+                                
+                                console.log(`🔧 rulesArchive'dan ${rules.length} kural yüklendi`);
+                            }
                             // 4. getSystemRules fonksiyonu kontrolü
                             else if (typeof getSystemRules === 'function') {
                                 const systemRulesList = getSystemRules();
@@ -27398,6 +27452,129 @@ Desteklenen Dosyalar:
                                         rules = window.systemRules;
                                     } else if (window.EMBEDDED_DATA && window.EMBEDDED_DATA.rules) {
                                         rules = window.EMBEDDED_DATA.rules;
+                                    } else {
+                                        // 🔧 FIX: rulesArchive'dan sistem kurallarını yükle
+                                        const systemRules = await getEmbeddedData('system_rules.json');
+                                        if (systemRules && systemRules.rulesArchive) {
+                                            const archive = systemRules.rulesArchive;
+                                            rules = [];
+                                            
+                                            // Frequency rules ekle
+                                            if (Array.isArray(archive.frequencyRules)) {
+                                                archive.frequencyRules.forEach(rule => {
+                                                    rules.push({
+                                                        id: rule.id,
+                                                        name: rule.name,
+                                                        description: `Sıklık kuralı: ${rule.name}`,
+                                                        type: 'frequency',
+                                                        status: 'active',
+                                                        priority: rule.priority || 1,
+                                                        details: rule
+                                                    });
+                                                });
+                                            }
+                                            
+                                            // Dependency rules ekle
+                                            if (Array.isArray(archive.dependencyRules)) {
+                                                archive.dependencyRules.forEach(rule => {
+                                                    rules.push({
+                                                        id: rule.id,
+                                                        name: rule.name,
+                                                        description: `Bağımlılık kuralı: ${rule.name}`,
+                                                        type: 'dependency',
+                                                        status: 'active',
+                                                        priority: rule.priority || 1,
+                                                        details: rule
+                                                    });
+                                                });
+                                            }
+                                            
+                                            // Lock rules ekle
+                                            if (Array.isArray(archive.lockRules)) {
+                                                archive.lockRules.forEach(rule => {
+                                                    rules.push({
+                                                        id: rule.id,
+                                                        name: rule.name,
+                                                        description: `Kilit kuralı: ${rule.name}`,
+                                                        type: 'lock',
+                                                        status: 'active',
+                                                        priority: rule.priority || 1,
+                                                        details: rule
+                                                    });
+                                                });
+                                            }
+                                        } else if (typeof getSystemRules === 'function') {
+                                            const systemRulesList = getSystemRules();
+                                            if (systemRulesList && systemRulesList.length > 0) {
+                                                rules = systemRulesList.map(rule => ({
+                                                    id: rule.id,
+                                                    name: rule.name,
+                                                    description: rule.description,
+                                                    type: 'system',
+                                                    status: 'active',
+                                                    priority: rule.id,
+                                                    weight: rule.weight
+                                                }));
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (error) {
+                                console.log('Hasta özel kuralları yüklenemedi, sistem kuralları kullanılacak');
+                                // Sistem kurallarına fallback
+                                if (window.systemRules && window.systemRules.length > 0) {
+                                    rules = window.systemRules;
+                                } else {
+                                    // 🔧 FIX: rulesArchive'dan sistem kurallarını yükle
+                                    const systemRules = await getEmbeddedData('system_rules.json');
+                                    if (systemRules && systemRules.rulesArchive) {
+                                        const archive = systemRules.rulesArchive;
+                                        rules = [];
+                                        
+                                        // Frequency rules ekle
+                                        if (Array.isArray(archive.frequencyRules)) {
+                                            archive.frequencyRules.forEach(rule => {
+                                                rules.push({
+                                                    id: rule.id,
+                                                    name: rule.name,
+                                                    description: `Sıklık kuralı: ${rule.name}`,
+                                                    type: 'frequency',
+                                                    status: 'active',
+                                                    priority: rule.priority || 1,
+                                                    details: rule
+                                                });
+                                            });
+                                        }
+                                        
+                                        // Dependency rules ekle
+                                        if (Array.isArray(archive.dependencyRules)) {
+                                            archive.dependencyRules.forEach(rule => {
+                                                rules.push({
+                                                    id: rule.id,
+                                                    name: rule.name,
+                                                    description: `Bağımlılık kuralı: ${rule.name}`,
+                                                    type: 'dependency',
+                                                    status: 'active',
+                                                    priority: rule.priority || 1,
+                                                    details: rule
+                                                });
+                                            });
+                                        }
+                                        
+                                        // Lock rules ekle
+                                        if (Array.isArray(archive.lockRules)) {
+                                            archive.lockRules.forEach(rule => {
+                                                rules.push({
+                                                    id: rule.id,
+                                                    name: rule.name,
+                                                    description: `Kilit kuralı: ${rule.name}`,
+                                                    type: 'lock',
+                                                    status: 'active',
+                                                    priority: rule.priority || 1,
+                                                    details: rule
+                                                });
+                                            });
+                                        }
                                     } else if (typeof getSystemRules === 'function') {
                                         const systemRulesList = getSystemRules();
                                         if (systemRulesList && systemRulesList.length > 0) {
@@ -27411,25 +27588,6 @@ Desteklenen Dosyalar:
                                                 weight: rule.weight
                                             }));
                                         }
-                                    }
-                                }
-                            } catch (error) {
-                                console.log('Hasta özel kuralları yüklenemedi, sistem kuralları kullanılacak');
-                                // Sistem kurallarına fallback
-                                if (window.systemRules && window.systemRules.length > 0) {
-                                    rules = window.systemRules;
-                                } else if (typeof getSystemRules === 'function') {
-                                    const systemRulesList = getSystemRules();
-                                    if (systemRulesList && systemRulesList.length > 0) {
-                                        rules = systemRulesList.map(rule => ({
-                                            id: rule.id,
-                                            name: rule.name,
-                                            description: rule.description,
-                                            type: 'system',
-                                            status: 'active',
-                                            priority: rule.id,
-                                            weight: rule.weight
-                                        }));
                                     }
                                 }
                             }
