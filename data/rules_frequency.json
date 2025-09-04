@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "id": "mf5tqslznzzx",
+    "filters": {
+      "names": [],
+      "nameMode": "AND",
+      "tags": [],
+      "tagMode": "AND",
+      "categories": [
+        "CORBALAR"
+      ],
+      "roles": []
+    },
+    "scope": "week",
+    "meals": [
+      "dinner"
+    ],
+    "countType": "fixed",
+    "count": 3,
+    "weeks": [],
+    "isLocked": true,
+    "lockScope": "item",
+    "priority": 1
+  }
+]
