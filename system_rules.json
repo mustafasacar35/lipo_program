@@ -1,1 +1,20 @@
-"{\n  \"version\": \"2.0\",\n  \"lastUpdated\": \"2025-09-04T20:10:02.834Z\",\n  \"rulesArchive\": {\n    \"frequencyRules\": [\n      {\n        \"id\": \"mf5u1nt5bcyl\",\n        \"weeklyMin\": 0,\n        \"weeklyMax\": 99,\n        \"dailyLimit\": 1,\n        \"blockRepeats\": true,\n        \"priority\": 1,\n        \"isLocked\": false,\n        \"lockScope\": \"item\"\n      }\n    ],\n    \"dependencyRules\": [],\n    \"lockRules\": [],\n    \"priorityPolicy\": \"top-first\"\n  }\n}"
+{
+  "version": "2.0",
+  "lastUpdated": "2025-09-04T20:10:05.148Z",
+  "rulesArchive": {
+    "frequencyRules": [
+      {
+        "id": "mf5u1nt5bcyl",
+        "filters": {},
+        "meals": [],
+        "weeks": [],
+        "priority": 1,
+        "isLocked": false,
+        "lockScope": "item"
+      }
+    ],
+    "dependencyRules": [],
+    "lockRules": [],
+    "priorityPolicy": "top-first"
+  }
+}
