@@ -1,25 +1,12 @@
 [
   {
-    "id": "mf5tqslznzzx",
-    "filters": {
-      "names": [],
-      "nameMode": "AND",
-      "tags": [],
-      "tagMode": "AND",
-      "categories": [
-        "CORBALAR"
-      ],
-      "roles": []
-    },
-    "scope": "week",
-    "meals": [
-      "dinner"
-    ],
-    "countType": "fixed",
-    "count": 3,
-    "weeks": [],
-    "isLocked": true,
-    "lockScope": "item",
-    "priority": 1
+    "id": "mf5u1nt5bcyl",
+    "weeklyMin": 0,
+    "weeklyMax": 99,
+    "dailyLimit": 1,
+    "blockRepeats": true,
+    "priority": 4,
+    "isLocked": false,
+    "lockScope": "item"
   }
 ]
