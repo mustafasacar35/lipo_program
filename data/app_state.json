@@ -1,35 +1,10 @@
 {
-  "timestamp": "2025-09-04T19:42:44.057Z",
-  "frequencyRules": [
-    {
-      "id": "mf5tby8n5f95",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [
-          "CORBALAR"
-        ],
-        "roles": []
-      },
-      "scope": "week",
-      "meals": [
-        "dinner"
-      ],
-      "countType": "range",
-      "count": 5,
-      "weeks": [],
-      "isLocked": true,
-      "lockScope": "item",
-      "countMax": 6,
-      "priority": 2
-    }
-  ],
+  "timestamp": "2025-09-04T19:45:21.752Z",
+  "frequencyRules": [],
   "dependencyRules": [
     {
       "id": "mezx0rp88cl6",
-      "name": "Yumurta-Mayonez BaÄÄ±mlÄ±lÄ±ÄÄ±",
+      "name": "Yumurta-Mayonez Bağımlılığı",
       "parentTag": "yumurta",
       "childTag": "mayonez",
       "dependent": {
@@ -55,7 +30,7 @@
       "ratio": 40,
       "minRatio": 30,
       "maxRatio": 50,
-      "priority": 1
+      "priority": 3
     }
   ],
   "lockRules": [],
