@@ -23868,15 +23868,33 @@
             }
 
             // 2) UI state'i senkronize et - YENİ FORMAT
-            const archivedFreq = systemRulesArchive?.rulesArchive?.frequencyRules;
-            const archivedDep = systemRulesArchive?.rulesArchive?.dependencyRules;
-            const archivedLock = systemRulesArchive?.rulesArchive?.lockRules;
-            frequencyRules = Array.isArray(archivedFreq) ? [...archivedFreq] : [];
-            dependencyRules = Array.isArray(archivedDep) ? [...archivedDep] : [];
-            lockRules = Array.isArray(archivedLock) ? [...archivedLock] : [];
-            window.frequencyRules = frequencyRules;
-            window.dependencyRules = dependencyRules;
-            window.lockRules = lockRules;
+            // 🔧 FIX: Kullanıcının özel kurallarını korumak için önce mevcut kuralları kontrol et
+            const userHasCustomRules = (typeof window.frequencyRules !== 'undefined' && window.frequencyRules.length > 0) ||
+                                      (typeof window.dependencyRules !== 'undefined' && window.dependencyRules.length > 0) ||
+                                      (typeof window.lockRules !== 'undefined' && window.lockRules.length > 0);
+            
+            console.log('🔧 Kullanıcı özel kuralları kontrol:', userHasCustomRules);
+            
+            if (!userHasCustomRules) {
+                // Kullanıcının özel kuralları yok, sistem kurallarını yükle
+                const archivedFreq = systemRulesArchive?.rulesArchive?.frequencyRules;
+                const archivedDep = systemRulesArchive?.rulesArchive?.dependencyRules;
+                const archivedLock = systemRulesArchive?.rulesArchive?.lockRules;
+                frequencyRules = Array.isArray(archivedFreq) ? [...archivedFreq] : [];
+                dependencyRules = Array.isArray(archivedDep) ? [...archivedDep] : [];
+                lockRules = Array.isArray(archivedLock) ? [...archivedLock] : [];
+                window.frequencyRules = frequencyRules;
+                window.dependencyRules = dependencyRules;
+                window.lockRules = lockRules;
+                console.log('✅ Sistem varsayılan kuralları yüklendi');
+            } else {
+                // Kullanıcının özel kuralları var, onları koru
+                console.log('✅ Kullanıcının özel kuralları korundu');
+                // Mevcut kuralları global değişkenlere senkronize et
+                if (typeof window.frequencyRules !== 'undefined') frequencyRules = window.frequencyRules;
+                if (typeof window.dependencyRules !== 'undefined') dependencyRules = window.dependencyRules;
+                if (typeof window.lockRules !== 'undefined') lockRules = window.lockRules;
+            }
             
             // window.systemRules'ı da set et getSystemRules için
             window.systemRules = {

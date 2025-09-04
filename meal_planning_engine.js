@@ -395,24 +395,27 @@ class MealPlanningEngine {
         // 1. Önce öğün sayılarını uygula
         this.applyMealCountRules(weeklyPlan, advancedRules.mealRules);
         
-        // 2. Sonra rol bazlı kuralları uygula
-        this.applyRoleBasedRules(weeklyPlan, advancedRules.roleRules);
+        // 2. 🔥 YENİ: Hiyerarşik kural sistemi - kuralları öncelik sırasına göre uygula
+        this.applyHierarchicalRules(weeklyPlan, advancedRules);
         
-        // 3. YENİ: Kategori bazlı kuralları uygula
-        this.applyCategoryBasedRules(weeklyPlan, advancedRules.categoryRules);
-        
-        // 4. YENİ: İsim bazlı kuralları uygula  
-        this.applyNameBasedRules(weeklyPlan, advancedRules.nameRules);
-        
-        // 5. YENİ: Anahtar kelime bazlı kuralları uygula
-        this.applyKeywordBasedRules(weeklyPlan, advancedRules.keywordRules);
+        // 3. Sonra rol bazlı kuralları uygula (eğer hiyerarşik sistem yoksa)
+        if (!this.hasHierarchicalRules(advancedRules)) {
+            this.applyRoleBasedRules(weeklyPlan, advancedRules.roleRules);
+            this.applyCategoryBasedRules(weeklyPlan, advancedRules.categoryRules);
+            this.applyNameBasedRules(weeklyPlan, advancedRules.nameRules);
+            this.applyKeywordBasedRules(weeklyPlan, advancedRules.keywordRules);
+        }
 
         // 6. 🥧 Öğün kalori dağılımı uygula (varsa)
         if (targetCalories && mealCalorieDistribution) {
             try { this.applyCalorieDistribution(weeklyPlan, targetCalories, mealCalorieDistribution); }
             catch(e){ console.warn('⚠️ Kalori dağılımı uygulanamadı:', e); }
         }
-        // 7. Makro hedef uyumluluğu puanı (bilgi amaçlı)
+        
+        // 7. 📊 YENİ: Detaylı kural raporu oluştur
+        const ruleReport = this.generateRuleReport(weeklyPlan, advancedRules);
+
+        // 8. Makro hedef uyumluluğu puanı (bilgi amaçlı)
         let macroScore = null;
         if (targetMacros && targetCalories) {
             try { macroScore = this.evaluateMacroTargets(weeklyPlan, targetMacros, targetCalories); }
@@ -432,7 +435,8 @@ class MealPlanningEngine {
             compliance: compliance,
             rules: advancedRules,
             summary: summary,
-            targets: { calories: targetCalories, macros: targetMacros, mealCalorieDistribution }
+            targets: { calories: targetCalories, macros: targetMacros, mealCalorieDistribution },
+            ruleReport: ruleReport // 📊 YENİ: Detaylı kural raporu
         };
         
         this.currentPlan = result;
@@ -1227,6 +1231,564 @@ class MealPlanningEngine {
     // Getters
     get isReady() { 
         return this.initialized; 
+    }
+    
+    // 📊 YENİ: Detaylı kural raporu oluştur
+    generateRuleReport(weeklyPlan, advancedRules) {
+        const report = {
+            timestamp: new Date().toISOString(),
+            summary: {
+                totalRulesApplied: 0,
+                rulesSuccessful: 0,
+                rulesFailed: 0,
+                hierarchyUsed: false
+            },
+            ruleDetails: [],
+            categoryLocks: [],
+            frequencyAnalysis: [],
+            recommendations: []
+        };
+
+        console.log('📊 Kural raporu oluşturuluyor...');
+
+        // Hiyerarşik kurallar analizi
+        if (this.hasHierarchicalRules(advancedRules)) {
+            report.summary.hierarchyUsed = true;
+            report.hierarchyAnalysis = this.analyzeHierarchicalRules(weeklyPlan, advancedRules);
+        }
+
+        // Kategori kilidi analizi
+        if (advancedRules.categoryRules) {
+            report.categoryLocks = this.analyzeCategoryLocks(weeklyPlan, advancedRules.categoryRules);
+        }
+
+        // Sıklık kuralları analizi
+        if (advancedRules.roleRules || advancedRules.hierarchicalRules) {
+            report.frequencyAnalysis = this.analyzeFrequencyRules(weeklyPlan, advancedRules);
+        }
+
+        // Öneriler oluştur
+        report.recommendations = this.generateRuleRecommendations(weeklyPlan, report);
+
+        console.log('✅ Kural raporu tamamlandı:', report.summary);
+        return report;
+    }
+
+    // 🔍 Hiyerarşik kuralları analiz et
+    analyzeHierarchicalRules(weeklyPlan, advancedRules) {
+        const analysis = {
+            rulesApplied: [],
+            conflicts: [],
+            overrides: []
+        };
+
+        if (!advancedRules.hierarchicalRules) return analysis;
+
+        const sortedRules = [...advancedRules.hierarchicalRules].sort((a, b) => 
+            (a.priority || 999) - (b.priority || 999)
+        );
+
+        sortedRules.forEach((rule, index) => {
+            const ruleAnalysis = {
+                rule: rule.name || rule.id,
+                type: rule.type,
+                priority: rule.priority || 999,
+                applied: true,
+                effect: this.analyzeRuleEffect(weeklyPlan, rule)
+            };
+
+            analysis.rulesApplied.push(ruleAnalysis);
+
+            // Çakışma kontrolü (alt öncelikli kurallarla)
+            for (let i = index + 1; i < sortedRules.length; i++) {
+                const laterRule = sortedRules[i];
+                if (this.rulesConflict(rule, laterRule)) {
+                    analysis.conflicts.push({
+                        higherPriority: rule.name || rule.id,
+                        lowerPriority: laterRule.name || laterRule.id,
+                        conflictType: this.getConflictType(rule, laterRule)
+                    });
+                }
+            }
+        });
+
+        return analysis;
+    }
+
+    // 🔍 Kategori kilitlerini analiz et
+    analyzeCategoryLocks(weeklyPlan, categoryRules) {
+        const locks = [];
+
+        categoryRules.forEach(rule => {
+            if (rule.type === 'lock' || rule.category) {
+                const lockAnalysis = {
+                    category: rule.category || rule.filterText,
+                    scope: rule.scope,
+                    mealsAffected: this.countMealsInCategory(weeklyPlan, rule.category || rule.filterText),
+                    consistency: this.checkCategoryConsistency(weeklyPlan, rule.category || rule.filterText),
+                    details: this.getCategoryLockDetails(weeklyPlan, rule.category || rule.filterText)
+                };
+
+                locks.push(lockAnalysis);
+            }
+        });
+
+        return locks;
+    }
+
+    // 📊 Sıklık kurallarını analiz et
+    analyzeFrequencyRules(weeklyPlan, advancedRules) {
+        const analysis = [];
+        
+        // Rol bazlı sıklık kuralları
+        if (advancedRules.roleRules) {
+            advancedRules.roleRules.forEach(rule => {
+                const ruleAnalysis = {
+                    rule: rule.name || `${rule.role} kuralı`,
+                    type: 'role_frequency',
+                    target: rule.role,
+                    scope: rule.scope,
+                    expected: rule.fixed || `${rule.min}-${rule.max}`,
+                    actual: this.countRoleInPlan(weeklyPlan, rule.role, rule.scope),
+                    compliant: this.checkRuleCompliance(weeklyPlan, rule)
+                };
+                analysis.push(ruleAnalysis);
+            });
+        }
+
+        // Kategori bazlı sıklık kuralları
+        if (advancedRules.categoryRules) {
+            advancedRules.categoryRules.forEach(rule => {
+                if (rule.type === 'frequency') {
+                    const ruleAnalysis = {
+                        rule: rule.name || `${rule.category} sıklık kuralı`,
+                        type: 'category_frequency',
+                        target: rule.category,
+                        scope: rule.scope,
+                        expected: rule.fixed || `${rule.min}-${rule.max}`,
+                        actual: this.countCategoryInPlan(weeklyPlan, rule.category, rule.scope),
+                        compliant: this.checkCategoryRuleCompliance(weeklyPlan, rule)
+                    };
+                    analysis.push(ruleAnalysis);
+                }
+            });
+        }
+
+        return analysis;
+    }
+
+    // 💡 Kural önerileri oluştur
+    generateRuleRecommendations(weeklyPlan, report) {
+        const recommendations = [];
+
+        // Kategori kilidi önerileri
+        report.categoryLocks.forEach(lock => {
+            if (lock.consistency < 100) {
+                recommendations.push({
+                    type: 'category_lock_issue',
+                    message: `${lock.category} kategorisinde tutarsızlık tespit edildi. Tüm ${lock.category} yemekleri aynı olmalı.`,
+                    severity: 'warning',
+                    action: 'Kategori kilidi kuralını daha yüksek öncelikle ayarlayın'
+                });
+            }
+        });
+
+        // Sıklık kuralı önerileri
+        report.frequencyAnalysis.forEach(freq => {
+            if (!freq.compliant) {
+                recommendations.push({
+                    type: 'frequency_violation',
+                    message: `${freq.rule}: Beklenen ${freq.expected}, mevcut ${freq.actual}`,
+                    severity: 'error',
+                    action: 'Planlama parametrelerini gözden geçirin veya yemek havuzunu genişletin'
+                });
+            }
+        });
+
+        // Çakışma önerileri
+        if (report.hierarchyAnalysis && report.hierarchyAnalysis.conflicts.length > 0) {
+            recommendations.push({
+                type: 'rule_conflicts',
+                message: `${report.hierarchyAnalysis.conflicts.length} kural çakışması tespit edildi`,
+                severity: 'info',
+                action: 'Kural önceliklerini gözden geçirin'
+            });
+        }
+
+        return recommendations;
+    }
+
+    // Yardımcı analiz fonksiyonları
+    analyzeRuleEffect(weeklyPlan, rule) {
+        return `${rule.type} kuralı uygulandı`;
+    }
+
+    rulesConflict(rule1, rule2) {
+        // Basit çakışma kontrolü - aynı kategori/rol hedefliyorlarsa
+        return (rule1.category && rule2.category && rule1.category === rule2.category) ||
+               (rule1.role && rule2.role && rule1.role === rule2.role);
+    }
+
+    getConflictType(rule1, rule2) {
+        if (rule1.category && rule2.category) return 'category_overlap';
+        if (rule1.role && rule2.role) return 'role_overlap';
+        return 'unknown';
+    }
+
+    countMealsInCategory(weeklyPlan, category) {
+        return this.findMealsInPlanByCategory(weeklyPlan, category).length;
+    }
+
+    checkCategoryConsistency(weeklyPlan, category) {
+        const meals = this.findMealsInPlanByCategory(weeklyPlan, category);
+        if (meals.length <= 1) return 100;
+
+        const firstMealName = meals[0].meal.adi || meals[0].meal.name;
+        const consistent = meals.every(m => (m.meal.adi || m.meal.name) === firstMealName);
+        
+        return consistent ? 100 : Math.round((1 / meals.length) * 100);
+    }
+
+    getCategoryLockDetails(weeklyPlan, category) {
+        const meals = this.findMealsInPlanByCategory(weeklyPlan, category);
+        return meals.map(m => ({
+            day: m.dayIndex + 1,
+            meal: m.mealType,
+            food: m.meal.adi || m.meal.name
+        }));
+    }
+
+    countRoleInPlan(weeklyPlan, role, scope) {
+        let count = 0;
+        weeklyPlan.days.forEach(day => {
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                if (day[mealType]) {
+                    day[mealType].forEach(meal => {
+                        if (this.getMealRole(meal) === role) {
+                            count++;
+                        }
+                    });
+                }
+            });
+        });
+        return count;
+    }
+
+    countCategoryInPlan(weeklyPlan, category, scope) {
+        return this.countMealsInCategory(weeklyPlan, category);
+    }
+
+    checkRuleCompliance(weeklyPlan, rule) {
+        const actual = this.countRoleInPlan(weeklyPlan, rule.role, rule.scope);
+        if (rule.fixed) return actual === rule.fixed;
+        return actual >= (rule.min || 0) && actual <= (rule.max || 999);
+    }
+
+    checkCategoryRuleCompliance(weeklyPlan, rule) {
+        const actual = this.countCategoryInPlan(weeklyPlan, rule.category, rule.scope);
+        if (rule.fixed) return actual === rule.fixed;
+        return actual >= (rule.min || 0) && actual <= (rule.max || 999);
+    }
+
+    // 🔥 YENİ: Hiyerarşik kural sistemi kontrolü
+    hasHierarchicalRules(advancedRules) {
+        return advancedRules && advancedRules.hierarchicalRules && 
+               Array.isArray(advancedRules.hierarchicalRules) && 
+               advancedRules.hierarchicalRules.length > 0;
+    }
+
+    // 🔥 YENİ: Hiyerarşik kuralları uygula
+    applyHierarchicalRules(weeklyPlan, advancedRules) {
+        if (!this.hasHierarchicalRules(advancedRules)) {
+            console.log('📋 Hiyerarşik kurallar yok, standard kural uygulaması');
+            return;
+        }
+
+        console.log('🔥 Hiyerarşik kural sistemi başlatılıyor...');
+        
+        // Kuralları öncelik sırasına göre sırala (düşük sayı = yüksek öncelik)
+        const sortedRules = [...advancedRules.hierarchicalRules].sort((a, b) => 
+            (a.priority || 999) - (b.priority || 999)
+        );
+
+        console.log(`🎯 ${sortedRules.length} kural öncelik sırasına göre uygulanacak`);
+
+        // Kural uygulama geçmişi (hangi kategoriler/roller kilitleniyor)
+        const appliedConstraints = {
+            lockedCategories: new Set(),
+            lockedRoles: new Set(),
+            appliedFrequencyRules: []
+        };
+
+        sortedRules.forEach((rule, index) => {
+            console.log(`📌 Kural ${index + 1}/${sortedRules.length} uygulanıyor: ${rule.type} - ${rule.name || rule.id}`);
+            
+            this.applyIndividualHierarchicalRule(weeklyPlan, rule, appliedConstraints);
+        });
+
+        console.log('✅ Hiyerarşik kural uygulaması tamamlandı');
+    }
+
+    // 🔥 YENİ: Tek hiyerarşik kural uygula
+    applyIndividualHierarchicalRule(weeklyPlan, rule, appliedConstraints) {
+        switch (rule.type) {
+            case 'category_lock':
+                this.applyCategoryLockRule(weeklyPlan, rule, appliedConstraints);
+                break;
+            case 'frequency':
+                this.applyFrequencyRuleWithConstraints(weeklyPlan, rule, appliedConstraints);
+                break;
+            case 'role':
+                this.applyRoleRuleWithConstraints(weeklyPlan, rule, appliedConstraints);
+                break;
+            default:
+                console.warn(`⚠️ Bilinmeyen kural tipi: ${rule.type}`);
+        }
+    }
+
+    // 🔒 YENİ: Kategori kilidi kuralı uygula
+    applyCategoryLockRule(weeklyPlan, rule, appliedConstraints) {
+        const { category, scope } = rule;
+        
+        console.log(`🔒 Kategori kilidi uygulanıyor: ${category} (${scope})`);
+        
+        appliedConstraints.lockedCategories.add(category.toLowerCase());
+        
+        // Bu kategorideki ilk yemek seçildikten sonra, aynı kategorideki diğer yemekler de aynı olmalı
+        if (scope === 'weekly') {
+            this.applyWeeklyCategoryLock(weeklyPlan, category);
+        } else if (scope === 'daily') {
+            this.applyDailyCategoryLock(weeklyPlan, category);
+        }
+    }
+
+    // 🔒 Haftalık kategori kilidi uygula
+    applyWeeklyCategoryLock(weeklyPlan, category) {
+        let firstMealOfCategory = null;
+        
+        // Hafta boyunca bu kategorinin ilk örneğini bul
+        weeklyPlan.days.forEach(day => {
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                if (day[mealType]) {
+                    day[mealType].forEach((meal, mealIndex) => {
+                        if (this.isMealInCategory(meal, category)) {
+                            if (!firstMealOfCategory) {
+                                firstMealOfCategory = meal;
+                                console.log(`🎯 Kategori ${category} için referans yemek: ${meal.adi || meal.name}`);
+                            } else {
+                                // Aynı kategorideki diğer yemekleri referans yemekle değiştir
+                                day[mealType][mealIndex] = { ...firstMealOfCategory };
+                                console.log(`🔄 Kategori kilidi: ${category} yemeği referansla değiştirildi`);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // 🔒 Günlük kategori kilidi uygula
+    applyDailyCategoryLock(weeklyPlan, category) {
+        weeklyPlan.days.forEach((day, dayIndex) => {
+            let dayFirstMeal = null;
+            
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                if (day[mealType]) {
+                    day[mealType].forEach((meal, mealIndex) => {
+                        if (this.isMealInCategory(meal, category)) {
+                            if (!dayFirstMeal) {
+                                dayFirstMeal = meal;
+                                console.log(`🎯 Gün ${dayIndex + 1} kategori ${category} referans: ${meal.adi || meal.name}`);
+                            } else {
+                                day[mealType][mealIndex] = { ...dayFirstMeal };
+                                console.log(`🔄 Gün ${dayIndex + 1} kategori kilidi: değiştirildi`);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // 🔍 Yemeğin belirtilen kategoriye ait olup olmadığını kontrol et
+    isMealInCategory(meal, category) {
+        const mealCategories = [
+            meal.kategori, meal.category, meal.categories,
+            ...(Array.isArray(meal.categories) ? meal.categories : [])
+        ].filter(Boolean).map(cat => cat.toString().toLowerCase());
+        
+        return mealCategories.some(cat => cat.includes(category.toLowerCase()));
+    }
+
+    // ⚖️ YENİ: Kısıtlamalar altında sıklık kuralı uygula
+    applyFrequencyRuleWithConstraints(weeklyPlan, rule, appliedConstraints) {
+        console.log(`📊 Sıklık kuralı uygulanıyor (kısıtlamalar dahil): ${rule.name || rule.id}`);
+        
+        // Eğer bu kural kategoriye dayalıysa ve kategori kilitliyse, uyarla
+        if (rule.filters && rule.filters.categories) {
+            const hasLockedCategory = rule.filters.categories.some(cat => 
+                appliedConstraints.lockedCategories.has(cat.toLowerCase())
+            );
+            
+            if (hasLockedCategory) {
+                console.log(`⚖️ Kilitli kategori tespit edildi, sıklık kuralı kategori kilidinebağlı olarak uygulanacak`);
+                this.applyFrequencyRuleWithCategoryLock(weeklyPlan, rule, appliedConstraints);
+                return;
+            }
+        }
+        
+        // Normal sıklık kuralı uygula
+        this.applyIndividualFrequencyRule(weeklyPlan, rule);
+    }
+
+    // 📊🔒 Kategori kilidi olan sıklık kuralı uygula
+    applyFrequencyRuleWithCategoryLock(weeklyPlan, rule, appliedConstraints) {
+        const { category, scope, count, countType } = rule.filters.categories[0] ? 
+            { category: rule.filters.categories[0], scope: rule.scope, count: rule.count, countType: rule.countType } : rule;
+        
+        const targetCount = countType === 'fixed' ? count : this.getRandomBetween(rule.count, rule.countMax || rule.count);
+        
+        console.log(`📊🔒 Kategori kilitli sıklık kuralı: ${category} - ${targetCount} adet`);
+        
+        // İlgili kategorideki mevcut yemekleri bul
+        const categoryMeals = this.findMealsInPlanByCategory(weeklyPlan, category);
+        
+        if (categoryMeals.length === 0) {
+            console.log(`⚠️ Kategoride mevcut yemek yok: ${category}`);
+            return;
+        }
+        
+        // İlk yemegi referans al
+        const referenceMeal = categoryMeals[0].meal;
+        
+        // Hedef sayıya ulaşana kadar aynı yemeği ekle
+        this.adjustMealCountWithReference(weeklyPlan, referenceMeal, targetCount, scope);
+    }
+
+    // 🔍 Plandaki belirli kategorideki yemekleri bul
+    findMealsInPlanByCategory(weeklyPlan, category) {
+        const found = [];
+        
+        weeklyPlan.days.forEach((day, dayIndex) => {
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                if (day[mealType]) {
+                    day[mealType].forEach((meal, mealIndex) => {
+                        if (this.isMealInCategory(meal, category)) {
+                            found.push({
+                                meal,
+                                dayIndex,
+                                mealType,
+                                mealIndex
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        
+        return found;
+    }
+
+    // ⚖️ Referans yemekle sayıyı ayarla
+    adjustMealCountWithReference(weeklyPlan, referenceMeal, targetCount, scope) {
+        if (scope === 'week') {
+            this.adjustWeeklyMealCountWithReference(weeklyPlan, referenceMeal, targetCount);
+        } else if (scope === 'meal') {
+            this.adjustMealCountPerMealWithReference(weeklyPlan, referenceMeal, targetCount);
+        }
+    }
+
+    // 📊 Haftalık bazda referans yemek sayısını ayarla
+    adjustWeeklyMealCountWithReference(weeklyPlan, referenceMeal, targetCount) {
+        // Mevcut sayıyı hesapla
+        const currentCount = this.countMealInPlan(weeklyPlan, referenceMeal);
+        
+        if (currentCount < targetCount) {
+            // Eksik varsa ekle
+            const needed = targetCount - currentCount;
+            console.log(`➕ ${needed} adet daha ${referenceMeal.adi || referenceMeal.name} ekleniyor`);
+            
+            this.addMealsToPlan(weeklyPlan, referenceMeal, needed);
+        } else if (currentCount > targetCount) {
+            // Fazla varsa çıkar
+            const excess = currentCount - targetCount;
+            console.log(`➖ ${excess} adet ${referenceMeal.adi || referenceMeal.name} çıkarılıyor`);
+            
+            this.removeMealsFromPlan(weeklyPlan, referenceMeal, excess);
+        }
+    }
+
+    // 🔄 Yemek sayısını planda say
+    countMealInPlan(weeklyPlan, targetMeal) {
+        let count = 0;
+        const targetName = targetMeal.adi || targetMeal.name;
+        
+        weeklyPlan.days.forEach(day => {
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                if (day[mealType]) {
+                    day[mealType].forEach(meal => {
+                        if ((meal.adi || meal.name) === targetName) {
+                            count++;
+                        }
+                    });
+                }
+            });
+        });
+        
+        return count;
+    }
+
+    // ➕ Plana yemek ekle
+    addMealsToPlan(weeklyPlan, meal, count) {
+        for (let i = 0; i < count; i++) {
+            // Rastgele bir güne ve öğüne ekle
+            const randomDay = Math.floor(Math.random() * weeklyPlan.days.length);
+            const mealTypes = ['breakfast', 'lunch', 'dinner'];
+            const randomMealType = mealTypes[Math.floor(Math.random() * mealTypes.length)];
+            
+            if (!weeklyPlan.days[randomDay][randomMealType]) {
+                weeklyPlan.days[randomDay][randomMealType] = [];
+            }
+            
+            weeklyPlan.days[randomDay][randomMealType].push({ ...meal });
+        }
+    }
+
+    // ➖ Plandan yemek çıkar  
+    removeMealsFromPlan(weeklyPlan, targetMeal, count) {
+        const targetName = targetMeal.adi || targetMeal.name;
+        let removed = 0;
+        
+        for (let dayIndex = 0; dayIndex < weeklyPlan.days.length && removed < count; dayIndex++) {
+            const day = weeklyPlan.days[dayIndex];
+            
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                if (day[mealType] && removed < count) {
+                    for (let i = day[mealType].length - 1; i >= 0 && removed < count; i--) {
+                        if ((day[mealType][i].adi || day[mealType][i].name) === targetName) {
+                            day[mealType].splice(i, 1);
+                            removed++;
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // 🔗 YENİ: Sıklık kuralını uygula (mevcut sistem ile uyumlu)
+    applyIndividualFrequencyRule(weeklyPlan, rule) {
+        // Mevcut rol kuralı sistemini kullan (geçici çözüm)
+        const convertedRule = {
+            role: rule.filters?.roles?.[0] || 'any',
+            scope: rule.scope,
+            min: rule.count,
+            max: rule.countMax || rule.count,
+            fixed: rule.countType === 'fixed' ? rule.count : null,
+            meals: rule.meals,
+            weeks: rule.weeks
+        };
+        
+        this.applyIndividualRoleRule(weeklyPlan, convertedRule);
     }
     
     get availableMeals() { 
