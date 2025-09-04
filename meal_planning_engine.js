@@ -885,6 +885,9 @@ class MealPlanningEngine {
                     // 🆕 Kural bilgisini ekle
                     const mealWithRule = { ...mealToAdd };
                     if (ruleInfo) {
+                        mealWithRule._addedByRule = ruleInfo.id;
+                        mealWithRule._ruleType = ruleInfo.type;
+                        mealWithRule._ruleName = ruleInfo.name;
                         mealWithRule._ruleApplied = {
                             ruleId: ruleInfo.id,
                             ruleName: ruleInfo.name,

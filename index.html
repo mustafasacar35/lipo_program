@@ -28112,6 +28112,12 @@ Desteklenen Dosyalar:
                 const actualLockCount = systemLockRules.length; // Sistem kurallarından
                 
                 html += `\n<div class="row mt-3">\n  <div class="col-md-6">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-link"></i> Bağımlılık Kuralları</h6>\n        <span class="text-muted small">${actualDepCount} kural</span>\n      </div>\n      <div class="card-body p-0">${generateDependencyDiagnosticsReport(depArr)}</div>\n    </div>\n  </div>\n  <div class="col-md-6">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-lock"></i> Kilit Kuralları</h6>\n        <span class="text-muted small">${actualLockCount} kural</span>\n      </div>\n      <div class="card-body p-0">${generateLockDiagnosticsReport(lockArr)}</div>\n    </div>\n  </div>\n</div>`;
+                
+                // 🆕 Enhanced Rule Application Report
+                if (result.summary && result.summary.ruleApplications) {
+                    const ruleApps = result.summary.ruleApplications;
+                    html += `\n<div class="row mt-3">\n  <div class="col-md-12">\n    <div class="card">\n      <div class="card-header d-flex justify-content-between align-items-center">\n        <h6 class="mb-0"><i class="fas fa-magic"></i> Kural Uygulama Detayları</h6>\n        <span class="text-muted small">${ruleApps.totalRulesApplied} uygulama</span>\n      </div>\n      <div class="card-body">\n        ${generateEnhancedRuleReport(ruleApps)}\n      </div>\n    </div>\n  </div>\n</div>`;
+                }
             } else {
                 html = `
                     <div class="text-center text-muted py-5">
@@ -28432,6 +28438,123 @@ Desteklenen Dosyalar:
             } else {
                 return '<div class="p-3 text-muted small">Tanımlı kilit kuralı yok</div>';
             }
+        }
+        
+        // 🆕 Enhanced Rule Application Report
+        function generateEnhancedRuleReport(ruleApplications) {
+            if (!ruleApplications || ruleApplications.totalRulesApplied === 0) {
+                return '<div class="p-3 text-muted small">Bu planlama sırasında hiç kural uygulanmadı.</div>';
+            }
+            
+            let html = `
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="h4 text-primary">${ruleApplications.totalRulesApplied}</div>
+                            <small class="text-muted">Toplam Uygulama</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="h4 text-success">${ruleApplications.mealsAddedByRules}</div>
+                            <small class="text-muted">Eklenen Yemek</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="h4 text-warning">${ruleApplications.activeLocks}</div>
+                            <small class="text-muted">Aktif Kilit</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="h4 text-info">${Object.keys(ruleApplications.rulesByType).length}</div>
+                            <small class="text-muted">Kural Türü</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Kural türlerine göre istatistikler
+            if (Object.keys(ruleApplications.rulesByType).length > 0) {
+                html += '<h6><i class="fas fa-chart-pie"></i> Kural Türü Dağılımı:</h6>';
+                html += '<div class="row mb-3">';
+                
+                const typeColors = {
+                    'frequency': 'primary',
+                    'dependency': 'warning', 
+                    'lock': 'danger',
+                    'category': 'success',
+                    'name': 'info',
+                    'keyword': 'secondary'
+                };
+                
+                Object.entries(ruleApplications.rulesByType).forEach(([type, count]) => {
+                    const color = typeColors[type] || 'secondary';
+                    const typeLabel = {
+                        'frequency': 'Sıklık',
+                        'dependency': 'Bağımlılık', 
+                        'lock': 'Kilit',
+                        'category': 'Kategori',
+                        'name': 'İsim',
+                        'keyword': 'Anahtar Kelime'
+                    }[type] || type;
+                    
+                    html += `
+                        <div class="col-md-4 mb-2">
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-${color} me-2">${count}</span>
+                                <span class="text-muted small">${typeLabel}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            // Kural uygulama geçmişi - Tooltip açıklamaları ile
+            if (ruleApplications.ruleHistory && ruleApplications.ruleHistory.length > 0) {
+                html += '<h6><i class="fas fa-history"></i> Kural Uygulama Geçmişi:</h6>';
+                html += '<div class="table-responsive">';
+                html += '<table class="table table-sm table-striped">';
+                html += '<thead class="table-light"><tr><th>Kural</th><th>Yemek</th><th>Konum</th><th>Zaman</th></tr></thead>';
+                html += '<tbody>';
+                
+                // Sadece meal_added action'larını göster, son 10 kaydı
+                const mealActions = ruleApplications.ruleHistory
+                    .filter(h => h.action === 'meal_added')
+                    .slice(-10);
+                
+                mealActions.forEach(history => {
+                    const ruleTypeIcon = {
+                        'frequency': 'fa-clock',
+                        'dependency': 'fa-link',
+                        'lock': 'fa-lock',
+                        'category': 'fa-tags',
+                        'name': 'fa-font',
+                        'keyword': 'fa-key'
+                    }[history.type] || 'fa-magic';
+                    
+                    const ruleTooltip = `${history.name} - ID: ${history.id}`;
+                    const timeStr = new Date(history.appliedAt).toLocaleTimeString('tr-TR');
+                    
+                    html += `
+                        <tr>
+                            <td>
+                                <i class="fas ${ruleTypeIcon} text-primary me-1" title="${ruleTooltip}"></i>
+                                <span class="small" title="${ruleTooltip}">${history.name}</span>
+                            </td>
+                            <td class="small">${history.target}</td>
+                            <td class="small">Gün ${history.day}, ${history.meal}</td>
+                            <td class="small text-muted">${timeStr}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table></div>';
+            }
+            
+            return html;
         }
         
         // Detaylı plan görünümü oluştur
