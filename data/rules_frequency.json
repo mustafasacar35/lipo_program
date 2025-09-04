@@ -1,6 +1,6 @@
 [
   {
-    "id": "mf5t0zmro6sg",
+    "id": "mf5tby8n5f95",
     "filters": {
       "names": [],
       "nameMode": "AND",
@@ -15,11 +15,12 @@
     "meals": [
       "dinner"
     ],
-    "countType": "fixed",
-    "count": 6,
+    "countType": "range",
+    "count": 5,
     "weeks": [],
     "isLocked": true,
     "lockScope": "item",
-    "priority": 1
+    "countMax": 6,
+    "priority": 2
   }
 ]
