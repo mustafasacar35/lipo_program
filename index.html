@@ -4023,6 +4023,26 @@
             window._rulesLoaded = true;
             rulesResolver && rulesResolver();
             
+            // 🎯 EMBEDDED_DATA.systemRules'u güncel kural içeriği ile doldur
+            if (!window.EMBEDDED_DATA) window.EMBEDDED_DATA = {};
+            if (window.frequencyRules || window.dependencyRules || window.lockRules) {
+                window.EMBEDDED_DATA.systemRules = {
+                    version: "2.0",
+                    lastUpdated: new Date().toISOString(),
+                    rulesArchive: {
+                        frequencyRules: window.frequencyRules || [],
+                        dependencyRules: window.dependencyRules || [],
+                        lockRules: window.lockRules || [],
+                        priorityPolicy: "top-first"
+                    }
+                };
+                console.log('📦 EMBEDDED_DATA.systemRules güncellendi:', {
+                    frequency: window.frequencyRules?.length || 0,
+                    dependency: window.dependencyRules?.length || 0,
+                    lock: window.lockRules?.length || 0
+                });
+            }
+            
             // 🎯 currentLocalRules'u güncelle (visual highlighting için)
             window.currentLocalRules = {
                 frequencyRules: window.frequencyRules || [],
@@ -5289,6 +5309,9 @@
                     } else if (path.includes('patients_list.json') || path.includes('patients.json')) {
                         console.log('📂 EMBEDDED_DATA.patients kullanılıyor (fallback):', EMBEDDED_DATA.patients?.patients?.length || 0, 'hasta');
                         resolve(EMBEDDED_DATA.patients);
+                    } else if (path.includes('system_rules.json')) {
+                        console.log('📂 EMBEDDED_DATA.systemRules kullanılıyor (fallback)');
+                        resolve(EMBEDDED_DATA.systemRules);
                     } else {
                         resolve(null);
                     }
@@ -10179,7 +10202,18 @@
             }
             console.log('========================');
             
-            // Global kural değişkenlerini kontrol et (global scope'dan)
+            // Global kural değişkenlerini kontrol et - önce window'dan almayı dene
+            // Eğer global değişkenler boş ama window'da varsa, onları kullan
+            if ((!frequencyRules || frequencyRules.length === 0) && window.frequencyRules && window.frequencyRules.length > 0) {
+                frequencyRules = window.frequencyRules;
+            }
+            if ((!dependencyRules || dependencyRules.length === 0) && window.dependencyRules && window.dependencyRules.length > 0) {
+                dependencyRules = window.dependencyRules;
+            }
+            if ((!lockRules || lockRules.length === 0) && window.lockRules && window.lockRules.length > 0) {
+                lockRules = window.lockRules;
+            }
+            
             const frequency = typeof frequencyRules !== 'undefined' ? frequencyRules : [];
             const dependency = typeof dependencyRules !== 'undefined' ? dependencyRules : [];
             const lock = typeof lockRules !== 'undefined' ? lockRules : [];
@@ -27496,6 +27530,44 @@ Desteklenen Dosyalar:
                 // Sistem kural robotu (frequency/dependency/lock) kurallarını ekle (yalnızca etkinse)
                 if (systemRulesEnabled && typeof getSystemRulesForPlanning === 'function') {
                     try {
+                        // Kuralların yüklü olduğundan emin ol - embedded data'dan al
+                        if ((!window.frequencyRules || window.frequencyRules.length === 0) && 
+                            (!window.dependencyRules || window.dependencyRules.length === 0) && 
+                            (!window.lockRules || window.lockRules.length === 0)) {
+                            console.log('⚠️ Kurallar yüklü değil, embedded data\'dan yükleniyor...');
+                            
+                            // Embedded system_rules.json'dan yükle
+                            const systemRulesData = await getEmbeddedData('system_rules.json');
+                            if (systemRulesData) {
+                                let rulesArchive = null;
+                                
+                                // Double-encoded JSON kontrolü
+                                if (typeof systemRulesData === 'string') {
+                                    try {
+                                        const parsed = JSON.parse(systemRulesData);
+                                        rulesArchive = parsed.rulesArchive;
+                                    } catch (e) {
+                                        console.error('Double-encoded JSON parse hatası:', e);
+                                    }
+                                } else if (systemRulesData.rulesArchive) {
+                                    rulesArchive = systemRulesData.rulesArchive;
+                                }
+                                
+                                if (rulesArchive) {
+                                    window.frequencyRules = rulesArchive.frequencyRules || [];
+                                    window.dependencyRules = rulesArchive.dependencyRules || [];
+                                    window.lockRules = rulesArchive.lockRules || [];
+                                    
+                                    // Global değişkenleri de senkronize et
+                                    frequencyRules = window.frequencyRules;
+                                    dependencyRules = window.dependencyRules;
+                                    lockRules = window.lockRules;
+                                    
+                                    console.log(`✅ Kurallar embedded data'dan yüklendi: ${window.frequencyRules.length} frekans + ${window.dependencyRules.length} bağımlılık + ${window.lockRules.length} kilit`);
+                                }
+                            }
+                        }
+                        
                         const sysPack = getSystemRulesForPlanning();
                         if (sysPack && sysPack.totalRules > 0) {
                             // Tüm kural türlerini birleştir
