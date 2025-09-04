@@ -20,6 +20,10 @@ class MealPlanningEngine {
         this.lastEvaluations = [];
         this.planCandidates = [];
         
+        // 🔧 FIX: Kategori kilitleri için
+        this.activeLocks = [];
+        this.appliedRuleHistory = [];
+        
         console.log('🎯 MealPlanningEngine v4.0 oluşturuldu (Akıllı Faktör Sistemi)');
     }
 
@@ -392,19 +396,22 @@ class MealPlanningEngine {
         const weeklyPlan = this.initializeWeeklyPlan(days);
         console.log('🏗️ Haftalık plan başlatıldı:', days, 'gün');
         
-        // 1. Önce öğün sayılarını uygula
+        // 1. 🔒 ÖNCE: Kilit kurallarını işle ve aktifleştir
+        this.processLockRules(advancedRules.lockRules);
+        
+        // 2. Önce öğün sayılarını uygula
         this.applyMealCountRules(weeklyPlan, advancedRules.mealRules);
         
-        // 2. Sonra rol bazlı kuralları uygula
+        // 3. Sonra rol bazlı kuralları uygula
         this.applyRoleBasedRules(weeklyPlan, advancedRules.roleRules);
         
-        // 3. YENİ: Kategori bazlı kuralları uygula
+        // 4. YENİ: Kategori bazlı kuralları uygula
         this.applyCategoryBasedRules(weeklyPlan, advancedRules.categoryRules);
         
-        // 4. YENİ: İsim bazlı kuralları uygula  
+        // 5. YENİ: İsim bazlı kuralları uygula  
         this.applyNameBasedRules(weeklyPlan, advancedRules.nameRules);
         
-        // 5. YENİ: Anahtar kelime bazlı kuralları uygula
+        // 6. YENİ: Anahtar kelime bazlı kuralları uygula
         this.applyKeywordBasedRules(weeklyPlan, advancedRules.keywordRules);
 
         // 6. 🥧 Öğün kalori dağılımı uygula (varsa)
@@ -639,6 +646,85 @@ class MealPlanningEngine {
         return 'main';
     }
 
+    // 🔒 YENİ: Kilit kurallarını işle ve aktifleştir
+    processLockRules(lockRules) {
+        if (!lockRules || !Array.isArray(lockRules)) return;
+
+        // Önceki kilitleri temizle
+        this.activeLocks = [];
+
+        lockRules.forEach(rule => {
+            if (rule.type === 'lock' && rule.details) {
+                const lockRule = rule.details;
+                
+                if (lockRule.filterType === 'category') {
+                    // Kategori kilidi: O kategoriden ilk yemeği seç ve kilitle
+                    const categoryMeals = this.meals.filter(meal => {
+                        const mealCategory = meal.kategori || meal.category || '';
+                        return mealCategory.toLowerCase().includes(lockRule.filterText.toLowerCase());
+                    });
+                    
+                    if (categoryMeals.length > 0) {
+                        // İlk yemeği kilitle
+                        const lockedMeal = categoryMeals[0];
+                        this.activeLocks.push({
+                            type: 'lock',
+                            details: lockRule,
+                            lockedMeal: lockedMeal,
+                            appliedAt: new Date(),
+                            scope: lockRule.scope || 'weekly'
+                        });
+                        
+                        console.log(`🔒 Kategori kilidi aktifleştirildi: ${lockRule.filterText} -> ${lockedMeal.adi || lockedMeal.name}`);
+                        
+                        // Kural geçmişine ekle
+                        this.appliedRuleHistory.push({
+                            id: rule.id,
+                            name: rule.name,
+                            type: 'lock',
+                            action: 'category_lock',
+                            target: lockRule.filterText,
+                            result: lockedMeal.adi || lockedMeal.name,
+                            appliedAt: new Date()
+                        });
+                    }
+                } else if (lockRule.filterType === 'tag') {
+                    // Tag kilidi: O etikete sahip ilk yemeği seç ve kilitle
+                    const tagMeals = this.meals.filter(meal => {
+                        const mealTags = meal.tags || meal.etiketler || '';
+                        return mealTags.toLowerCase().includes(lockRule.filterText.toLowerCase());
+                    });
+                    
+                    if (tagMeals.length > 0) {
+                        const lockedMeal = tagMeals[0];
+                        this.activeLocks.push({
+                            type: 'lock',
+                            details: lockRule,
+                            lockedMeal: lockedMeal,
+                            appliedAt: new Date(),
+                            scope: lockRule.scope || 'weekly'
+                        });
+                        
+                        console.log(`🔒 Tag kilidi aktifleştirildi: ${lockRule.filterText} -> ${lockedMeal.adi || lockedMeal.name}`);
+                        
+                        // Kural geçmişine ekle
+                        this.appliedRuleHistory.push({
+                            id: rule.id,
+                            name: rule.name,
+                            type: 'lock',
+                            action: 'tag_lock',
+                            target: lockRule.filterText,
+                            result: lockedMeal.adi || lockedMeal.name,
+                            appliedAt: new Date()
+                        });
+                    }
+                }
+            }
+        });
+
+        console.log(`🔒 Toplam ${this.activeLocks.length} kilit aktifleştirildi`);
+    }
+
     // 🆕 YENİ: Kategori bazlı kuralları uygula
     applyCategoryBasedRules(weeklyPlan, categoryRules) {
         if (!categoryRules || !Array.isArray(categoryRules)) return;
@@ -674,7 +760,11 @@ class MealPlanningEngine {
         console.log(`🏷️ Kategori kuralı uygulanıyor: ${category} - ${scope} - ${targetCount} adet`);
         
         const categoryMeals = this.selectMealsByCategory(category, targetCount * 10); // Buffer ekle
-        this.distributeMealsToWeeklyPlan(weeklyPlan, categoryMeals, targetCount, scope);
+        this.distributeMealsToWeeklyPlan(weeklyPlan, categoryMeals, targetCount, scope, {
+            id: rule.id || 'category_rule',
+            name: rule.name || `Kategori kuralı: ${category}`,
+            type: 'category'
+        });
     }
 
     // 🆕 YENİ: Tek isim kuralını uygula
@@ -685,7 +775,11 @@ class MealPlanningEngine {
         console.log(`📝 İsim kuralı uygulanıyor: "${keywords.join(', ')}" (${operator}) - ${scope} - ${targetCount} adet`);
         
         const nameMeals = this.selectMealsByName(keywords, operator, targetCount * 10);
-        this.distributeMealsToWeeklyPlan(weeklyPlan, nameMeals, targetCount, scope);
+        this.distributeMealsToWeeklyPlan(weeklyPlan, nameMeals, targetCount, scope, {
+            id: rule.id || 'name_rule',
+            name: rule.name || `İsim kuralı: ${keywords.join(', ')}`,
+            type: 'name'
+        });
     }
 
     // 🆕 YENİ: Tek anahtar kelime kuralını uygula
@@ -696,15 +790,40 @@ class MealPlanningEngine {
         console.log(`🔑 Anahtar kelime kuralı uygulanıyor: "${keywords.join(', ')}" (${operator}) - ${scope} - ${targetCount} adet`);
         
         const keywordMeals = this.selectMealsByKeywords(keywords, operator, targetCount * 10);
-        this.distributeMealsToWeeklyPlan(weeklyPlan, keywordMeals, targetCount, scope);
+        this.distributeMealsToWeeklyPlan(weeklyPlan, keywordMeals, targetCount, scope, {
+            id: rule.id || 'keyword_rule',
+            name: rule.name || `Anahtar kelime kuralı: ${keywords.join(', ')}`,
+            type: 'keyword'
+        });
     }
 
-    // 🆕 YENİ: Kategoriye göre yemek seç
+    // 🆕 YENİ: Kategoriye göre yemek seç (kategori kilidi ile)
     selectMealsByCategory(category, count) {
-        const categoryMeals = this.meals.filter(meal => {
+        let categoryMeals = this.meals.filter(meal => {
             const mealCategory = meal.kategori || meal.category || '';
             return mealCategory.toLowerCase().includes(category.toLowerCase());
         });
+        
+        // 🔧 FIX: Kategori kilidi kontrolü
+        if (this.activeLocks && this.activeLocks.length > 0) {
+            const categoryLock = this.activeLocks.find(lock => 
+                lock.type === 'lock' && 
+                lock.details && 
+                lock.details.filterType === 'category' && 
+                lock.details.filterText.toLowerCase() === category.toLowerCase()
+            );
+            
+            if (categoryLock && categoryLock.lockedMeal) {
+                console.log(`🔒 Kategori kilidi aktif: ${category} -> ${categoryLock.lockedMeal.adi || categoryLock.lockedMeal.name}`);
+                // Kilitlenen yemek kategori içindeyse onu kullan
+                const lockedMeal = categoryLock.lockedMeal;
+                const lockedCategory = lockedMeal.kategori || lockedMeal.category || '';
+                if (lockedCategory.toLowerCase().includes(category.toLowerCase())) {
+                    // Aynı yemeği istenen sayıda döndür
+                    return Array(count).fill(lockedMeal).slice(0, count);
+                }
+            }
+        }
         
         return this.selectRandomFromArray(categoryMeals.length > 0 ? categoryMeals : this.meals, count);
     }
@@ -749,7 +868,8 @@ class MealPlanningEngine {
     }
 
     // 🆕 YENİ: Yemekleri haftalık plana dağıt
-    distributeMealsToWeeklyPlan(weeklyPlan, meals, targetCount, scope) {
+    // 🔧 Updated: Yemekleri haftalık plana dağıt ve kural metadata'sı ekle
+    distributeMealsToWeeklyPlan(weeklyPlan, meals, targetCount, scope, ruleInfo = null) {
         let distributedCount = 0;
         
         for (let dayIndex = 0; dayIndex < weeklyPlan.length && distributedCount < targetCount; dayIndex++) {
@@ -762,7 +882,34 @@ class MealPlanningEngine {
                 
                 const mealToAdd = meals[distributedCount % meals.length];
                 if (mealToAdd) {
-                    day[mealType].push(mealToAdd);
+                    // 🆕 Kural bilgisini ekle
+                    const mealWithRule = { ...mealToAdd };
+                    if (ruleInfo) {
+                        mealWithRule._addedByRule = ruleInfo.id;
+                        mealWithRule._ruleType = ruleInfo.type;
+                        mealWithRule._ruleName = ruleInfo.name;
+                        mealWithRule._ruleApplied = {
+                            ruleId: ruleInfo.id,
+                            ruleName: ruleInfo.name,
+                            ruleType: ruleInfo.type,
+                            appliedAt: new Date(),
+                            scope: scope
+                        };
+                        
+                        // Kural geçmişine ekle
+                        this.appliedRuleHistory.push({
+                            id: ruleInfo.id,
+                            name: ruleInfo.name,
+                            type: ruleInfo.type,
+                            action: 'meal_added',
+                            target: mealToAdd.adi || mealToAdd.name,
+                            day: dayIndex + 1,
+                            meal: mealType,
+                            appliedAt: new Date()
+                        });
+                    }
+                    
+                    day[mealType].push(mealWithRule);
                     distributedCount++;
                 }
             }
@@ -910,8 +1057,29 @@ class MealPlanningEngine {
             totalMeals: 0,
             roleDistribution: {},
             mealTypeDistribution: { breakfast: 0, snack1: 0, lunch: 0, snack2: 0, dinner: 0 },
-            averageMealsPerDay: 0
+            averageMealsPerDay: 0,
+            // 🆕 Kural uygulama detayları
+            ruleApplications: {
+                totalRulesApplied: this.appliedRuleHistory.length,
+                rulesByType: {},
+                activeLocks: this.activeLocks.length,
+                mealsAddedByRules: 0,
+                ruleHistory: this.appliedRuleHistory
+            }
         };
+        
+        // Kural türlerine göre groupla
+        this.appliedRuleHistory.forEach(ruleApp => {
+            const type = ruleApp.type;
+            if (!summary.ruleApplications.rulesByType[type]) {
+                summary.ruleApplications.rulesByType[type] = 0;
+            }
+            summary.ruleApplications.rulesByType[type]++;
+            
+            if (ruleApp.action === 'meal_added') {
+                summary.ruleApplications.mealsAddedByRules++;
+            }
+        });
         
         weeklyPlan.forEach(day => {
             ['breakfast', 'snack1', 'lunch', 'snack2', 'dinner'].forEach(mealType => {
