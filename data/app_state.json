@@ -1,28 +1,15 @@
 {
-  "timestamp": "2025-09-04T19:54:35.597Z",
+  "timestamp": "2025-09-04T20:09:57.674Z",
   "frequencyRules": [
     {
-      "id": "mf5tqslznzzx",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [
-          "CORBALAR"
-        ],
-        "roles": []
-      },
-      "scope": "week",
-      "meals": [
-        "dinner"
-      ],
-      "countType": "fixed",
-      "count": 3,
-      "weeks": [],
-      "isLocked": true,
-      "lockScope": "item",
-      "priority": 1
+      "id": "mf5u1nt5bcyl",
+      "weeklyMin": 0,
+      "weeklyMax": 99,
+      "dailyLimit": 1,
+      "blockRepeats": true,
+      "priority": 4,
+      "isLocked": false,
+      "lockScope": "item"
     }
   ],
   "dependencyRules": [],
@@ -128,7 +115,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-04T19:54:22.653Z",
+    "lastUpdated": "2025-09-04T20:09:49.141Z",
     "version": "2.1.0"
   },
   "foodsData": [
