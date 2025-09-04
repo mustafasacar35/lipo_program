@@ -1,1 +1,10 @@
-"{\n  \"version\": \"2.0\",\n  \"lastUpdated\": \"2025-09-04T19:33:21.603Z\",\n  \"rulesArchive\": {\n    \"frequencyRules\": [],\n    \"dependencyRules\": [],\n    \"lockRules\": [],\n    \"priorityPolicy\": \"top-first\"\n  }\n}"
+{
+  "version": "2.0",
+  "lastUpdated": "2025-09-04T19:33:33.262Z",
+  "rulesArchive": {
+    "frequencyRules": [],
+    "dependencyRules": [],
+    "lockRules": [],
+    "priorityPolicy": "top-first"
+  }
+}
