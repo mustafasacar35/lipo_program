@@ -1,6 +1,30 @@
 {
-  "timestamp": "2025-09-04T19:33:28.358Z",
-  "frequencyRules": [],
+  "timestamp": "2025-09-04T19:33:55.379Z",
+  "frequencyRules": [
+    {
+      "id": "mf5t0zmro6sg",
+      "filters": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [
+          "CORBALAR"
+        ],
+        "roles": []
+      },
+      "scope": "week",
+      "meals": [
+        "dinner"
+      ],
+      "countType": "fixed",
+      "count": 6,
+      "weeks": [],
+      "isLocked": true,
+      "lockScope": "item",
+      "priority": 1
+    }
+  ],
   "dependencyRules": [],
   "lockRules": [],
   "systemSettings": {
