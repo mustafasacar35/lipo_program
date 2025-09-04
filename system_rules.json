@@ -1,1 +1,34 @@
-"{\n  \"version\": \"2.0\",\n  \"lastUpdated\": \"2025-09-04T19:33:52.323Z\",\n  \"rulesArchive\": {\n    \"frequencyRules\": [\n      {\n        \"id\": \"mf5t0zmro6sg\",\n        \"filters\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [],\n          \"tagMode\": \"AND\",\n          \"categories\": [\n            \"CORBALAR\"\n          ],\n          \"roles\": []\n        },\n        \"scope\": \"week\",\n        \"meals\": [\n          \"dinner\"\n        ],\n        \"countType\": \"fixed\",\n        \"count\": 6,\n        \"weeks\": []\n      }\n    ],\n    \"dependencyRules\": [],\n    \"lockRules\": [],\n    \"priorityPolicy\": \"top-first\"\n  }\n}"
+{
+  "version": "2.0",
+  "lastUpdated": "2025-09-04T19:34:00.411Z",
+  "rulesArchive": {
+    "frequencyRules": [
+      {
+        "id": "mf5t0zmro6sg",
+        "filters": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [],
+          "tagMode": "AND",
+          "categories": [
+            "CORBALAR"
+          ],
+          "roles": []
+        },
+        "scope": "week",
+        "meals": [
+          "dinner"
+        ],
+        "countType": "fixed",
+        "count": 6,
+        "weeks": [],
+        "priority": 1,
+        "isLocked": true,
+        "lockScope": "item"
+      }
+    ],
+    "dependencyRules": [],
+    "lockRules": [],
+    "priorityPolicy": "top-first"
+  }
+}
