@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "mezx0rp88cl6",
+    "name": "Yumurta-Mayonez BaÄÄ±mlÄ±lÄ±ÄÄ±",
+    "parentTag": "yumurta",
+    "childTag": "mayonez",
+    "dependent": {
+      "names": [],
+      "nameMode": "AND",
+      "tags": [
+        "yumurta"
+      ],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": []
+    },
+    "target": {
+      "names": [],
+      "nameMode": "AND",
+      "tags": [
+        "mayonez"
+      ],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": []
+    },
+    "ratio": 40,
+    "minRatio": 30,
+    "maxRatio": 50,
+    "priority": 3
+  }
+]
