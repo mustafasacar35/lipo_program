@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-09-04T19:33:55.379Z",
+  "timestamp": "2025-09-04T19:42:44.057Z",
   "frequencyRules": [
     {
-      "id": "mf5t0zmro6sg",
+      "id": "mf5tby8n5f95",
       "filters": {
         "names": [],
         "nameMode": "AND",
@@ -17,15 +17,47 @@
       "meals": [
         "dinner"
       ],
-      "countType": "fixed",
-      "count": 6,
+      "countType": "range",
+      "count": 5,
       "weeks": [],
       "isLocked": true,
       "lockScope": "item",
+      "countMax": 6,
+      "priority": 2
+    }
+  ],
+  "dependencyRules": [
+    {
+      "id": "mezx0rp88cl6",
+      "name": "Yumurta-Mayonez BaÄÄ±mlÄ±lÄ±ÄÄ±",
+      "parentTag": "yumurta",
+      "childTag": "mayonez",
+      "dependent": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [
+          "yumurta"
+        ],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": []
+      },
+      "target": {
+        "names": [],
+        "nameMode": "AND",
+        "tags": [
+          "mayonez"
+        ],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": []
+      },
+      "ratio": 40,
+      "minRatio": 30,
+      "maxRatio": 50,
       "priority": 1
     }
   ],
-  "dependencyRules": [],
   "lockRules": [],
   "systemSettings": {
     "systemDefaults": {
@@ -128,7 +160,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-04T19:33:24.191Z",
+    "lastUpdated": "2025-09-04T19:40:53.796Z",
     "version": "2.1.0"
   },
   "foodsData": [
