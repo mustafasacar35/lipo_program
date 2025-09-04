@@ -1,79 +1,8 @@
 {
-  "timestamp": "2025-09-03T14:21:46.471Z",
+  "timestamp": "2025-09-04T19:21:32.775Z",
   "frequencyRules": [
     {
-      "id": "mezww2p6yw1w",
-      "name": "Ana Yemek ZorunluluÄu",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [],
-        "roles": [
-          "mainDish"
-        ]
-      },
-      "scope": "meal",
-      "meals": [
-        "breakfast",
-        "lunch",
-        "dinner"
-      ],
-      "countType": "fixed",
-      "count": 1,
-      "weeks": [],
-      "priority": 1
-    },
-    {
-      "id": "mezwyso1j582",
-      "name": "Yan Yemek SÄ±nÄ±rÄ±",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [],
-        "roles": [
-          "side"
-        ]
-      },
-      "scope": "meal",
-      "meals": [
-        "lunch",
-        "dinner"
-      ],
-      "countType": "range",
-      "count": 1,
-      "countMax": 2,
-      "weeks": [],
-      "priority": 2
-    },
-    {
-      "id": "freq_egg_breakfast",
-      "name": "KahvaltÄ± Yumurta SÄ±nÄ±rÄ±",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [
-          "yumurta"
-        ],
-        "tagMode": "AND",
-        "categories": [],
-        "roles": []
-      },
-      "scope": "meal",
-      "meals": [
-        "breakfast"
-      ],
-      "countType": "range",
-      "count": 1,
-      "countMax": 1,
-      "weeks": [],
-      "priority": 5
-    },
-    {
-      "id": "freq_soup_week",
+      "id": "mf5sl38wn6oo",
       "filters": {
         "names": [],
         "nameMode": "AND",
@@ -89,83 +18,16 @@
         "dinner"
       ],
       "countType": "range",
-      "count": 2,
+      "count": 4,
       "weeks": [],
-      "countMax": 4,
-      "priority": 11
-    },
-    {
-      "id": "freq_dessert_week",
-      "name": "HaftalÄ±k TatlÄ± SÄ±klÄ±ÄÄ±",
-      "filters": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [],
-        "tagMode": "AND",
-        "categories": [],
-        "roles": [
-          "dessert"
-        ]
-      },
-      "scope": "week",
-      "meals": [],
-      "countType": "range",
-      "count": 1,
-      "countMax": 3,
-      "weeks": [],
-      "priority": 8
+      "isLocked": true,
+      "lockScope": "item",
+      "countMax": 5,
+      "priority": 1
     }
   ],
-  "dependencyRules": [
-    {
-      "id": "mezx0rp88cl6",
-      "name": "Yumurta-Mayonez BaÄÄ±mlÄ±lÄ±ÄÄ±",
-      "parentTag": "yumurta",
-      "childTag": "mayonez",
-      "dependent": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [
-          "yumurta"
-        ],
-        "tagMode": "AND",
-        "categories": [],
-        "roles": []
-      },
-      "target": {
-        "names": [],
-        "nameMode": "AND",
-        "tags": [
-          "mayonez"
-        ],
-        "tagMode": "AND",
-        "categories": [],
-        "roles": []
-      },
-      "ratio": 40,
-      "minRatio": 30,
-      "maxRatio": 50,
-      "priority": 3
-    }
-  ],
-  "lockRules": [
-    {
-      "id": "lock_soup_category",
-      "name": "Ãorba Kategori Kilidi",
-      "filterType": "category",
-      "filterText": "ÃORBALAR",
-      "scope": "weekly",
-      "priority": 2
-    },
-    {
-      "id": "lock_bread_tag",
-      "name": "Ekmek Tag Kilidi",
-      "filterType": "tag",
-      "filterText": "ekmek",
-      "scope": "weekly",
-      "priority": 10
-    }
-  ],
+  "dependencyRules": [],
+  "lockRules": [],
   "systemSettings": {
     "systemDefaults": {
       "patientData": {
@@ -267,7 +129,7 @@
       "timestamp": "2025-08-31T14:57:50.210Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-03T14:21:24.999Z",
+    "lastUpdated": "2025-09-04T19:21:05.486Z",
     "version": "2.1.0"
   },
   "foodsData": [
