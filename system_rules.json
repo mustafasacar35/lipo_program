@@ -1,1 +1,36 @@
-"{\n  \"version\": \"2.0\",\n  \"lastUpdated\": \"2025-09-04T19:45:17.494Z\",\n  \"rulesArchive\": {\n    \"frequencyRules\": [],\n    \"dependencyRules\": [\n      {\n        \"id\": \"mezx0rp88cl6\",\n        \"dependent\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [\n            \"yumurta\"\n          ],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": []\n        },\n        \"target\": {\n          \"names\": [],\n          \"nameMode\": \"AND\",\n          \"tags\": [\n            \"mayonez\"\n          ],\n          \"tagMode\": \"AND\",\n          \"categories\": [],\n          \"roles\": []\n        },\n        \"ratio\": 40,\n        \"priority\": 3\n      }\n    ],\n    \"lockRules\": [],\n    \"priorityPolicy\": \"top-first\"\n  }\n}"
+{
+  "version": "2.0",
+  "lastUpdated": "2025-09-04T19:45:26.839Z",
+  "rulesArchive": {
+    "frequencyRules": [],
+    "dependencyRules": [
+      {
+        "id": "mezx0rp88cl6",
+        "dependent": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "yumurta"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "target": {
+          "names": [],
+          "nameMode": "AND",
+          "tags": [
+            "mayonez"
+          ],
+          "tagMode": "AND",
+          "categories": [],
+          "roles": []
+        },
+        "ratio": 40,
+        "priority": 3
+      }
+    ],
+    "lockRules": [],
+    "priorityPolicy": "top-first"
+  }
+}
