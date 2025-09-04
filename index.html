@@ -3667,12 +3667,19 @@
                 async function loadRulesFromArchive(archive) {
                     console.log('🔍 loadRulesFromArchive çağrıldı, archive type:', typeof archive);
                     
-                    // JSON string ise parse et
+                    // JSON string ise parse et (double-encoded JSON kontrolü ile)
                     let parsedArchive = archive;
                     if (typeof archive === 'string') {
                         try {
-                            parsedArchive = JSON.parse(archive);
-                            console.log('✅ JSON string parse edildi');
+                            const firstParse = JSON.parse(archive);
+                            if (typeof firstParse === 'string') {
+                                // Double-encoded, parse again
+                                parsedArchive = JSON.parse(firstParse);
+                                console.log('✅ Double-encoded JSON string parse edildi');
+                            } else {
+                                parsedArchive = firstParse;
+                                console.log('✅ JSON string parse edildi');
+                            }
                         } catch (e) {
                             console.error('❌ JSON parse hatası:', e);
                             return;
@@ -27544,8 +27551,17 @@ Desteklenen Dosyalar:
                                 // Double-encoded JSON kontrolü
                                 if (typeof systemRulesData === 'string') {
                                     try {
-                                        const parsed = JSON.parse(systemRulesData);
-                                        rulesArchive = parsed.rulesArchive;
+                                        const firstParse = JSON.parse(systemRulesData);
+                                        
+                                        if (typeof firstParse === 'string') {
+                                            // It's double-encoded, parse again
+                                            const secondParse = JSON.parse(firstParse);
+                                            rulesArchive = secondParse.rulesArchive;
+                                            console.log('✅ Double-encoded JSON parsed successfully');
+                                        } else {
+                                            // Single-encoded
+                                            rulesArchive = firstParse.rulesArchive;
+                                        }
                                     } catch (e) {
                                         console.error('Double-encoded JSON parse hatası:', e);
                                     }
