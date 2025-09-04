@@ -1,18 +1,1 @@
-[
-  {
-    "id": "lock_soup_category",
-    "name": "Ãorba Kategori Kilidi",
-    "filterType": "category",
-    "filterText": "ÃORBALAR",
-    "scope": "weekly",
-    "priority": 2
-  },
-  {
-    "id": "lock_bread_tag",
-    "name": "Ekmek Tag Kilidi",
-    "filterType": "tag",
-    "filterText": "ekmek",
-    "scope": "weekly",
-    "priority": 10
-  }
-]
+[]
