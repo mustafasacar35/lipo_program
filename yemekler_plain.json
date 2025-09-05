@@ -12187,36 +12187,29 @@
   {
     "name": "*Lor ekmeği (1 dilim)",
     "category": "EKMEKLER",
-    "role": "bread",
     "calories": 55,
     "protein": 6,
     "carbs": 1,
     "fat": 3,
-    "maxQuantity": 1,
     "minQuantity": 0.5,
+    "maxQuantity": 1,
     "step": 0.5,
-    "tags": [
-      "keto",
-      "ekmek",
-      "börek",
-      "muffin",
-      "tost",
-      "ekmeği"
-    ],
-    "compatibilityTags": [],
+    "multiplier": 1,
+    "portionFixed": false,
+    "role": "bread",
     "keto": true,
     "lowcarb": true,
     "fillerLunch": true,
     "fillerDinner": true,
-    "portionFixed": false,
-    "multiplier": 1,
     "seasonRange": "[1,12]",
+    "isReversedSeason": false,
+    "tags": [],
+    "compatibilityTags": null,
+    "incompatibilityTags": null,
     "mealType": [
       "lunch",
       "dinner"
-    ],
-    "isReversedSeason": false,
-    "incompatibilityTags": null
+    ]
   },
   {
     "name": "Haşhaş ezmesi ekmeği (1 dilim)",
