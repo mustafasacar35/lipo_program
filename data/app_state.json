@@ -1,18 +1,62 @@
 {
-  "timestamp": "2025-09-04T20:09:57.674Z",
+  "timestamp": "2025-09-06T10:28:04.827Z",
   "frequencyRules": [
     {
-      "id": "mf5u1nt5bcyl",
-      "weeklyMin": 0,
-      "weeklyMax": 99,
+      "id": "mf6khbtpzsw3",
+      "name": "EKMEKLER",
+      "filterType": "category",
+      "filterText": "EKMEKLER",
+      "weeklyMin": 7,
+      "weeklyMax": 8,
       "dailyLimit": 1,
       "blockRepeats": true,
-      "priority": 4,
-      "isLocked": false,
+      "description": "category: EKMEKLER (7-8/hafta)",
+      "priority": 3,
+      "isLocked": true,
       "lockScope": "item"
+    },
+    {
+      "id": "mf7acxw7egci",
+      "name": "TOSTLAR",
+      "filterType": "category",
+      "filterText": "TOSTLAR",
+      "weeklyMin": 1,
+      "weeklyMax": 1,
+      "dailyLimit": 1,
+      "blockRepeats": true,
+      "description": "category: TOSTLAR (1-1/hafta)",
+      "priority": 3,
+      "isLocked": false,
+      "lockScope": "category"
     }
   ],
-  "dependencyRules": [],
+  "dependencyRules": [
+    {
+      "id": "mf7c5ynbprgf",
+      "dependent": {
+        "names": [
+          "ekmek"
+        ],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": []
+      },
+      "target": {
+        "names": [
+          "domates"
+        ],
+        "nameMode": "AND",
+        "tags": [],
+        "tagMode": "AND",
+        "categories": [],
+        "roles": []
+      },
+      "ratio": 50,
+      "priority": 4
+    }
+  ],
   "lockRules": [],
   "systemSettings": {
     "systemDefaults": {
@@ -79,43 +123,13 @@
           }
         }
       },
-      "criteriaHierarchy": [
-        "allergies",
-        "liked_foods",
-        "medical_conditions",
-        "macro_targets",
-        "calorie_distribution",
-        "meal_timing",
-        "food_groups",
-        "portion_sizes",
-        "seasonal_foods",
-        "repetition_frequency",
-        "food_compatibility",
-        "tag_conflicts",
-        "system_rules",
-        "auto_planning_methods"
-      ],
-      "criteriaSettings": {
-        "allergies": true,
-        "liked_foods": true,
-        "medical_conditions": true,
-        "macro_targets": true,
-        "calorie_distribution": true,
-        "meal_timing": true,
-        "food_groups": true,
-        "portion_sizes": true,
-        "seasonal_foods": true,
-        "repetition_frequency": true,
-        "food_compatibility": true,
-        "tag_conflicts": true,
-        "system_rules": true,
-        "auto_planning_methods": true
-      },
+      "criteriaHierarchy": [],
+      "criteriaSettings": {},
       "fixedMeals": {},
-      "timestamp": "2025-08-31T14:57:50.210Z"
+      "timestamp": "2025-09-06T10:27:51.618Z"
     },
     "weeklyProfiles": {},
-    "lastUpdated": "2025-09-04T20:09:49.141Z",
+    "lastUpdated": "2025-09-06T09:33:45.823Z",
     "version": "2.1.0"
   },
   "foodsData": [
