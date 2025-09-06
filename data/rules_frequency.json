@@ -1,12 +1,30 @@
 [
   {
-    "id": "mf5u1nt5bcyl",
-    "weeklyMin": 0,
-    "weeklyMax": 99,
+    "id": "mf6khbtpzsw3",
+    "name": "EKMEKLER",
+    "filterType": "category",
+    "filterText": "EKMEKLER",
+    "weeklyMin": 7,
+    "weeklyMax": 8,
     "dailyLimit": 1,
     "blockRepeats": true,
-    "priority": 4,
-    "isLocked": false,
+    "description": "category: EKMEKLER (7-8/hafta)",
+    "priority": 3,
+    "isLocked": true,
     "lockScope": "item"
+  },
+  {
+    "id": "mf7acxw7egci",
+    "name": "TOSTLAR",
+    "filterType": "category",
+    "filterText": "TOSTLAR",
+    "weeklyMin": 1,
+    "weeklyMax": 1,
+    "dailyLimit": 1,
+    "blockRepeats": true,
+    "description": "category: TOSTLAR (1-1/hafta)",
+    "priority": 3,
+    "isLocked": false,
+    "lockScope": "category"
   }
 ]
