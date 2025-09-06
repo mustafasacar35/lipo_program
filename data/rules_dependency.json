@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "id": "mf7c5ynbprgf",
+    "dependent": {
+      "names": [
+        "ekmek"
+      ],
+      "nameMode": "AND",
+      "tags": [],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": []
+    },
+    "target": {
+      "names": [
+        "domates"
+      ],
+      "nameMode": "AND",
+      "tags": [],
+      "tagMode": "AND",
+      "categories": [],
+      "roles": []
+    },
+    "ratio": 50,
+    "priority": 4
+  }
+]
